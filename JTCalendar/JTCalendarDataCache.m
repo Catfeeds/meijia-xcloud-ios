@@ -50,13 +50,13 @@
     BOOL haveEvent;
     NSString *key = [dateFormatter stringFromDate:date];
     
-    if(events[key] != nil){
-        haveEvent = [events[key] boolValue];
-    }
-    else{
+//    if(events[key] != nil){
+//        haveEvent = [events[key] boolValue];
+//    }
+//    else{
         haveEvent = [self.calendarManager.dataSource calendarHaveEvent:self.calendarManager date:date];
         events[key] = [NSNumber numberWithBool:haveEvent];
-    }
+//    }
     
     return haveEvent;
 }

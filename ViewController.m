@@ -64,6 +64,7 @@ float lastContentOffset;
     if (vc.L==1) {
         _tableView.scrollEnabled =NO;
     }
+    [self rlLayout];
     
 }
 - (void)viewWillDisappear:(BOOL)animated
@@ -166,6 +167,7 @@ float lastContentOffset;
 #pragma mark日历
 -(void)rlLayout
 {
+    
     self.calendar = [JTCalendar new];
     {
         self.calendar.calendarAppearance.calendar.firstWeekday = 2; // Sunday == 1, Saturday == 7
