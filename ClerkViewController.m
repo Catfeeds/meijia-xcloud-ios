@@ -95,85 +95,63 @@
     NSArray *labelArray=[dic objectForKey:@"user_tags"];
     NSString *identifier = [NSString stringWithFormat:@"cell%ld,%ld",(long)indexPath.row,(long)indexPath.section];
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    UIImageView *headImageView=[[UIImageView alloc]init];
-    UILabel *nameLabel=[[UILabel alloc]init];
-    UILabel *textLabel=[[UILabel alloc]init];
-    UILabel *buyLabel=[[UILabel alloc]init];
-    UILabel *occupationLabel=[[UILabel alloc]init];
-    UILabel *addresslabel=[[UILabel alloc]init];
-    UIImageView *addressIamge=[[UIImageView alloc]init];
-    UILabel *timeLabel=[[UILabel alloc]init];
-    UIImageView *timeImage=[[UIImageView alloc]init];
-    UIView *lineView=[[UIView alloc]init];
     
     
     if (cell == nil) {
         
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:identifier];
-        [cell addSubview:lineView];
-        
-        headImageView.frame=FRAME(10, (GAO-50)/2, 50, 50);
-        headImageView.layer.cornerRadius=headImageView.frame.size.width/2;
-        headImageView.clipsToBounds = YES;
-        [cell addSubview:headImageView];
-        
-        nameLabel.frame=FRAME(headImageView.frame.origin.x+headImageView.frame.size.width+10, 12, 60, 18);
-        nameLabel.font=[UIFont fontWithName:@"Arial" size:16];
-        [cell  addSubview:nameLabel];
-        
-        occupationLabel.frame=FRAME(nameLabel.frame.size.width+nameLabel.frame.origin.x, nameLabel.frame.origin.y+2, WIDTH-210, 16);
-        occupationLabel.textColor=[UIColor colorWithRed:100 / 255.0 green:100 / 255.0 blue:100 / 255.0 alpha:1];
-        occupationLabel.font=[UIFont fontWithName:@"Arial" size:12];
-        [cell addSubview:occupationLabel];
-        
-        
-        textLabel.font=[UIFont fontWithName:@"Arial" size:12];
-        textLabel.textColor=[UIColor colorWithRed:100 / 255.0 green:100 / 255.0 blue:100 / 255.0 alpha:1];
-        [cell  addSubview:textLabel];
-        
-        buyLabel.frame=FRAME(WIDTH-70, 12, 60, 18);
-        buyLabel.font=[UIFont fontWithName:@"Arial" size:12];
-        buyLabel.textColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
-        buyLabel.hidden=YES;
-        [cell addSubview:buyLabel];
-        
-        addressIamge.frame=FRAME(headImageView.frame.size.width+headImageView.frame.origin.x+10, nameLabel.frame.size.height+nameLabel.frame.origin.y+5, 16, 16);
-        addressIamge.image=[UIImage imageNamed:@"icon_sec_addr"];
-        [cell addSubview:addressIamge];
-        addresslabel.font=[UIFont fontWithName:@"Arial" size:12];
-        addresslabel.textColor=[UIColor colorWithRed:100 / 255.0 green:100 / 255.0 blue:100 / 255.0 alpha:1];
-        [cell addSubview:addresslabel];
-        
-        timeImage.image=[UIImage imageNamed:@"icon_sec_time"];
-        [cell addSubview:timeImage];
-        
-        timeLabel.font=[UIFont fontWithName:@"Arial" size:12];
-        timeLabel.textColor=[UIColor colorWithRed:100 / 255.0 green:100 / 255.0 blue:100 / 255.0 alpha:1];
-        [cell addSubview:timeLabel];
-        Y=addressIamge.frame.size.height+addressIamge.frame.origin.y+5;
-        int x=0;
-        for (int i=0; i<labelArray.count; i++) {
-            NSDictionary *dict=labelArray[i];
-            if (i%3==0&&i!=0) {
-                Y=Y+21;
-                x=0;
-            }
-            UILabel *typeLabel=[[UILabel alloc]initWithFrame:FRAME(headImageView.frame.size.width+headImageView.frame.origin.x+10+((WIDTH-70-4)/3+2)*x, Y, (WIDTH-70-4)/3, 16)];
-            typeLabel.text=[NSString stringWithFormat:@"%@",[dict objectForKey:@"tag_name"]];
-            typeLabel.font=[UIFont fontWithName:@"Arial" size:12];
-            typeLabel.textColor=[UIColor colorWithRed:100 / 255.0 green:100 / 255.0 blue:100 / 255.0 alpha:1];
-            typeLabel.layer.cornerRadius=8;
-            typeLabel.clipsToBounds=YES;
-            typeLabel.textAlignment=NSTextAlignmentCenter;
-            typeLabel.backgroundColor=[UIColor colorWithRed:240/255.0f green:240/255.0f blue:240/255.0f alpha:1];
-            [cell addSubview:typeLabel];
-            x++;
-        }
         
     }
     
+    
+    UIView *lineView=[[UIView alloc]init];
+    [cell addSubview:lineView];
+    
+    UIImageView *headImageView=[[UIImageView alloc]init];
+    headImageView.frame=FRAME(10, (GAO-50)/2, 50, 50);
+    headImageView.layer.cornerRadius=headImageView.frame.size.width/2;
+    headImageView.clipsToBounds = YES;
+    
+    NSString *headString=[NSString stringWithFormat:@"%@",[dic objectForKey:@"head_img"]];
+    if ([headString length]==1||[headString length]==0) {
+        headImageView.image =[UIImage imageNamed:@"家-我_默认头像"];
+    }else
+    {
+        NSString *imageUrl=[NSString stringWithFormat:@"%@",[dic objectForKey:@"head_img"]];
+        [headImageView setImageWithURL:[NSURL URLWithString:imageUrl]placeholderImage:nil];
+    }
+
+    [cell addSubview:headImageView];
+    
+    UILabel *nameLabel=[[UILabel alloc]init];
+    nameLabel.frame=FRAME(headImageView.frame.origin.x+headImageView.frame.size.width+10, 12, 60, 18);
+    nameLabel.font=[UIFont fontWithName:@"Arial" size:16];
+    nameLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"name"]];
+    nameLabel.textAlignment=NSTextAlignmentLeft;
+    nameLabel.lineBreakMode=NSLineBreakByTruncatingTail;
+    [nameLabel setNumberOfLines:1];
+    [nameLabel sizeToFit];
+    [cell  addSubview:nameLabel];
+    
+    
+    UILabel *occupationLabel=[[UILabel alloc]init];
+    occupationLabel.frame=FRAME(nameLabel.frame.size.width+nameLabel.frame.origin.x+10, nameLabel.frame.origin.y+2, WIDTH-210, 16);
+    occupationLabel.textColor=[UIColor colorWithRed:100 / 255.0 green:100 / 255.0 blue:100 / 255.0 alpha:1];
+    occupationLabel.font=[UIFont fontWithName:@"Arial" size:12];
     occupationLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"service_type_name"]];
     occupationLabel.textColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
+    [cell addSubview:occupationLabel];
+    
+    UILabel *textLabel=[[UILabel alloc]init];
+    textLabel.font=[UIFont fontWithName:@"Arial" size:12];
+    textLabel.textColor=[UIColor colorWithRed:100 / 255.0 green:100 / 255.0 blue:100 / 255.0 alpha:1];
+    [cell  addSubview:textLabel];
+    
+    UILabel *buyLabel=[[UILabel alloc]init];
+    buyLabel.frame=FRAME(WIDTH-70, 12, 60, 18);
+    buyLabel.font=[UIFont fontWithName:@"Arial" size:12];
+    buyLabel.textColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
+    buyLabel.hidden=YES;
     buyLabel.text=@"以购买";
     NSLog(@"service_type_id%@",service_type_id);
     if ([service_type_id isEqualToString:@"75"]) {
@@ -187,35 +165,61 @@
                 buyLabel.hidden=YES;
             }
         }
+        
+    }
 
-    }
-        NSString *headString=[NSString stringWithFormat:@"%@",[dic objectForKey:@"head_img"]];
-    if ([headString length]==1||[headString length]==0) {
-        headImageView.image =[UIImage imageNamed:@"家-我_默认头像"];
-    }else
-    {
-        NSString *imageUrl=[NSString stringWithFormat:@"%@",[dic objectForKey:@"head_img"]];
-        [headImageView setImageWithURL:[NSURL URLWithString:imageUrl]placeholderImage:nil];
-    }
-    nameLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"name"]];
-    nameLabel.lineBreakMode=NSLineBreakByTruncatingTail;
-    [nameLabel setNumberOfLines:1];
-    [nameLabel sizeToFit];
+    [cell addSubview:buyLabel];
     
+    UIImageView *addressIamge=[[UIImageView alloc]init];
+    addressIamge.frame=FRAME(headImageView.frame.size.width+headImageView.frame.origin.x+10, nameLabel.frame.size.height+nameLabel.frame.origin.y+5, 16, 16);
+    addressIamge.image=[UIImage imageNamed:@"icon_sec_addr"];
+    [cell addSubview:addressIamge];
+    
+    UILabel *addresslabel=[[UILabel alloc]init];
+    addresslabel.font=[UIFont fontWithName:@"Arial" size:12];
+    addresslabel.textColor=[UIColor colorWithRed:100 / 255.0 green:100 / 255.0 blue:100 / 255.0 alpha:1];
     addresslabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"city_and_region"]];
     addresslabel.lineBreakMode=NSLineBreakByTruncatingTail;
     [addresslabel setNumberOfLines:1];
     [addresslabel sizeToFit];
     addresslabel.frame=FRAME(addressIamge.frame.size.width+addressIamge.frame.origin.x, addressIamge.frame.origin.y, addresslabel.frame.size.width, 16);
+    [cell addSubview:addresslabel];
     
+    UIImageView *timeImage=[[UIImageView alloc]init];
+    timeImage.image=[UIImage imageNamed:@"icon_sec_time"];
     timeImage.frame=FRAME(addresslabel.frame.size.width+addresslabel.frame.origin.x+5, addresslabel.frame.origin.y, 16, 16);
+    [cell addSubview:timeImage];
     
+    UILabel *timeLabel=[[UILabel alloc]init];
+    timeLabel.font=[UIFont fontWithName:@"Arial" size:12];
+    timeLabel.textColor=[UIColor colorWithRed:100 / 255.0 green:100 / 255.0 blue:100 / 255.0 alpha:1];
     timeLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"response_time_name"]];
     timeLabel.lineBreakMode=NSLineBreakByTruncatingTail;
     [timeLabel setNumberOfLines:1];
     [timeLabel sizeToFit];
     timeLabel.frame=FRAME(timeImage.frame.size.width+timeImage.frame.origin.x, timeImage.frame.origin.y, timeLabel.frame.size.width, 16);
+    [cell addSubview:timeLabel];
     
+    
+    Y=addressIamge.frame.size.height+addressIamge.frame.origin.y+5;
+    int x=0;
+    for (int i=0; i<labelArray.count; i++) {
+        NSDictionary *dict=labelArray[i];
+        if (i%3==0&&i!=0) {
+            Y=Y+21;
+            x=0;
+        }
+        UILabel *typeLabel=[[UILabel alloc]initWithFrame:FRAME(headImageView.frame.size.width+headImageView.frame.origin.x+10+((WIDTH-70-4)/3+2)*x, Y, (WIDTH-70-4)/3, 16)];
+        typeLabel.text=[NSString stringWithFormat:@"%@",[dict objectForKey:@"tag_name"]];
+        typeLabel.font=[UIFont fontWithName:@"Arial" size:12];
+        typeLabel.textColor=[UIColor colorWithRed:100 / 255.0 green:100 / 255.0 blue:100 / 255.0 alpha:1];
+        typeLabel.layer.cornerRadius=8;
+        typeLabel.clipsToBounds=YES;
+        typeLabel.textAlignment=NSTextAlignmentCenter;
+        typeLabel.backgroundColor=[UIColor colorWithRed:240/255.0f green:240/255.0f blue:240/255.0f alpha:1];
+        [cell addSubview:typeLabel];
+        x++;
+    }
     
     UIFont *font=[UIFont fontWithName:@"Arial" size:12];
     CGSize constraint = CGSizeMake(WIDTH-90, 200.0f);

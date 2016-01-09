@@ -61,7 +61,7 @@ DynamicViewController *dynamicViewController;
     tabBarView=[[UIView alloc]initWithFrame:CGRectMake((WIDTH-180)/2, 20, 180, 44)];
    // tabBarView.backgroundColor=[UIColor colorWithRed:231/255.0f green:231/255.0f blue:231/255.0f alpha:1];
     [self.view addSubview:tabBarView];
-    lineView=[[UIView alloc]initWithFrame:FRAME(0, 43, 60, 1)];
+    lineView=[[UIView alloc]initWithFrame:FRAME(0, 42, 60, 2)];
     lineView.backgroundColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
     [tabBarView addSubview:lineView];
     
@@ -99,8 +99,10 @@ DynamicViewController *dynamicViewController;
     currentSelectButtonIndex=(int)sender.tag;
     UIButton *previousBtn=(UIButton *)[self.view viewWithTag:previousSelectButtonIndex];
     [previousBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    previousBtn.titleLabel.font=[UIFont fontWithName:@"Arial" size:15];
     UIButton *currentBtn = (UIButton *)[self.view viewWithTag:currentSelectButtonIndex];;
     [currentBtn setTitleColor:[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1] forState:UIControlStateNormal];
+    currentBtn.titleLabel.font=[UIFont fontWithName:@"Arial" size:18];
     previousSelectButtonIndex=currentSelectButtonIndex;
     switch (sender.tag) {
         case 1000:
@@ -108,12 +110,7 @@ DynamicViewController *dynamicViewController;
             [self transitionFromViewController:currentViewController toViewController:dynamicViewController duration:0.5 options:0 animations:^{
             }  completion:^(BOOL finished) {
                 if(finished){
-                    [UIView beginAnimations:nil context:nil];
-                    [UIView setAnimationDuration:0.5];
-                    lineView.frame=FRAME(60*(sender.tag-1000), 43, 60, 1);
-                    [newsButton setTitleColor:[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1] forState:UIControlStateNormal];
-                    [secetFriendsButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-                    [UIView commitAnimations];
+                    
                     currentViewController=dynamicViewController;
                     
                 }else{
@@ -129,12 +126,6 @@ DynamicViewController *dynamicViewController;
             [self transitionFromViewController:currentViewController toViewController:secAccessController duration:0.5 options:0 animations:^{
             }  completion:^(BOOL finished) {
                 if(finished){
-                    [UIView beginAnimations:nil context:nil];
-                    [UIView setAnimationDuration:0.5];
-                    lineView.frame=FRAME(60*(sender.tag-1000), 43, 60, 1);
-                    [newsButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-                    [secetFriendsButton setTitleColor:[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1] forState:UIControlStateNormal];
-                    [UIView commitAnimations];
                     currentViewController=secAccessController;
                     
                 }else{
@@ -150,12 +141,6 @@ DynamicViewController *dynamicViewController;
             [self transitionFromViewController:currentViewController toViewController:newsViewController duration:0.5 options:0 animations:^{
             }  completion:^(BOOL finished) {
                 if(finished){
-                    [UIView beginAnimations:nil context:nil];
-                    [UIView setAnimationDuration:0.5];
-                    lineView.frame=FRAME(60*(sender.tag-1000), 43, 60, 1);
-                    [newsButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-                    [secetFriendsButton setTitleColor:[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1] forState:UIControlStateNormal];
-                    [UIView commitAnimations];
                     currentViewController=newsViewController;
                     
                 }else{
@@ -170,6 +155,10 @@ DynamicViewController *dynamicViewController;
         default:
             break;
     }
+    [UIView beginAnimations:nil context:nil];
+    [UIView setAnimationDuration:0.3];
+    lineView.frame=FRAME(60*(sender.tag-1000), 42, 60, 2);
+    [UIView commitAnimations];
 }
 
 - (void)didReceiveMemoryWarning {

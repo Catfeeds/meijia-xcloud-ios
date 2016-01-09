@@ -8,8 +8,8 @@
 
 #import "FatherViewController.h"
 #import "AppDelegate.h"
-@interface RootViewController : FatherViewController<appDelegate>
-- (void)tabbarhiddenNO;
-- (void)tabbarhidden;
+@interface RootViewController : FatherViewController//<appDelegate>
+//- (void)tabbarhiddenNO;
+//- (void)tabbarhidden;
 @property (nonatomic, strong)UIView *tab;
 @end

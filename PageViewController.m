@@ -366,7 +366,7 @@ CGFloat newHeight ;
     imageView.frame =CGRectMake(0, 0, self.view.frame.size.width, 44);
     
 
-    NSArray *weekArray=@[@"周日",@"周一",@"周二",@"周三",@"周四",@"周五",@"周六"];
+    NSArray *weekArray=@[@"日",@"一",@"二",@"三",@"四",@"五",@"六"];
     for (int i=0; i<weekArray.count; i++) {
         UIButton *weekButton=[[UIButton alloc]init];
         weekButton.frame=CGRectMake((self.view.frame.size.width-210)/8+7+(30+(self.view.frame.size.width-210)/8)*i, imageView.frame.size.height-15, 30, 10);

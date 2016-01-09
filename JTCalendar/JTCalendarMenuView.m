@@ -115,11 +115,11 @@
     for(int i = 0; i < NUMBER_PAGES_LOADED; ++i){
         JTCalendarMenuMonthView *monthView = monthsViews[i];
         if (i==2) {
-            [UIView beginAnimations:nil context:nil];
-            //设置动画时长
-            [UIView setAnimationDuration:5];
+//            [UIView beginAnimations:nil context:nil];
+//            //设置动画时长
+//            [UIView setAnimationDuration:5];
             monthView.alpha=1;
-            [UIView commitAnimations];
+//            [UIView commitAnimations];
 
         }
         dayComponent.month = i - (NUMBER_PAGES_LOADED / 2);

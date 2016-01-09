@@ -104,7 +104,7 @@
     for (int i = 0; i < arr.count; i++) {
         UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
         button.tag =i;
-        button.backgroundColor = [UIColor greenColor];
+        button.backgroundColor = [UIColor colorWithRed:240/255.0f green:240/255.0f blue:240/255.0f alpha:1];
         button.layer.cornerRadius=5;
         [button addTarget:self action:@selector(handleClick:) forControlEvents:UIControlEventTouchUpInside];
         [button setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
@@ -117,6 +117,7 @@
         //设置button的frame
         button.frame = CGRectMake(10 + w, h, length + 15 , 30);
         button.titleLabel.font=[UIFont fontWithName:@"Arial" size:13];
+        [button setTitleColor:[UIColor colorWithRed:150/255.0f green:150/255.0f blue:150/255.0f alpha:1] forState:UIControlStateNormal];
         //当button的位置超出屏幕边缘时换行 320 只是button所在父视图的宽度
         if(10 + w + length + 15 > 320){
             w = 0; //换行时将w置为0

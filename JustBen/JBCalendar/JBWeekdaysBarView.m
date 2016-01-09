@@ -45,7 +45,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-        self.weekdays = [NSArray arrayWithObjects:@"周日", @"周一", @"周二", @"周三", @"周四", @"周五", @"周六", nil];
+        self.weekdays = [NSArray arrayWithObjects:@"日", @"一", @"二", @"三", @"四", @"五", @"六", nil];
         
         self.weekdayLabels = [[NSMutableArray alloc] init];
         CGFloat labelWidth = self.bounds.size.width / DaysCountPerWeek;

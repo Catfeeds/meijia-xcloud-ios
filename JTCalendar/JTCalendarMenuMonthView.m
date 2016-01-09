@@ -60,11 +60,12 @@
     NSString *  locationString=[dateformatter stringFromDate:currentDate];
     NSLog(@"时间%@",locationString);
     textLabel.text = locationString;
+    
 }
 
 - (void)layoutSubviews
 {
-    textLabel.frame = CGRectMake(0, 11, self.frame.size.width, self.frame.size.height);
+    textLabel.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
 
     // No need to call [super layoutSubviews]
 }

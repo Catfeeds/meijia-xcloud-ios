@@ -301,7 +301,7 @@
 
 //向日历中添加星期标号（周日到周六）
 -(void)AddWeekLableToCalendarWatch{
-    NSMutableArray* array = [[NSMutableArray alloc]initWithObjects:@"周日",@"周一",@"周二",@"周三",@"周四",@"周五",@"周六", nil];
+    NSMutableArray* array = [[NSMutableArray alloc]initWithObjects:@"日",@"一",@"二",@"三",@"四",@"五",@"六", nil];
     for (int i = 0; i < 7; i++) {
         UILabel* lable = [[UILabel alloc]init];
         lable.text = [NSString stringWithString:array[i]];

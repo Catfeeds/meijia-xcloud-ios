@@ -25,6 +25,10 @@
     int scrollID;
     int buttID;
     NSArray *array;
+    NSMutableArray *W;
+    CGFloat maximumOffset;
+    CGFloat currentOffset;
+    int widths;
     
 }
 @end
@@ -49,6 +53,7 @@ HairViewController *fourViewController;
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
+    W=[[NSMutableArray alloc]init];
     if (vcID==1005) {
         self.backBtn.hidden=NO;
     }else
@@ -109,19 +114,21 @@ HairViewController *fourViewController;
     [rootView removeFromSuperview];
     rootView=[[UIScrollView alloc]initWithFrame:CGRectMake(0, 64, WIDTH, 37)];
     rootView.backgroundColor=[UIColor whiteColor];
-    rootView.contentSize=CGSizeMake(WIDTH/4*array.count, 37);
+//    rootView.contentSize=CGSizeMake(WIDTH/4*array.count, 37);
+    rootView.showsVerticalScrollIndicator = FALSE;
+    rootView.showsHorizontalScrollIndicator = FALSE;
     //rootView.pagingEnabled=YES;
     rootView.bounces=NO;
     rootView.delegate=self;
     [self.view addSubview:rootView];
-    lineImageView=[[UIImageView alloc]initWithFrame:CGRectMake(0, 36, WIDTH/4, 1)];
+    lineImageView=[[UIImageView alloc]init];
     lineImageView.backgroundColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
     [rootView addSubview:lineImageView];
     
-    
-    for (int i=0; i<array.count; i++) {
+    int X=0;
+    for (int i=0; i<array.count-1; i++) {
         NSDictionary *dic=array[i];
-        UIButton *button=[[UIButton alloc]initWithFrame:CGRectMake(WIDTH/4*i, 0, WIDTH/4, 37)];
+        UIButton *button=[[UIButton alloc]init];
         [button setTitle:[NSString stringWithFormat:@"%@",[dic objectForKey:@"name"]] forState:UIControlStateNormal];
         [button addTarget:self action:@selector(tabbarButton:) forControlEvents:UIControlEventTouchUpInside];
         if (i==0) {
@@ -132,10 +139,34 @@ HairViewController *fourViewController;
         
         [button setTag:1000+i];
         button.titleLabel.font=[UIFont fontWithName:@"Arial" size:15];
+        
+        UILabel *butLabel=[[UILabel alloc]init];
+        butLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"name"]];
+        butLabel.font=[UIFont fontWithName:@"Arial" size:15];
+        [butLabel setNumberOfLines:1];
+        [butLabel sizeToFit];
+        butLabel.frame=FRAME(10, 8, butLabel.frame.size.width, 21);
+//        [button addSubview:butLabel];
 //        button.titleLabel.textColor=;
+        button.frame=CGRectMake(X, 0, butLabel.frame.size.width+20, 37);
         [rootView addSubview:button];
+        X=X+butLabel.frame.size.width+20;
+        int S=butLabel.frame.size.width+20;
+        NSString *stringt=[NSString stringWithFormat:@"%d",S];
+        [W addObject:stringt];
     }
-
+    int kuan=0;
+    for (int i=0; i<W.count; i++) {
+        int k=[[W objectAtIndex:i]intValue];
+        kuan+=k;
+    }
+    rootView.contentSize=CGSizeMake(kuan, 37);
+    maximumOffset = rootView.contentSize.width;
+    CGRect bounds = rootView.bounds;
+    UIEdgeInsets inset = rootView.contentInset;
+    currentOffset = rootView.contentOffset.x+bounds.size.width - inset.bottom;
+    int s=[[W objectAtIndex:0]intValue];
+    lineImageView.frame=CGRectMake(0, 35, s, 2);
 }
 #pragma mark 搜索按钮点击方法
 -(void)searchButAction
@@ -196,6 +227,25 @@ HairViewController *fourViewController;
 }
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
     [_refreshHeaderView egoRefreshScrollViewDidScroll:scrollView];
+    
+    
+    
+    
+    
+    CGRect bounds = scrollView.bounds;
+    
+    
+    
+    
+    UIEdgeInsets inset = scrollView.contentInset;
+    
+    
+    
+    
+    currentOffset = scrollView.contentOffset.x+bounds.size.width - inset.bottom;
+    
+    
+    
 }
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
     [_refreshHeaderView egoRefreshScrollViewDidEndDragging:scrollView];
@@ -217,33 +267,87 @@ HairViewController *fourViewController;
 }
 -(void)tabbarButton:(UIButton *)sender
 {
-    
+    int huang=0,kuan=0;
+     int width=[[W objectAtIndex:(sender.tag-1000)]intValue];
+    for (int i=0; i<(sender.tag-1000); i++) {
+        NSString *string=W[i];
+        int s=[string intValue];
+        huang+=s;
+    }
+    for (int i=0; i<W.count; i++) {
+        int t=[[W objectAtIndex:i]intValue];
+        kuan+=t;
+    }
     int _offSet=(int)(sender.tag-1000);
     NSDictionary *dic=array[_offSet];
-    if (_offSet>2&&_offSet!=array.count-1) {
-        buttID=1;
-        [UIView beginAnimations: @"Animation" context:nil];
-        [UIView setAnimationDuration:1];
-        rootView.contentOffset=CGPointMake(WIDTH/4*1, 0);
-        [UIView commitAnimations];
-        
-    }else if (buttID==1&&_offSet<scrollID){
-        [UIView beginAnimations: @"Animation" context:nil];
-        [UIView setAnimationDuration:1];
-        rootView.contentOffset=CGPointMake(rootView.contentOffset.x-(WIDTH/4), 0);
-        [UIView commitAnimations];
-        
-        if (_offSet<3) {
-            buttID=0;
+    if (kuan>WIDTH) {
+        if (_offSet>2&&_offSet!=array.count-1&&_offSet>scrollID) {
+            buttID=1;
+            [UIView beginAnimations: @"Animation" context:nil];
+            [UIView setAnimationDuration:1];
+            if (currentOffset==maximumOffset||currentOffset>maximumOffset) {
+                
+            }else{
+                if (maximumOffset-currentOffset==width) {
+                    rootView.contentOffset=CGPointMake(rootView.contentOffset.x+width, 0);
+                    widths=width;
+                }else if (maximumOffset-currentOffset<width){
+                    rootView.contentOffset=CGPointMake(rootView.contentOffset.x+maximumOffset-currentOffset, 0);
+                    widths=maximumOffset-currentOffset;
+                }else{
+                    rootView.contentOffset=CGPointMake(rootView.contentOffset.x+width, 0);
+                    widths=width;
+                }
+                
+            }
+            
+            [UIView commitAnimations];
+            
+        }else if (buttID==1&&_offSet<scrollID){
+            if (currentOffset==WIDTH) {
+                
+            }else{
+                [UIView beginAnimations: @"Animation" context:nil];
+                [UIView setAnimationDuration:1];
+                if (currentOffset-WIDTH==width) {
+                    rootView.contentOffset=CGPointMake(rootView.contentOffset.x-width, 0);
+                    widths=width;
+                }else if (currentOffset-WIDTH<width){
+                    rootView.contentOffset=CGPointMake(rootView.contentOffset.x-(currentOffset-WIDTH), 0);
+                    widths=maximumOffset-currentOffset;
+                }else{
+                    rootView.contentOffset=CGPointMake(rootView.contentOffset.x-width, 0);
+                    widths=width;
+                }
+
+//                
+//                if (widths!=0) {
+//                    rootView.contentOffset=CGPointMake(rootView.contentOffset.x-widths, 0);
+//                }else{
+//                    rootView.contentOffset=CGPointMake(rootView.contentOffset.x-width, 0);
+//                }
+//                
+                [UIView commitAnimations];
+
+            }
+
+                
+//            if (_offSet==3||_offSet<3) {
+//                buttID=0;
+//            }
         }
+        
+
     }
     static int currentSelectButtonIndex = 0;
     static int previousSelectButtonIndex=1000;
     currentSelectButtonIndex=(int)sender.tag;
     UIButton *previousBtn=(UIButton *)[self.view viewWithTag:previousSelectButtonIndex];
     [previousBtn setTitleColor:[UIColor colorWithRed:120/255.0f green:120/255.0f blue:120/255.0f alpha:1] forState:UIControlStateNormal];
+    previousBtn.titleLabel.font=[UIFont fontWithName:@"Arial" size:15];
     UIButton *currentBtn = (UIButton *)[self.view viewWithTag:currentSelectButtonIndex];;
     [currentBtn setTitleColor:[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1] forState:UIControlStateNormal];
+    currentBtn.titleLabel.font=[UIFont fontWithName:@"Arial" size:18];
     previousSelectButtonIndex=currentSelectButtonIndex;
     
     
@@ -264,11 +368,12 @@ HairViewController *fourViewController;
     currentViewController = oneViewController;
     
     [UIView beginAnimations: @"Animation" context:nil];
-    [UIView setAnimationDuration:1];
-    lineImageView.frame=CGRectMake(WIDTH/4*(sender.tag-1000), 36, WIDTH/4, 1);
+    [UIView setAnimationDuration:0.3];
+   
+    lineImageView.frame=CGRectMake(huang, 35, width, 2);
     [UIView commitAnimations];
    // currentViewController=oneViewController;
-        scrollID=(int)(sender.tag-1000);
+    scrollID=(int)(sender.tag-1000);
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

@@ -67,11 +67,12 @@
             [self addSubview:_button];
             
             if (i == 4) {
+                NSString *editionStr=[NSString stringWithFormat:@"V%@",[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]];
                 UIButton *_phonebutton = [UIButton buttonWithType:UIButtonTypeCustom];
                 _phonebutton.frame = FRAME(_CELL_WIDTH-100-12, 27+54*4, 100, 54);
                 _phonebutton.titleLabel.font = MYFONT(13.5);
                 [_phonebutton setTitleColor:HEX_TO_UICOLOR(TEXT_COLOR, 1.0) forState:UIControlStateNormal];
-                [_phonebutton setTitle:@"V1.0.5" forState:UIControlStateNormal];
+                [_phonebutton setTitle:editionStr forState:UIControlStateNormal];
                 [self addSubview:_phonebutton];
                 [_button setImage:IMAGE_NAMED(@"") forState:UIControlStateNormal];
                 [_button setTitleEdgeInsets:UIEdgeInsetsMake(0, 31, 0, 0)];

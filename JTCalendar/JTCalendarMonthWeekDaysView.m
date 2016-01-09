@@ -42,7 +42,7 @@ static NSArray *cacheDaysOfWeeks;
         
         view.font = self.calendarManager.calendarAppearance.weekDayTextFont;
         view.textColor = self.calendarManager.calendarAppearance.weekDayTextColor;
-        
+//        view.backgroundColor=[UIColor redColor];
         view.textAlignment = NSTextAlignmentCenter;
         view.text = day;
         
@@ -121,13 +121,14 @@ static NSArray *cacheDaysOfWeeks;
 
 - (void)reloadAppearance
 {
+    NSArray *arr=[[NSMutableArray alloc]initWithObjects:@"一",@"二",@"三",@"四",@"五",@"六",@"日", nil];;
     for(int i = 0; i < self.subviews.count; ++i){
         UILabel *view = [self.subviews objectAtIndex:i];
         
         view.font = self.calendarManager.calendarAppearance.weekDayTextFont;
         view.textColor = self.calendarManager.calendarAppearance.weekDayTextColor;
         
-        view.text = [[self daysOfWeek] objectAtIndex:i];
+        view.text = [arr objectAtIndex:i];
     }
 }
 

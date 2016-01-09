@@ -64,7 +64,7 @@ float lastContentOffset;
     if (vc.L==1) {
         _tableView.scrollEnabled =NO;
     }
-    [self rlLayout];
+//    [self rlLayout];
     
 }
 - (void)viewWillDisappear:(BOOL)animated

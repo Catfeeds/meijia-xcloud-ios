@@ -430,6 +430,7 @@ int height,Y,processID=0;
     UILabel *promptLabel=[[UILabel alloc]init];
     promptLabel.frame=CGRectMake(38/2, weatherImage.frame.origin.y+weatherImage.frame.size.height+21/2, WIDTH-38, 14);
     promptLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"service_content"]];
+    promptLabel.textColor=[UIColor colorWithRed:138/255.0f green:137/255.0f blue:137/255.0f alpha:1];
     promptLabel.lineBreakMode=NSLineBreakByTruncatingTail;
     [promptLabel setNumberOfLines:0];
     [promptLabel sizeToFit];
@@ -439,11 +440,12 @@ int height,Y,processID=0;
     
     
     UILabel *inTimeLabel=[[UILabel alloc]init];
-    inTimeLabel.frame=CGRectMake(38/2, promptLabel.frame.origin.y+promptLabel.frame.size.height+20/2, inTimeLabel.frame.size.width, 10);
+    inTimeLabel.frame=CGRectMake(38/2, promptLabel.frame.origin.y+promptLabel.frame.size.height+5, inTimeLabel.frame.size.width, 10);
     inTimeLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"add_time_str"]];
     inTimeLabel.lineBreakMode=NSLineBreakByTruncatingTail;
     [inTimeLabel setNumberOfLines:0];
     [inTimeLabel sizeToFit];
+    inTimeLabel.textColor=[UIColor colorWithRed:138/255.0f green:137/255.0f blue:137/255.0f alpha:1];
     inTimeLabel.font=[UIFont fontWithName:@"Arial" size:10];
     [selfView addSubview:inTimeLabel];
     
@@ -468,6 +470,7 @@ int height,Y,processID=0;
         [shijianLabel setNumberOfLines:0];
         [shijianLabel sizeToFit];
         shijianLabel.lineBreakMode=NSLineBreakByTruncatingTail;
+        shijianLabel.textColor=[UIColor colorWithRed:138/255.0f green:137/255.0f blue:137/255.0f alpha:1];
         shijianLabel.frame=FRAME(addressLabel.frame.origin.x, addressLabel.frame.origin.y+addressLabel.frame.size.height+10, addressLabel.frame.size.width, 13);
         
         cityLabel.text=cityString;
@@ -475,6 +478,7 @@ int height,Y,processID=0;
         cityLabel.font=font;
         [cityLabel setNumberOfLines:0];
         [cityLabel sizeToFit];
+        cityLabel.textColor=[UIColor colorWithRed:138/255.0f green:137/255.0f blue:137/255.0f alpha:1];
         CGSize constraint = CGSizeMake(WIDTH-addressLabel.frame.origin.x-20, 200.0f);
         NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc]init];
         NSDictionary *attributes = @{NSFontAttributeName:font, NSParagraphStyleAttributeName:paragraphStyle.copy};
@@ -501,6 +505,7 @@ int height,Y,processID=0;
         shijianLabel.font=[UIFont fontWithName:@"Arial" size:11];
         [shijianLabel setNumberOfLines:0];
         [shijianLabel sizeToFit];
+        shijianLabel.textColor=[UIColor colorWithRed:138/255.0f green:137/255.0f blue:137/255.0f alpha:1];
         shijianLabel.lineBreakMode=NSLineBreakByTruncatingTail;
         shijianLabel.frame=FRAME(addressLabel.frame.origin.x, addressLabel.frame.origin.y+addressLabel.frame.size.height+10, addressLabel.frame.size.width, 13);
         
@@ -526,6 +531,7 @@ int height,Y,processID=0;
         shijianLabel.font=[UIFont fontWithName:@"Arial" size:11];
         [shijianLabel setNumberOfLines:0];
         [shijianLabel sizeToFit];
+        shijianLabel.textColor=[UIColor colorWithRed:138/255.0f green:137/255.0f blue:137/255.0f alpha:1];
         shijianLabel.lineBreakMode=NSLineBreakByTruncatingTail;
         shijianLabel.frame=FRAME(addressLabel.frame.origin.x, addressLabel.frame.origin.y+addressLabel.frame.size.height+10, addressLabel.frame.size.width, 13);
         
@@ -550,6 +556,7 @@ int height,Y,processID=0;
         shijianLabel.font=[UIFont fontWithName:@"Arial" size:11];
         [shijianLabel setNumberOfLines:0];
         [shijianLabel sizeToFit];
+        shijianLabel.textColor=[UIColor colorWithRed:138/255.0f green:137/255.0f blue:137/255.0f alpha:1];
         shijianLabel.lineBreakMode=NSLineBreakByTruncatingTail;
         shijianLabel.frame=FRAME(addressLabel.frame.origin.x, addressLabel.frame.origin.y+addressLabel.frame.size.height+10, addressLabel.frame.size.width, 13);
         
@@ -571,6 +578,7 @@ int height,Y,processID=0;
         shijianLabel.font=[UIFont fontWithName:@"Arial" size:11];
         [shijianLabel setNumberOfLines:0];
         [shijianLabel sizeToFit];
+        shijianLabel.textColor=[UIColor colorWithRed:138/255.0f green:137/255.0f blue:137/255.0f alpha:1];
         shijianLabel.lineBreakMode=NSLineBreakByTruncatingTail;
         shijianLabel.frame=FRAME(addressLabel.frame.origin.x, addressLabel.frame.origin.y+addressLabel.frame.size.height+10, addressLabel.frame.size.width, 13);
         
@@ -578,6 +586,7 @@ int height,Y,processID=0;
         cityLabel.font=[UIFont fontWithName:@"Arial" size:11];
         [cityLabel setNumberOfLines:0];
         [cityLabel sizeToFit];
+        cityLabel.textColor=[UIColor colorWithRed:138/255.0f green:137/255.0f blue:137/255.0f alpha:1];
         cityLabel.lineBreakMode=NSLineBreakByTruncatingTail;
         cityLabel.frame=FRAME(addressLabel.frame.origin.x, shijianLabel.frame.origin.y+shijianLabel.frame.size.height+10, addressLabel.frame.size.width, 13);
         
@@ -585,7 +594,7 @@ int height,Y,processID=0;
 
     
     UIView *lineView=[[UIView alloc]init];
-    lineView.frame=CGRectMake(0, inTimeLabel.frame.origin.y+inTimeLabel.frame.size.height+5, WIDTH, 1);
+    lineView.frame=CGRectMake(0, inTimeLabel.frame.origin.y+inTimeLabel.frame.size.height+10, WIDTH, 1);
     lineView.backgroundColor=[UIColor colorWithRed:241/255.0f green:241/255.0f blue:241/255.0f alpha:1];
     [selfView addSubview:lineView];
     
@@ -668,6 +677,7 @@ int height,Y,processID=0;
         UILabel *textLabel=[[UILabel alloc]initWithFrame:FRAME(nameLabel.frame.origin.x, 45, WIDTH-(seekImage.frame.size.width+seekImage.frame.origin.x+30), 15)];
         textLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"set_sec_remarks"]];
         textLabel.font=[UIFont fontWithName:@"Arial" size:14];
+        textLabel.textColor=[UIColor colorWithRed:138/255.0f green:137/255.0f blue:137/255.0f alpha:1];
         [textLabel setNumberOfLines:0];
         [textLabel sizeToFit];
         textLabel.frame=FRAME(nameLabel.frame.origin.x, 45, WIDTH-(seekImage.frame.size.width+seekImage.frame.origin.x+30), textLabel.frame.size.height);
