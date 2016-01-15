@@ -81,7 +81,9 @@
     {
         [myWebView goBack];
     }else{
+        _backBtn.enabled = NO;
         [self.navigationController popViewControllerAnimated:YES];
+        _backBtn.enabled = YES;
     }
 
 }

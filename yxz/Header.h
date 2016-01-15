@@ -143,4 +143,6 @@
 #define DYNAMIC_COM_CARD                 @"simi/app/feed/get_comment_list.json"          //动态-动态评论列表接口
 #define DYNAMIC_COM_DELETE               @"simi/app/feed/del_comment.json"               //动态-动态评论删除接口
 #define WAGE_ORCODE                      @"simi/app/company/get_detail.json"             //企业-获取企业详情
+#define ATTEND_CHECKIN                   @"simi/app/company/checkin.json"                //企业-员工考勤签到接口
+#define ATTEND_DEFAULT                   @"simi/app/company/get_checkins.json"               //企业-获取企业员工班次及考勤记录接口
 #endif

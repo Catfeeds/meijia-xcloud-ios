@@ -115,7 +115,9 @@
     [UIView setAnimationDuration:0.5];
     [_textView resignFirstResponder];
     [UIView commitAnimations];
+    _backBtn.enabled = NO;
     [self.navigationController popViewControllerAnimated:YES];
+    _backBtn.enabled = YES;
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

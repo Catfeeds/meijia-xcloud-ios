@@ -13,7 +13,6 @@
 #import "DownloadManager.h"
 #import "AFHTTPRequestOperationManager.h"
 #import "ISLoginManager.h"
-#import "MyLogInViewController.h"
 #import "ImgWebViewController.h"
 @interface FatherViewController ()<UIAlertViewDelegate>
 {
@@ -54,6 +53,7 @@
 
     _backBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     _backBtn.frame = FRAME(0, 20, 60, 40);
+    _backBtn.tag=33;
     _backBtn.titleLabel.font = [UIFont systemFontOfSize:12];
     [_backBtn addTarget:self action:@selector(backAction) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:_backBtn];
@@ -65,14 +65,17 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(openWebView:) name:@"OPENWEBVIEW" object:nil];
     
 }
-//- (void)hideTabbar
-//{
-//    RootViewController *rot = [[RootViewController alloc]init];
-//    [rot tabbarhidden];
-//}
-- (void)backAction
+-(void)todoSomething
 {
     [self.navigationController popViewControllerAnimated:YES];
+}
+- (void)backAction
+{
+    [[self class] cancelPreviousPerformRequestsWithTarget:self selector:@selector(todoSomething) object:nil];
+    [self performSelector:@selector(todoSomething) withObject:nil afterDelay:0.2f];
+    
+//    [[self class] cancelPreviousPerformRequestsWithTarget:self];
+    
 }   
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -188,32 +191,10 @@
         return;
     }
     
-    
-//    int senior = APPLIACTION.huanxinBase.is_senior;
-//    NSString * toID;
-//    NSString *userName;
-//    if (senior == 1) {
-//        toID = APPLIACTION.huanxinBase.im_senior_username;
-//        userName = APPLIACTION.huanxinBase.im_senior_nickname;
-//    }else{
-//        toID = APPLIACTION.huanxinBase.im_robot_username;
-//        userName = APPLIACTION.huanxinBase.im_robot_nickname;
-//    }
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+//    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 
-    NSString *to = [userDefaults objectForKey:@"TOHXUSERID"];
-    NSString *name = [userDefaults objectForKey:@"TOHXUSERNAME"];
-//    ChatViewController *chat = [[ChatViewController alloc] initWithChatter:to isGroup:NO];
-//    chat.title = name;
-////    chat._baojie = APPLIACTION._baseSource.data.serviceTypes.baojie;
-////    chat._zuofan = APPLIACTION._baseSource.data.serviceTypes.zuofan;
-////    chat._xiyi = APPLIACTION._baseSource.data.serviceTypes.xiyi;
-////    chat._jiadian = APPLIACTION._baseSource.data.serviceTypes.jiadian;
-////    chat._caboli = APPLIACTION._baseSource.data.serviceTypes.caboli;
-////    chat._guandao = APPLIACTION._baseSource.data.serviceTypes.guandao;
-////    chat._xinju = APPLIACTION._baseSource.data.serviceTypes.xinju;
-////    chat.baseData = APPLIACTION.huanxinBase;
-//    [self.navigationController pushViewController:chat animated:YES];
+//    NSString *to = [userDefaults objectForKey:@"TOHXUSERID"];
+//    NSString *name = [userDefaults objectForKey:@"TOHXUSERNAME"];
 }
 //判断是否登录
 -(BOOL)loginYesOrNo
@@ -227,22 +208,6 @@
    
 }
 
-//- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-//{
-//
-//    if (alertView.tag == 20) {
-//        if (buttonIndex == 0) {
-//            NSLog(@"222");
-//        }else{
-//            NSLog(@"111");
-//            //            MyLogInViewController *login = [[MyLogInViewController alloc]init];
-//            //            [self.navigationController presentViewController:login animated:YES completion:nil];
-//            [[NSNotificationCenter defaultCenter]postNotificationName:@"PRESENTMYLOGINVIEW" object:nil];
-//        }
-//    }
-//
-//
-//}
 /*
 #pragma mark - Navigation
 

@@ -45,6 +45,7 @@
 #import "MobClick.h"
 #import "UMSocialSinaSSOHandler.h"
 #import "DetailsViewController.h"
+#import "UMCheckUpdate.h"
 #define IosAppVersion [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]
 @interface AppDelegate ()<WXApiDelegate,WeiboSDKDelegate>
 {
@@ -146,6 +147,7 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    self.riliArray=[[NSMutableArray alloc]init];
     NSArray *path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentDirectory = [path objectAtIndex:0];
     NSString *fileName = [NSString stringWithFormat:@"dr.log"];// 注意不是NSData!
@@ -269,7 +271,7 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     //UMSocial_Sdk_Extra_Frameworks
     //打开调试日志
     [UMSocialData openLog:YES];
-    
+    [UMCheckUpdate checkUpdateWithAppkey:YMAPPKEY channel:@"App Store"];
     
     
     APPLIACTION.application = application;
@@ -773,40 +775,40 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     }
     
     if (gTid!=1) {
-        UILocalNotification *notification=[[UILocalNotification alloc] init];
-        if (notification!=nil) {
-            
-            //NSDate *now=[NSDate new];
-            
-            notification.fireDate=[detaildate dateByAddingTimeInterval:-0];//10秒后通知
-            
-            notification.repeatInterval=0;//循环次数，kCFCalendarUnitWeekday一周一次
-            
-            notification.timeZone=[NSTimeZone defaultTimeZone];
-            
-            notification.applicationIconBadgeNumber=1; //应用的红色数字
-            
-            
-            notification.soundName=@"simivoice.caf";//声音，可以换成alarm.soundName = @"myMusic.caf"
-            
-            //去掉下面2行就不会弹出提示框
-            notification.alertTitle=[dic objectForKey:@"remind_title"];
-            notification.alertBody=[dic objectForKey:@"remind_content"];//提示信息 弹出提示框
-            
-            notification.alertAction = @"打开";  //提示框按钮
-            
-            //notification.hasAction = NO; //是否显示额外的按钮，为no时alertAction消失
-            
-            
-            
-            NSDictionary *infoDict = [NSDictionary dictionaryWithObject:card_idStr forKey:@"someKey"];
-            
-            notification.userInfo = infoDict; //添加额外的信息
-            
-            
-            
-            [[UIApplication sharedApplication] scheduleLocalNotification:notification];
-        }
+//        UILocalNotification *notification=[[UILocalNotification alloc] init];
+//        if (notification!=nil) {
+//            
+//            //NSDate *now=[NSDate new];
+//            
+//            notification.fireDate=[detaildate dateByAddingTimeInterval:-0];//10秒后通知
+//            
+//            notification.repeatInterval=0;//循环次数，kCFCalendarUnitWeekday一周一次
+//            
+//            notification.timeZone=[NSTimeZone defaultTimeZone];
+//            
+//            notification.applicationIconBadgeNumber=1; //应用的红色数字
+//            
+//            
+//            notification.soundName=@"simivoice.caf";//声音，可以换成alarm.soundName = @"myMusic.caf"
+//            
+//            //去掉下面2行就不会弹出提示框
+//            notification.alertTitle=[dic objectForKey:@"remind_title"];
+//            notification.alertBody=[dic objectForKey:@"remind_content"];//提示信息 弹出提示框
+//            
+//            notification.alertAction = @"打开";  //提示框按钮
+//            
+//            //notification.hasAction = NO; //是否显示额外的按钮，为no时alertAction消失
+//            
+//            
+//            
+//            NSDictionary *infoDict = [NSDictionary dictionaryWithObject:card_idStr forKey:@"someKey"];
+//            
+//            notification.userInfo = infoDict; //添加额外的信息
+//            
+//            
+//            
+//            [[UIApplication sharedApplication] scheduleLocalNotification:notification];
+//        }
         
     }else{
         
@@ -935,78 +937,78 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
             NSDateFormatter  *dateformatter=[[NSDateFormatter alloc] init];
             
             [dateformatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-            UILocalNotification *notification=[[UILocalNotification alloc] init];
-            if (notification!=nil) {
-                
-                //NSDate *now=[NSDate new];
-                
-                notification.fireDate=[senddate dateByAddingTimeInterval:-0];//10秒后通知
-                
-                notification.repeatInterval=0;//循环次数，kCFCalendarUnitWeekday一周一次
-                
-                notification.timeZone=[NSTimeZone defaultTimeZone];
-                
-                notification.applicationIconBadgeNumber=1; //应用的红色数字
-                
-                
-                notification.soundName=@"simivoice.caf";//声音，可以换成alarm.soundName = @"myMusic.caf"
-                
-                //去掉下面2行就不会弹出提示框
-                notification.alertTitle=[dic objectForKey:@"remind_title"];
-                notification.alertBody=[dic objectForKey:@"remind_content"];//提示信息 弹出提示框
-                
-                //notification.alertAction = @"打开";  //提示框按钮
-                
-                //notification.hasAction = NO; //是否显示额外的按钮，为no时alertAction消失
-                
-                
-                
-                NSDictionary *infoDict = [NSDictionary dictionaryWithObject:card_idStr forKey:@"someKey"];
-                
-                notification.userInfo = infoDict; //添加额外的信息
-                
-                
-                
-                [[UIApplication sharedApplication] scheduleLocalNotification:notification];
-                
-            }
+//            UILocalNotification *notification=[[UILocalNotification alloc] init];
+//            if (notification!=nil) {
+//                
+//                //NSDate *now=[NSDate new];
+//                
+//                notification.fireDate=[senddate dateByAddingTimeInterval:-0];//10秒后通知
+//                
+//                notification.repeatInterval=0;//循环次数，kCFCalendarUnitWeekday一周一次
+//                
+//                notification.timeZone=[NSTimeZone defaultTimeZone];
+//                
+//                notification.applicationIconBadgeNumber=1; //应用的红色数字
+//                
+//                
+//                notification.soundName=@"simivoice.caf";//声音，可以换成alarm.soundName = @"myMusic.caf"
+//                
+//                //去掉下面2行就不会弹出提示框
+//                notification.alertTitle=[dic objectForKey:@"remind_title"];
+//                notification.alertBody=[dic objectForKey:@"remind_content"];//提示信息 弹出提示框
+//                
+//                //notification.alertAction = @"打开";  //提示框按钮
+//                
+//                //notification.hasAction = NO; //是否显示额外的按钮，为no时alertAction消失
+//                
+//                
+//                
+//                NSDictionary *infoDict = [NSDictionary dictionaryWithObject:card_idStr forKey:@"someKey"];
+//                
+//                notification.userInfo = infoDict; //添加额外的信息
+//                
+//                
+//                
+//                [[UIApplication sharedApplication] scheduleLocalNotification:notification];
+//                
+//            }
         }
         
         if (gTid!=1) {
-            UILocalNotification *notification=[[UILocalNotification alloc] init];
-            if (notification!=nil) {
-                
-                //NSDate *now=[NSDate new];
-                
-                notification.fireDate=[detaildate dateByAddingTimeInterval:-0];//10秒后通知
-                
-                notification.repeatInterval=0;//循环次数，kCFCalendarUnitWeekday一周一次
-                
-                notification.timeZone=[NSTimeZone defaultTimeZone];
-                
-                notification.applicationIconBadgeNumber=1; //应用的红色数字
-                
-                
-                notification.soundName=@"simivoice.caf";//声音，可以换成alarm.soundName = @"myMusic.caf"
-                
-                //去掉下面2行就不会弹出提示框
-                notification.alertTitle=[dic objectForKey:@"remind_title"];
-                notification.alertBody=[dic objectForKey:@"remind_content"];//提示信息 弹出提示框
-                
-                notification.alertAction = @"打开";  //提示框按钮
-                
-                //notification.hasAction = NO; //是否显示额外的按钮，为no时alertAction消失
-                
-                
-                
-                NSDictionary *infoDict = [NSDictionary dictionaryWithObject:card_idStr forKey:@"someKey"];
-                
-                notification.userInfo = infoDict; //添加额外的信息
-                
-                
-                
-                [[UIApplication sharedApplication] scheduleLocalNotification:notification];
-            }
+//            UILocalNotification *notification=[[UILocalNotification alloc] init];
+//            if (notification!=nil) {
+//                
+//                //NSDate *now=[NSDate new];
+//                
+//                notification.fireDate=[detaildate dateByAddingTimeInterval:-0];//10秒后通知
+//                
+//                notification.repeatInterval=0;//循环次数，kCFCalendarUnitWeekday一周一次
+//                
+//                notification.timeZone=[NSTimeZone defaultTimeZone];
+//                
+//                notification.applicationIconBadgeNumber=1; //应用的红色数字
+//                
+//                
+//                notification.soundName=@"simivoice.caf";//声音，可以换成alarm.soundName = @"myMusic.caf"
+//                
+//                //去掉下面2行就不会弹出提示框
+//                notification.alertTitle=[dic objectForKey:@"remind_title"];
+//                notification.alertBody=[dic objectForKey:@"remind_content"];//提示信息 弹出提示框
+//                
+//                notification.alertAction = @"打开";  //提示框按钮
+//                
+//                //notification.hasAction = NO; //是否显示额外的按钮，为no时alertAction消失
+//                
+//                
+//                
+//                NSDictionary *infoDict = [NSDictionary dictionaryWithObject:card_idStr forKey:@"someKey"];
+//                
+//                notification.userInfo = infoDict; //添加额外的信息
+//                
+//                
+//                
+//                [[UIApplication sharedApplication] scheduleLocalNotification:notification];
+//            }
             
         }else{
             

@@ -165,7 +165,9 @@
 }
 - (void)backAction
 {
+    _backBtn.enabled = NO;
     [self.navigationController popViewControllerAnimated:YES];
+    _backBtn.enabled = YES;
 }
 #pragma mark 大图返回按钮点击方法
 -(void)fhAction:(id)sender

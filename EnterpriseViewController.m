@@ -32,7 +32,7 @@
         DownloadManager *_download = [[DownloadManager alloc]init];
         NSDictionary *_dict=@{@"user_id":_manager.telephone};
         [_download requestWithUrl:USER_ENTERPRISE dict:_dict view:self.view delegate:self finishedSEL:@selector(CompanySuccess:) isPost:NO failedSEL:@selector(CompanyFailure:)];
-        
+        [self tableViewLayout];
     }
     // Do any additional setup after loading the view.
 }
@@ -52,7 +52,7 @@
 {
     NSLog(@"用户所属企业列表数据%@",sender);
     companyArray=[sender objectForKey:@"data"];
-    [self tableViewLayout];
+    [myTableView reloadData];
 }
 #pragma mark 用户所属企业列表失败返回
 -(void)CompanyFailure:(id)sender

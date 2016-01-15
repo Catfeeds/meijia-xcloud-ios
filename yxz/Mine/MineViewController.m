@@ -10,7 +10,7 @@
 #import "ChoiceDefine.h"
 #import "UserInfoViewController.h"
 #import "UsedDressViewController.h"
-#import "MyLogInViewController.h"
+//#import "MyLogInViewController.h"
 #import "ISLoginManager.h"
 
 #import "HuiYuanCenterController.h"
@@ -343,10 +343,10 @@
             [self presentViewController:userinfo animated:YES completion:nil];
 //            [self.navigationController pushViewController:userinfo animated:YES];
         }else{
-            MyLogInViewController *userinfo = [[MyLogInViewController alloc]init];
-            userinfo.vCLID=0;
-//            [self presentViewController:userinfo animated:YES completion:nil];
-            [self.navigationController pushViewController:userinfo animated:YES];
+//            MyLogInViewController *userinfo = [[MyLogInViewController alloc]init];
+//            userinfo.vCLID=0;
+////            [self presentViewController:userinfo animated:YES completion:nil];
+//            [self.navigationController pushViewController:userinfo animated:YES];
         }
     }else if (sennder.tag == 2) {
         
@@ -355,10 +355,10 @@
             [self.navigationController pushViewController:dress animated:YES];
             
         }else{
-            MyLogInViewController *userinfo = [[MyLogInViewController alloc]init];
-            userinfo.vCLID=0;
-//            [self presentViewController:userinfo animated:YES completion:nil];
-            [self.navigationController pushViewController:userinfo animated:YES];
+//            MyLogInViewController *userinfo = [[MyLogInViewController alloc]init];
+//            userinfo.vCLID=0;
+////            [self presentViewController:userinfo animated:YES completion:nil];
+//            [self.navigationController pushViewController:userinfo animated:YES];
 
         }
         
@@ -372,10 +372,10 @@
             
             
         }else{
-            MyLogInViewController *userinfo = [[MyLogInViewController alloc]init];
-            userinfo.vCLID=0;
-//            [self presentViewController:userinfo animated:YES completion:nil];
-            [self.navigationController pushViewController:userinfo animated:YES];
+//            MyLogInViewController *userinfo = [[MyLogInViewController alloc]init];
+//            userinfo.vCLID=0;
+////            [self presentViewController:userinfo animated:YES completion:nil];
+//            [self.navigationController pushViewController:userinfo animated:YES];
 
 
         }
@@ -387,10 +387,10 @@
             [self.navigationController pushViewController:_controller animated:YES];
             
         }else{
-            MyLogInViewController *userinfo = [[MyLogInViewController alloc]init];
-            userinfo.vCLID=0;
-//            [self presentViewController:userinfo animated:YES completion:nil];
-            [self.navigationController pushViewController:userinfo animated:YES];
+//            MyLogInViewController *userinfo = [[MyLogInViewController alloc]init];
+//            userinfo.vCLID=0;
+////            [self presentViewController:userinfo animated:YES completion:nil];
+//            [self.navigationController pushViewController:userinfo animated:YES];
 
         }
         
@@ -403,10 +403,10 @@
             [self.navigationController pushViewController:dress animated:YES];
             
         }else{
-            MyLogInViewController *userinfo = [[MyLogInViewController alloc]init];
-            userinfo.vCLID=0;
-//            [self presentViewController:userinfo animated:YES completion:nil];
-            [self.navigationController pushViewController:userinfo animated:YES];
+//            MyLogInViewController *userinfo = [[MyLogInViewController alloc]init];
+//            userinfo.vCLID=0;
+////            [self presentViewController:userinfo animated:YES completion:nil];
+//            [self.navigationController pushViewController:userinfo animated:YES];
 
         }
         
@@ -417,10 +417,10 @@
             [self.navigationController pushViewController:dress animated:YES];
             
         }else{
-            MyLogInViewController *userinfo = [[MyLogInViewController alloc]init];
-            userinfo.vCLID=0;
-//            [self presentViewController:userinfo animated:YES completion:nil];
-            [self.navigationController pushViewController:userinfo animated:YES];
+//            MyLogInViewController *userinfo = [[MyLogInViewController alloc]init];
+//            userinfo.vCLID=0;
+////            [self presentViewController:userinfo animated:YES completion:nil];
+//            [self.navigationController pushViewController:userinfo animated:YES];
 
         }
         
@@ -440,10 +440,10 @@
             [self.navigationController pushViewController:more animated:YES];
             
         }else{
-            MyLogInViewController *userinfo = [[MyLogInViewController alloc]init];
-            userinfo.vCLID=0;
-            //            [self presentViewController:userinfo animated:YES completion:nil];
-            [self.navigationController pushViewController:userinfo animated:YES];
+//            MyLogInViewController *userinfo = [[MyLogInViewController alloc]init];
+//            userinfo.vCLID=0;
+//            //            [self presentViewController:userinfo animated:YES completion:nil];
+//            [self.navigationController pushViewController:userinfo animated:YES];
         }
     }
 //    else if (sennder.tag == 8)

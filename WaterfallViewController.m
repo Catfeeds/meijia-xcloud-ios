@@ -12,6 +12,7 @@
 #import "MineJifenViewController.h"
 #import "Order_ListViewController.h"
 #import "CreditWebViewController.h"
+#import "AttendanceViewController.h"
 @interface WaterfallViewController ()
 {
 //    UIView *_headerView;
@@ -232,7 +233,22 @@
                 CreditWebViewController *web=[[CreditWebViewController alloc]initWithUrl:url];//实际中需要改为带签名的地址
                 //如果已经有UINavigationContoller了，就 创建出一个 CreditWebViewController 然后 push 进去
                 [self.navigationController pushViewController:web animated:YES];
+            }else{
+                AttendanceViewController *userVC=[[AttendanceViewController alloc]init];
+                [self.navigationController pushViewController:userVC animated:YES];
             }
+        }else if(indexPath.row==4){
+            AttendanceViewController *userVC=[[AttendanceViewController alloc]init];
+            AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication] delegate];
+            NSString *has_company=[NSString stringWithFormat:@"%@",[delegate.globalDic objectForKey:@"has_company"]];
+            int has=[has_company intValue];
+            if (has==0) {
+                userVC.webID=0;
+            }else{
+                userVC.webID=1;
+            }
+
+            [self.navigationController pushViewController:userVC animated:YES];
         }else{
             urlString=[NSString stringWithFormat:@"%@",[dataDic objectForKey:@"url"]];
             [self webLayout];

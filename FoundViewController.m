@@ -10,6 +10,7 @@
 #import "ClerkViewController.h"
 #import "SearchVoiceViewController.h"
 #import "HairViewController.h"
+#import "WholeViewController.h"
 @interface FoundViewController ()
 {
     UIScrollView *rootView;
@@ -33,9 +34,7 @@
 }
 @end
 HairViewController *oneViewController;
-HairViewController *towViewController;
-HairViewController *threeViewController;
-HairViewController *fourViewController;
+WholeViewController *wholeViewController;
 @implementation FoundViewController
 @synthesize meWebView,lineImageView,vcID;
 -(void)viewWillAppear:(BOOL)animated
@@ -126,7 +125,7 @@ HairViewController *fourViewController;
     [rootView addSubview:lineImageView];
     
     int X=0;
-    for (int i=0; i<array.count-1; i++) {
+    for (int i=0; i<array.count; i++) {
         NSDictionary *dic=array[i];
         UIButton *button=[[UIButton alloc]init];
         [button setTitle:[NSString stringWithFormat:@"%@",[dic objectForKey:@"name"]] forState:UIControlStateNormal];
@@ -356,16 +355,26 @@ HairViewController *fourViewController;
     [view stopAnimating]; // 结束旋转
     [view setHidesWhenStopped:YES]; //当旋转结束时隐藏
     [oneViewController removeFromParentViewController];
+    [wholeViewController removeFromParentViewController];
     [mainView removeFromSuperview];
     mainView = [[UIView alloc]initWithFrame:CGRectMake(0, 101,WIDTH, SELF_VIEW_HEIGHT-151)];
     mainView.backgroundColor=[UIColor whiteColor];
     [self.view addSubview:mainView];
 
-    oneViewController=[[HairViewController alloc]init];
-    [self addChildViewController:oneViewController];
-    oneViewController.channel_id=[NSString stringWithFormat:@"%@",[dic objectForKey:@"channel_id"]];
-    [mainView addSubview:oneViewController.view];
-    currentViewController = oneViewController;
+    if (_offSet==array.count-1) {
+        wholeViewController=[[WholeViewController alloc]init];
+        [self addChildViewController:wholeViewController];
+        wholeViewController.channel_id=[NSString stringWithFormat:@"%@",[dic objectForKey:@"channel_id"]];
+        [mainView addSubview:wholeViewController.view];
+        currentViewController = wholeViewController;
+    }else{
+        oneViewController=[[HairViewController alloc]init];
+        [self addChildViewController:oneViewController];
+        oneViewController.channel_id=[NSString stringWithFormat:@"%@",[dic objectForKey:@"channel_id"]];
+        [mainView addSubview:oneViewController.view];
+        currentViewController = oneViewController;
+
+    }
     
     [UIView beginAnimations: @"Animation" context:nil];
     [UIView setAnimationDuration:0.3];

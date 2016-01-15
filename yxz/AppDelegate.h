@@ -70,7 +70,7 @@
 @property (nonatomic) BOOL pushBool;
 
 @property (nonatomic ,strong) NSDictionary *globalDic;
-@property (nonatomic ,strong) NSArray *riliArray;
+@property (nonatomic ,strong) NSMutableArray *riliArray;
 - (void)startSdkWith:(NSString *)appID appKey:(NSString *)appKey appSecret:(NSString *)appSecret;
 - (void)saveContext;
 - (NSURL *)applicationDocumentsDirectory;

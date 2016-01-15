@@ -8,6 +8,6 @@
 
 #import "FatherViewController.h"
 
-@interface FriendViewController : FatherViewController
+@interface FriendViewController : UIViewController
 
 @end

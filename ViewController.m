@@ -77,6 +77,9 @@ float lastContentOffset;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.imageView.image=[UIImage imageNamed:@"cal-bg.jpg"];
+//    UIImageView *imageView=(UIImageView *)[self.view viewWithTag:100];
+//    imageView.image=[UIImage imageNamed:@"cal-bg.jpg"];
     
     locationManager = [[CLLocationManager alloc] init];
     
@@ -94,18 +97,7 @@ float lastContentOffset;
     [actView startAnimating];
     [self.view addSubview:actView];
     imageArray=[[NSMutableArray alloc]init];
-    
-    self.view.backgroundColor=[UIColor colorWithRed:236/255.0f green:236/255.0f blue:236/255.0f alpha:1];
-    
     self.view.frame=FRAME(0, 0, WIDTH, HEIGHT-50);
-//    foldingBut=[[UIButton alloc]initWithFrame:FRAME(WIDTH-60, 25, 40, 20)];
-//    foldingBut.backgroundColor=[UIColor redColor];
-//    foldingBut.layer.cornerRadius=5;
-//    [foldingBut setTitle:@"展开" forState:UIControlStateNormal];
-//    [foldingBut addTarget:self action:@selector(didChangeModeTouch) forControlEvents:UIControlEventTouchUpInside];
-    
-    
-    
     NSDate *  senddate=[NSDate date];
     NSDateFormatter  *dateformatter=[[NSDateFormatter alloc] init];
     [dateformatter setDateFormat:@"yyyy-MM-dd"];
@@ -120,50 +112,27 @@ float lastContentOffset;
     myImage.image=[UIImage imageNamed:@"GRZX_BT"];
     [myButton addSubview:myImage];
     
-    UIButton *eyeButton=[[UIButton alloc]initWithFrame:FRAME(15, 25, 30, 30)];
+    UIButton *eyeButton=[[UIButton alloc]initWithFrame:FRAME(15, 25, 50, 40)];
     [eyeButton addTarget:self action:@selector(eyeButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:eyeButton];
     
-    UIImageView *eyeImage=[[UIImageView alloc]initWithFrame:FRAME(5, 5, 20, 20)];
+    UIImageView *eyeImage=[[UIImageView alloc]initWithFrame:FRAME(5, 10, 20, 20)];
     eyeImage.image=[UIImage imageNamed:@"iconfont-saoma"];//EYE_BT
     [eyeButton addSubview:eyeImage];
     
-    UIButton *calenderButton=[[UIButton alloc]initWithFrame:FRAME(WIDTH-45, 25, 30, 30)];
+    UIButton *calenderButton=[[UIButton alloc]initWithFrame:FRAME(WIDTH-50, 25, 50, 40)];
     [calenderButton addTarget:self action:@selector(didChangeModeTouch) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:calenderButton];
     
-    UIImageView *calenderImage=[[UIImageView alloc]initWithFrame:FRAME(5, 5, 20, 20)];
+    UIImageView *calenderImage=[[UIImageView alloc]initWithFrame:FRAME(10, 10, 20, 20)];
     calenderImage.image=[UIImage imageNamed:@"RL_BT"];
     [calenderButton addSubview:calenderImage];
     AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication] delegate];
     riliArray=delegate.riliArray;
-//    
-//    NSDateFormatter  *yerformatter=[[NSDateFormatter alloc] init];
-//    [yerformatter setDateFormat:@"yyyy"];
-//    NSString *  yearStr=[yerformatter stringFromDate:senddate];
-//
-//    NSDateFormatter  *monthformatter=[[NSDateFormatter alloc] init];
-//    [monthformatter setDateFormat:@"MM"];
-//    NSString *  monthStr=[monthformatter stringFromDate:senddate];
-//
-//    
-//    ISLoginManager *_manager = [ISLoginManager shareManager];
-//    DownloadManager *download = [[DownloadManager alloc]init];
-//    NSDictionary *dict=@{@"user_id":_manager.telephone,@"year":yearStr,@"month":monthStr};
-//    [download requestWithUrl:@"simi/app/card/total_by_month.json"  dict:dict view:self.view delegate:self finishedSEL:@selector(RiLiSuccess:) isPost:NO failedSEL:@selector(RiLiFailure:)];
     [self rlLayout];
    
 }
--(void)RiLiSuccess:(id)sender
-{
-    riliArray=[sender objectForKey:@"data"];
-    
-    
-}
--(void)RiLiFailure:(id)sender
-{
-    NSLog(@"日历布局失败返回:%@",sender);
-}
+
 #pragma mark日历
 -(void)rlLayout
 {
@@ -203,7 +172,9 @@ float lastContentOffset;
     OcclusionView.hidden=YES;
     
     
-    
+//    self.calendarContentView.alpha=0.8;
+//    self.calendarMenuView.alpha=0.8;
+//    self.calendar
     [self.calendar setMenuMonthsView:self.calendarMenuView];
     [self.calendar setContentView:self.calendarContentView];
     [self.calendar setDataSource:self];
@@ -345,7 +316,7 @@ float lastContentOffset;
 
 -(void)addTimer
 {
-    timer = [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(nextPage) userInfo:nil repeats:YES];
+    timer = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(nextPage) userInfo:nil repeats:YES];
 }
 
 -(void)nextPage
@@ -430,7 +401,7 @@ float lastContentOffset;
 
 // 错误信息
 -(void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error {
-    NSLog(@"error");
+    NSLog(@"error1234567%@",error);
     NSString *errorString;
     [manager stopUpdatingLocation];
     NSLog(@"Error: %@",[error localizedDescription]);
@@ -550,18 +521,6 @@ float lastContentOffset;
     [self transitionExample];
 }
 
-#pragma mark - JTCalendarDataSource
-
-- (BOOL)calendarHaveEvent:(JTCalendar *)calendar date:(NSDate *)date
-{
-    NSString *key = [[self dateFormatter] stringFromDate:date];
-    
-    if(eventsByDate[key] && [eventsByDate[key] count] > 0){
-        return YES;
-    }
-    
-    return NO;
-}
 
 - (void)calendarDidDateSelected:(JTCalendar *)calendar date:(NSDate *)date
 {
@@ -628,7 +587,7 @@ float lastContentOffset;
                          
                          [UIView animateWithDuration:.25
                                           animations:^{
-                                              self.calendarContentView.layer.opacity = 1;
+                                              self.calendarContentView.layer.opacity = 0.9;
                                           }];
                      }];
     [UIView beginAnimations:nil context:nil];
@@ -655,12 +614,46 @@ float lastContentOffset;
     static NSDateFormatter *dateFormatter;
     if(!dateFormatter){
         dateFormatter = [NSDateFormatter new];
-        dateFormatter.dateFormat = @"yyyy-dd-MM";
+        dateFormatter.dateFormat = @"yyyy-MM-dd";
     }
     
     return dateFormatter;
 }
 
+#pragma mark - JTCalendarDataSource
+
+- (BOOL)calendarHaveEvent:(JTCalendar *)calendar date:(NSDate *)date
+{
+    eventsByDate = [NSMutableDictionary new];
+    AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication] delegate];
+    riliArray=delegate.riliArray;
+    for(int i = 0; i < riliArray.count; ++i){
+        NSDictionary *dic=riliArray[i];
+        NSString *riliStr=[NSString stringWithFormat:@"%@ 07:10:00",[dic objectForKey:@"service_date"]];
+        NSString *theFirstTime1=[NSString stringWithFormat:@"%@",riliStr];
+        NSDateFormatter *theFirstformatte1 = [[NSDateFormatter alloc] init];
+        [theFirstformatte1 setDateStyle:NSDateFormatterMediumStyle];
+        [theFirstformatte1 setTimeStyle:NSDateFormatterShortStyle];
+        [theFirstformatte1 setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+        NSDate* theFirstdate1 = [theFirstformatte1 dateFromString:theFirstTime1];
+        //        NSDate *randomDate = [theFirstformatte1 dateFromString:theFirstTime1];//[NSDate dateWithTimeInterval:(rand() % (3600 * 24 * 60)) sinceDate:[NSDate date]];
+        NSString *key = [[self dateFormatter] stringFromDate:theFirstdate1];
+        
+        if(!eventsByDate[key]){
+            eventsByDate[key] = [NSMutableArray new];
+        }
+        
+        [eventsByDate[key] addObject:theFirstdate1];
+    }
+
+    NSString *key = [[self dateFormatter] stringFromDate:date];
+    
+    if(eventsByDate[key] && [eventsByDate[key] count] > 0){
+        return YES;
+    }
+    
+    return NO;
+}
 - (void)createRandomEvents
 {
     eventsByDate = [NSMutableDictionary new];

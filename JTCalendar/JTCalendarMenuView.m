@@ -10,7 +10,7 @@
 #import "JTCalendar.h"
 #import "JTCalendarMenuMonthView.h"
 
-#define NUMBER_PAGES_LOADED 5 // Must be the same in JTCalendarView, JTCalendarMenuView, JTCalendarContentView
+#define NUMBER_PAGES_LOADED 3 // Must be the same in JTCalendarView, JTCalendarMenuView, JTCalendarContentView
 
 @interface JTCalendarMenuView(){
     NSMutableArray *monthsViews;
@@ -55,12 +55,12 @@
     
     for(int i = 0; i < NUMBER_PAGES_LOADED; ++i){
         JTCalendarMenuMonthView *monthView = [JTCalendarMenuMonthView new];
-        if (i!=2) {
+        if (i!=1) {
             monthView.alpha=0.0;
         }else{
             [UIView beginAnimations:nil context:nil];
             //设置动画时长
-            [UIView setAnimationDuration:5];
+            [UIView setAnimationDuration:1];
             monthView.alpha=1;
             [UIView commitAnimations];
         }
@@ -114,7 +114,7 @@
     
     for(int i = 0; i < NUMBER_PAGES_LOADED; ++i){
         JTCalendarMenuMonthView *monthView = monthsViews[i];
-        if (i==2) {
+        if (i==1) {
 //            [UIView beginAnimations:nil context:nil];
 //            //设置动画时长
 //            [UIView setAnimationDuration:5];
@@ -124,8 +124,42 @@
         }
         dayComponent.month = i - (NUMBER_PAGES_LOADED / 2);
         NSDate *monthDate = [calendar dateByAddingComponents:dayComponent toDate:self.currentDate options:0];
+        
+        NSDateFormatter  *yerformatter=[[NSDateFormatter alloc] init];
+        [yerformatter setDateFormat:@"yyyy"];
+        NSString *  yearStr=[yerformatter stringFromDate:monthDate];
+        
+        NSDateFormatter  *monthformatter=[[NSDateFormatter alloc] init];
+        [monthformatter setDateFormat:@"MM"];
+        NSString *  monthStr=[monthformatter stringFromDate:monthDate];
+        ISLoginManager *_manager = [ISLoginManager shareManager];
+        DownloadManager *download = [[DownloadManager alloc]init];
+        NSDictionary *dict=@{@"user_id":_manager.telephone,@"year":yearStr,@"month":monthStr};
+        [download requestWithUrl:@"simi/app/card/total_by_month.json"  dict:dict view:self delegate:self finishedSEL:@selector(RiLiSuccess:) isPost:NO failedSEL:@selector(RiLiFailure:)];
         [monthView setCurrentDate:monthDate];
     }
+    
+}
+-(void)RiLiSuccess:(id)sender
+{
+    NSArray *array=[sender objectForKey:@"data"];
+    AppDelegate *delegates=(AppDelegate*)[[UIApplication sharedApplication] delegate];
+    for (int i=0; i<array.count; i++) {
+        if([delegates.riliArray containsObject:array[i]])
+        {
+            
+        }else{
+            [delegates.riliArray addObject:array[i]];
+        }
+    }
+    
+//    delegates.riliArray=array;
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"RILIARRAY" object:nil];
+}
+-(void)RiLiFailure:(id)sender
+{
+    NSLog(@"日历布局失败返回:%@",sender);
 }
 
 #pragma mark - JTCalendarManager

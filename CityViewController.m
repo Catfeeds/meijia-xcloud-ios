@@ -53,10 +53,6 @@
     NSLog(@"字典个数 %lu",(unsigned long)dicArray.count);
     //[self dismissViewControllerAnimated:YES completion:nil];
 }
-- (void)backAction
-{
-    [self.navigationController popViewControllerAnimated:YES];
-}
 -(void)DownFail:(id)sender
 {
     NSLog(@"erroe is %@",sender);

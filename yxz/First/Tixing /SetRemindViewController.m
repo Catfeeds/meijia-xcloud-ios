@@ -25,10 +25,10 @@
 //#import "APService.h"
 #import "DownloadManager.h"
 #import "ISLoginManager.h"
-#import "MyLogInViewController.h"
+//#import "MyLogInViewController.h"
 #import "BaiduMobStat.h"
 #import "TixingTimePicker.h"
-#import "MyLogInViewController.h"
+//#import "MyLogInViewController.h"
 #import "LoginViewController.h"
 #import "ChatViewController.h"
 @interface SetRemindViewController ()<SelectCityDelegate,UITextFieldDelegate,timePickerDelegate,datePicDelegate,BeiZhuDelegate,repeartDelegate,SetRemDelegate,CallDelegate,TixingTimePic,appDelegate>
@@ -64,7 +64,7 @@
 @end
 
 @implementation SetRemindViewController{
-    UILocalNotification *_notification;
+//    UILocalNotification *_notification;
 }
 @synthesize delegate = _delegate,superior,arrIndex,week;
 
@@ -938,9 +938,9 @@
 {
 
     if (logmanager.isLogin == NO) {
-        MyLogInViewController *log = [[MyLogInViewController alloc]init];
-        log.vCLID=0;
-        [self.navigationController presentViewController:log animated:YES completion:nil];
+//        MyLogInViewController *log = [[MyLogInViewController alloc]init];
+//        log.vCLID=0;
+//        [self.navigationController presentViewController:log animated:YES completion:nil];
         return;
     }
 
@@ -1171,7 +1171,7 @@
     //移除通知时用
     NSDictionary *infoDic = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"%@ %@",_mymodel.date,_mymodel.time] forKey:@"biaoshi"];
     NSLog(@"%@",infoDic);
-    _notification.userInfo = infoDic;
+//    _notification.userInfo = infoDic;
     
 
     int badge = -1;
@@ -1187,83 +1187,83 @@
     if ([_mymodel.week isEqualToString:@"六"]||[_mymodel.week isEqualToString:@"日"]) {
         if(_mymodel.number == 0){
             //一次性
-            _notification.repeatInterval= 0;
+//            _notification.repeatInterval= 0;
         }
         if(_mymodel.number == 1)
         {
             //每天
-            _notification.repeatInterval=NSDayCalendarUnit;
+//            _notification.repeatInterval=NSDayCalendarUnit;
         }
         if(_mymodel.number == 2)
         {
             //每周（每月的星期几）
-            _notification.repeatInterval=NSCalendarUnitWeekday;
+//            _notification.repeatInterval=NSCalendarUnitWeekday;
         }
         if(_mymodel.number == 3)
         {
             //每月＊日
-            _notification.repeatInterval=NSCalendarUnitMonth;
+//            _notification.repeatInterval=NSCalendarUnitMonth;
         }
         if(_mymodel.number == 4)
         {
             //每年（几月几日）
-            _notification.repeatInterval=NSCalendarUnitYear;
+//            _notification.repeatInterval=NSCalendarUnitYear;
         }
     }else{
         if(_mymodel.number == 0){
             //一次性
-            _notification.repeatInterval= 0;
+//            _notification.repeatInterval= 0;
         }
         if(_mymodel.number == 1)
         {
             //每天
-            _notification.repeatInterval= NSDayCalendarUnit;
+//            _notification.repeatInterval= NSDayCalendarUnit;
         }
         if(_mymodel.number == 2)
         {
             //每个工作日
-            _notification.repeatInterval= NSCalendarUnitWeekday;
+//            _notification.repeatInterval= NSCalendarUnitWeekday;
         }
         if(_mymodel.number == 3)
         {
             //每周（每月的星期几）
-            _notification.repeatInterval= NSCalendarUnitWeekdayOrdinal;
+//            _notification.repeatInterval= NSCalendarUnitWeekdayOrdinal;
         }
         if(_mymodel.number == 4)
         {
             //每月＊日
-            _notification.repeatInterval= NSCalendarUnitMonth;
+//            _notification.repeatInterval= NSCalendarUnitMonth;
         }
         if(_mymodel.number == 5)
         {
             //每年（几月几日）
-            _notification.repeatInterval= NSCalendarUnitYear;
+//            _notification.repeatInterval= NSCalendarUnitYear;
         }
     }
 
-    _notification.soundName = UILocalNotificationDefaultSoundName;
+//    _notification.soundName = UILocalNotificationDefaultSoundName;
     
     NSString *result;
-    if (_notification) {
-        
-        result = @"设置闹钟成功";
-        
-        [[UIApplication sharedApplication] scheduleLocalNotification:_notification];
-        
-        if ([superior isEqualToString:@"提醒详情"]) {
-            [self ChangeUserdefaults:nil];
-        }else{
-            [self AddUserDefaults:nil];
-        }
-        
-        [self.delegate SetRemDelegate];
-        
-        [self.navigationController popViewControllerAnimated:YES];
-        
-        
-    } else {
-        result = @"设置闹钟失败";
-    }
+//    if (_notification) {
+//        
+//        result = @"设置闹钟成功";
+//        
+//        [[UIApplication sharedApplication] scheduleLocalNotification:_notification];
+//        
+//        if ([superior isEqualToString:@"提醒详情"]) {
+//            [self ChangeUserdefaults:nil];
+//        }else{
+//            [self AddUserDefaults:nil];
+//        }
+//        
+//        [self.delegate SetRemDelegate];
+//        
+//        [self.navigationController popViewControllerAnimated:YES];
+//        
+//        
+//    } else {
+//        result = @"设置闹钟失败";
+//    }
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"设置"
                                                     message:result
                                                    delegate:self
@@ -1314,9 +1314,9 @@
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (alertView.tag == 20) {
-        MyLogInViewController *log = [[MyLogInViewController alloc]init];
-        log.vCLID=0;
-        [self.navigationController presentViewController:log animated:YES completion:nil];
+//        MyLogInViewController *log = [[MyLogInViewController alloc]init];
+//        log.vCLID=0;
+//        [self.navigationController presentViewController:log animated:YES completion:nil];
     }
 }
 - (void)CallTelephone

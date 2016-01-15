@@ -11,7 +11,7 @@
 #import "AliPayManager.h"
 #import "DownloadManager.h"
 #import "ISLoginManager.h"
-#import "MyLogInViewController.h"
+//#import "MyLogInViewController.h"
 #import "USERINFODataModels.h"
 #import "UserInfoViewController.h"
 #import "WeiXinPay.h"
@@ -425,9 +425,9 @@
         
     }else{
         
-        MyLogInViewController *userinfo = [[MyLogInViewController alloc]init];
-        userinfo.vCLID=0;
-        [self presentViewController:userinfo animated:YES completion:nil];
+//        MyLogInViewController *userinfo = [[MyLogInViewController alloc]init];
+//        userinfo.vCLID=0;
+//        [self presentViewController:userinfo animated:YES completion:nil];
         
     }
     

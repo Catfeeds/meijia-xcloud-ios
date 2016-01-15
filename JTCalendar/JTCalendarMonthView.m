@@ -153,37 +153,11 @@
 {
     for(JTCalendarWeekView *view in weeksViews){
         [view reloadData];
-        
-        
-//        NSDateFormatter  *yerformatter=[[NSDateFormatter alloc] init];
-//        [yerformatter setDateFormat:@"yyyy"];
-//        NSString *  yearStr=[yerformatter stringFromDate:view.calendarManager.currentDate];
-//        
-//        NSDateFormatter  *monthformatter=[[NSDateFormatter alloc] init];
-//        [monthformatter setDateFormat:@"MM"];
-//        NSString *  monthStr=[monthformatter stringFromDate:view.calendarManager.currentDate];
-//        ISLoginManager *_manager = [ISLoginManager shareManager];
-//        DownloadManager *download = [[DownloadManager alloc]init];
-//        NSDictionary *dict=@{@"user_id":_manager.telephone,@"year":yearStr,@"month":monthStr};
-//        [download requestWithUrl:@"simi/app/card/total_by_month.json"  dict:dict view:self delegate:self finishedSEL:@selector(RiLiSuccess:) isPost:NO failedSEL:@selector(RiLiFailure:)];
-        
-        // Doesn't need to do other weeks
         if(self.calendarManager.calendarAppearance.isWeekMode){
             break;
         }
     }
 }
-//-(void)RiLiSuccess:(id)sender
-//{
-//    NSArray *array=[sender objectForKey:@"data"];
-//    AppDelegate *delegates=(AppDelegate*)[[UIApplication sharedApplication] delegate];
-//    delegates.riliArray=array;
-//}
-//-(void)RiLiFailure:(id)sender
-//{
-//    NSLog(@"日历布局失败返回:%@",sender);
-//}
-
 - (void)reloadAppearance
 {
     if(cacheLastWeekMode != self.calendarManager.calendarAppearance.isWeekMode){

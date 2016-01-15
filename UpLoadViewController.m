@@ -47,7 +47,7 @@
     [imageview addSubview:scrollImView];
     
     UIButton *fhBut=[[UIButton alloc]initWithFrame:FRAME(10, 5, 50, 30)];
-    fhBut.backgroundColor=[UIColor redColor];
+//    fhBut.backgroundColor=[UIColor redColor];
     [fhBut addTarget:self action:@selector(fhAction:) forControlEvents:UIControlEventTouchUpInside];
     [scrollImView addSubview:fhBut];
     UIImageView *fhImageView=[[UIImageView alloc]initWithFrame:FRAME(8, 5, 20, 20)];
@@ -55,7 +55,7 @@
     [fhBut addSubview:fhImageView];
     
     UIButton *remBut=[[UIButton alloc]initWithFrame:FRAME(WIDTH-40, 5, 30, 30)];
-    remBut.backgroundColor=[UIColor redColor];
+//    remBut.backgroundColor=[UIColor redColor];
     [remBut addTarget:self action:@selector(remAction:) forControlEvents:UIControlEventTouchUpInside];
     [scrollImView addSubview:remBut];
     UIImageView *remImageView=[[UIImageView alloc]initWithFrame:FRAME(0, 0, 30, 30)];
@@ -177,10 +177,10 @@
 -(void)upButAction
 {
     
-    NSString *urlStr = @"http://123.57.173.36/simi/app/user/post_user_img.json";
+    NSString *urlStr = @"http://123.57.173.36/simi/app/feed/post_feed.json";
     ISLoginManager *_manager = [ISLoginManager shareManager];
     NSString *user=_manager.telephone;
-    NSDictionary *dic=@{@"user_id":user};
+    NSDictionary *dic=@{@"user_id":user,@"title":descriptionView.text};
     // 向服务器提交图片
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
@@ -199,17 +199,14 @@
             }
             
             NSData * imageData =data; //[self.imageDataArray objectAtIndex: i];
-            // 上传的参数名
-            // NSString * Name = [NSString stringWithFormat:@"%@%zi", Image_Name, i+1];
-            // 上传filename
             NSString * fileName = [NSString stringWithFormat:@"image%ld.png", (long)i];
-            [formData appendPartWithFileData:imageData name:@"file" fileName:fileName mimeType:@"image/jpeg"];
+            [formData appendPartWithFileData:imageData name:@"feed_imgs" fileName:fileName mimeType:@"image/jpeg"];
         }
-        //        formData appendPartWithFormData:<#(NSData *)#> name:<#(NSString *)#>
     }
           success:^(AFHTTPRequestOperation *operation, id responseObject){
               NSString *result = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
               NSLog(@"完成 %@", result);
+              [self.navigationController popViewControllerAnimated:YES];
           }
           failure:^(AFHTTPRequestOperation *operation, NSError *error){
               NSLog(@"错误 %@", error.localizedDescription);

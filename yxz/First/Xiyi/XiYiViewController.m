@@ -16,7 +16,7 @@
 #import "AppDelegate.h"
 #import "BaiduMobStat.h"
 #import "MBProgressHUD+Add.h"
-#import "MyLogInViewController.h"
+//#import "MyLogInViewController.h"
 #import "LoginViewController.h"
 #import "ChatViewController.h"
 @interface XiYiViewController () <cellDelegate,CallDelegate,appDelegate>
@@ -309,9 +309,9 @@
 {
     
     if (alertView.tag == 20) {
-        MyLogInViewController *log = [[MyLogInViewController alloc]init];
-        log.vCLID=0;
-        [self.navigationController presentViewController:log animated:YES completion:nil];
+//        MyLogInViewController *log = [[MyLogInViewController alloc]init];
+//        log.vCLID=0;
+//        [self.navigationController presentViewController:log animated:YES completion:nil];
     }
 }
 - (void)CallTelephone

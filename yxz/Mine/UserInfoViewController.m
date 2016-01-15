@@ -515,7 +515,6 @@
     
     
 }
-
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
 {
     [picker dismissViewControllerAnimated:YES completion:nil];
@@ -526,7 +525,9 @@
 }
 - (void)backAction
 {
+    _backBtn.enabled = NO;
     [self dismissViewControllerAnimated:YES completion:nil];
+    _backBtn.enabled = YES;
 }
 
 - (void)didReceiveMemoryWarning {

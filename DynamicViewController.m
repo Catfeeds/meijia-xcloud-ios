@@ -9,7 +9,11 @@
 #import "DynamicViewController.h"
 #import "DynamicTableViewCell.h"
 #import "Dynamic_DetailsViewController.h"
-@interface DynamicViewController ()@end
+@interface DynamicViewController ()
+{
+    int arrayID;
+}
+@end
 
 @implementation DynamicViewController
 {
@@ -34,7 +38,7 @@
 }
 -(void)viewWillAppear:(BOOL)animated
 {
-    
+    [self portData];
 }
 -(void)portData
 {
@@ -57,7 +61,7 @@
     _tableView.dataSource=self;
     _tableView.delegate=self;
     if (string==nil||string==NULL||[string isEqualToString:@""]) {
-        
+        arrayID=100;
     }else{
         [_tableView reloadData];
     }
@@ -75,6 +79,9 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    if (arrayID==100) {
+        return 0;
+    }
     return dataSourceArray.count;
 }
 

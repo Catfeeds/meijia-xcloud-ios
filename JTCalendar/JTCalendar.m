@@ -7,7 +7,7 @@
 
 #import "JTCalendar.h"
 
-#define NUMBER_PAGES_LOADED 5 // Must be the same in JTCalendarView, JTCalendarMenuView, JTCalendarContentView
+#define NUMBER_PAGES_LOADED 3 // Must be the same in JTCalendarView, JTCalendarMenuView, JTCalendarContentView
 
 @interface JTCalendar(){
     BOOL cacheLastWeekMode;
@@ -20,11 +20,11 @@
 
 - (instancetype)init
 {
+    
     self = [super init];
     if(!self){
         return nil;
     }
-    
     self->_currentDate = [NSDate date];
     self->_calendarAppearance = [JTCalendarAppearance new];
     self->_dataCache = [JTCalendarDataCache new];
@@ -133,17 +133,7 @@
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
-    NSDateFormatter  *yerformatter=[[NSDateFormatter alloc] init];
-    [yerformatter setDateFormat:@"yyyy"];
-    NSString *  yearStr=[yerformatter stringFromDate:_menuMonthsView.currentDate];
     
-    NSDateFormatter  *monthformatter=[[NSDateFormatter alloc] init];
-    [monthformatter setDateFormat:@"MM"];
-    NSString *  monthStr=[monthformatter stringFromDate:_menuMonthsView.currentDate];
-    ISLoginManager *_manager = [ISLoginManager shareManager];
-    DownloadManager *download = [[DownloadManager alloc]init];
-    NSDictionary *dict=@{@"user_id":_manager.telephone,@"year":yearStr,@"month":monthStr};
-    [download requestWithUrl:@"simi/app/card/total_by_month.json"  dict:dict view:scrollView delegate:self finishedSEL:@selector(RiLiSuccess:) isPost:NO failedSEL:@selector(RiLiFailure:)];
     if(scrollView == self.contentView){
         self.menuMonthsView.scrollEnabled = NO;
     }
@@ -151,6 +141,7 @@
         self.contentView.scrollEnabled = NO;
     }
 }
+
 - (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView
 {
     [self updatePage];
@@ -160,17 +151,6 @@
     
     [self updatePage];
 }
--(void)RiLiSuccess:(id)sender
-{
-    NSArray *array=[sender objectForKey:@"data"];
-    AppDelegate *delegates=(AppDelegate*)[[UIApplication sharedApplication] delegate];
-    delegates.riliArray=array;
-}
--(void)RiLiFailure:(id)sender
-{
-    NSLog(@"日历布局失败返回:%@",sender);
-}
-
 - (void)updatePage
 {
     CGFloat pageWidth = CGRectGetWidth(self.contentView.frame);

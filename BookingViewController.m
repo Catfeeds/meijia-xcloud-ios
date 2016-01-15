@@ -1105,42 +1105,47 @@ int y,x=0,time_ID;
         
         int timeID=[[timeString substringWithRange:NSMakeRange(6,2)] intValue];
         NSLog(@"timeID___%d",timeID);
-        UILocalNotification *notification=[[UILocalNotification alloc] init];
-        if (notification!=nil) {
-            
-            //NSDate *now=[NSDate new];
-            
-            notification.fireDate=[dat dateByAddingTimeInterval:-(time_ID+timeID)];//10秒后通知
-            
-            notification.repeatInterval=0;//循环次数，kCFCalendarUnitWeekday一周一次
-            
-            notification.timeZone=[NSTimeZone defaultTimeZone];
-            
-            notification.applicationIconBadgeNumber=1; //应用的红色数字
-            
-            
-            notification.soundName=@"simivoice.caf";//声音，可以换成alarm.soundName = @"myMusic.caf"
-            
-            //去掉下面2行就不会弹出提示框
-            
-            notification.alertBody=self.navlabel.text;//提示信息 弹出提示框
-            
-            notification.alertAction = @"打开";  //提示框按钮
-            
-            //notification.hasAction = NO; //是否显示额外的按钮，为no时alertAction消失
-            
-            
-            
-            // NSDictionary *infoDict = [NSDictionary dictionaryWithObject:@"someValue" forKey:@"someKey"];
-            
-            //notification.userInfo = infoDict; //添加额外的信息
-            
-            
-            
-            [[UIApplication sharedApplication] scheduleLocalNotification:notification];
-            
-        }
+//        for (int i=0; i<nameArray.count; i++) {
+            if ([nameArray containsObject:@"自己"]) {
+                UILocalNotification *notification=[[UILocalNotification alloc] init];
+                if (notification!=nil) {
+                    
+                    //NSDate *now=[NSDate new];
+                    
+                    notification.fireDate=[dat dateByAddingTimeInterval:-(time_ID+timeID)];//10秒后通知
+                    
+                    notification.repeatInterval=0;//循环次数，kCFCalendarUnitWeekday一周一次
+                    
+                    notification.timeZone=[NSTimeZone defaultTimeZone];
+                    
+                    notification.applicationIconBadgeNumber=1; //应用的红色数字
+                    
+                    
+                    notification.soundName=@"simivoice.caf";//声音，可以换成alarm.soundName = @"myMusic.caf"
+                    
+                    //去掉下面2行就不会弹出提示框
+                    
+                    notification.alertBody=self.navlabel.text;//提示信息 弹出提示框
+                    
+                    notification.alertAction = @"打开";  //提示框按钮
+                    
+                    //notification.hasAction = NO; //是否显示额外的按钮，为no时alertAction消失
+                    
+                    
+                    
+                    // NSDictionary *infoDict = [NSDictionary dictionaryWithObject:@"someValue" forKey:@"someKey"];
+                    
+                    //notification.userInfo = infoDict; //添加额外的信息
+                    
+                    
+                    
+                    [[UIApplication sharedApplication] scheduleLocalNotification:notification];
+                    
+                }
 
+            }
+//        }
+        
     }
     
 }
@@ -1464,7 +1469,9 @@ int y,x=0,time_ID;
 }
 - (void)backAction
 {
+    _backBtn.enabled = NO;
     [self.navigationController popViewControllerAnimated:YES];
+    _backBtn.enabled = YES;
 }
 -(void)DownFail:(id)sender
 {

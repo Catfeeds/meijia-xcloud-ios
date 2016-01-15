@@ -23,13 +23,12 @@
 #import "SERVICEDatas.h"
 #import "UsedDressViewController.h"
 #import "ISLoginManager.h"
-#import "MyLogInViewController.h"
 #import "AppDelegate.h"
 #import "BaiduMobStat.h"
 #import "TimeManager.h"
 #import "ChatViewController.h"
 #import "LoginViewController.h"
-#import "MyLogInViewController.h"
+//#import "MyLogInViewController.h"
 #import "CUSTOMDRESSBaseClass.h"
 #import "CUSTOMDRESSData.h"
 @interface XinjuViewController ()<ChoiceDelegate,picDelegate,BeiZhuDelegate,pingmiDelegate,userDressDelegate,CallDelegate,appDelegate>
@@ -339,9 +338,9 @@
             dress.delegate = self;
             [self.navigationController pushViewController:dress animated:YES];
         }else{
-            MyLogInViewController *log = [[MyLogInViewController alloc]init];
-            log.vCLID=0;
-            [self.navigationController presentViewController:log animated:YES completion:nil];
+//            MyLogInViewController *log = [[MyLogInViewController alloc]init];
+//            log.vCLID=0;
+//            [self.navigationController presentViewController:log animated:YES completion:nil];
         }
     }
     if (btnTag == 32) {
@@ -660,9 +659,9 @@
 {
     
     if (alertView.tag == 20) {
-        MyLogInViewController *log = [[MyLogInViewController alloc]init];
-        log.vCLID=0;
-        [self.navigationController presentViewController:log animated:YES completion:nil];
+//        MyLogInViewController *log = [[MyLogInViewController alloc]init];
+//        log.vCLID=0;
+//        [self.navigationController presentViewController:log animated:YES completion:nil];
     }
 }
 - (void)CallTelephone

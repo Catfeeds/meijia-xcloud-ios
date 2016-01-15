@@ -28,7 +28,7 @@ static NSString *const kJTCalendarDaySelected = @"kJTCalendarDaySelected";
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
-    self = [super initWithFrame:frame];
+        self = [super initWithFrame:frame];
     if(!self){
         return nil;
     }
@@ -105,6 +105,8 @@ static NSString *const kJTCalendarDaySelected = @"kJTCalendarDaySelected";
 {
     textLabel.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
     backgroundView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
+//    backgroundView.backgroundColor=[UIColor redColor];
+//    backgroundView.alpha=0.1;
 
 
     CGFloat sizeCircle = MIN(self.frame.size.width, self.frame.size.height);
@@ -212,23 +214,29 @@ static NSString *const kJTCalendarDaySelected = @"kJTCalendarDaySelected";
     else if([self isToday]){
         if(!self.isOtherMonth){
             circleView.color = [self.calendarManager.calendarAppearance dayCircleColorToday];
+//            circleView.alpha=0.1;
             textLabel.textColor = [self.calendarManager.calendarAppearance dayTextColorToday];
             dotView.color = [self.calendarManager.calendarAppearance dayDotColorToday];
+//            dotView.alpha=0.1;
         }
         else{
             circleView.color = [self.calendarManager.calendarAppearance dayCircleColorTodayOtherMonth];
+//            circleView.alpha=0.1;
             textLabel.textColor = [self.calendarManager.calendarAppearance dayTextColorTodayOtherMonth];
             dotView.color = [self.calendarManager.calendarAppearance dayDotColorTodayOtherMonth];
+//            dotView.alpha=0.1;
         }
     }
     else{
         if(!self.isOtherMonth){
             textLabel.textColor = [self.calendarManager.calendarAppearance dayTextColor];
             dotView.color = [self.calendarManager.calendarAppearance dayDotColor];
+//            dotView.alpha=0.1;
         }
         else{
             textLabel.textColor = [self.calendarManager.calendarAppearance dayTextColorOtherMonth];
             dotView.color = [self.calendarManager.calendarAppearance dayDotColorOtherMonth];
+//            dotView.alpha=0.1;
         }
         
         opacity = 0.;
@@ -255,7 +263,7 @@ static NSString *const kJTCalendarDaySelected = @"kJTCalendarDaySelected";
 - (void)reloadData
 {
     dotView.hidden = ![self.calendarManager.dataCache haveEvent:self.date];
-    
+    NSLog(@"这里是什么玩意啊%hhd",dotView.hidden);
     BOOL selected = [self isSameDate:[self.calendarManager currentDateSelected]];
     [self setSelected:selected animated:NO];
 }
@@ -286,7 +294,7 @@ static NSString *const kJTCalendarDaySelected = @"kJTCalendarDaySelected";
     if(!dateFormatter){
         dateFormatter = [NSDateFormatter new];
         dateFormatter.timeZone = self.calendarManager.calendarAppearance.calendar.timeZone;
-        [dateFormatter setDateFormat:@"dd-MM-yyyy"];
+        [dateFormatter setDateFormat:@"yyyy-MM-dd"];
     }
     
     if(!cacheCurrentDateText){

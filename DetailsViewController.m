@@ -211,7 +211,9 @@ int height,Y,processID=0;
             }
         }
     }else{
+        _backBtn.enabled = NO;
         [self.navigationController popViewControllerAnimated:YES];
+        _backBtn.enabled = YES;
     }
     
 }

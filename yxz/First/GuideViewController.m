@@ -27,7 +27,7 @@
     myscrollview.delegate = self;
     myscrollview.pagingEnabled = YES;
     myscrollview.backgroundColor = [UIColor clearColor];
-    myscrollview.contentSize = CGSizeMake(320*3, self.view.frame.size.height);
+    myscrollview.contentSize = CGSizeMake(WIDTH*3, self.view.frame.size.height);
     [self.view addSubview:myscrollview];
     
     CGFloat y = 600-64-100-20;

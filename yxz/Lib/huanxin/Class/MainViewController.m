@@ -361,8 +361,8 @@ static const CGFloat kDefaultPlaySoundInterval = 3.0;
 {
     EMPushNotificationOptions *options = [[EaseMob sharedInstance].chatManager pushNotificationOptions];
     //发送本地推送
-    UILocalNotification *notification = [[UILocalNotification alloc] init];
-    notification.fireDate = [NSDate date]; //触发通知的时间
+//    UILocalNotification *notification = [[UILocalNotification alloc] init];
+//    notification.fireDate = [NSDate date]; //触发通知的时间
     
     if (options.displayStyle == ePushNotificationDisplayStyle_messageSummary) {
         id<IEMMessageBody> messageBody = [message.messageBodies firstObject];
@@ -407,20 +407,20 @@ static const CGFloat kDefaultPlaySoundInterval = 3.0;
             }
         }
         
-        notification.alertBody = [NSString stringWithFormat:@"%@:%@", title, messageStr];
+//        notification.alertBody = [NSString stringWithFormat:@"%@:%@", title, messageStr];
     }
     else{
-        notification.alertBody = NSLocalizedString(@"receiveMessage", @"you have a new message");
+//        notification.alertBody = NSLocalizedString(@"receiveMessage", @"you have a new message");
     }
     
 //#warning 去掉注释会显示[本地]开头, 方便在开发中区分是否为本地推送
     //notification.alertBody = [[NSString alloc] initWithFormat:@"[本地]%@", notification.alertBody];
     
-    notification.alertAction = NSLocalizedString(@"open", @"Open");
-    notification.timeZone = [NSTimeZone defaultTimeZone];
-    notification.soundName = UILocalNotificationDefaultSoundName;
-    //发送通知
-    [[UIApplication sharedApplication] scheduleLocalNotification:notification];
+//    notification.alertAction = NSLocalizedString(@"open", @"Open");
+//    notification.timeZone = [NSTimeZone defaultTimeZone];
+//    notification.soundName = UILocalNotificationDefaultSoundName;
+//    //发送通知
+//    [[UIApplication sharedApplication] scheduleLocalNotification:notification];
 //    UIApplication *application = [UIApplication sharedApplication];
 //    application.applicationIconBadgeNumber += 1;
 }
@@ -454,11 +454,11 @@ static const CGFloat kDefaultPlaySoundInterval = 3.0;
     BOOL isAppActivity = [[UIApplication sharedApplication] applicationState] == UIApplicationStateActive;
     if (!isAppActivity) {
         //发送本地推送
-        UILocalNotification *notification = [[UILocalNotification alloc] init];
-        notification.fireDate = [NSDate date]; //触发通知的时间
-        notification.alertBody = [NSString stringWithFormat:NSLocalizedString(@"friend.somebodyAddWithName", @"%@ add you as a friend"), username];
-        notification.alertAction = NSLocalizedString(@"open", @"Open");
-        notification.timeZone = [NSTimeZone defaultTimeZone];
+//        UILocalNotification *notification = [[UILocalNotification alloc] init];
+//        notification.fireDate = [NSDate date]; //触发通知的时间
+//        notification.alertBody = [NSString stringWithFormat:NSLocalizedString(@"friend.somebodyAddWithName", @"%@ add you as a friend"), username];
+//        notification.alertAction = NSLocalizedString(@"open", @"Open");
+//        notification.timeZone = [NSTimeZone defaultTimeZone];
     }
 #endif
     

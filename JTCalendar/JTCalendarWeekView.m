@@ -11,6 +11,7 @@
 
 @interface JTCalendarWeekView (){
     NSArray *daysViews;
+    int  arrayID;
 };
 
 @end
@@ -19,6 +20,8 @@
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(dataSourceACtion) name:@"RILIARRAY" object:nil];
+    
     self = [super initWithFrame:frame];
     if(!self){
         return nil;
@@ -28,7 +31,6 @@
     
     return self;
 }
-
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
     self = [super initWithCoder:aDecoder];
@@ -112,13 +114,18 @@
         [view setCalendarManager:calendarManager];
     }
 }
+-(void)dataSourceACtion
+{
+    arrayID+=1;
+    for(JTCalendarDayView *view in daysViews){
+        
+        [view reloadData];
+    }
+}
 
 - (void)reloadData
 {
     
-    for(JTCalendarDayView *view in daysViews){
-        [view reloadData];
-    }
 }
 
 - (void)reloadAppearance

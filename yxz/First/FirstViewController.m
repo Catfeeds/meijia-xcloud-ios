@@ -28,7 +28,7 @@
 #import "ISLoginManager.h"
 #import "AdScrollView.h"
 #import "HuanxinBase.h"
-#import "MyLogInViewController.h"
+//#import "MyLogInViewController.h"
 #import "UserDressMapViewController.h"
 //环信
 #import "LoginViewController.h"
@@ -476,9 +476,9 @@
     if (alertView.tag == 10) {
         if (buttonIndex == 0) {
         }else{
-            MyLogInViewController *login = [[MyLogInViewController alloc]init];
-            login.vCLID=0;;
-            [self.navigationController presentViewController:login animated:YES completion:nil];
+//            MyLogInViewController *login = [[MyLogInViewController alloc]init];
+//            login.vCLID=0;;
+//            [self.navigationController presentViewController:login animated:YES completion:nil];
         }
     }
 

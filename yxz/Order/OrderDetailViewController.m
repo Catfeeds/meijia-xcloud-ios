@@ -66,10 +66,6 @@
     _myview.delegate = self;
     [self.view addSubview:_myview];
 }
-- (void)backAction
-{
-    [self.navigationController popViewControllerAnimated:YES];
-}
 
 
 #pragma mark 获取订单详情接口

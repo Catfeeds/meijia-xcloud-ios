@@ -66,14 +66,14 @@ appDelegate
         [[NSNotificationCenter defaultCenter] postNotificationName:@"LOGIN_SUCCESS" object:nil];
 
     }
-    self.navlabel.text = @"快速注册与登录";
+//    self.navlabel.text = @"快速注册与登录";
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
     wxID=0;
    // super.backBtn.hidden=YES;
     self.navlabel.text = @"快速注册与登录";
-    self.title=@"快速注册与登录";
+//    self.title=@"快速注册与登录";
     if (self.loginYesOrNo == YES) {
         [self pushToIM];
         
@@ -87,15 +87,6 @@ appDelegate
         self.backBtn.hidden = YES;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(back) name:@"MylogVcBack" object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pushToIM) name:@"PUSHTOCHAT" object:nil];
-        
-        //    UIButton *backBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        //    //    [_backBtn setTitle:@"返回" forState:UIControlStateNormal];
-        //    [backBtn setImage:[UIImage imageNamed:@"nav-arrow"] forState:UIControlStateNormal];
-        //    backBtn.titleLabel.font = [UIFont systemFontOfSize:12];
-        //    backBtn.frame = FRAME(18, 25, 40, 30);
-        //    [backBtn setImageEdgeInsets:UIEdgeInsetsMake(5, 10, 5, 10)];  //17/2   16
-        //    [backBtn addTarget:self action:@selector(backAction) forControlEvents:UIControlEventTouchUpInside];
-        //    [self.view addSubview:backBtn];
         
         view = [[UIView alloc]initWithFrame:FRAME(0, NAV_HEIGHT+9, SELF_VIEW_WIDTH, 1.5+108)];
         view.backgroundColor = HEX_TO_UICOLOR(CHOICE_BACK_VIEW_COLOR, 1.0);

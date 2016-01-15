@@ -39,7 +39,7 @@ DynamicViewController *dynamicViewController;
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.backBtn.hidden=YES;
+//    self.backBtn.hidden=YES;
 //    self.navlabel.text=@"好友";
     mainView = [[UIView alloc]initWithFrame:CGRectMake(0, 0,SELF_VIEW_WIDTH, HEIGHT)];
     mainView.backgroundColor=[UIColor blackColor];

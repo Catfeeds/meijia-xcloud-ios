@@ -19,7 +19,7 @@
 #import "MBProgressHUD+Add.h"
 #import "ChatViewController.h"
 #import "LoginViewController.h"
-#import "MyLogInViewController.h"
+//#import "MyLogInViewController.h"
 @interface JiaDianViewController ()<CallDelegate,appDelegate,JiadianDelegate>
 {
     RemindView *remindView;
@@ -321,9 +321,9 @@
 {
     
     if (alertView.tag == 20) {
-        MyLogInViewController *log = [[MyLogInViewController alloc]init];
-        log.vCLID=0;
-        [self.navigationController presentViewController:log animated:YES completion:nil];
+//        MyLogInViewController *log = [[MyLogInViewController alloc]init];
+//        log.vCLID=0;
+//        [self.navigationController presentViewController:log animated:YES completion:nil];
     }
 }
 - (void)CallTelephone

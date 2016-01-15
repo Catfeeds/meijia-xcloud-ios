@@ -72,13 +72,6 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(AddDressWithData:) name:@"ADDDRESS_SUCCESS" object:nil];
     dataArray = [[NSMutableArray alloc] initWithCapacity:0];
     
-//    editButon = [UIButton buttonWithType:UIButtonTypeCustom];
-//    editButon.frame = FRAME(SELF_VIEW_WIDTH-14-15-10, 20+10, 30, 20);
-//    [editButon setTitle:@"编辑" forState:UIControlStateNormal];
-//    editButon.titleLabel.font = [UIFont systemFontOfSize:13];
-//    [editButon addTarget:self action:@selector(setEditing:) forControlEvents:UIControlEventTouchUpInside];
-//    [self.view addSubview:editButon];
-    
     UIButton *bttn = [UIButton buttonWithType:UIButtonTypeCustom];
     bttn.frame = FRAME(14, SELF_VIEW_HEIGHT-14-41, WIDTH-28, 41);
     bttn.layer.cornerRadius=5;

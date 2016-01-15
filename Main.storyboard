@@ -18,22 +18,28 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bLk-nx-MCc" customClass="JTCalendarMenuView">
+                            <imageView userInteractionEnabled="NO" tag="100" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fh6-Yq-SnJ">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="370"/>
+                                <accessibility key="accessibilityConfiguration">
+                                    <accessibilityTraits key="traits" none="YES"/>
+                                </accessibility>
+                            </imageView>
+                            <view alpha="0.90000000000000002" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bLk-nx-MCc" customClass="JTCalendarMenuView">
                                 <rect key="frame" x="0.0" y="20" width="600" height="50"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" white="0.96317331414473684" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="wRk-E7-7hS"/>
                                 </constraints>
                             </view>
-                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IaV-x3-ghF" customClass="JTCalendarContentView">
+                            <view alpha="0.90000000000000002" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IaV-x3-ghF" customClass="JTCalendarContentView">
                                 <rect key="frame" x="0.0" y="70" width="600" height="75"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" white="0.96116879111842102" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="300" id="Kfn-Ge-jpQ"/>
                                 </constraints>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="IaV-x3-ghF" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" id="0Sv-uB-Eut"/>
                             <constraint firstAttribute="trailingMargin" secondItem="bLk-nx-MCc" secondAttribute="trailing" id="3Xi-dc-GLe"/>
@@ -71,10 +77,12 @@
                         <outlet property="calendarContentView" destination="IaV-x3-ghF" id="5OO-9L-SBh"/>
                         <outlet property="calendarContentViewHeight" destination="Kfn-Ge-jpQ" id="r4i-aV-g9Y"/>
                         <outlet property="calendarMenuView" destination="bLk-nx-MCc" id="exp-NN-C52"/>
+                        <outlet property="imageView" destination="fh6-Yq-SnJ" id="1KJ-q4-27n"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="591" y="256"/>
         </scene>
     </scenes>
 </document>

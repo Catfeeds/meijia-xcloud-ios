@@ -13,7 +13,7 @@
 #import "MoreViewController.h"
 #import "PayViewController.h"
 #import "ISLoginManager.h"
-#import "MyLogInViewController.h"
+//#import "MyLogInViewController.h"
 #import "SMBaseViewController.h"
 #import "ChatViewController.h"
 #import "AppDelegate.h"
@@ -64,7 +64,7 @@ FoundViewController * firstViewController;
 ViewController *secondViewController;
 FriendViewController * friendViewController;
 MyselfViewController *thirdViewController;
-MyLogInViewController *myLogInViewController;
+//MyLogInViewController *myLogInViewController;
 @implementation RootViewController
 @synthesize tab;
 -(void)viewWillAppear:(BOOL)animated
@@ -78,7 +78,8 @@ MyLogInViewController *myLogInViewController;
 - (void)viewDidLoad {
     [super viewDidLoad];
     indexesID=0;
-    
+//    self.backBtn.hidden=YES;
+    self.navigationController.navigationBarHidden=YES;
     // 状态栏(statusbar)
     CGRect rectStatus = [[UIApplication sharedApplication] statusBarFrame];
     NSLog(@"status width - %f", rectStatus.size.width); // 宽度
@@ -139,7 +140,15 @@ MyLogInViewController *myLogInViewController;
 {
     NSArray *array=[sender objectForKey:@"data"];
     AppDelegate *delegates=(AppDelegate*)[[UIApplication sharedApplication] delegate];
-    delegates.riliArray=array;
+    for (int i=0; i<array.count; i++) {
+        if([delegates.riliArray containsObject:array[i]])
+        {
+            
+        }else{
+            [delegates.riliArray addObject:array[i]];
+        }
+    }
+
     
     UIStoryboard *story  = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     pageViewController=[story instantiateViewControllerWithIdentifier:@"ViewController"];
@@ -153,14 +162,14 @@ MyLogInViewController *myLogInViewController;
     [self addChildViewController:secondViewController];
     
     friendViewController=[[FriendViewController alloc]init];
-    friendViewController.backBtn.hidden=YES;
+//    friendViewController.backBtn.hidden=YES;
     [self addChildViewController:friendViewController];
     
     thirdViewController = [[MyselfViewController alloc]init];
     [self addChildViewController:thirdViewController];
     
-    myLogInViewController = [[MyLogInViewController alloc]init];
-    [self addChildViewController:myLogInViewController];
+//    myLogInViewController = [[MyLogInViewController alloc]init];
+//    [self addChildViewController:myLogInViewController];
     
     [mainView addSubview:pageViewController.view];
     currentViewController = pageViewController;
@@ -442,7 +451,7 @@ MyLogInViewController *myLogInViewController;
         case 1002:
         {
             indexesID=1;
-            self.backBtn.hidden=YES;
+//            self.backBtn.hidden=YES;
             [self transitionFromViewController:currentViewController toViewController:secondViewController duration:0.5 options:0 animations:^{
                 
             }  completion:^(BOOL finished) {
