@@ -28,6 +28,7 @@
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate,IChatManagerDelegate,GeTuiSdkDelegate,WCSessionDelegate>
 {
+    sqlite3 *yxzdb;
     sqlite3 *database;
     NSArray *_stockDataArray;
     NSArray *_tianjinArray;

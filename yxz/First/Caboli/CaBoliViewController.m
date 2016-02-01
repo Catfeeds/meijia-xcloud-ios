@@ -629,15 +629,7 @@
     
     
 }
-- (void)LoginFailNavpush
-{
-//    LoginViewController *log = [[LoginViewController alloc]init];
-//    log.userName = APPLIACTION.huanxinBase.imUsername;;
-//    log.password = APPLIACTION.huanxinBase.imUserPassword;
-//    [self.navigationController pushViewController:log animated:YES];
-//    [log loginWithUsername:APPLIACTION.huanxinBase.imUsername password:APPLIACTION.huanxinBase.imUserPassword];
-    
-}
+
 - (void)LoginSuccessNavPush
 {
     

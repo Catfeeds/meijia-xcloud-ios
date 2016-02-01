@@ -19,7 +19,7 @@
         _view=[[UIView alloc]init];
         _view.backgroundColor=[UIColor colorWithRed:240/255.0f green:240/255.0f blue:240/255.0f alpha:1];
         [self.contentView addSubview:_view];
-        UIView *shangline=[[UIView alloc]initWithFrame:FRAME(0, 0, WIDTH, 1)];
+        UIView *shangline=[[UIView alloc]initWithFrame:FRAME(0, 0, WIDTH, 0.5)];
         shangline.backgroundColor=[UIColor colorWithRed:220/255.0f green:220/255.0f blue:220/255.0f alpha:1];
         [_view addSubview:shangline];
         UIView *xiaLine=[[UIView alloc]initWithFrame:FRAME(0, 9, WIDTH, 1)];
@@ -29,7 +29,7 @@
         headView.backgroundColor=[UIColor whiteColor];
         [_view addSubview:headView];
         
-        _heideImage=[[UIImageView alloc]initWithFrame:CGRectMake(18, headView.frame.size.height-42, 30, 30)];
+        _heideImage=[[UIImageView alloc]initWithFrame:CGRectMake(10, 4.5, 46, 46)];
         //_heideImage.image=@"";
         //_heideImage.backgroundColor=[UIColor redColor];
         _heideImage.layer.cornerRadius=_heideImage.frame.size.width/2;
@@ -122,7 +122,7 @@
         _contentLabel.frame=CGRectMake(18, 21+_descriptionView.frame.origin.y+_descriptionView.frame.size.height, WIDTH-36, siZe.height);
         [layoutView addSubview:_contentLabel];
         
-        UIImageView *lineimageView=[[UIImageView alloc]initWithFrame:CGRectMake(0, 20+_contentLabel.frame.origin.y+_contentLabel.frame.size.height, WIDTH, 1)];
+        UIImageView *lineimageView=[[UIImageView alloc]initWithFrame:CGRectMake(0, 20+_contentLabel.frame.origin.y+_contentLabel.frame.size.height, WIDTH, 0.5)];
         lineimageView.backgroundColor=[UIColor colorWithRed:225/255.0f green:225/255.0f blue:225/255.0f alpha:1];
         [layoutView addSubview:lineimageView];
         NSArray *array=@[@"common_icon_like_c@2x(1)",@"common_icon_review@2x(1)",@"common_icon_share@2x(1)"];

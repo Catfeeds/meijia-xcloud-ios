@@ -54,7 +54,6 @@
     
     {
         weekdaysView = [JTCalendarMonthWeekDaysView new];
-//        weekdaysView.backgroundColor=[UIColor blueColor];
         [self addSubview:weekdaysView];
     }
     
@@ -94,8 +93,12 @@
     
     for(int i = 0; i < self.subviews.count; ++i){
         UIView *view = self.subviews[i];
+        if (i==0) {
+            view.frame = CGRectMake(0, y, width, 27.5);
+        }else{
+            view.frame = CGRectMake(0, y, width, height);
+        }
         
-        view.frame = CGRectMake(0, y, width, height);
         y = CGRectGetMaxY(view.frame);
         
         if(cacheLastWeekMode && i == weeksToDisplay - 1){

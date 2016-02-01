@@ -49,9 +49,15 @@
 {
     UITableView *_tableView;
     NSDictionary *dict;
-    NSArray *array;
+    NSMutableArray *array;
     ISLoginManager *_manager;
     MeetingViewController *vc;
+    
+    MJRefreshHeaderView *_refreshHeader;
+    MJRefreshFooterView *_moreFooter;
+    BOOL _needRefresh;
+    BOOL _hasMore;
+    NSInteger   page;
     
 }
 @end
@@ -60,6 +66,12 @@
 @synthesize shujuArray;
 -(void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
+    if (_needRefresh) {
+        [_refreshHeader beginRefreshing];
+        _needRefresh = NO;
+    }
+
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
     self.backBtn.hidden=YES;
 //    self.navlabel.text=@"消息";
@@ -71,7 +83,8 @@
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    page=1;
+    array=[[NSMutableArray alloc]init];
     JKTest *text=[JKTest new];
     [text setValue:@"KVC" forKey:@"object"];
     [text valueForKey:@"object"];
@@ -85,28 +98,121 @@
     UIView *v = [[UIView alloc] initWithFrame:CGRectZero];
     
     [_tableView setTableFooterView:v];
+    _refreshHeader = [[MJRefreshHeaderView alloc] init];
+    _refreshHeader.delegate = self;
+    _refreshHeader.scrollView = _tableView;
+    
+    _moreFooter = [[MJRefreshFooterView alloc] init];
+    _moreFooter.delegate = self;
+    _moreFooter.scrollView = _tableView;
 }
 
 -(void)dataLayout
 {
     DownloadManager *_download = [[DownloadManager alloc]init];
     NSString *user_ID=_manager.telephone;
-    NSDictionary *_dict = @{@"user_id":user_ID};
+    NSString *pageStr=[NSString stringWithFormat:@"%ld",(long)page];
+    NSDictionary *_dict = @{@"user_id":user_ID,@"page":pageStr};
     NSLog(@"字典数据%@",_dict);
     [_download requestWithUrl:USER_HYXX dict:_dict view:self.view delegate:self finishedSEL:@selector(logDowLoadFinish:) isPost:NO failedSEL:@selector(DownFail:)];
 }
 -(void)logDowLoadFinish:(id)sender
 {
     NSLog(@"好友消息列表数据%@",sender);
-    array=[sender objectForKey:@"data"];
+//    array=[sender objectForKey:@"data"];
     NSLog(@"数组个数%lu",(unsigned long)array.count);
+    NSArray *arraySS=[sender objectForKey:@"data"];
+    if (arraySS.count<10*page) {
+        _hasMore=YES;
+    }else{
+        _hasMore=NO;
+    }
+    if (page==1) {
+        [array removeAllObjects];
+        [array addObjectsFromArray:arraySS];
+    }else{
+        for (int i=0; i<arraySS.count; i++) {
+            if ([array containsObject:arraySS[i]]) {
+                
+            }else{
+                [array addObject:arraySS[i]];
+            }
+        }
+        
+    }
+
     [_tableView reloadData];
 }
 -(void)DownFail:(id)sender
 {
     NSLog(@"获取好友消息失败");
 }
+#pragma mark 表格刷新相关
+#pragma mark 刷新
+-(void)refresh
+{
+    [_refreshHeader beginRefreshing];
+}
 
+
+#pragma mark - MJRefreshBaseViewDelegate
+- (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
+{
+    
+    if ([refreshView isKindOfClass:[MJRefreshHeaderView class]]) {
+        //头 -》 刷新
+        if (_moreFooter.isRefreshing) {
+            //正在加载更多，取消本次请求
+            [_refreshHeader performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+            return;
+        }
+        page = 1;
+        //刷新
+        [self loadData];
+        
+    }else if ([refreshView isKindOfClass:[MJRefreshFooterView class]]) {
+        //尾 -》 更多
+        if (_refreshHeader.isRefreshing) {
+            //正在刷新，取消本次请求
+            [_moreFooter performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+            
+            return;
+        }
+        
+        if (_hasMore==YES) {
+            //没有更多了
+            [_moreFooter performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+            //            [_tableView reloadData];
+            return;
+        }
+        page++;
+        
+        //加载更多
+        
+        [self loadData];
+    }
+}
+
+-(void)loadData
+{
+    //    if (_service == nil) {
+    //        _service = [[zzProjectListService alloc] init];
+    //        _service.delegate = self;
+    //    }
+    
+    //通过控制page控制更多 网路数据
+    //    [_service reqwithPageSize:INVESTPAGESIZE page:page];
+    //    [self loadImg];
+    
+    //本底数据
+    //    [_arrData addObjectsFromArray:[UIFont familyNames]];
+    
+    [self dataLayout];
+    
+    
+    
+}
+#pragma mark 表格刷新相关
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }
@@ -166,6 +272,14 @@
     textLabel.font=[UIFont fontWithName:@"Arial" size:10];
     textLabel.textColor=[UIColor colorWithRed:225/255.0f green:225/255.0f blue:225/255.0f alpha:1];
     [cell addSubview:textLabel];
+    
+    if([indexPath row] == ((NSIndexPath*)[[tableView indexPathsForVisibleRows] lastObject]).row){
+        //end of loading
+        dispatch_async(dispatch_get_main_queue(),^{
+            [_refreshHeader performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+            [_moreFooter performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+        });
+    }
 
     return cell;
 }

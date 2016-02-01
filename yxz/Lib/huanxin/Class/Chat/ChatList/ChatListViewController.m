@@ -21,6 +21,11 @@
 #import "ConvertToCommonEmoticonsHelper.h"
 
 @interface ChatListViewController ()<UITableViewDelegate,UITableViewDataSource, UISearchDisplayDelegate,SRRefreshDelegate, UISearchBarDelegate, IChatManagerDelegate>
+{
+    NSMutableArray *dataArray;
+    int dataID;
+    int spotID;
+}
 
 @property (strong, nonatomic) NSMutableArray        *dataSource;
 
@@ -47,15 +52,48 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    [self.view addSubview:self.searchBar];
+    self.navigationController.navigationBarHidden=YES;
+    [[self navigationController] setNavigationBarHidden:YES animated:NO];
+    if (_listVcID==100) {
+        UIButton *_backBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        _backBtn.frame = FRAME(0, 20, 60, 40);
+        _backBtn.tag=33;
+        _backBtn.titleLabel.font = [UIFont systemFontOfSize:12];
+        [_backBtn addTarget:self action:@selector(backAction) forControlEvents:UIControlEventTouchUpInside];
+        [self.view addSubview:_backBtn];
+        
+        UIImageView *img = [[UIImageView alloc]initWithFrame:FRAME(18, (40-20)/2, 10, 20)];
+        img.image = [UIImage imageNamed:@"title_left_back"];
+        [_backBtn addSubview:img];
+
+    }
+    dataID=1;
+    dataArray=[[NSMutableArray alloc]init];
+    self.view.backgroundColor=[UIColor whiteColor];
+    UILabel *_lineLable = [[UILabel alloc]initWithFrame:FRAME(0, 63, SELF_VIEW_WIDTH, 1)];
+    _lineLable.backgroundColor = [UIColor grayColor];
+    _lineLable.alpha = 0.3;
+    [self.view addSubview:_lineLable];
+
+//    [self.view addSubview:self.searchBar];
     [self.view addSubview:self.tableView];
     [self.tableView addSubview:self.slimeView];
     [self networkStateView];
     
     [self searchController];
 }
-
+-(void)todoSomething
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+- (void)backAction
+{
+    [[self class] cancelPreviousPerformRequestsWithTarget:self selector:@selector(todoSomething) object:nil];
+    [self performSelector:@selector(todoSomething) withObject:nil afterDelay:0.2f];
+    
+    //    [[self class] cancelPreviousPerformRequestsWithTarget:self];
+    
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -63,12 +101,17 @@
 
 -(void)viewWillAppear:(BOOL)animated
 {
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault animated:NO];
+    [[self navigationController] setNavigationBarHidden:YES animated:NO];
     [super viewWillAppear:animated];
     
+    
+}
+-(void)viewDidAppear:(BOOL)animated
+{
     [self refreshDataSource];
     [self registerNotifications];
 }
-
 -(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
@@ -110,7 +153,7 @@
 - (UITableView *)tableView
 {
     if (_tableView == nil) {
-        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, self.searchBar.frame.size.height, self.view.frame.size.width, self.view.frame.size.height - self.searchBar.frame.size.height) style:UITableViewStylePlain];
+        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 64, self.view.frame.size.width, self.view.frame.size.height - self.searchBar.frame.size.height) style:UITableViewStylePlain];
         _tableView.backgroundColor = [UIColor whiteColor];
         _tableView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
         _tableView.delegate = self;
@@ -213,10 +256,12 @@
 {
     NSMutableArray *ret = nil;
     NSArray *conversations = [[EaseMob sharedInstance].chatManager conversations];
+    NSLog(@"聊天数组%@",conversations);
     NSArray* sorte = [conversations sortedArrayUsingComparator:
            ^(EMConversation *obj1, EMConversation* obj2){
                EMMessage *message1 = [obj1 latestMessage];
                EMMessage *message2 = [obj2 latestMessage];
+               NSLog(@"解析数据%@,%@",message1,message2);
                if(message1.timestamp > message2.timestamp) {
                    return(NSComparisonResult)NSOrderedAscending;
                }else {
@@ -245,6 +290,13 @@
     NSInteger ret = 0;
     ret = conversation.unreadMessagesCount;
     NSLog(@"没有度过的消息个数%ld",(long)ret);
+    spotID+=ret;
+    if(spotID>0){
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"LIAOTIAN" object:nil];
+    }else{
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SPOTQUXIAO" object:nil];
+    }
+
     return  ret;
 }
 
@@ -286,7 +338,7 @@
 
 -(UITableViewCell *)tableView:(UITableView *)tableView
         cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    
+    NSLog(@"数组  %@",self.dataSource);
     static NSString *identify = @"chatListCell";
     ChatListCell *cell = [tableView dequeueReusableCellWithIdentifier:identify];
     
@@ -294,21 +346,29 @@
         cell = [[ChatListCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:identify];
     }
     EMConversation *conversation = [self.dataSource objectAtIndex:indexPath.row];
-    cell.name = conversation.chatter;
-    if (!conversation.isGroup) {
-        cell.placeholderImage = [UIImage imageNamed:@"chatListCellHead.png"];
-    }
-    else{
-        NSString *imageName = @"groupPublicHeader";
-        NSArray *groupArray = [[EaseMob sharedInstance].chatManager groupList];
-        for (EMGroup *group in groupArray) {
-            if ([group.groupId isEqualToString:conversation.chatter]) {
-                cell.name = group.groupSubject;
-                imageName = group.isPublic ? @"groupPublicHeader" : @"groupPrivateHeader";
-                break;
+    for (int i=0; i<dataArray.count; i++) {
+        NSDictionary *dic=dataArray[i];
+        if ([conversation.chatter isEqualToString:[dic objectForKey:@"im_username"]]) {
+            cell.name = [NSString stringWithFormat:@"%@",[dic objectForKey:@"name"]];
+             NSString *imageUrl=[NSString stringWithFormat:@"%@",[dic objectForKey:@"head_img"]];
+            NSData *data=[NSData dataWithContentsOfURL:[NSURL URLWithString:imageUrl]];
+            if (!conversation.isGroup) {
+                cell.placeholderImage =  [UIImage imageWithData:data];
             }
+            else{
+                NSString *imageName = @"groupPublicHeader";
+                NSArray *groupArray = [[EaseMob sharedInstance].chatManager groupList];
+                for (EMGroup *group in groupArray) {
+                    if ([group.groupId isEqualToString:conversation.chatter]) {
+                        cell.name = group.groupSubject;
+                        imageName = @"bianji";
+                        break;
+                    }
+                }
+                cell.placeholderImage =  [UIImage imageWithData:data];
+            }
+
         }
-        cell.placeholderImage = [UIImage imageNamed:imageName];
     }
     cell.detailMsg = [self subTitleMessageByConversation:conversation];
     cell.time = [self lastMessageTimeByConversation:conversation];
@@ -335,7 +395,14 @@
     EMConversation *conversation = [self.dataSource objectAtIndex:indexPath.row];
     
     ChatViewController *chatController;
-    NSString *title = conversation.chatter;
+    NSString *title;
+    for (int i=0; i<dataArray.count; i++) {
+        NSDictionary *dic=dataArray[i];
+        if ([conversation.chatter isEqualToString:[dic objectForKey:@"im_username"]]) {
+            title=[dic objectForKey:@"name"];
+        }
+    }
+//     = conversation.chatter;
     if (conversation.isGroup) {
         NSArray *groupArray = [[EaseMob sharedInstance].chatManager groupList];
         for (EMGroup *group in groupArray) {
@@ -457,8 +524,34 @@
 -(void)refreshDataSource
 {
     self.dataSource = [self loadDataSource];
-    [_tableView reloadData];
-    [self hideHud];
+    for (int i=0; i<self.dataSource.count; i++) {
+        EMConversation *conversation = [self.dataSource objectAtIndex:i];
+        DownloadManager *_download = [[DownloadManager alloc]init];
+        NSDictionary *_dict = @{@"im_username":conversation.chatter};
+        NSLog(@"字典数据%@",_dict);
+        [_download requestWithUrl:@"simi//app/user/get_im_profile.json" dict:_dict view:self.view delegate:self finishedSEL:@selector(logDowLoadFinish:) isPost:NO failedSEL:@selector(DownFail:)];
+    }
+    
+}
+-(void)logDowLoadFinish:(id)sender
+{
+    NSDictionary *dic=[sender objectForKey:@"data"];
+    if ([dataArray containsObject:dic]) {
+        
+    }else{
+        [dataArray addObject:dic];
+    }
+//    if (dataID==self.dataSource.count) {
+        [_tableView reloadData];
+        [self hideHud];
+        dataID=1;
+//    }
+//    dataID++;
+}
+
+-(void)DownFail:(id)sender
+{
+    NSLog(@"获取秘书列表失败!%@",sender);
 }
 
 - (void)isConnect:(BOOL)isConnect{

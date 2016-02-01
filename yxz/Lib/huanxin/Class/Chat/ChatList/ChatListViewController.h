@@ -19,5 +19,6 @@
 
 - (void)isConnect:(BOOL)isConnect;
 - (void)networkChanged:(EMConnectionState)connectionState;
+@property (nonatomic ,assign)int listVcID;
 
 @end

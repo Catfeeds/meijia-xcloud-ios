@@ -7,7 +7,7 @@
 //
 
 #import "CompanyViewController.h"
-
+#import "MeetTableViewCell.h"
 @interface CompanyViewController ()
 {
     NSArray *companyArray;
@@ -167,8 +167,9 @@
         identifier = [NSString stringWithFormat:@"（%ld,%ld)",(long)indexPath.row,(long)indexPath.section];
     }
     
-    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+   
     if (_companyVcId==10) {
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
         UILabel *contactNameLabel = (UILabel *)[cell viewWithTag:101];
         UIImageView *contactImage = (UIImageView *)[cell viewWithTag:103];
         UIImageView *checkboxImageView = (UIImageView *)[cell viewWithTag:104];
@@ -178,7 +179,9 @@
             
         }
         
-        
+//        UILabel *contactNameLabel = (UILabel *)[cell viewWithTag:101];
+//        UIImageView *contactImage = (UIImageView *)[cell viewWithTag:103];
+//        UIImageView *checkboxImageView = (UIImageView *)[cell viewWithTag:104];
         
         contactNameLabel.frame=FRAME(70, 20, WIDTH-110, 20);
         
@@ -208,8 +211,12 @@
         }
 
         checkboxImageView.image = image;
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        return cell;
+
 
     }else{
+         UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
         UIImageView *headImage=[[UIImageView alloc]init];
         UILabel *textLabel=[[UILabel alloc]init];
         //    UIImageView *arrowImage=[[UIImageView alloc]init];
@@ -219,12 +226,12 @@
         if (cell == nil) {
             
             cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
-            headImage.frame=FRAME(10, 5, 40, 40);
+            headImage.frame=FRAME(10, 10, 40, 40);
             //headImage.backgroundColor=[UIColor blackColor];
             headImage.layer.cornerRadius=headImage.frame.size.width/2;
             headImage.clipsToBounds = YES;
             [cell addSubview:headImage];
-            textLabel.frame=FRAME(60, 15, WIDTH-80, 20);
+            textLabel.frame=FRAME(60, 20, WIDTH-80, 20);
             textLabel.font=[UIFont fontWithName:@"Arial" size:17];
             [cell addSubview:textLabel];
             
@@ -245,21 +252,30 @@
             [headImage setImageWithURL:[NSURL URLWithString:imageUrl]placeholderImage:nil];
 //            headImage.image=imageArray[indexPath.row];//[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[dic objectForKey:@"head_img"]]]];
         }
-        
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        return cell;
+ 
     }
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    return cell;
 }
 //改变行的高度
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    return 50;
+    return 60;
     
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    NSDictionary *dic=companyArray[indexPath.row];
+    int idString=[[dic objectForKey:@"friend_id"]intValue];
+    ISLoginManager *manager = [[ISLoginManager alloc]init];
+    int userID=[[NSString stringWithFormat:@"%@",manager.telephone]intValue];
+    if (userID==idString) {
+        UIAlertView *tsView=[[UIAlertView alloc]initWithTitle:@"提醒" message:@"审批人不可以选择自己，请重新选择！" delegate:self cancelButtonTitle:@"我知道了" otherButtonTitles:nil, nil];
+        [tsView show];
+        return;
+    }
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     UIImageView *checkboxImageView = (UIImageView *)[cell viewWithTag:104];
     UIImage *image;

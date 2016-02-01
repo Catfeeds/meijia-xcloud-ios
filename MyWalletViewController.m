@@ -12,10 +12,16 @@
 {
     UILabel *moneyLabel;
     UITableView *detailedTableView;
-    NSArray *tableArray;
+    NSMutableArray *tableArray;
     UIView *balanceView;
     NSDictionary *balanceDic;
     UILabel *alertLabel;
+    
+    MJRefreshHeaderView *_refreshHeader;
+    MJRefreshFooterView *_moreFooter;
+    BOOL _needRefresh;
+    BOOL _hasMore;
+    NSInteger   page;
 }
 
 @end
@@ -24,6 +30,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    page=1;
+    tableArray=[[NSMutableArray alloc]init];
     self.navlabel.text=@"我的钱包";
     balanceView=[[UIView alloc]initWithFrame:FRAME(0, 64, WIDTH, 70)];
     balanceView.backgroundColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
@@ -45,7 +53,26 @@
     balanceBut.backgroundColor=[UIColor whiteColor];
     [balanceBut addTarget:self action:@selector(balanceButAction) forControlEvents:UIControlEventTouchUpInside];
     [balanceView addSubview:balanceBut];
-   
+   [self PLJKLayout];
+    
+    [detailedTableView removeFromSuperview];
+    detailedTableView=[[UITableView alloc]initWithFrame:FRAME(0, 134, WIDTH, HEIGHT-134)];
+    detailedTableView.dataSource=self;
+    detailedTableView.delegate=self;
+    detailedTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    [self.view addSubview:detailedTableView];
+    
+    // [v removeFromSuperview];
+    UIView *v= [[UIView alloc] initWithFrame:CGRectZero];
+    [detailedTableView setTableFooterView:v];
+    
+    _refreshHeader = [[MJRefreshHeaderView alloc] init];
+    _refreshHeader.delegate = self;
+    _refreshHeader.scrollView = detailedTableView;
+    
+    _moreFooter = [[MJRefreshFooterView alloc] init];
+    _moreFooter.delegate = self;
+    _moreFooter.scrollView = detailedTableView;
     // Do any additional setup after loading the view.
 }
 
@@ -65,7 +92,80 @@
 
 -(void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
+    if (_needRefresh) {
+        [_refreshHeader beginRefreshing];
+        _needRefresh = NO;
+    }
+}
+#pragma mark 表格刷新相关
+#pragma mark 刷新
+-(void)refresh
+{
+    [_refreshHeader beginRefreshing];
+}
+
+
+#pragma mark - MJRefreshBaseViewDelegate
+- (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
+{
     
+    if ([refreshView isKindOfClass:[MJRefreshHeaderView class]]) {
+        //头 -》 刷新
+        if (_moreFooter.isRefreshing) {
+            //正在加载更多，取消本次请求
+            [_refreshHeader performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+            return;
+        }
+        page = 1;
+        //刷新
+        [self loadData];
+        
+    }else if ([refreshView isKindOfClass:[MJRefreshFooterView class]]) {
+        //尾 -》 更多
+        if (_refreshHeader.isRefreshing) {
+            //正在刷新，取消本次请求
+            [_moreFooter performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+            
+            return;
+        }
+        
+        if (_hasMore==YES) {
+            //没有更多了
+            [_moreFooter performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+            //            [_tableView reloadData];
+            return;
+        }
+        page++;
+        
+        //加载更多
+        
+        [self loadData];
+    }
+}
+
+-(void)loadData
+{
+    //    if (_service == nil) {
+    //        _service = [[zzProjectListService alloc] init];
+    //        _service.delegate = self;
+    //    }
+    
+    //通过控制page控制更多 网路数据
+    //    [_service reqwithPageSize:INVESTPAGESIZE page:page];
+    //    [self loadImg];
+    
+    //本底数据
+    //    [_arrData addObjectsFromArray:[UIFont familyNames]];
+    
+    [self PLJKLayout];
+    
+    
+    
+}
+#pragma mark 表格刷新相关
+-(void)PLJKLayout
+{
     ISLoginManager *_manager = [ISLoginManager shareManager];
     
     DownloadManager *money = [[DownloadManager alloc]init];
@@ -73,25 +173,35 @@
     [money requestWithUrl:USER_GRZY dict:dic view:self.view delegate:self finishedSEL:@selector(DetailsSuccessDown:) isPost:NO failedSEL:@selector(DetailsFailureDown:)];
     
     DownloadManager *_download = [[DownloadManager alloc]init];
-    NSDictionary *_dicts = @{@"user_id":_manager.telephone,@"page":@"1"};
+    NSString *pageStr=[NSString stringWithFormat:@"%ld",(long)page];
+    NSDictionary *_dicts = @{@"user_id":_manager.telephone,@"page":pageStr};
     [_download requestWithUrl:[NSString stringWithFormat:@"%@",USER_WALLET] dict:_dicts view:self.view delegate:self finishedSEL:@selector(DownloadFinish:) isPost:NO failedSEL:@selector(FailDownload:)];
+
 }
 #pragma mark 我的钱包积口访问成功返回方法
 -(void)DownloadFinish:(id)sender
 {
     NSLog(@"我的钱包返回方法%@",sender);
-        tableArray=[sender objectForKey:@"data"];
-    [detailedTableView removeFromSuperview];
-    detailedTableView=[[UITableView alloc]initWithFrame:FRAME(0, 134, WIDTH, HEIGHT-134)];
-    detailedTableView.dataSource=self;
-    detailedTableView.delegate=self;
-    detailedTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    [self.view addSubview:detailedTableView];
-    
-   // [v removeFromSuperview];
-     UIView *v= [[UIView alloc] initWithFrame:CGRectZero];
-    [detailedTableView setTableFooterView:v];
-
+//        tableArray=[sender objectForKey:@"data"];
+    NSArray *array=[sender objectForKey:@"data"];
+    if (array.count<10*page) {
+        _hasMore=YES;
+    }else{
+        _hasMore=NO;
+    }
+    if (page==1) {
+        [tableArray removeAllObjects];
+        [tableArray addObjectsFromArray:array];
+    }else{
+        for (int i=0; i<array.count; i++) {
+            if ([tableArray containsObject:array[i]]) {
+                
+            }else{
+                [tableArray addObject:array[i]];
+            }
+        }
+        
+    }
     NSString *string=[NSString stringWithFormat:@"%@",[sender objectForKey:@"status"]];
     if ([string isEqualToString:@"999"]) {
         [alertLabel removeFromSuperview];
@@ -109,7 +219,7 @@
                                        userInfo:alertLabel
                                         repeats:NO];
     }
-
+    [detailedTableView reloadData];
 }
 - (void)timerFireMethod:(NSTimer*)theTimer
 {
@@ -206,6 +316,13 @@
     mobileLabel.textAlignment=NSTextAlignmentRight;
     mobileLabel.frame=FRAME(WIDTH-mobileLabel.frame.size.width-10, 32, mobileLabel.frame.size.width, 15);
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    if([indexPath row] == ((NSIndexPath*)[[tableView indexPathsForVisibleRows] lastObject]).row){
+        //end of loading
+        dispatch_async(dispatch_get_main_queue(),^{
+            [_refreshHeader performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+            [_moreFooter performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+        });
+    }
     return cell;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath

@@ -35,14 +35,14 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    self.navlabel.text=@"签到";
     NSArray * arrWeek=[NSArray arrayWithObjects:@"星期六",@"星期日",@"星期一",@"星期二",@"星期三",@"星期四",@"星期五", nil];
     NSDate *date = [NSDate date];
     NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
     NSDateComponents *comps = [[NSDateComponents alloc] init];
     NSInteger unitFlags = NSYearCalendarUnit |NSMonthCalendarUnit |NSDayCalendarUnit |NSWeekdayCalendarUnit |NSHourCalendarUnit |NSMinuteCalendarUnit |NSSecondCalendarUnit;
     comps = [calendar components:unitFlags fromDate:date];
-    int week = (int)[comps weekday];
+    int week = (int)[comps weekday]%7;
     weekString=[NSString stringWithFormat:@"%@",[arrWeek objectAtIndex:week]];
     if (_webID==0) {
         [self webViewLayout];

@@ -13,7 +13,7 @@
 - (void) CardPasswdIs:(NSString *)passwd money:(double)money;
 
 @end
-@interface MineJifenViewController : FatherViewController
+@interface MineJifenViewController : FatherViewController<MJRefreshBaseViewDelegate>
 {
     __weak id<JiFenDelegate>_delegate;
 }

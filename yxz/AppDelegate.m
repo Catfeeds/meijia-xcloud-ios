@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import <AudioToolbox/AudioToolbox.h>
 #import "FirstViewController.h"
 #import "RootViewController.h"
 #import "DatabaseManager.h"
@@ -46,6 +47,7 @@
 #import "UMSocialSinaSSOHandler.h"
 #import "DetailsViewController.h"
 #import "UMCheckUpdate.h"
+
 #define IosAppVersion [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]
 @interface AppDelegate ()<WXApiDelegate,WeiboSDKDelegate>
 {
@@ -64,6 +66,8 @@
     NSString *timeLabelStr;
     NSString *dataLabelStr;
     NSString *textLabelStr;
+    EjectAlertView *ejectView;
+    NSString *helpUrl_Str;
     //NSDictionary *dic;
 }
 
@@ -74,7 +78,7 @@ NSString* const NotificationActionOneIdent = @"ACTION_ONE";
 NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
 @implementation AppDelegate
 
-
+//static SystemSoundID shake_sound_male_id = 1000;
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
@@ -90,7 +94,6 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
 @synthesize payloadId = _payloadId;
 @synthesize lastPayloadIndex = _lastPaylodIndex;
 @synthesize sdkStatus = _sdkStatus;
-
 
 -(void)registerRemoteNotification {
     
@@ -144,21 +147,93 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
 #endif
     
 }
+-(NSString *)dataFilePath {
+    NSArray * myPaths = NSSearchPathForDirectoriesInDomains (NSDocumentDirectory,
+                                                             NSUserDomainMask, YES);
+    NSString * myDocPath = [myPaths objectAtIndex:0];
+    NSString *filename = [myDocPath stringByAppendingPathComponent:@"yxz"];
+    NSLog(@"%@",filename);
+    return filename;
+}
 
+//判断表是否存在
+-(BOOL)checkName:(NSString *)name{
+    
+    char *err;
+    
+    NSString *sql = [NSString stringWithFormat:@"SELECT COUNT(*) FROM yxzdb where type='table' and name='%@';",name];
+    
+    const char *sql_stmt = [sql UTF8String];
+    
+    if(sqlite3_exec(yxzdb, sql_stmt, NULL, NULL, &err) == 1){
+        
+        return YES;
+        
+    }else{
+        
+        return NO;
+        
+    }
+    
+}
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    self.riliArray=[[NSMutableArray alloc]init];
-    NSArray *path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentDirectory = [path objectAtIndex:0];
-    NSString *fileName = [NSString stringWithFormat:@"dr.log"];// 注意不是NSData!
-    NSString *logFilePath = [documentDirectory stringByAppendingPathComponent:fileName];
-    // 先删除已经存在的文件
-    NSFileManager *defaultManager = [NSFileManager defaultManager];
-    [defaultManager removeItemAtPath:logFilePath error:nil];
+    NSString *filename = [self dataFilePath];
+    NSLog(@"%@",filename);
+    if (sqlite3_open([filename UTF8String], &yxzdb) != SQLITE_OK) {
+        sqlite3_close(yxzdb);
+        NSAssert(NO,@"数据库打开失败。");
+    } else {
+        
+        if ([self checkName:@"users"]) {
+            NSString *sqlStr = [NSString stringWithFormat: @"INSERT OR REPLACE INTO %@ (%@, %@, %@ ,%@) VALUES (?,?,?,?)",
+                                TABLE_NAME, FIELDS_NAME_SID, FIELDS_NAME_SNAME, FIELDS_NAME_SCLASS,FIELDS_NAME_MOBILE];
+            
+            sqlite3_stmt *statement;
+            //预处理过程
+            if (sqlite3_prepare_v2(yxzdb, [sqlStr UTF8String], -1, &statement, NULL) == SQLITE_OK) {
+                //绑定参数开始
+                sqlite3_bind_text(statement, 1, [@"1" UTF8String], -1, NULL);
+                sqlite3_bind_text(statement, 2, [@"白玉林" UTF8String], -1, NULL);
+                sqlite3_bind_text(statement, 3, [@"iamge" UTF8String], -1, NULL);
+                sqlite3_bind_text(statement, 4, [@"15727372986" UTF8String], -1, NULL);
+                
+                
+                //执行插入
+                if (sqlite3_step(statement) != SQLITE_DONE) {
+                    NSAssert(0, @"插入数据失败。");
+                }
+            }
+            
+            sqlite3_finalize(statement);
+            sqlite3_close(yxzdb);
+
+        }else{
+            char *err;
+            NSString *createSQL = [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@ (%@ INT PRIMARY KEY, %@ NSSTRING, %@ NSSTRING, %@ NSSTRING);" ,
+                                   TABLE_NAME,FIELDS_NAME_SID,FIELDS_NAME_SNAME,FIELDS_NAME_SCLASS,FIELDS_NAME_MOBILE];
+            if (sqlite3_exec(yxzdb,[createSQL UTF8String],NULL,NULL,&err) != SQLITE_OK) {
+                sqlite3_close(yxzdb);
+                //NSAssert1(NO, @"建表失败, %@", err);
+            }
+            sqlite3_close(yxzdb);
+        }
+        
+    }
+
     
-    // 将log输入到文件
-    freopen([logFilePath cStringUsingEncoding:NSASCIIStringEncoding], "a+", stdout);
-    freopen([logFilePath cStringUsingEncoding:NSASCIIStringEncoding], "a+", stderr);
+    self.riliArray=[[NSMutableArray alloc]init];
+//    NSArray *path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+//    NSString *documentDirectory = [path objectAtIndex:0];
+//    NSString *fileName = [NSString stringWithFormat:@"dr.log"];// 注意不是NSData!
+//    NSString *logFilePath = [documentDirectory stringByAppendingPathComponent:fileName];
+//    // 先删除已经存在的文件
+//    NSFileManager *defaultManager = [NSFileManager defaultManager];
+//    [defaultManager removeItemAtPath:logFilePath error:nil];
+//    
+//    // 将log输入到文件
+//    freopen([logFilePath cStringUsingEncoding:NSASCIIStringEncoding], "a+", stdout);
+//    freopen([logFilePath cStringUsingEncoding:NSASCIIStringEncoding], "a+", stderr);
     
     NSLog(@"我就看看你走没走--1");
     NSLog(@"有什么：%@",launchOptions);
@@ -434,6 +509,8 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
 {
     NSLog(@"我就看看你走没走--2");
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(imageLayout:) name:@"ALERT" object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(viewLayout:) name:@"EJECT" object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(helpLayout:) name:@"HELP" object:nil];
     _appID = appID;
     _appKey = appKey;
     _appSecret =appSecret;
@@ -447,6 +524,125 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     //[1-3]:设置电子围栏功能，开启LBS定位服务 和 是否允许SDK 弹出用户定位请求
     [GeTuiSdk lbsLocationEnable:NO andUserVerify:NO];
     
+}
+-(void)viewLayout:(NSNotification *)dataSource
+{
+    NSDictionary *dataDic=dataSource.object;
+    NSLog(@"%@",dataDic);
+    [ejectView removeFromSuperview];
+    helpUrl_Str=[NSString stringWithFormat:@"%@",[dataDic objectForKey:@"goto_url"]];
+    ejectView = [EjectAlertView new];
+    ejectView.frame=FRAME(0, 0, WIDTH, HEIGHT);
+    ejectView.backgroundColor = [UIColor redColor];
+    [ejectView setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleLeftMargin];
+    [self.window addSubview:ejectView];
+    UIView *grayView=[[UIView alloc]initWithFrame:FRAME(0, 0, WIDTH, HEIGHT)];
+    grayView.backgroundColor=[UIColor blackColor];
+    grayView.alpha=0.4;
+    [ejectView addSubview:grayView];
+    
+    UIView *view=[[UIView alloc]initWithFrame:FRAME((WIDTH-WIDTH*0.72)/2, (HEIGHT-356)/2, WIDTH*0.72, WIDTH*0.72*0.70+168)];
+    view.backgroundColor=[UIColor whiteColor];
+    view.layer.cornerRadius=10;
+    view.clipsToBounds=YES;
+    [ejectView addSubview:view];
+    
+    UIImageView *headeImageView=[[UIImageView alloc]initWithFrame:FRAME(0, 0, WIDTH*0.72, WIDTH*0.72*0.70)];
+    NSString *imageUrl=[NSString stringWithFormat:@"%@",[dataDic objectForKey:@"img_url"]];
+    [headeImageView setImageWithURL:[NSURL URLWithString:imageUrl]placeholderImage:nil];
+    [view addSubview:headeImageView];
+    
+    UILabel *titleLabel=[[UILabel alloc]init];
+    titleLabel.text=[NSString stringWithFormat:@"%@",[dataDic objectForKey:@"title"]];
+    titleLabel.font=[UIFont fontWithName:@"Arial" size:16];
+    [titleLabel setNumberOfLines:1];
+    [titleLabel sizeToFit];
+    titleLabel.frame=FRAME((WIDTH*0.72-titleLabel.frame.size.width)/2, WIDTH*0.72*0.70+10, titleLabel.frame.size.width, 17);
+    [view addSubview:titleLabel];
+    
+    UILabel *textLabel=[[UILabel alloc]init];
+    textLabel.text=[NSString stringWithFormat:@"    %@",[dataDic objectForKey:@"content"]];
+    
+    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc]initWithString:textLabel.text];;
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc]init];
+    [paragraphStyle setLineSpacing:5];
+    [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, textLabel.text.length)];
+    textLabel.attributedText = attributedString;
+    
+    UIFont *font=[UIFont fontWithName:@"Arial" size:13];
+    textLabel.textColor=[UIColor colorWithRed:150/255.0f green:150/255.0f blue:150/255.0f alpha:1];
+    textLabel.font=font;
+    [textLabel setNumberOfLines:0];
+    [textLabel sizeToFit];
+    textLabel.lineBreakMode = NSLineBreakByTruncatingTail;
+    CGSize maximumLabelSize = CGSizeMake(WIDTH*0.72-20, 90);
+    CGSize expectSize = [textLabel sizeThatFits:maximumLabelSize];
+    textLabel.frame=FRAME(10, WIDTH*0.72*0.70+37, expectSize.width, expectSize.height);
+    [view addSubview:textLabel];
+    
+    UIView *hengView=[[UIView alloc]initWithFrame:FRAME(0, WIDTH*0.72*0.70+127, WIDTH*0.72, 1)];
+    hengView.backgroundColor=[UIColor colorWithRed:232/255.0f green:232/255.0f blue:232/255.0f alpha:1];
+    [view addSubview:hengView];
+    
+    UIButton *detailsBut=[[UIButton alloc]initWithFrame:FRAME(0, WIDTH*0.72*0.70+128, (WIDTH*0.72)/2-0.5, 40)];
+    detailsBut.backgroundColor=[UIColor whiteColor];
+    detailsBut.tag=11;
+    [detailsBut addTarget:self action:@selector(ButActiob:) forControlEvents:UIControlEventTouchUpInside];
+    [detailsBut setTitle:@"了解更多" forState:UIControlStateNormal];
+    detailsBut.titleLabel.font=[UIFont fontWithName:@"Arial" size:16];
+    [detailsBut setTitleColor:[UIColor colorWithRed:17/255.0f green:150/255.0f blue:219/255.0f alpha:1] forState:UIControlStateNormal];
+    [view addSubview:detailsBut];
+    
+    UIView *werticalView=[[UIView alloc]initWithFrame:FRAME((WIDTH*0.72)/2-0.5, WIDTH*0.72*0.70+128, 1, 40)];
+    werticalView.backgroundColor=[UIColor colorWithRed:232/255.0f green:232/255.0f blue:232/255.0f alpha:1];
+    [view addSubview:werticalView];
+    
+    UIButton *cancelBut=[[UIButton alloc]initWithFrame:FRAME((WIDTH*0.72)/2+0.5, WIDTH*0.72*0.70+128, WIDTH*0.72/2-0.5, 40)];
+    cancelBut.backgroundColor=[UIColor whiteColor];
+    cancelBut.tag=12;
+    [cancelBut addTarget:self action:@selector(ButActiob:) forControlEvents:UIControlEventTouchUpInside];
+    cancelBut.titleLabel.font=[UIFont fontWithName:@"Arial" size:16];
+    [cancelBut setTitle:@"我知道了" forState:UIControlStateNormal];
+    [cancelBut setTitleColor:[UIColor colorWithRed:17/255.0f green:150/255.0f blue:219/255.0f alpha:1] forState:UIControlStateNormal];
+    [view addSubview:cancelBut];
+}
+-(void)helpLayout:(NSNotification *)dataSource
+{
+    NSDictionary *dic=dataSource.object;
+    ISLoginManager *_manager = [ISLoginManager shareManager];
+    DownloadManager *_download = [[DownloadManager alloc]init];
+    NSString *action=[NSString stringWithFormat:@"%@",[dic objectForKey:@"action"]];
+    NSDictionary *_dic = @{@"action":action,@"user_id":_manager.telephone};
+    [_download requestWithUrl:USER_HELP dict:_dic view:self.window delegate:self finishedSEL:@selector(HelpSuccess:) isPost:NO failedSEL:@selector(HelpFailure:)];
+}
+
+-(void)HelpSuccess:(id)dataSource
+{
+    NSDictionary *dic=[dataSource objectForKey:@"data"];
+    NSString *dataStr=[NSString stringWithFormat:@"%@",[dataSource objectForKey:@"data"]];
+    if (dataStr==nil||dataStr==NULL||[dataStr length]==0||[dataStr isEqualToString:@""]) {
+        
+    }else{
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"EJECT" object:dic];
+    }
+    
+}
+-(void)HelpFailure:(id)dataSource
+{
+    
+}
+
+-(void)ButActiob:(UIButton *)button
+{
+    if (button.tag==12) {
+        ejectView.hidden=YES;
+        [ejectView removeFromSuperview];
+    }else{
+        ejectView.hidden=YES;
+        [ejectView removeFromSuperview];
+        NSDictionary *dic=@{@"webUrl":helpUrl_Str};
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"WEBURL" object:dic];
+    }
 }
 -(void)imageLayout:(NSNotification *)sender
 {
@@ -661,15 +857,17 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
         }else{
             //            nav  = _mainController.navigationController;
         }
-    }else{//登陆失败加载登陆页面控制器
-        //        _mainController = nil;
-        //        LoginViewController *loginController = [[LoginViewController alloc] init];
-        //        nav = [[UINavigationController alloc] initWithRootViewController:loginController];
-        //        loginController.title = NSLocalizedString(@"私秘", @"EaseMobDemo");
-        //        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:@"IM登录失败" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-        //        [alert show];
+    }else{
+        //登陆失败加载登陆页面控制器
+    
+//        _mainController = nil;
+//        LoginViewController *loginController = [[LoginViewController alloc] init];
+//        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:loginController];
+//        loginController.title = NSLocalizedString(@"私秘", @"EaseMobDemo");
+////        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:@"IM登录失败" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+////        [alert show];
         [self.deletate LoginFailNavpush];
-        //        self.window.rootViewController = nav;
+//        self.window.rootViewController = nav;
     }
     
     //设置7.0以下的导航栏
@@ -723,16 +921,6 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     NSLog(@"%@",dateDic);
     NSLog(@"remind_time%@",timeStr);
     NSString *card_idStr=[dic objectForKey:@"card_id"];
-    if ([card_idStr isEqualToString:@"0"]) {
-        return;
-    }
-    NSString *actionStr=[NSString stringWithFormat:@"%@",[dic objectForKey:@"action"]];
-    if ([actionStr isEqualToString:@"setclock"]) {
-        badge=101;
-    }else{
-        badge=100;
-    }
-//    int pdg=[[[userInfo objectForKey:@"aps"]objectForKey:@"badge"]intValue];
 //    if (pdg!=0) {
 //        badge=100;
 //    }else{
@@ -1332,19 +1520,12 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
+    AudioServicesPlayAlertSound(1000); //系统的通知声音
     NSLog(@"我就看看你走没走--9");
     if (_mainController) {
         [_mainController jumpToChatList];
     }
-//        [BPush handleNotification:userInfo]; // 可选
-    
-    //    application.applicationIconBadgeNumber += 1;
     NSLog(@"userinfo:%@",userInfo);
-//    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"消息通知" message:[[userInfo objectForKey:@"aps"]objectForKey:@"alert" ] delegate:self cancelButtonTitle:@"不错哦" otherButtonTitles:nil];
-//    [alert show];
-//    
-//    NSString *alert2 = [[userInfo objectForKey:@"aps"]objectForKey:@"alert"];
-//    NSLog(@"推送的内容：%@",alert2);
 }
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
     NSLog(@"我就看看你走没走--10");
@@ -1371,7 +1552,6 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
         
         badge=100;
     }
-    //UILocalNotification *localNotif = [notification objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
     if (notification)
     {
 //        NSLog(@"Recieved Notification %@",notification);
@@ -1381,7 +1561,6 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     }
     
     application.applicationIconBadgeNumber = 0;
-//    [APService showLocalNotificationAtFront:notification identifierKey:nil];
     
     if (_mainController) {
         [_mainController jumpToChatList];

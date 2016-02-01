@@ -112,6 +112,7 @@ static DatabaseManager *sharedDatabaseManager = nil;
         }
         
     }
+    NSLog(@"%@",writableDBPath);
     return writableDBPath;
 }
 #pragma mark-
@@ -363,7 +364,7 @@ static DatabaseManager *sharedDatabaseManager = nil;
     Reachability *r = [Reachability reachabilityWithHostName:@"www.apple.com"];
     
     if ([r currentReachabilityStatus] == NotReachable) {
-        [self showAlertViewWithTitle:@"网络错误" message:@"网络连接失败，请稍后再试"];
+        [self showAlertViewWithTitle:@"友情提示" message:@"您的网络不给力，请检查网络，稍后重试！"];
         return NO;
         
     }else{
@@ -378,7 +379,7 @@ static DatabaseManager *sharedDatabaseManager = nil;
                        message:(NSString *)message
 
 {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:message  delegate:nil cancelButtonTitle:@"OK"otherButtonTitles:nil];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:message  delegate:nil cancelButtonTitle:@"知道了"otherButtonTitles:nil];
     
     [alert show];
 }

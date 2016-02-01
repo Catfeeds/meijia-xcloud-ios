@@ -159,20 +159,20 @@ int H = 0,time_ID;
             break;
         case 1002:
         {
-            self.navlabel.text=@"事务提醒";
-            card_type_ID=3;
+            self.navlabel.text=@"通知公告";
+            card_type_ID=2;
         }
             break;
         case 1003:
         {
-            self.navlabel.text=@"面试邀约";
-            card_type_ID=4;
+            self.navlabel.text=@"事物提醒";
+            card_type_ID=3;
         }
             break;
         case 1004:
         {
-            self.navlabel.text=@"通知公告";
-            card_type_ID=2;
+            self.navlabel.text=@"面试邀约";
+            card_type_ID=4;
         }
             break;
             
@@ -446,17 +446,17 @@ int H = 0,time_ID;
                 break;
             case 1002:
             {
-                [sendButton setTitle:@"发起事务" forState:UIControlStateNormal];
+                [sendButton setTitle:@"发起公告" forState:UIControlStateNormal];
             }
                 break;
             case 1003:
             {
-                [sendButton setTitle:@"发起邀约" forState:UIControlStateNormal];
+                [sendButton setTitle:@"事物提醒" forState:UIControlStateNormal];
             }
                 break;
             case 1004:
             {
-                [sendButton setTitle:@"发起公告" forState:UIControlStateNormal];
+                [sendButton setTitle:@"面试邀约" forState:UIControlStateNormal];
             }
                 break;
                 
@@ -542,22 +542,26 @@ int H = 0,time_ID;
     switch (_vcID) {
         case 1001:
         {
+            
             array=@[@"会议内容",@"提醒设置",@"立即给相关人员消息"];
         }
             break;
         case 1002:
         {
-            array=@[@"提醒内容",@"提醒设置",@"立即给相关人员消息"];
+            
+            array=@[@"公告内容",@"提醒设置",@"立即给相关人员消息"];
         }
             break;
         case 1003:
         {
-            array=@[@"邀约内容",@"提醒设置",@"立即给相关人员消息"];
+            array=@[@"提醒内容",@"提醒设置",@"立即给相关人员消息"];
+            
         }
             break;
         case 1004:
         {
-            array=@[@"公告内容",@"提醒设置",@"立即给相关人员消息"];
+            array=@[@"邀约内容",@"提醒设置",@"立即给相关人员消息"];
+            
         }
             break;
             
@@ -585,17 +589,17 @@ int H = 0,time_ID;
                     break;
                 case 1002:
                 {
-                    titleLabel.text=@"提醒人员";
+                    titleLabel.text=@"通知人员";
                 }
                     break;
                 case 1003:
                 {
-                    titleLabel.text=@"邀约人员";
+                    titleLabel.text=@"提醒人员";
                 }
                     break;
                 case 1004:
                 {
-                    titleLabel.text=@"通知人员";
+                    titleLabel.text=@"邀约人员";
                 }
                     break;
                     
@@ -671,16 +675,17 @@ int H = 0,time_ID;
                     break;
                 case 1002:
                 {
-                    inTimeLabel.text=@"提醒时间";
+                    inTimeLabel.text=@"通知时间";
                 }
                     break;
                 case 1003:
                 {
-                    inTimeLabel.text=@"邀约时间";                }
+                    inTimeLabel.text=@"提醒时间";
+                }
                     break;
                 case 1004:
                 {
-                    inTimeLabel.text=@"通知时间";
+                    inTimeLabel.text=@"邀约时间";
                 }
                     break;
                     

@@ -8,6 +8,6 @@
 
 #import "FatherViewController.h"
 
-@interface MyWalletViewController : FatherViewController<UITableViewDataSource,UITableViewDelegate>
+@interface MyWalletViewController : FatherViewController<UITableViewDataSource,UITableViewDelegate,MJRefreshBaseViewDelegate>
 
 @end

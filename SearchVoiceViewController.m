@@ -12,16 +12,24 @@
 {
     UISearchBar *mySearchBar;
     UITableView *myTableView;
-    NSArray *seekArray;
+    NSMutableArray *seekArray;
     int Y;
     int height;
-    NSMutableArray *imageArray;
+//    NSMutableArray *imageArray;
     NSString *sec_Id;
     NSString *secID;
     int is_senior;
     UIView *hotView;
     NSArray *arr;
     UILabel *alertLabel;
+    NSString *searchStr;
+    
+    NSString *senderString;
+    MJRefreshHeaderView *_refreshHeader;
+    MJRefreshFooterView *_moreFooter;
+    BOOL _needRefresh;
+    BOOL _hasMore;
+    NSInteger   page;
 }
 @end
 
@@ -29,7 +37,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    imageArray=[[NSMutableArray alloc]init];
+    page=1;
+   seekArray=[[NSMutableArray alloc]init];
+//    imageArray=[[NSMutableArray alloc]init];
     mySearchBar=[[UISearchBar alloc]initWithFrame:FRAME(60, 25, WIDTH-100, 30)];
     mySearchBar.placeholder=@"搜索";
     mySearchBar.delegate=self;
@@ -39,6 +49,8 @@
     [mySearchBar.layer setBorderWidth:8];
     [mySearchBar.layer setBorderColor:[UIColor whiteColor].CGColor];
     [self.view addSubview:mySearchBar];
+    
+    
     
     
     UIToolbar * topView = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, WIDTH, 30)];
@@ -62,8 +74,78 @@
     
     // Do any additional setup after loading the view.
 }
+
+#pragma mark 表格刷新相关
+#pragma mark 刷新
+-(void)refresh
+{
+    [_refreshHeader beginRefreshing];
+}
+
+
+#pragma mark - MJRefreshBaseViewDelegate
+- (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
+{
+    
+    if ([refreshView isKindOfClass:[MJRefreshHeaderView class]]) {
+        //头 -》 刷新
+        if (_moreFooter.isRefreshing) {
+            //正在加载更多，取消本次请求
+            [_refreshHeader performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+            return;
+        }
+        page = 1;
+        //刷新
+        [self loadData];
+        
+    }else if ([refreshView isKindOfClass:[MJRefreshFooterView class]]) {
+        //尾 -》 更多
+        if (_refreshHeader.isRefreshing) {
+            //正在刷新，取消本次请求
+            [_moreFooter performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+            
+            return;
+        }
+        
+        if (_hasMore==YES) {
+            //没有更多了
+            [_moreFooter performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+            //            [_tableView reloadData];
+            return;
+        }
+        page++;
+        
+        //加载更多
+        
+        [self loadData];
+    }
+}
+
+-(void)loadData
+{
+    //    if (_service == nil) {
+    //        _service = [[zzProjectListService alloc] init];
+    //        _service.delegate = self;
+    //    }
+    
+    //通过控制page控制更多 网路数据
+    //    [_service reqwithPageSize:INVESTPAGESIZE page:page];
+    //    [self loadImg];
+    
+    //本底数据
+    //    [_arrData addObjectsFromArray:[UIFont familyNames]];
+    
+    [self handleSearchForTerm:searchStr];
+    
+    
+    
+}
+
+#pragma mark 表格刷新相关
+
 -(void)viewWillAppear:(BOOL)animated
 {
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
     DownloadManager *_download = [[DownloadManager alloc]init];
     [_download requestWithUrl:SERVICE_RSLB dict:nil view:self.view delegate:self finishedSEL:@selector(HotSearchSuccess:) isPost:NO failedSEL:@selector(HotSearchFailure:)];
 }
@@ -130,6 +212,22 @@
     
     hotView.frame=FRAME(0, 64, WIDTH, h+50);
     [self.view addSubview:hotView];
+    [myTableView removeFromSuperview];
+    myTableView =[[UITableView alloc]initWithFrame:FRAME(0, hotView.frame.size.height+74, WIDTH, HEIGHT-hotView.frame.size.height-74)];
+    myTableView.dataSource=self;
+    myTableView.delegate=self;
+    [self.view addSubview:myTableView];
+    UIView *v = [[UIView alloc] initWithFrame:CGRectZero];
+    
+    [myTableView setTableFooterView:v];
+    _refreshHeader = [[MJRefreshHeaderView alloc] init];
+    _refreshHeader.delegate = self;
+    _refreshHeader.scrollView = myTableView;
+    
+    _moreFooter = [[MJRefreshFooterView alloc] init];
+    _moreFooter.delegate = self;
+    _moreFooter.scrollView = myTableView;
+
 }
 #pragma mark 热搜关键词列表失败返回
 -(void)HotSearchFailure:(id)sender
@@ -139,16 +237,16 @@
 #pragma mark 热搜关键字点击时间
 -(void)handleClick:(UIButton *)but
 {
-    NSString *string=[NSString stringWithFormat:@"%@",arr[but.tag]];
-    [self handleSearchForTerm:string];
+    searchStr=[NSString stringWithFormat:@"%@",arr[but.tag]];
+    [self handleSearchForTerm:searchStr];
 }
 
 - (void) searchBarSearchButtonClicked:(UISearchBar *)searchBar
 
 {
-    NSString *searchTerm = searchBar.text;
+    searchStr = searchBar.text;
     [mySearchBar resignFirstResponder];
-    [self handleSearchForTerm:searchTerm];
+    [self handleSearchForTerm:searchStr];
 }
 -(void)handleSearchForTerm:(NSString *)string
 {
@@ -163,7 +261,7 @@
 -(void)SearchSuccess:(id)sender
 {
     NSLog(@"获取关键字搜索结果成功数据%@",sender);
-    seekArray=[sender objectForKey:@"data"];
+    senderString=[NSString stringWithFormat:@"%@",[sender objectForKey:@"data"]];
     NSString *arrayString=[NSString stringWithFormat:@"%@",[sender objectForKey:@"data"]];
     if(arrayString==nil||arrayString==NULL||[arrayString isEqualToString:@""]){
         [alertLabel removeFromSuperview];
@@ -181,24 +279,32 @@
                                        userInfo:alertLabel
                                         repeats:NO];
     }else{
-        for (int i=0; i<seekArray.count; i++) {
-            NSDictionary *dic=seekArray[i];
-            UIImage *image=[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[dic objectForKey:@"head_img"]]]];
-            CGSize newSize=CGSizeMake(50, 50);
-            UIGraphicsBeginImageContextWithOptions(newSize, NO, 0.0);
-            [image drawInRect:CGRectMake(0, 0, newSize.width, newSize.height)];
-            image = UIGraphicsGetImageFromCurrentImageContext();
-            UIGraphicsEndImageContext();
-            [imageArray addObject:image];
+        if ([senderString isEqualToString:@""]) {
+            seekArray=nil;
+        }else{
+            NSArray *array=[sender objectForKey:@"data"];
+            if (array.count<10*page) {
+                _hasMore=YES;
+                [_refreshHeader performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+                [_moreFooter performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+            }else{
+                _hasMore=NO;
+            }
+            if (page==1) {
+                [seekArray removeAllObjects];
+                [seekArray addObjectsFromArray:array];
+            }else{
+                for (int i=0; i<array.count; i++) {
+                    if ([seekArray containsObject:array[i]]) {
+                        
+                    }else{
+                        [seekArray addObject:array[i]];
+                    }
+                }
+                
+            }
         }
-        [myTableView removeFromSuperview];
-        myTableView =[[UITableView alloc]initWithFrame:FRAME(0, hotView.frame.size.height+74, WIDTH, HEIGHT-hotView.frame.size.height-74)];
-        myTableView.dataSource=self;
-        myTableView.delegate=self;
-        [self.view addSubview:myTableView];
-        UIView *v = [[UIView alloc] initWithFrame:CGRectZero];
-        
-        [myTableView setTableFooterView:v];
+        [myTableView reloadData];
     }
 }
 
@@ -332,7 +438,8 @@
         //            headeView.backgroundColor=[UIColor redColor];
     }else
     {
-        headImageView.image=imageArray[indexPath.row];
+        NSString *imageUrl=[NSString stringWithFormat:@"%@",[dic objectForKey:@"head_img"]];
+        [headImageView setImageWithURL:[NSURL URLWithString:imageUrl]placeholderImage:nil];
     }
     //headImageView.image=[UIImage imageNamed:@"家-我_默认头像"];
     nameLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"name"]];

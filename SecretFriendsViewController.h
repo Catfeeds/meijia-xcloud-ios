@@ -8,7 +8,7 @@
 
 #import "FatherViewController.h"
 
-@interface SecretFriendsViewController : FatherViewController<UITableViewDataSource,UITableViewDelegate>
+@interface SecretFriendsViewController : FatherViewController<UITableViewDataSource,UITableViewDelegate,MJRefreshBaseViewDelegate>
 @property(nonatomic ,strong)UITableView *_tableView;
 @property (nonatomic, strong) NSArray *contacts;
 @property (nonatomic, strong) NSMutableArray *selectedContacts;

@@ -20,7 +20,9 @@
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(dataSourceACtion) name:@"RILIARRAY" object:nil];
+    //获取通知中心单例对象
+    NSNotificationCenter * center = [NSNotificationCenter defaultCenter];
+    [center addObserver:self selector:@selector(dataSourceACtion) name:@"RILIARRAY" object:nil];
     
     self = [super initWithFrame:frame];
     if(!self){
@@ -127,12 +129,13 @@
 {
     
 }
-
+-(void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 - (void)reloadAppearance
 {
     for(JTCalendarDayView *view in daysViews){
         [view reloadAppearance];
     }
 }
-
 @end

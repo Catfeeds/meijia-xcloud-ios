@@ -84,7 +84,7 @@
 }
 - (void) GetBasicData{
     DownloadManager *_download = [[DownloadManager alloc]init];
-    [_download requestWithUrl:[NSString stringWithFormat:@"%@",BASE_API] dict:nil view:_myscroll delegate:self finishedSEL:@selector(DownlLoadFinish:) isPost:NO failedSEL:@selector(DownloadFail:)];
+    [_download requestWithUrl:[NSString stringWithFormat:@"%@",BASE_API] dict:nil view:self.view  delegate:self finishedSEL:@selector(DownlLoadFinish:) isPost:NO failedSEL:@selector(DownloadFail:)];
 }
 - (void)DownlLoadFinish:(id)dict
 {
@@ -517,16 +517,6 @@
         [LogalertView show];
     }
     
-    
-}
-- (void)LoginFailNavpush
-{
-    LoginViewController *log = [[LoginViewController alloc]init];
-//    log.userName = UserData.imUsername;
-//    log.password = UserData.imUserPassword;
-//    [self.navigationController pushViewController:log animated:YES];
-    NSLog(@"%@",APPLIACTION.deviceToken);
-    [log loginWithUsername:self.hxUserName password:self.hxPassword];
     
 }
 - (void)LoginSuccessNavPush

@@ -8,7 +8,7 @@
 
 #import "FatherViewController.h"
 
-@interface DynamicViewController : FatherViewController<UITableViewDataSource,UITableViewDelegate,UMSocialUIDelegate>
+@interface DynamicViewController : FatherViewController<UITableViewDataSource,UITableViewDelegate,UMSocialUIDelegate,MJRefreshBaseViewDelegate>
 
 @property(nonatomic ,strong)UITableView *tableView;
 @property(nonatomic ,assign)int vcLayoutID;

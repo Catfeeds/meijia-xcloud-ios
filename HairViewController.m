@@ -13,9 +13,15 @@
 @interface HairViewController ()
 {
     UITableView *myTableView;
-    NSArray *arrayImage;
+    NSMutableArray *arrayImage;
     UILabel *alertLabel;
     UIActivityIndicatorView *actView;
+    
+    MJRefreshHeaderView *_refreshHeader;
+    MJRefreshFooterView *_moreFooter;
+    BOOL _needRefresh;
+    BOOL _hasMore;
+    NSInteger   page;
 }
 @end
 
@@ -27,6 +33,8 @@
     self.lineLable.hidden=YES;
     self.navlabel.hidden=YES;
     self.backlable.hidden=YES;
+    page=1;
+    arrayImage=[[NSMutableArray alloc]init];
     self.view .backgroundColor=[UIColor whiteColor];
     UIView *view=[[UIView alloc]initWithFrame:FRAME(0, 0, WIDTH, HEIGHT)];
     view.backgroundColor=[UIColor whiteColor];
@@ -37,10 +45,25 @@
     actView.color = [UIColor blackColor];
     [actView startAnimating];
     [self.view addSubview:actView];
-    DownloadManager *_download = [[DownloadManager alloc]init];
-    NSDictionary *dict=@{@"channel_id":_channel_id};
-    [_download requestWithUrl:CHANNEL_CARD dict:dict view:self.view delegate:self finishedSEL:@selector(ChannelSuccess:) isPost:NO failedSEL:@selector(ChannelFailure:)];
+    [self PLJKLayout];
+
     [self tableViewLayout];
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    if (_needRefresh) {
+        [_refreshHeader beginRefreshing];
+        _needRefresh = NO;
+    }
+}
+-(void)PLJKLayout
+{
+    DownloadManager *_download = [[DownloadManager alloc]init];
+    NSString *pageStr=[NSString stringWithFormat:@"%ld",page];
+    NSDictionary *dict=@{@"channel_id":_channel_id,@"page":pageStr};
+    [_download requestWithUrl:CHANNEL_CARD dict:dict view:self.view delegate:self finishedSEL:@selector(ChannelSuccess:) isPost:NO failedSEL:@selector(ChannelFailure:)];
 }
 - (void)timerFireMethod:(NSTimer*)theTimer
 {
@@ -50,7 +73,7 @@
 -(void)ChannelSuccess:(id)sender
 {
     NSLog(@"获取频道列表成功数据%@",sender);
-    arrayImage=[sender objectForKey:@"data"];
+//    arrayImage=[sender objectForKey:@"data"];
     NSString *dataString=[NSString stringWithFormat:@"%@",[sender objectForKey:@"data"]];
     if (dataString==nil||dataString==NULL||dataString.length==0||[dataString isEqualToString:@""]) {
         [actView stopAnimating]; // 结束旋转
@@ -71,6 +94,26 @@
                                         repeats:NO];
 
     }else{
+        NSArray *array=[sender objectForKey:@"data"];
+        if (array.count<10*page) {
+            _hasMore=YES;
+        }else{
+            _hasMore=NO;
+        }
+        if (page==1) {
+            [arrayImage removeAllObjects];
+            [arrayImage addObjectsFromArray:array];
+        }else{
+            for (int i=0; i<array.count; i++) {
+                if ([arrayImage containsObject:array[i]]) {
+                    
+                }else{
+                    [arrayImage addObject:array[i]];
+                }
+            }
+            
+        }
+
         [myTableView reloadData];
     }
    
@@ -82,10 +125,77 @@
     NSLog(@"获取频道列表失败数据%@",sender);
 }
 
+#pragma mark 表格刷新相关
+#pragma mark 刷新
+-(void)refresh
+{
+    [_refreshHeader beginRefreshing];
+}
+
+
+#pragma mark - MJRefreshBaseViewDelegate
+- (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
+{
+    
+    if ([refreshView isKindOfClass:[MJRefreshHeaderView class]]) {
+        //头 -》 刷新
+        if (_moreFooter.isRefreshing) {
+            //正在加载更多，取消本次请求
+            [_refreshHeader performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+            return;
+        }
+        page = 1;
+        //刷新
+        [self loadData];
+        
+    }else if ([refreshView isKindOfClass:[MJRefreshFooterView class]]) {
+        //尾 -》 更多
+        if (_refreshHeader.isRefreshing) {
+            //正在刷新，取消本次请求
+            [_moreFooter performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+            
+            return;
+        }
+        
+        if (_hasMore==YES) {
+            //没有更多了
+            [_moreFooter performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+            //            [_tableView reloadData];
+            return;
+        }
+        page++;
+        
+        //加载更多
+        
+        [self loadData];
+    }
+}
+
+-(void)loadData
+{
+    //    if (_service == nil) {
+    //        _service = [[zzProjectListService alloc] init];
+    //        _service.delegate = self;
+    //    }
+    
+    //通过控制page控制更多 网路数据
+    //    [_service reqwithPageSize:INVESTPAGESIZE page:page];
+    //    [self loadImg];
+    
+    //本底数据
+    //    [_arrData addObjectsFromArray:[UIFont familyNames]];
+    
+    [self PLJKLayout];
+    
+    
+    
+}
+#pragma mark 表格刷新相关
+
 -(void)tableViewLayout
 {
     [myTableView removeFromSuperview];
-    myTableView=[[UITableView alloc]initWithFrame:FRAME(0, 0, WIDTH, HEIGHT-155)];
+    myTableView=[[UITableView alloc]initWithFrame:FRAME(0, 0, WIDTH, HEIGHT-154)];
     myTableView.dataSource=self;
     myTableView.delegate=self;
     myTableView.separatorStyle=UITableViewCellSelectionStyleNone;
@@ -93,6 +203,13 @@
     [self.view addSubview:myTableView];
     UIView *v = [[UIView alloc] initWithFrame:CGRectZero];
     [myTableView setTableFooterView:v];
+    _refreshHeader = [[MJRefreshHeaderView alloc] init];
+    _refreshHeader.delegate = self;
+    _refreshHeader.scrollView = myTableView;
+    
+    _moreFooter = [[MJRefreshFooterView alloc] init];
+    _moreFooter.delegate = self;
+    _moreFooter.scrollView = myTableView;
 }
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
@@ -119,6 +236,8 @@
         dispatch_async(dispatch_get_main_queue(),^{
             [actView stopAnimating]; // 结束旋转
             [actView setHidesWhenStopped:YES]; //当旋转结束时隐藏
+            [_refreshHeader performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+            [_moreFooter performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
         });
     }
     NSString *imageUrl=[NSString stringWithFormat:@"%@",[dic objectForKey:@"img_url"]];

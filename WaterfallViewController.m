@@ -250,7 +250,8 @@
 
             [self.navigationController pushViewController:userVC animated:YES];
         }else{
-            urlString=[NSString stringWithFormat:@"%@",[dataDic objectForKey:@"url"]];
+            ISLoginManager *_manager = [ISLoginManager shareManager];
+            urlString=[NSString stringWithFormat:@"%@?user_id=%@",[dataDic objectForKey:@"url"],_manager.telephone];
             [self webLayout];
         }
     }else{

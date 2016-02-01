@@ -8,6 +8,6 @@
 
 #import "FatherViewController.h"
 
-@interface HairViewController : FatherViewController<UITableViewDataSource,UITableViewDelegate>
+@interface HairViewController : FatherViewController<UITableViewDataSource,UITableViewDelegate,MJRefreshBaseViewDelegate>
 @property (nonatomic ,strong)NSString *channel_id;
 @end

@@ -172,6 +172,7 @@
 {
     djID=100;
     NSDictionary *dic=companyArray[indexPath.row];
+    _company_idStr=[NSString stringWithFormat:@"%@",[dic objectForKey:@"company_id"]];
     companyVC=[[CompanyViewController alloc]init];
     companyVC.companyDic=dic;
     companyVC.theNumber=_theNumber;

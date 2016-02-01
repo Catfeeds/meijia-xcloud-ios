@@ -80,6 +80,7 @@ appDelegate
         RootViewController *vc=[[RootViewController alloc]init];
         [self.navigationController pushViewController:vc animated:YES];
         [self AppdeleAction];
+        [self getUserInfo];//1
     }else{
         secondsDown = 60;
         
@@ -251,6 +252,7 @@ appDelegate
         [self.navigationController pushViewController:vc animated:YES];
         _vCLID=0;
         [self AppdeleAction];
+        //[self getUserInfo];//2
         
     }
     //[self.navigationController popViewControllerAnimated:YES];
@@ -273,7 +275,7 @@ appDelegate
         [mydefaults setObject:userid forKey:@"telephone"];
         [mydefaults synchronize];
         
-        [self getUserInfo];
+        [self getUserInfo];//3
 //        [self dismissViewControllerAnimated:YES completion:nil];
         
 //        textfield.text = [textfield.text isEqual:[NSNull null] ]? @"":textfield.text;
@@ -581,7 +583,7 @@ appDelegate
         [mydefaults setObject:[[string objectForKey:@"data"] objectForKey:@"id"] forKey:@"telephone"];
         [mydefaults synchronize];
         
-        [self getUserInfo];
+        [self getUserInfo];//4
         //[self.navigationController popViewControllerAnimated:YES];
         
         

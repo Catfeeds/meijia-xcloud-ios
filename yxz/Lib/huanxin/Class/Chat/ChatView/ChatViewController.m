@@ -167,7 +167,7 @@
     [self.view addSubview:self.tableView];
     [self.tableView addSubview:self.slimeView];
     [self.view addSubview:self.chatToolBar];
-    [self bottomThreeBtn];
+//    [self bottomThreeBtn];
     
     //将self注册为chatToolBar的moreView的代理
     if ([self.chatToolBar.moreView isKindOfClass:[DXChatBarMoreView class]]) {
@@ -228,85 +228,55 @@
     NSLog(@"error:%@",error);
 }
 #pragma warning 1.8主要改动
-//创建三个按钮
-- (void)bottomThreeBtn
-{
-    self.chatToolBar.hidden = NO;
-    UIButton *btn = [[UIButton alloc]initWithFrame:FRAME(SELF_VIEW_WIDTH/2-40, SELF_VIEW_HEIGHT-100-60, 80, 80)];
-    btn.tag = 600;
-    [btn setBackgroundImage:[UIImage imageNamed:@"calling-btn"] forState:UIControlStateNormal];
-    [btn.layer setCornerRadius:40];
-//    [btn setBackgroundColor:[UIColor greenColor]];
-    [btn addTarget:self action:@selector(startRecordAdiou) forControlEvents:UIControlEventTouchDown];
-    [btn addTarget:self action:@selector(stopRecordAdiou) forControlEvents:UIControlEventTouchUpInside];
-//    [btn addTarget:self action:@selector(recordButtonTouchUpOutside) forControlEvents:UIControlEventTouchUpInside];
-    [btn addTarget:self action:@selector(touchOutsideRecord) forControlEvents:UIControlEventTouchUpOutside];
-//    [btn addTarget:self action:@selector(stopRecordAdiou) forControlEvents:UIControlEventTouchUpInside];
-    //[self.view addSubview:btn];
-    
-    
-    UIButton *leftBtn = [[UIButton alloc]initWithFrame:FRAME((SELF_VIEW_WIDTH/2-40)/2-20, SELF_VIEW_HEIGHT-100-30, 40, 40)];
-    leftBtn.tag = 601;
-//    [leftBtn setBackgroundColor:[UIColor redColor]];
-    [leftBtn.layer setCornerRadius:20];
-    [leftBtn setImage:[UIImage imageNamed:@"left_text"] forState:UIControlStateNormal];
-    [leftBtn addTarget:self action:@selector(leftBtn) forControlEvents:UIControlEventTouchUpInside];
-    //[self.view addSubview:leftBtn];
-    
-    UIButton *rightBtn = [[UIButton alloc]initWithFrame:FRAME((SELF_VIEW_WIDTH/2)+(SELF_VIEW_WIDTH/2)/2,  SELF_VIEW_HEIGHT-100-30, 40, 40)];
-    rightBtn.tag = 602;
-    [rightBtn setImage:[UIImage imageNamed:@"right_List"] forState:UIControlStateNormal];
-//    [rightBtn setBackgroundColor:[UIColor redColor]];
-    [rightBtn addTarget:self action:@selector(rightBtnAction) forControlEvents:UIControlEventTouchUpInside];
-    [rightBtn.layer setCornerRadius:20];
-    //[self.view addSubview:rightBtn];
-    
-    voiceButton=[[UIButton alloc]initWithFrame:FRAME(50, 5, WIDTH-100, 36)];
-    [voiceButton setImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
-    voiceButton.backgroundColor=[UIColor whiteColor];
-    voiceButton.layer.cornerRadius=8;
-    [voiceButton.layer setMasksToBounds:YES];
-    [voiceButton.layer setCornerRadius:7.0]; //设置矩圆角半径
-    [voiceButton.layer setBorderWidth:1.0];   //边框宽度
-    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-    CGColorRef colorref = CGColorCreate(colorSpace,(CGFloat[]){ 1, 0, 0, 1 });
-    [voiceButton.layer setBorderColor:colorref];//边框颜色
-    
-    [voiceButton addTarget:self action:@selector(startRecordAdiou) forControlEvents:UIControlEventTouchDown];
-    [voiceButton addTarget:self action:@selector(stopRecordAdiou) forControlEvents:UIControlEventTouchUpInside];
-    //    [btn addTarget:self action:@selector(recordButtonTouchUpOutside) forControlEvents:UIControlEventTouchUpInside];
-    [voiceButton addTarget:self action:@selector(touchOutsideRecord) forControlEvents:UIControlEventTouchUpOutside];
-    UILabel *label=[[UILabel alloc]initWithFrame:FRAME(0, 0, voiceButton.frame.size.width, voiceButton.frame.size.height)];
-    label.text=@"按住 说话";
-    label.textAlignment=NSTextAlignmentCenter;
-    [voiceButton addSubview:label];
-    [self.chatToolBar addSubview:voiceButton];
-    UILabel *lable = [[UILabel alloc]initWithFrame:FRAME(20, 100, self.view.width-40, 100)];
-    lable.tag = 700;
-    lable.text = @"嗨~~终于等到你！\r我是你的私人小秘哦，\r有事只管吩咐，按住说话就行!";
-    lable.textColor = HEX_TO_UICOLOR(TEXT_COLOR, 1.0);
-    lable.numberOfLines = 0;
-    lable.textAlignment = NSTextAlignmentCenter;
-    lable.font = [UIFont systemFontOfSize:18];
-    [self.tableView addSubview:lable];
-    
-    UIButton *dian = [[UIButton alloc]initWithFrame:FRAME(SELF_VIEW_WIDTH-30, 12, 5, 5)];
-    dian.tag = 321;
-    dian.hidden = YES;
-//    [dian setBackgroundColor:YELLOW_COLOR];
-    [dian setBackgroundImage:[UIImage imageNamed:@"dot_@2x"] forState:UIControlStateNormal];
-//    [self.navigationController.navigationBar addSubview:dian];
-    
-    NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
-    NSString *unRead = [user objectForKey:@"UNREADMESSAGES"];
-    if ([unRead isEqualToString:@"66"]) {
-        dian.hidden = NO;
-    }else{
-        dian.hidden = YES;
-    }
-    [user synchronize];
-
-}
+////创建三个按钮
+//- (void)bottomThreeBtn
+//{
+//    voiceButton=[[UIButton alloc]initWithFrame:FRAME(50, 5, WIDTH-100, 36)];
+//    [voiceButton setImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
+//    voiceButton.backgroundColor=[UIColor whiteColor];
+//    voiceButton.layer.cornerRadius=8;
+//    [voiceButton.layer setMasksToBounds:YES];
+//    [voiceButton.layer setCornerRadius:7.0]; //设置矩圆角半径
+//    [voiceButton.layer setBorderWidth:1.0];   //边框宽度
+//    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+//    CGColorRef colorref = CGColorCreate(colorSpace,(CGFloat[]){ 1, 0, 0, 1 });
+//    [voiceButton.layer setBorderColor:colorref];//边框颜色
+//    
+//    [voiceButton addTarget:self action:@selector(startRecordAdiou) forControlEvents:UIControlEventTouchDown];
+//    [voiceButton addTarget:self action:@selector(stopRecordAdiou) forControlEvents:UIControlEventTouchUpInside];
+//    //    [btn addTarget:self action:@selector(recordButtonTouchUpOutside) forControlEvents:UIControlEventTouchUpInside];
+//    [voiceButton addTarget:self action:@selector(touchOutsideRecord) forControlEvents:UIControlEventTouchUpOutside];
+//    UILabel *label=[[UILabel alloc]initWithFrame:FRAME(0, 0, voiceButton.frame.size.width, voiceButton.frame.size.height)];
+//    label.text=@"按住 说话";
+//    label.textAlignment=NSTextAlignmentCenter;
+//    [voiceButton addSubview:label];
+//    [self.chatToolBar addSubview:voiceButton];
+//    UILabel *lable = [[UILabel alloc]initWithFrame:FRAME(20, 100, self.view.width-40, 100)];
+//    lable.tag = 700;
+//    lable.text = @"嗨~~终于等到你！\r我是你的私人小秘哦，\r有事只管吩咐，按住说话就行!";
+//    lable.textColor = HEX_TO_UICOLOR(TEXT_COLOR, 1.0);
+//    lable.numberOfLines = 0;
+//    lable.textAlignment = NSTextAlignmentCenter;
+//    lable.font = [UIFont systemFontOfSize:18];
+//    [self.tableView addSubview:lable];
+//    
+//    UIButton *dian = [[UIButton alloc]initWithFrame:FRAME(SELF_VIEW_WIDTH-30, 12, 5, 5)];
+//    dian.tag = 321;
+//    dian.hidden = YES;
+////    [dian setBackgroundColor:YELLOW_COLOR];
+//    [dian setBackgroundImage:[UIImage imageNamed:@"dot_@2x"] forState:UIControlStateNormal];
+////    [self.navigationController.navigationBar addSubview:dian];
+//    
+//    NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
+//    NSString *unRead = [user objectForKey:@"UNREADMESSAGES"];
+//    if ([unRead isEqualToString:@"66"]) {
+//        dian.hidden = NO;
+//    }else{
+//        dian.hidden = YES;
+//    }
+//    [user synchronize];
+//
+//}
 - (void)hideLable
 {
     UILabel *lab = (UILabel *) [self.view viewWithTag:700];
@@ -350,7 +320,7 @@
 - (void)leftBtn
 {
     self.chatToolBar.hidden = NO;
-    [self.chatToolBar willShowBottomView:nil];
+//    [self.chatToolBar willShowBottomView:nil];
 //    self.chatToolBar.height = 46;
     [self hideThreeBtn:YES];
 }
@@ -361,19 +331,19 @@
 }
 - (void)startRecordAdiou
 {
-    [self.chatToolBar recordButtonTouchDown];
+//    [self.chatToolBar recordButtonTouchDown];
 //    DXMessageToolBar *a = [[DXMessageToolBar alloc]init];
 //    [a recordButtonTouchDown];
 }
 - (void)stopRecordAdiou
 {
-    [self.chatToolBar recordButtonTouchUpInside];
+//    [self.chatToolBar recordButtonTouchUpInside];
 //    DXMessageToolBar *a = [[DXMessageToolBar alloc]init];
 //    [a recordButtonTouchUpInside];
 }
 - (void)touchOutsideRecord
 {
-    [self.chatToolBar recordButtonTouchUpOutside];
+//    [self.chatToolBar recordButtonTouchUpOutside];
 }
 //自动回复
 - (void)SendMessage:(NSString *)message to:(NSString *)to from:(NSString *)from
@@ -612,7 +582,7 @@
         _chatToolBar.moreView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
         
 //        _chatToolBar.height = 120;
-        _chatToolBar.hidden = YES;
+//        _chatToolBar.hidden = YES;
     }
     
     return _chatToolBar;
@@ -690,6 +660,7 @@
             MessageModel *model = (MessageModel *)obj;
             NSString *cellIdentifier = [EMChatViewCell cellIdentifierForMessageModel:model];
             EMChatViewCell *cell = (EMChatViewCell *)[tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+            cell.headImageView.image=[UIImage imageNamed:@""];
             if (cell == nil) {
                 cell = [[EMChatViewCell alloc] initWithMessageModel:model reuseIdentifier:cellIdentifier];
                 cell.backgroundColor = [UIColor clearColor];
@@ -2081,7 +2052,7 @@
 
 - (void)exitGroup
 {
-    [self.navigationController popToViewController:self animated:NO];
+//    [self.navigationController popToViewController:self animated:NO];
     [self.navigationController popViewControllerAnimated:YES];
     
 }

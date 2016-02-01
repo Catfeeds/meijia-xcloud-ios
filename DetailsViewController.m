@@ -18,6 +18,7 @@
 #import "AppDelegate.h"
 #import "FXBlurView.h"
 #import "RootViewController.h"
+
 int height,Y,processID=0;
 @interface DetailsViewController ()
 {
@@ -29,7 +30,7 @@ int height,Y,processID=0;
     
     DownloadManager *_pllb;
     NSDictionary *dic;
-    NSArray *plArray;
+    NSMutableArray *plArray;
     NSString *plString;
     //点赞个数label
     UILabel *zambiaLabel;
@@ -57,12 +58,26 @@ int height,Y,processID=0;
     
     UILabel *textViewLabel;
     UILabel *alertLabel;
+    
+    MJRefreshHeaderView *_refreshHeader;
+    MJRefreshFooterView *_moreFooter;
+    BOOL _needRefresh;
+    BOOL _hasMore;
+    NSInteger   page;
+    
 }
 @end
 
 @implementation DetailsViewController
 -(void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
+    if (_needRefresh) {
+        [_refreshHeader beginRefreshing];
+        _needRefresh = NO;
+    }
+    
+    
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
     ISLoginManager *_manager = [ISLoginManager shareManager];
     DownloadManager *_download = [[DownloadManager alloc]init];
@@ -83,6 +98,11 @@ int height,Y,processID=0;
    // NSDictionary *processDic=
     
 }
+#pragma mark 刷新
+-(void)refresh
+{
+    [_refreshHeader beginRefreshing];
+}
 -(void)msgm:(id)sender
 {
     NSLog(@"用户数据:%@",sender);
@@ -98,6 +118,8 @@ int height,Y,processID=0;
 - (void)viewDidLoad {
     [super viewDidLoad];
     seekButID=0;
+    page=1;
+    plArray=[[NSMutableArray alloc]init];
     self.view.userInteractionEnabled = YES;
     
     
@@ -894,21 +916,42 @@ int height,Y,processID=0;
     
     NSString *card_Id=[NSString stringWithFormat:@"%d",_card_ID];
     NSLog(@"ID%@  %d",card_Id, _card_ID);
+    NSString *pageStr=[NSString stringWithFormat:@"%ld",(long)page];
     DownloadManager *_download = [[DownloadManager alloc]init];
-    _dict = @{@"card_id":card_Id,@"user_id":_manager.telephone,@"page":@"1"};
+    _dict = @{@"card_id":card_Id,@"user_id":_manager.telephone,@"page":pageStr};
     NSLog(@"字典数据%@",_dict);
-    [_download requestWithUrl:CARD_PLLB dict:_dict view:_tableView delegate:self finishedSEL:@selector(logDowLoadPLLB:) isPost:NO failedSEL:@selector(PLLBbDownFail:)];
+    [_download requestWithUrl:CARD_PLLB dict:_dict view:self.view delegate:self finishedSEL:@selector(logDowLoadPLLB:) isPost:NO failedSEL:@selector(PLLBbDownFail:)];
 }
 -(void)logDowLoadPLLB:(id)sender
 {
     NSLog(@"返回数据 %@",sender);
     plString=[NSString stringWithFormat:@"%@",[sender objectForKey:@"data"]];
+    
     NSLog(@"string的值%@",plString);
     if ([plString isEqualToString:@""]) {
         cellNum=0;
     }else
     {
-        plArray=[sender objectForKey:@"data"];
+        NSArray *array=[sender objectForKey:@"data"];
+        if (array.count<10*page) {
+            _hasMore=YES;
+        }else{
+            _hasMore=NO;
+        }
+
+        if (page==1) {
+            [plArray removeAllObjects];
+            [plArray addObjectsFromArray:array];
+        }else{
+            for (int i=0; i<array.count; i++) {
+                if ([plArray containsObject:array[i]]) {
+                    
+                }else{
+                    [plArray addObject:array[i]];
+                }
+            }
+        }
+        
         cellNum=(int)plArray.count;
     }
     _tableView.frame=CGRectMake(0, liNeView.frame.origin.y+66, WIDTH, HEIGHT-liNeView.frame.origin.y-116);
@@ -930,6 +973,13 @@ int height,Y,processID=0;
     //tableView.backgroundColor=[UIColor yellowColor];
     _tableView.separatorStyle = UITableViewCellSelectionStyleNone;
     [self.view addSubview:_tableView];
+    _refreshHeader = [[MJRefreshHeaderView alloc] init];
+    _refreshHeader.delegate = self;
+    _refreshHeader.scrollView = _tableView;
+    
+    _moreFooter = [[MJRefreshFooterView alloc] init];
+    _moreFooter.delegate = self;
+    _moreFooter.scrollView = _tableView;
     
 }
 -(void)commwntLayout
@@ -1143,7 +1193,14 @@ int height,Y,processID=0;
 
     lineView.frame=FRAME(0, textLabel.frame.size.height+textLabel.frame.origin.y+9, WIDTH, 1);
     lineView.backgroundColor=[UIColor colorWithRed:241/255.0f green:241/255.0f blue:241/255.0f alpha:1];
-    
+    if([indexPath row] == ((NSIndexPath*)[[tableView indexPathsForVisibleRows] lastObject]).row){
+        //end of loading
+        dispatch_async(dispatch_get_main_queue(),^{
+            [_refreshHeader performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+            [_moreFooter performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+        });
+    }
+
 //    [cell.layer setMasksToBounds:YES];
 //    cell.layer.cornerRadius=10;
 //    cell.layer.borderColor=[UIColor colorWithRed:231/255.0f green:231/255.0f blue:231/255.0f alpha:1].CGColor;
@@ -1169,6 +1226,63 @@ int height,Y,processID=0;
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+#pragma mark - MJRefreshBaseViewDelegate
+- (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
+{
+    
+    if ([refreshView isKindOfClass:[MJRefreshHeaderView class]]) {
+        //头 -》 刷新
+        if (_moreFooter.isRefreshing) {
+            //正在加载更多，取消本次请求
+            [_refreshHeader performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+            return;
+        }
+        page = 1;
+        //刷新
+        [self loadData];
+        
+    }else if ([refreshView isKindOfClass:[MJRefreshFooterView class]]) {
+        //尾 -》 更多
+        if (_refreshHeader.isRefreshing) {
+            //正在刷新，取消本次请求
+            [_moreFooter performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+            
+            return;
+        }
+        
+        if (_hasMore==YES) {
+            //没有更多了
+            [_moreFooter performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+//            [_tableView reloadData];
+            return;
+        }
+        page++;
+        
+        //加载更多
+        
+        [self loadData];
+    }
+}
+
+-(void)loadData
+{
+    //    if (_service == nil) {
+    //        _service = [[zzProjectListService alloc] init];
+    //        _service.delegate = self;
+    //    }
+    
+    //通过控制page控制更多 网路数据
+    //    [_service reqwithPageSize:INVESTPAGESIZE page:page];
+    //    [self loadImg];
+    
+    //本底数据
+//    [_arrData addObjectsFromArray:[UIFont familyNames]];
+    
+    [self PLJKLayout];
+    
+    
+    
 }
 
 /*

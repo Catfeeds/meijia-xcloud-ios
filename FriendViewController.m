@@ -10,6 +10,7 @@
 #import "NewsViewController.h"
 #import "SecretFriendsViewController.h"
 #import "DynamicViewController.h"
+#import "ChatListViewController.h"
 @interface FriendViewController ()
 {
     UIView *tabBarView;
@@ -18,11 +19,12 @@
     UIViewController *currentViewController;
     UIButton *newsButton;
     UIButton *secetFriendsButton;
+    UIView *spotView;
     
 }
 
 @end
-NewsViewController *newsViewController;
+ChatListViewController *newsViewController;
 SecretFriendsViewController *secAccessController;
 DynamicViewController *dynamicViewController;
 @implementation FriendViewController
@@ -41,6 +43,11 @@ DynamicViewController *dynamicViewController;
     [super viewDidLoad];
 //    self.backBtn.hidden=YES;
 //    self.navlabel.text=@"好友";
+    [self didUnreadMessagesCountChanged];
+#pragma warning 把self注册为SDK的delegate
+    [self registerNotifications];
+   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setupUntreatedApplyCount) name:@"setupUntreatedApplyCount" object:nil];
+    [self setupUntreatedApplyCount];
     mainView = [[UIView alloc]initWithFrame:CGRectMake(0, 0,SELF_VIEW_WIDTH, HEIGHT)];
     mainView.backgroundColor=[UIColor blackColor];
     [self.view addSubview:mainView];
@@ -48,7 +55,7 @@ DynamicViewController *dynamicViewController;
     dynamicViewController=[[DynamicViewController alloc]init];
     [self addChildViewController:dynamicViewController];
     
-    newsViewController=[[NewsViewController alloc]init];
+    newsViewController=[[ChatListViewController alloc]init];
     [self addChildViewController:newsViewController];
     
     secAccessController=[[SecretFriendsViewController alloc]init];
@@ -69,6 +76,7 @@ DynamicViewController *dynamicViewController;
     _lineLable.backgroundColor = [UIColor colorWithRed:231/255.0f green:231/255.0f blue:231/255.0f alpha:1];
     //_lineLable.alpha = 0.3;
 //    [tabBarView addSubview:_lineLable];
+    
     NSArray *nameArray=@[@"动态",@"好友",@"消息"];
     for (int i=0; i<nameArray.count; i++) {
         UIButton *tabbarBut=[[UIButton alloc]initWithFrame:FRAME(60*i, 0, 60, 43)];
@@ -78,7 +86,14 @@ DynamicViewController *dynamicViewController;
         }else{
             [tabbarBut setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         }
-        
+        if (i==2) {
+            spotView=[[UIView alloc]initWithFrame:FRAME(43, 8, 10, 10)];
+            spotView.layer.masksToBounds=YES;
+            spotView.layer.cornerRadius=spotView.frame.size.width/2;
+            spotView.backgroundColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
+            spotView.hidden=YES;
+            [tabbarBut addSubview:spotView];
+        }
         tabbarBut.titleLabel.font=[UIFont fontWithName:@"Arial" size:15];
         [tabbarBut addTarget:self action:@selector(tabBarButton:) forControlEvents:UIControlEventTouchUpInside];
         [tabbarBut setTag:(1000+i)];
@@ -86,8 +101,61 @@ DynamicViewController *dynamicViewController;
         
     }
     
+    [self setupUnreadMessageCount];
     // Do any additional setup after loading the view.
 }
+#pragma mark - private
+// 未读消息数量变化回调
+-(void)didUnreadMessagesCountChanged
+{
+    [self setupUnreadMessageCount];
+}
+// 统计未读消息数
+-(void)setupUnreadMessageCount
+{
+    NSArray *conversations = [[[EaseMob sharedInstance] chatManager] conversations];
+    NSInteger unreadCount = 0;
+    for (EMConversation *conversation in conversations) {
+        unreadCount += conversation.unreadMessagesCount;
+    }
+    if (unreadCount > 0) {
+        spotView.hidden=NO;
+    }else{
+        spotView.hidden=YES;
+    }
+    
+    NSLog(@"没有读过的消息数%ld",(long)unreadCount);
+    
+    UIApplication *application = [UIApplication sharedApplication];
+    [application setApplicationIconBadgeNumber:unreadCount];
+}
+
+-(void)registerNotifications
+{
+    [self unregisterNotifications];
+    
+    [[EaseMob sharedInstance].chatManager addDelegate:self delegateQueue:nil];
+    //    [[EMSDKFull sharedInstance].callManager addDelegate:self delegateQueue:nil];
+}
+
+-(void)unregisterNotifications
+{
+    [[EaseMob sharedInstance].chatManager removeDelegate:self];
+    //    [[EMSDKFull sharedInstance].callManager removeDelegate:self];
+}
+
+#pragma mark未读消息书
+- (void)setupUntreatedApplyCount
+{
+    NSInteger unreadCount = [[[ApplyViewController shareController] dataSource] count];
+    if (unreadCount > 0) {
+         spotView.hidden=NO;
+    }else{
+         spotView.hidden=YES;
+    }
+    
+}
+
 -(void)tabBarButton:(UIButton *)sender
 {
     if ((currentViewController==dynamicViewController&&[sender tag]==1000)||(currentViewController==secAccessController&&[sender tag]==1001)||(currentViewController==newsViewController&&[sender tag]==1002)) {

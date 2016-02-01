@@ -8,7 +8,7 @@
 
 #import "FatherViewController.h"
 
-@interface Order_ListViewController : FatherViewController<UITableViewDataSource,UITableViewDelegate>
+@interface Order_ListViewController : FatherViewController<UITableViewDataSource,UITableViewDelegate,MJRefreshBaseViewDelegate>
 @property(nonatomic ,strong)UITableView *orderTableView;
 
 @end

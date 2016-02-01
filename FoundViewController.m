@@ -40,11 +40,21 @@ WholeViewController *wholeViewController;
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
     [MobClick beginLogPageView:@"发现"];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     
     
 }
+
+//- (void)addDragHeaderView
+//{
+//    if (self.shouldShowDragHeader && !dragHeaderView)
+//    {
+//        CGRect frame = CGRectMake(0, -self.dragHeaderHeight,self.bounds.size.width, self.dragHeaderHeight);
+//        dragHeaderView = [[Pull2RefreshView alloc]initWithFrame:frame type:kPull2RefreshViewTypeHeader];
+//        [self addSubview:dragHeaderView];}
+//}
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewWillDisappear:animated];

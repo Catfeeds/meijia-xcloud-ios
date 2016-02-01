@@ -9,8 +9,10 @@
 #import <CoreLocation/CoreLocation.h>
 #import <MapKit/MapKit.h>
 #import "JTCalendar.h"
+#import "MJRefresh.h"
 
-@interface ViewController : UIViewController<JTCalendarDataSource,UITableViewDelegate,UITableViewDataSource,UMSocialUIDelegate,CLLocationManagerDelegate>
+
+@interface ViewController : UIViewController<JTCalendarDataSource,UITableViewDelegate,UITableViewDataSource,UMSocialUIDelegate,CLLocationManagerDelegate,MJRefreshBaseViewDelegate>
 
 @property (weak, nonatomic) IBOutlet JTCalendarMenuView *calendarMenuView;
 @property (weak, nonatomic) IBOutlet JTCalendarContentView *calendarContentView;

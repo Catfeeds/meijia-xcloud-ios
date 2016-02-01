@@ -7,8 +7,8 @@
 //
 
 #import "FatherViewController.h"
-
-@interface DetailsViewController : FatherViewController<UITableViewDataSource,UITableViewDelegate,UITextViewDelegate,UMSocialUIDelegate>
+#import "MJRefresh.h"
+@interface DetailsViewController : FatherViewController<UITableViewDataSource,UITableViewDelegate,UITextViewDelegate,UMSocialUIDelegate,MJRefreshBaseViewDelegate>
 //@property(nonatomic ,assign)NSInteger *A;
 @property(nonatomic ,assign)int pathId;
 @property(nonatomic ,assign)int card_ID;

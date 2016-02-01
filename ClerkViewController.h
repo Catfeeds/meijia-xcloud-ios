@@ -8,11 +8,11 @@
 
 #import "FatherViewController.h"
 
-@interface ClerkViewController : FatherViewController<UITableViewDataSource,UITableViewDelegate>
+@interface ClerkViewController : FatherViewController<UITableViewDataSource,UITableViewDelegate,MJRefreshBaseViewDelegate>
 @property(nonatomic ,strong)UITableView *_tableView;
 @property(nonatomic ,strong)NSString *service_type_id;
 
-@property(nonatomic ,strong)NSArray *seekArray;
+@property(nonatomic ,strong)NSMutableArray *seekArray;
 @property(nonatomic ,strong)NSString *sec_Id;
 @property(nonatomic ,strong)NSString *secID;
 @property(nonatomic ,assign)int is_senior;

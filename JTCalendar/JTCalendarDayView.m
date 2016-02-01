@@ -62,11 +62,13 @@ static NSString *const kJTCalendarDaySelected = @"kJTCalendarDaySelected";
 
     {
         backgroundView = [UIView new];
+//        backgroundView.backgroundColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
         [self addSubview:backgroundView];
     }
     
     {
         circleView = [JTCircleView new];
+//        circleView.backgroundColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
         [self addSubview:circleView];
     }
     
@@ -77,6 +79,7 @@ static NSString *const kJTCalendarDaySelected = @"kJTCalendarDaySelected";
     
     {
         dotView = [JTCircleView new];
+//        dotView.backgroundColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
         [self addSubview:dotView];
         dotView.hidden = YES;
     }

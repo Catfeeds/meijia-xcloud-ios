@@ -102,6 +102,7 @@ static NSArray *cacheDaysOfWeeks;
         for(UIView *view in [[self.subviews reverseObjectEnumerator] allObjects]){
             view.frame = CGRectMake(x, 0, width, height);
             x = CGRectGetMaxX(view.frame);
+            
         }
     }
     else{

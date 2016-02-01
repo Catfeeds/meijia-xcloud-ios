@@ -139,16 +139,29 @@
      ^(NSDictionary *loginInfo, EMError *error) {
          [self hideHud];
          if (loginInfo && !error) {
+//             [[EaseMob sharedInstance].chatManager setIsAutoLoginEnabled:YES];
+//             //发送自动登陆状态通知
+//             [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_LOGINCHANGE object:@YES];
+////             [self LogInSuccess];
+//
+//             //将旧版的coredata数据导入新的数据库
+//             EMError *error = [[EaseMob sharedInstance].chatManager importDataToNewDatabase];
+//             if (!error) {
+//                 error = [[EaseMob sharedInstance].chatManager loadDataFromDatabase];
+//             }
+             //设置是否自动登录
              [[EaseMob sharedInstance].chatManager setIsAutoLoginEnabled:YES];
+             
+             // 旧数据转换 (如果您的sdk是由2.1.2版本升级过来的，需要家这句话)
+             [[EaseMob sharedInstance].chatManager importDataToNewDatabase];
+             //获取数据库中数据
+             [[EaseMob sharedInstance].chatManager loadDataFromDatabase];
+             
+             //获取群组列表
+             [[EaseMob sharedInstance].chatManager asyncFetchMyGroupsList];
+             
              //发送自动登陆状态通知
              [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_LOGINCHANGE object:@YES];
-//             [self LogInSuccess];
-
-             //将旧版的coredata数据导入新的数据库
-             EMError *error = [[EaseMob sharedInstance].chatManager importDataToNewDatabase];
-             if (!error) {
-                 error = [[EaseMob sharedInstance].chatManager loadDataFromDatabase];
-             }
          }else {
              switch (error.errorCode) {
            

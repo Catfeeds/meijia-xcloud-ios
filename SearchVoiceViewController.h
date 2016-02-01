@@ -8,6 +8,6 @@
 
 #import "FatherViewController.h"
 
-@interface SearchVoiceViewController : FatherViewController<UISearchBarDelegate,UITableViewDataSource,UITableViewDelegate,UIGestureRecognizerDelegate>
+@interface SearchVoiceViewController : FatherViewController<UISearchBarDelegate,UITableViewDataSource,UITableViewDelegate,UIGestureRecognizerDelegate,MJRefreshBaseViewDelegate>
 
 @end

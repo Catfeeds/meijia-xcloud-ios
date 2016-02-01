@@ -19,6 +19,7 @@
     UILabel *_unreadLabel;
     UILabel *_detailLabel;
     UIView *_lineView;
+    UIImageView *hedImageView;
 }
 
 @end
@@ -31,6 +32,8 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         // Initialization code
+        hedImageView=[[UIImageView alloc]initWithFrame:CGRectMake(10, 7, 45, 45)];
+        [self.contentView addSubview:hedImageView];
         _timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(240, 7, 80, 16)];
         _timeLabel.font = [UIFont systemFontOfSize:13];
         _timeLabel.backgroundColor = [UIColor clearColor];
@@ -85,14 +88,15 @@
     [super layoutSubviews];
     CGRect frame = self.imageView.frame;
     
-    [self.imageView sd_setImageWithURL:_imageURL placeholderImage:_placeholderImage];
-    self.imageView.frame = CGRectMake(10, 7, 45, 45);
+//    [self.imageView sd_setImageWithURL:_imageURL placeholderImage:_placeholderImage];
+//    self.imageView.frame = CGRectMake(10, 7, 45, 45);
     
     self.textLabel.text = _name;
     self.textLabel.frame = CGRectMake(65, 7, 175, 20);
     
     _detailLabel.text = _detailMsg;
     _timeLabel.text = _time;
+    hedImageView.image=_placeholderImage;
     if (_unreadCount > 0) {
         if (_unreadCount < 9) {
             _unreadLabel.font = [UIFont systemFontOfSize:13];
@@ -103,7 +107,7 @@
         }
         [_unreadLabel setHidden:NO];
         [self.contentView bringSubviewToFront:_unreadLabel];
-        _unreadLabel.text = [NSString stringWithFormat:@"%d",_unreadCount];
+        _unreadLabel.text = [NSString stringWithFormat:@"%ld",(long)_unreadCount];
     }else{
         [_unreadLabel setHidden:YES];
     }

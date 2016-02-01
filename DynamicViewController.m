@@ -12,15 +12,23 @@
 @interface DynamicViewController ()
 {
     int arrayID;
+    MJRefreshHeaderView *_refreshHeader;
+    MJRefreshFooterView *_moreFooter;
+    BOOL _needRefresh;
+    BOOL _hasMore;
+    NSInteger   page;
+
 }
 @end
 
 @implementation DynamicViewController
 {
-    NSArray *dataSourceArray;
+    NSMutableArray *dataSourceArray;
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
+    page=1;
+    dataSourceArray=[[NSMutableArray alloc]init];
     self.view.frame=FRAME(0, 0, WIDTH, HEIGHT-50);
     self.backBtn.hidden=YES;
 //    self.navlabel.text=@"动态";
@@ -34,9 +42,24 @@
     UIView *v = [[UIView alloc] initWithFrame:CGRectZero];
     _tableView.separatorStyle=UITableViewCellSelectionStyleNone;
     [_tableView setTableFooterView:v];
+    _refreshHeader = [[MJRefreshHeaderView alloc] init];
+    _refreshHeader.delegate = self;
+    _refreshHeader.scrollView = _tableView;
+    
+    _moreFooter = [[MJRefreshFooterView alloc] init];
+    _moreFooter.delegate = self;
+    _moreFooter.scrollView = _tableView;
     [self portData];
 }
 -(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    if (_needRefresh) {
+        [_refreshHeader beginRefreshing];
+        _needRefresh = NO;
+    }
+}
+-(void)viewDidAppear:(BOOL)animated
 {
     [self portData];
 }
@@ -45,10 +68,12 @@
     ISLoginManager *_manager = [ISLoginManager shareManager];
     DownloadManager *_download = [[DownloadManager alloc]init];
     NSDictionary *dic;
+    NSString *pageStr=[NSString stringWithFormat:@"%ld",(long)page];
+
     if (_vcLayoutID==100) {
-        dic=@{@"user_id":_friendID,@"feed_from":@"1",@"page":@"1"};
+        dic=@{@"user_id":_friendID,@"feed_from":@"1",@"page":pageStr};
     }else{
-        dic=@{@"user_id":_manager.telephone,@"feed_from":@"0",@"page":@"1"};
+        dic=@{@"user_id":_manager.telephone,@"feed_from":@"0",@"page":pageStr};
     }
     [_download requestWithUrl:DYNAMIC_CARD dict:dic view:self.view delegate:self finishedSEL:@selector(ProtSuccess:) isPost:NO failedSEL:@selector(ProtFailure:)];
 }
@@ -56,13 +81,34 @@
 -(void)ProtSuccess:(id)dataSource
 {
     NSLog(@"获取动态列表数据成功:%@",dataSource);
-    dataSourceArray=[dataSource objectForKey:@"data"];
+//    dataSourceArray=[dataSource objectForKey:@"data"];
     NSString *string=[NSString stringWithFormat:@"%@",[dataSource objectForKey:@"data"]];
     _tableView.dataSource=self;
     _tableView.delegate=self;
     if (string==nil||string==NULL||[string isEqualToString:@""]) {
         arrayID=100;
     }else{
+        
+        NSArray *array=[dataSource objectForKey:@"data"];
+        if (array.count<10*page) {
+            _hasMore=YES;
+        }else{
+            _hasMore=NO;
+        }
+        if (page==1) {
+            [dataSourceArray removeAllObjects];
+            [dataSourceArray addObjectsFromArray:array];
+        }else{
+            for (int i=0; i<array.count; i++) {
+                if ([dataSourceArray containsObject:array[i]]) {
+                    
+                }else{
+                    [dataSourceArray addObject:array[i]];
+                }
+            }
+            
+        }
+
         [_tableView reloadData];
     }
 
@@ -72,6 +118,73 @@
 {
     NSLog(@"获取动态列表数据失败:%@",dataSource);
 }
+
+#pragma mark 表格刷新相关
+#pragma mark 刷新
+-(void)refresh
+{
+    [_refreshHeader beginRefreshing];
+}
+
+
+#pragma mark - MJRefreshBaseViewDelegate
+- (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
+{
+    
+    if ([refreshView isKindOfClass:[MJRefreshHeaderView class]]) {
+        //头 -》 刷新
+        if (_moreFooter.isRefreshing) {
+            //正在加载更多，取消本次请求
+            [_refreshHeader performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+            return;
+        }
+        page = 1;
+        //刷新
+        [self loadData];
+        
+    }else if ([refreshView isKindOfClass:[MJRefreshFooterView class]]) {
+        //尾 -》 更多
+        if (_refreshHeader.isRefreshing) {
+            //正在刷新，取消本次请求
+            [_moreFooter performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+            
+            return;
+        }
+        
+        if (_hasMore==YES) {
+            //没有更多了
+            [_moreFooter performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+            //            [_tableView reloadData];
+            return;
+        }
+        page++;
+        
+        //加载更多
+        
+        [self loadData];
+    }
+}
+
+-(void)loadData
+{
+    //    if (_service == nil) {
+    //        _service = [[zzProjectListService alloc] init];
+    //        _service.delegate = self;
+    //    }
+    
+    //通过控制page控制更多 网路数据
+    //    [_service reqwithPageSize:INVESTPAGESIZE page:page];
+    //    [self loadImg];
+    
+    //本底数据
+    //    [_arrData addObjectsFromArray:[UIFont familyNames]];
+    
+    [self portData];
+    
+    
+    
+}
+#pragma mark 表格刷新相关
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     
     // Return the number of sections.
@@ -224,6 +337,14 @@
         lineView.backgroundColor=[UIColor colorWithRed:225/255.0f green:225/255.0f blue:225/255.0f alpha:1];
         [cell addSubview:lineView];
     }
+    if([indexPath row] == ((NSIndexPath*)[[tableView indexPathsForVisibleRows] lastObject]).row){
+        //end of loading
+        dispatch_async(dispatch_get_main_queue(),^{
+            [_refreshHeader performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+            [_moreFooter performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+        });
+    }
+
     return cell;
 }
 

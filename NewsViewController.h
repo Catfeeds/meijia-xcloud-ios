@@ -9,7 +9,7 @@
 #import "FatherViewController.h"
 
 
-@interface NewsViewController : FatherViewController<UITableViewDataSource,UITableViewDelegate,EMChatManagerDelegate>
+@interface NewsViewController : FatherViewController<UITableViewDataSource,UITableViewDelegate,EMChatManagerDelegate,MJRefreshBaseViewDelegate>
 @property(nonatomic ,strong)NSArray *shujuArray;
 @property (strong, nonatomic) NSMutableArray*dataSource;
 //- (void)refreshDataSource;

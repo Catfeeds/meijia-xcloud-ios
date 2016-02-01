@@ -69,43 +69,24 @@ NSString *const kRouterEventChatHeadImageTapEventName = @"kRouterEventChatHeadIm
 - (void)setMessageModel:(MessageModel *)messageModel
 {
     _messageModel = messageModel;
-    
-    _nameLabel.hidden = !messageModel.isChatGroup;
-    
-//    _nameLabel.hidden = YES;
-
-    
+    DownloadManager *_download = [[DownloadManager alloc]init];
+    NSDictionary *_dict = @{@"im_username":_messageModel.username};
+    NSLog(@"字典数据%@",_dict);
+    [_download requestWithUrl:@"simi//app/user/get_im_profile.json" dict:_dict view:self delegate:self finishedSEL:@selector(logDowLoadFinish:) isPost:NO failedSEL:@selector(DownFail:)];
 //    UIImage *placeholderImage = [UIImage imageNamed:@"chatListCellHead"];
-    NSString *imgName = @"chatListCellHead";
-    
-    
-    int senior = APPLIACTION.huanxinBase.is_senior;
-    
-    if (senior == 1) {
-        if ([APPLIACTION.huanxinBase.im_senior_nickname isEqualToString:@"rita"]) {
-            _nameLabel.text = _messageModel.isSender ? APPLIACTION.huanxinBase.im_senior_username :APPLIACTION.huanxinBase.im_senior_nickname;
-            imgName = _messageModel.isSender ? @"chatListCellHead" : @"nv.png";  //设置头像   //真人聊天的时候的头像
-            
-            
-            
-        }else{
-            _nameLabel.text = _messageModel.isSender ? APPLIACTION.huanxinBase.im_senior_username :APPLIACTION.huanxinBase.im_senior_nickname;
-            imgName = _messageModel.isSender ? @"chatListCellHead" : @"nan.png";  //设置头像   //真人聊天的时候的头像
-        }
-        
-    }else{
-        _nameLabel.text = _messageModel.isSender ? APPLIACTION.huanxinBase.im_robot_username :APPLIACTION.huanxinBase.im_robot_nickname;
-        imgName = _messageModel.isSender ? @"chatListCellHead" : @"bai.png";  //设置头像   //机器人聊天的时候的头像
-    }
-    
-    [self.headImageView setImage:[UIImage imageNamed:imgName]];
-    
-    UIImage *headimg = [GetPhoto getPhotoFromName:@"image.png"];
-    if (headimg != nil && _messageModel.isSender) {
-        [self.headImageView setImage:headimg];
-    }
-    
 //    [self.headImageView sd_setImageWithURL:_messageModel.headImageURL placeholderImage:placeholderImage];
+//    [self.headImageView sd_setImageWithURL:_messageModel.headImageURL placeholderImage:placeholderImage];
+}
+-(void)logDowLoadFinish:(id)sender
+{
+    NSDictionary *dic=[sender objectForKey:@"data"];
+    NSString *imageUrl=[NSString stringWithFormat:@"%@",[dic objectForKey:@"head_img"]];
+    [self.headImageView setImageWithURL:[NSURL URLWithString:imageUrl] placeholderImage:nil];
+}
+
+-(void)DownFail:(id)sender
+{
+    NSLog(@"获取秘书列表失败!%@",sender);
 }
 
 #pragma mark - private

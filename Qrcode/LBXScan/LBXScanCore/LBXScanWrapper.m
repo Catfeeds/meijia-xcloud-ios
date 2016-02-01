@@ -267,7 +267,7 @@
 
 #pragma mark- 震动、声音效果
 
-#define SOUNDID  1109  //1012 -iphone   1152 ipad  1109 ipad
+#define SOUNDID  1000  //1012 -iphone   1152 ipad  1109 ipad
 + (void)systemVibrate
 {
     AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);

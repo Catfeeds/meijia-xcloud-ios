@@ -49,7 +49,7 @@ static const CGFloat kDefaultPlaySoundInterval = 3.0;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+    self.tabBar.frame=FRAME(0, 20, WIDTH, 44);
     //if 使tabBarController中管理的viewControllers都符合 UIRectEdgeNone
     if ([UIDevice currentDevice].systemVersion.floatValue >= 7) {
         self.edgesForExtendedLayout = UIRectEdgeNone;
@@ -95,11 +95,10 @@ static const CGFloat kDefaultPlaySoundInterval = 3.0;
         self.navigationItem.rightBarButtonItem = nil;
     }else if (item.tag == 1){
         self.title = NSLocalizedString(@"title.addressbook", @"AddressBook");
-        self.navigationItem.rightBarButtonItem = _addFriendItem;
+        self.navigationItem.rightBarButtonItem = nil;
     }else if (item.tag == 2){
         self.title = NSLocalizedString(@"title.setting", @"Setting");
         self.navigationItem.rightBarButtonItem = nil;
-        [_settingsVC refreshConfig];
     }
 }
 
@@ -140,40 +139,39 @@ static const CGFloat kDefaultPlaySoundInterval = 3.0;
 
 - (void)setupSubviews
 {
+    
+    
     self.tabBar.backgroundImage = [[UIImage imageNamed:@"tabbarBackground"] stretchableImageWithLeftCapWidth:25 topCapHeight:25];
     self.tabBar.selectionIndicatorImage = [[UIImage imageNamed:@"tabbarSelectBg"] stretchableImageWithLeftCapWidth:25 topCapHeight:25];
     
-    _chatListVC = [[ChatListViewController alloc] init];
-    [_chatListVC networkChanged:_connectionState];
-    _chatListVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"title.conversation", @"Conversations")
+    _settingsVC = [[SettingsViewController alloc] init];
+    
+    _settingsVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"title.conversation", @"Conversations")
                                                            image:nil
                                                              tag:0];
-    [_chatListVC.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"tabbar_chatsHL"]
-                         withFinishedUnselectedImage:[UIImage imageNamed:@"tabbar_chats"]];
-    [self unSelectedTapTabBarItems:_chatListVC.tabBarItem];
-    [self selectedTapTabBarItems:_chatListVC.tabBarItem];
+    [_settingsVC.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"common_icon_home@2x"]
+                         withFinishedUnselectedImage:[UIImage imageNamed:@"common_icon_home_c@2x"]];
+    [self unSelectedTapTabBarItems:_settingsVC.tabBarItem];
+    [self selectedTapTabBarItems:_settingsVC.tabBarItem];
     
     _contactsVC = [[ContactsViewController alloc] initWithNibName:nil bundle:nil];
     _contactsVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"title.addressbook", @"AddressBook")
                                                            image:nil
                                                              tag:1];
-    [_contactsVC.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"tabbar_contactsHL"]
-                         withFinishedUnselectedImage:[UIImage imageNamed:@"tabbar_contacts"]];
     [self unSelectedTapTabBarItems:_contactsVC.tabBarItem];
     [self selectedTapTabBarItems:_contactsVC.tabBarItem];
     
-    _settingsVC = [[SettingsViewController alloc] init];
-    _settingsVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"title.setting", @"Setting")
+    _chatListVC = [[ChatListViewController alloc] init];
+    [_chatListVC networkChanged:_connectionState];
+    _chatListVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"title.setting", @"Setting")
                                                            image:nil
                                                              tag:2];
-    [_settingsVC.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"tabbar_settingHL"]
-                         withFinishedUnselectedImage:[UIImage imageNamed:@"tabbar_setting"]];
-    _settingsVC.view.autoresizingMask = UIViewAutoresizingFlexibleHeight;
-    [self unSelectedTapTabBarItems:_settingsVC.tabBarItem];
-    [self selectedTapTabBarItems:_settingsVC.tabBarItem];
-    
-    self.viewControllers = @[_chatListVC, _contactsVC, _settingsVC];
+    _chatListVC.view.autoresizingMask = UIViewAutoresizingFlexibleHeight;
+    [self unSelectedTapTabBarItems:_chatListVC.tabBarItem];
     [self selectedTapTabBarItems:_chatListVC.tabBarItem];
+    
+    self.viewControllers = @[_settingsVC, _contactsVC, _chatListVC];
+    [self selectedTapTabBarItems:_settingsVC.tabBarItem];
 }
 
 -(void)unSelectedTapTabBarItems:(UITabBarItem *)tabBarItem
@@ -207,6 +205,7 @@ static const CGFloat kDefaultPlaySoundInterval = 3.0;
         }
     }
     NSLog(@"没有读过的消息数%ld",(long)unreadCount);
+   
     UIApplication *application = [UIApplication sharedApplication];
     [application setApplicationIconBadgeNumber:unreadCount];
 }

@@ -20,6 +20,7 @@
 #import "MyLogInViewController.h"
 #import "AFHTTPRequestOperationManager.h"
 #import "UpLoadViewController.h"
+#import "LoginViewController.h"
 #import <AssetsLibrary/AssetsLibrary.h>
 @interface UserInfoViewController ()<userInfoDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate>
 {
@@ -278,17 +279,25 @@
 - (void)takeout
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"LOGOUT" object:nil];
+  [[EaseMob sharedInstance].chatManager asyncLogoffWithUnbindDeviceToken:YES completion:^(NSDictionary *info, EMError *error)
+    {
+        if (error && error.errorCode != EMErrorServerNotLogin)
+        {
+            
+        }else{
+            SettingsViewController *set = [[SettingsViewController alloc]init];
+            [set logoutAction];
+            NSUserDefaults *_default = [NSUserDefaults standardUserDefaults];
+            [_default removeObjectForKey:@"telephone"];
+            [_default removeObjectForKey:@"islogin"];
+            [_default synchronize];
+            MyLogInViewController *vc=[[MyLogInViewController alloc]init];
+            vc.vCLID=100;
+            UINavigationController *nav=[[UINavigationController alloc]initWithRootViewController:vc];
+            [self presentViewController:nav animated:YES completion:nil];
 
-    SettingsViewController *set = [[SettingsViewController alloc]init];
-    [set logoutAction];
-    NSUserDefaults *_default = [NSUserDefaults standardUserDefaults];
-    [_default removeObjectForKey:@"telephone"];
-    [_default removeObjectForKey:@"islogin"];
-    [_default synchronize];
-    MyLogInViewController *vc=[[MyLogInViewController alloc]init];
-    vc.vCLID=100;
-    UINavigationController *nav=[[UINavigationController alloc]initWithRootViewController:vc];
-    [self presentViewController:nav animated:YES completion:nil];
+        }
+    } onQueue:nil];
 //    ISLoginManager *manager = [ISLoginManager shareManager]
 //    manager.isLogin = NO;
     

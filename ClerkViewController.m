@@ -16,6 +16,12 @@
 {
     UIActivityIndicatorView *meView;
     int  GAO;
+    
+    MJRefreshHeaderView *_refreshHeader;
+    MJRefreshFooterView *_moreFooter;
+    BOOL _needRefresh;
+    BOOL _hasMore;
+    NSInteger   page;
 }
 @end
 
@@ -24,6 +30,8 @@
 @synthesize _tableView,seekArray,sec_Id,secID,is_senior,height,Y,service_type_id;
 - (void)viewDidLoad {
     [super viewDidLoad];
+    page=1;
+    seekArray=[[NSMutableArray alloc]init];
     meView=[[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     meView.center = CGPointMake(WIDTH/2, HEIGHT/2);
     meView.color = [UIColor redColor];
@@ -36,6 +44,15 @@
     [self tableViewSource];
     [self tableViewLayout];
 }
+-(void)viewWillAppear:(BOOL)animated
+{
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault animated:NO];
+    [super viewWillAppear:animated];
+    if (_needRefresh) {
+        [_refreshHeader beginRefreshing];
+        _needRefresh = NO;
+    }
+}
 -(void)tableViewSource
 {
     
@@ -43,18 +60,41 @@
     
     DownloadManager *_download = [[DownloadManager alloc]init];
     //NSString *str=[NSString stringWithFormat:@"%ld",(long)service_type_id];
-    NSDictionary *_dict = @{@"service_type_ids":service_type_id,@"user_id":_manager.telephone,@"page":@"1"};
+    NSString *pageStr=[NSString stringWithFormat:@"%ld",(long)page];
+    NSDictionary *_dict = @{@"service_type_ids":service_type_id,@"user_id":_manager.telephone,@"page":pageStr};
     NSLog(@"字典数据%@",_dict);
     [_download requestWithUrl:SEEK_FWS dict:_dict view:self.view delegate:self finishedSEL:@selector(logDowLoadFinish:) isPost:NO failedSEL:@selector(DownFail:)];
 }
 -(void)logDowLoadFinish:(id)sender
 {
     NSLog(@"秘书列表数据%@",sender);
-    seekArray=[sender objectForKey:@"data"];
-    self.navlabel.text=[NSString stringWithFormat:@"%@",[seekArray[0] objectForKey:@"service_type_name"]];
+//    seekArray=[sender objectForKey:@"data"];
+    NSArray *array=[sender objectForKey:@"data"];
+    self.navlabel.text=[NSString stringWithFormat:@"%@",[array[0] objectForKey:@"service_type_name"]];
     NSString *dataString=[NSString stringWithFormat:@"%@",[sender objectForKey:@"data"]];
     if ([dataString length]==0) {
+        
     }else{
+        
+        if (array.count<10*page) {
+            _hasMore=YES;
+        }else{
+            _hasMore=NO;
+        }
+        if (page==1) {
+            [seekArray removeAllObjects];
+            [seekArray addObjectsFromArray:array];
+        }else{
+            for (int i=0; i<array.count; i++) {
+                if ([seekArray containsObject:array[i]]) {
+                    
+                }else{
+                    [seekArray addObject:array[i]];
+                }
+            }
+            
+        }
+
         [_tableView reloadData];
     }
 }
@@ -63,6 +103,75 @@
 {
     NSLog(@"获取秘书列表失败!%@",sender);
 }
+
+#pragma mark 表格刷新相关
+#pragma mark 刷新
+-(void)refresh
+{
+    [_refreshHeader beginRefreshing];
+}
+
+
+#pragma mark - MJRefreshBaseViewDelegate
+- (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
+{
+    
+    if ([refreshView isKindOfClass:[MJRefreshHeaderView class]]) {
+        //头 -》 刷新
+        if (_moreFooter.isRefreshing) {
+            //正在加载更多，取消本次请求
+            [_refreshHeader performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+            return;
+        }
+        page = 1;
+        //刷新
+        [self loadData];
+        
+    }else if ([refreshView isKindOfClass:[MJRefreshFooterView class]]) {
+        //尾 -》 更多
+        if (_refreshHeader.isRefreshing) {
+            //正在刷新，取消本次请求
+            [_moreFooter performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+            
+            return;
+        }
+        
+        if (_hasMore==YES) {
+            //没有更多了
+            [_moreFooter performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+            //            [_tableView reloadData];
+            return;
+        }
+        page++;
+        
+        //加载更多
+        
+        [self loadData];
+    }
+}
+
+-(void)loadData
+{
+    //    if (_service == nil) {
+    //        _service = [[zzProjectListService alloc] init];
+    //        _service.delegate = self;
+    //    }
+    
+    //通过控制page控制更多 网路数据
+    //    [_service reqwithPageSize:INVESTPAGESIZE page:page];
+    //    [self loadImg];
+    
+    //本底数据
+    //    [_arrData addObjectsFromArray:[UIFont familyNames]];
+    
+    [self tableViewSource];
+    
+    
+    
+}
+#pragma mark 表格刷新相关
+
+
 -(void)tableViewLayout
 {
     [_tableView removeFromSuperview];
@@ -79,6 +188,14 @@
     UIView *v = [[UIView alloc] initWithFrame:CGRectZero];
     
     [_tableView setTableFooterView:v];
+    
+    _refreshHeader = [[MJRefreshHeaderView alloc] init];
+    _refreshHeader.delegate = self;
+    _refreshHeader.scrollView = _tableView;
+    
+    _moreFooter = [[MJRefreshFooterView alloc] init];
+    _moreFooter.delegate = self;
+    _moreFooter.scrollView = _tableView;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -260,6 +377,8 @@
         dispatch_async(dispatch_get_main_queue(),^{
             [meView stopAnimating]; // 结束旋转
             [meView setHidesWhenStopped:YES]; //当旋转结束时隐藏
+            [_refreshHeader performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+            [_moreFooter performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
         });
     }
     return cell;

@@ -11,9 +11,15 @@
 #import "OrderPayViewController.h"
 @interface Order_ListViewController ()
 {
-    NSArray *orderArray;
-    NSMutableArray *imageArray;
+    NSMutableArray *orderArray;
+//    NSMutableArray *imageArray;
     UIActivityIndicatorView *indicatorView;
+    
+    MJRefreshHeaderView *_refreshHeader;
+    MJRefreshFooterView *_moreFooter;
+    BOOL _needRefresh;
+    BOOL _hasMore;
+    NSInteger   page;
 }
 
 @end
@@ -22,19 +28,31 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    imageArray=[[NSMutableArray alloc]init];
+    page=1;
+    orderArray=[[NSMutableArray alloc]init];
+//    imageArray=[[NSMutableArray alloc]init];
     self.view.backgroundColor=[UIColor colorWithRed:231/255.0f green:231/255.0f blue:231/255.0f alpha:1];
     self.navlabel.text=@"订单";
+   [self PLJKLayout];
+    [self tableViewLayout];
+    // Do any additional setup after loading the view.
+}
+-(void)PLJKLayout
+{
     ISLoginManager *_manager = [ISLoginManager shareManager];
     
     DownloadManager *_download = [[DownloadManager alloc]init];
-    NSDictionary *dic=@{@"user_id":_manager.telephone,@"page":@"1"};
+     NSString *pageStr=[NSString stringWithFormat:@"%ld",(long)page];
+    NSDictionary *dic=@{@"user_id":_manager.telephone,@"page":pageStr};
     [_download requestWithUrl:ORDER_DDLB dict:dic view:self.view delegate:self finishedSEL:@selector(ORder_GetUserInfo:) isPost:NO failedSEL:@selector(ORder_FailDownload:)];
-    // Do any additional setup after loading the view.
 }
-
 -(void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
+    if (_needRefresh) {
+        [_refreshHeader beginRefreshing];
+        _needRefresh = NO;
+    }
     indicatorView=[[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     indicatorView.center = CGPointMake(WIDTH/2, HEIGHT/2);
     //indicatorView.color = [UIColor redColor];
@@ -42,28 +60,81 @@
     [indicatorView startAnimating];
 
 }
+
+#pragma mark 表格刷新相关
+#pragma mark 刷新
+-(void)refresh
+{
+    [_refreshHeader beginRefreshing];
+}
+
+
+#pragma mark - MJRefreshBaseViewDelegate
+- (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
+{
+    
+    if ([refreshView isKindOfClass:[MJRefreshHeaderView class]]) {
+        //头 -》 刷新
+        if (_moreFooter.isRefreshing) {
+            //正在加载更多，取消本次请求
+            [_refreshHeader performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+            return;
+        }
+        page = 1;
+        //刷新
+        [self loadData];
+        
+    }else if ([refreshView isKindOfClass:[MJRefreshFooterView class]]) {
+        //尾 -》 更多
+        if (_refreshHeader.isRefreshing) {
+            //正在刷新，取消本次请求
+            [_moreFooter performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+            
+            return;
+        }
+        
+        if (_hasMore==YES) {
+            //没有更多了
+            [_moreFooter performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+            //            [_tableView reloadData];
+            return;
+        }
+        page++;
+        
+        //加载更多
+        
+        [self loadData];
+    }
+}
+
+-(void)loadData
+{
+    //    if (_service == nil) {
+    //        _service = [[zzProjectListService alloc] init];
+    //        _service.delegate = self;
+    //    }
+    
+    //通过控制page控制更多 网路数据
+    //    [_service reqwithPageSize:INVESTPAGESIZE page:page];
+    //    [self loadImg];
+    
+    //本底数据
+    //    [_arrData addObjectsFromArray:[UIFont familyNames]];
+    
+    [self PLJKLayout];
+    
+    
+    
+}
+#pragma mark 表格刷新相关
 -(void)viewDidAppear:(BOOL)animated
 {
     [indicatorView stopAnimating]; // 结束旋转
     [indicatorView setHidesWhenStopped:YES]; //当旋转结束时隐藏
 
 }
-#pragma mark 订单列表获取数据成功返回方法
--(void)ORder_GetUserInfo:(id)sender
+-(void)tableViewLayout
 {
-    NSLog(@"订单列表数据%@",sender);
-    orderArray=[sender objectForKey:@"data"];
-    [imageArray removeLastObject];
-    for (int i=0; i<orderArray.count; i++) {
-        NSDictionary *dic=orderArray[i];
-        UIImage *image=[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[dic objectForKey:@"partner_user_head_img"]]]];
-        CGSize newSize=CGSizeMake(40, 40);
-        UIGraphicsBeginImageContextWithOptions(newSize, NO, 0.0);
-        [image drawInRect:CGRectMake(0, 0, newSize.width, newSize.height)];
-        image = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
-        [imageArray addObject:image];
-    }
     _orderTableView=[[UITableView alloc]initWithFrame:FRAME(0, 80, WIDTH, HEIGHT-80)];
     _orderTableView.dataSource=self;
     _orderTableView.delegate=self;
@@ -71,10 +142,63 @@
     UIView *v = [[UIView alloc] initWithFrame:CGRectZero];
     
     [_orderTableView setTableFooterView:v];
+    _refreshHeader = [[MJRefreshHeaderView alloc] init];
+    _refreshHeader.delegate = self;
+    _refreshHeader.scrollView = _orderTableView;
+    
+    _moreFooter = [[MJRefreshFooterView alloc] init];
+    _moreFooter.delegate = self;
+    _moreFooter.scrollView = _orderTableView;
+
+}
+#pragma mark 订单列表获取数据成功返回方法
+-(void)ORder_GetUserInfo:(id)sender
+{
+    NSLog(@"订单列表数据%@",sender);
+//    orderArray=[sender objectForKey:@"data"];
+//    [imageArray removeLastObject];
+//    for (int i=0; i<orderArray.count; i++) {
+//        NSDictionary *dic=orderArray[i];
+//        UIImage *image=[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[dic objectForKey:@"partner_user_head_img"]]]];
+//        CGSize newSize=CGSizeMake(40, 40);
+//        UIGraphicsBeginImageContextWithOptions(newSize, NO, 0.0);
+//        [image drawInRect:CGRectMake(0, 0, newSize.width, newSize.height)];
+//        image = UIGraphicsGetImageFromCurrentImageContext();
+//        UIGraphicsEndImageContext();
+//        [imageArray addObject:image];
+//    }
+    NSString *string=[sender objectForKey:@"data"];
+    if (string==nil||string==NULL/*||[string isEqualToString:@"0 objects"]*/) {
+        [_refreshHeader performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+        [_moreFooter performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+    }
+    NSArray *array=[sender objectForKey:@"data"];
+    if (array.count<10*page) {
+        _hasMore=YES;
+    }else{
+        _hasMore=NO;
+    }
+    if (page==1) {
+        [orderArray removeAllObjects];
+        [orderArray addObjectsFromArray:array];
+    }else{
+        for (int i=0; i<array.count; i++) {
+            if ([orderArray containsObject:array[i]]) {
+                
+            }else{
+                [orderArray addObject:array[i]];
+            }
+        }
+        
+    }
+
+    [_orderTableView reloadData];
 }
 #pragma mark 订单列表获取数据失败返回方法
 -(void)ORder_FailDownload:(id)sender
 {
+    [_refreshHeader performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+    [_moreFooter performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
     NSLog(@"获取订单列表失败%@",sender);
 }
 
@@ -157,8 +281,9 @@
         }
     }
     
-    
-    heagImageView.image=imageArray[indexPath.row];
+    NSString *imageUrl=[NSString stringWithFormat:@"%@",[orderDic objectForKey:@"partner_user_head_img"]];
+    [heagImageView setImageWithURL:[NSURL URLWithString:imageUrl]placeholderImage:nil];
+//    heagImageView.image=imageArray[indexPath.row];
     NSString *service_type_name=[NSString stringWithFormat:@"%@",[orderDic objectForKey:@"service_type_name"]];
     NSString *order_money=[NSString stringWithFormat:@"%@",[orderDic objectForKey:@"order_pay"]];
     cateGroyLabel.text=[NSString stringWithFormat:@"%@:%@",service_type_name,order_money];
@@ -193,6 +318,13 @@
     stateLabel.font=[UIFont fontWithName:@"Arial" size:14];
     stateLabel.textAlignment=NSTextAlignmentCenter;
     [stateButton addSubview:stateLabel];
+    if([indexPath row] == ((NSIndexPath*)[[tableView indexPathsForVisibleRows] lastObject]).row){
+        //end of loading
+        dispatch_async(dispatch_get_main_queue(),^{
+            [_refreshHeader performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+            [_moreFooter performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+        });
+    }
     
     return cell;
 }

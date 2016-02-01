@@ -8,8 +8,7 @@
 
 #import "FatherViewController.h"
 #import "AppDelegate.h"
-@interface RootViewController : UIViewController//<appDelegate>
-//- (void)tabbarhiddenNO;
-//- (void)tabbarhidden;
-@property (nonatomic, strong)UIView *tab;
+@interface RootViewController : UIViewController<UICollectionViewDataSource,UICollectionViewDelegate,UIWebViewDelegate>
+@property (nonatomic ,strong)UICollectionView *collectionView;
+@property (nonatomic, strong)UIImageView *tab;
 @end

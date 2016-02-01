@@ -19,8 +19,8 @@
     #import <UIKit/UIKit.h>
     #import <Foundation/Foundation.h>
     #import <CoreData/CoreData.h>
-
-
+#import <sqlite3.h>
+#import "JTCalendarDayView.h"
     #import "ChatDemoUIDefine.h"
     #import "WCAlertView.h"
     #import "TTGlobalUICommon.h"
@@ -42,7 +42,13 @@
     #import "DownloadManager.h"
     #import"UIImageView+WebCache.h"
 //    #import "ZBarReaderView.h"
-
+    #import "WQPlaySound.h"
+//表格上拉加载 下拉刷新相关类
+   #import "MJRefreshHeaderView.h"
+   #import "MJRefreshFooterView.h"
+   #import "MJRefresh.h"
+#import "EjectAlertView.h"
+#import "WebPageViewController.h"
 #endif
 
 #define NAV_COLOR 0xE8374A
@@ -53,6 +59,13 @@
 #define TAB_BAR_COLOR 0x474546
 
 #define NAV_HEIGHT 64
+
+#define TABLE_NAME @"users"
+#define FIELDS_NAME_SID @"user_id"
+#define FIELDS_NAME_SNAME @"name"
+#define FIELDS_NAME_SCLASS @"head_img"
+#define FIELDS_NAME_MOBILE @"mobile"
+
 
 #define SELF_VIEW_HEIGHT self.view.bounds.size.height
 #define SELF_VIEW_WIDTH  self.view.bounds.size.width
@@ -85,7 +98,6 @@
 #define CITY_STOREID                        @"CITY_storeid"
 #define CITY_OPENTIME                       @"CITY_opentime"
 #define C_ID                                @"C_id"
-
 //系统相关
 #define SYSTEM_VERSION  [[[UIDevice currentDevice]systemVersion] floatValue]
 #define HEIGHT_TYPE     [[[UIDevice currentDevice]systemVersion] floatValue] >= 7.0 ? 20 : 0

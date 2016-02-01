@@ -1,14 +1,14 @@
 /************************************************************
-  *  * EaseMob CONFIDENTIAL 
-  * __________________ 
-  * Copyright (C) 2013-2014 EaseMob Technologies. All rights reserved. 
-  *  
-  * NOTICE: All information contained herein is, and remains 
-  * the property of EaseMob Technologies.
-  * Dissemination of this information or reproduction of this material 
-  * is strictly forbidden unless prior written permission is obtained
-  * from EaseMob Technologies.
-  */
+ *  * EaseMob CONFIDENTIAL
+ * __________________
+ * Copyright (C) 2013-2014 EaseMob Technologies. All rights reserved.
+ *
+ * NOTICE: All information contained herein is, and remains
+ * the property of EaseMob Technologies.
+ * Dissemination of this information or reproduction of this material
+ * is strictly forbidden unless prior written permission is obtained
+ * from EaseMob Technologies.
+ */
 
 #import <UIKit/UIKit.h>
 
@@ -23,8 +23,8 @@
 #define kHorizontalPadding 8
 #define kVerticalPadding 5
 
-#define kTouchToRecord NSLocalizedString(@"按住说话", @"hold down to talk")
-#define kTouchToFinish NSLocalizedString(@"手指上滑，取消发送", @"loosen to send")
+#define kTouchToRecord NSLocalizedString(@"message.toolBar.record.touch", @"hold down to talk")
+#define kTouchToFinish NSLocalizedString(@"message.toolBar.record.send", @"loosen to send")
 
 
 /**
@@ -38,13 +38,9 @@
 @protocol DXMessageToolBarDelegate;
 @interface DXMessageToolBar : UIView
 
-- (void)recordButtonTouchDown;
-- (void)recordButtonTouchUpInside;
-- (void)recordButtonTouchUpOutside;
-- (void)willShowBottomView:(UIView *)bottomView;
-
-@property (strong, nonatomic) UIView *toolbarView;
 @property (nonatomic, weak) id <DXMessageToolBarDelegate> delegate;
+
+@property (strong, nonatomic) UIButton *recordButton;
 
 /**
  *  操作栏背景图片
@@ -90,7 +86,6 @@
  */
 - (instancetype)initWithFrame:(CGRect)frame;
 
-
 /**
  *  默认高度
  *
@@ -102,11 +97,6 @@
  *  取消触摸录音键
  */
 - (void)cancelTouchRecord;
-
-
-
-
-
 
 @end
 
@@ -162,8 +152,6 @@
  *  @param faceLocalPath 选中的表情的本地路径
  */
 - (void)didSendFace:(NSString *)faceLocalPath;
-
-
 
 /**
  *  按下录音按钮开始录音

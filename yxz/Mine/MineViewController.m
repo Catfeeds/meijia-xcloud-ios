@@ -113,7 +113,7 @@
 {
     DownloadManager *_download = [[DownloadManager alloc]init];
     NSDictionary *_dict = @{@"user_id":cellphone};
-    [_download requestWithUrl:[NSString stringWithFormat:@"%@",USERINFO_API] dict:_dict view:_myscroll delegate:self finishedSEL:@selector(DownloadFinish1:) isPost:NO failedSEL:@selector(FailDownload:)];
+    [_download requestWithUrl:[NSString stringWithFormat:@"%@",USERINFO_API] dict:_dict view:self.view  delegate:self finishedSEL:@selector(DownloadFinish1:) isPost:NO failedSEL:@selector(FailDownload:)];
 }
 
 - (void)JifenDuihuanSuccess:(NSNotification *)noti
