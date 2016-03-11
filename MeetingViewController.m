@@ -19,11 +19,12 @@
 #import "FXBlurView.h"
 #import "ConTentViewController.h"
 
-#import "SeekViewController.h"
+#import "ClerkViewController.h"
 
 #import "RelevantPersonnelViewController.h"
 
 #import "CustomerViewController.h"
+#import "Meeting_roomButViewController.h"
 int heights;
 int H = 0,time_ID;
 @interface MeetingViewController ()<timePickerDelegate,meetingPickerDelegate>
@@ -112,6 +113,8 @@ int H = 0,time_ID;
     NSDictionary *zjDic;
     
     int releID;
+    Meeting_roomButViewController *meetingVC;
+    int meetingVCid;
 }
 @property (nonatomic, assign) ABAddressBookRef addressBookRef;
 @end
@@ -128,6 +131,24 @@ int H = 0,time_ID;
     _cardsID=1;
     textID=0;
     time=0;
+    switch (_vcID) {
+        case 1001:
+            self.backlable.backgroundColor=HEX_TO_UICOLOR(0x11cd6e, 1.0);
+            break;
+        case 1002:
+            self.backlable.backgroundColor=HEX_TO_UICOLOR(0xf4c600, 1.0);
+            break;
+        case 1003:
+            self.backlable.backgroundColor=HEX_TO_UICOLOR(0x56abe4, 1.0);
+            break;
+        case 1004:
+            self.backlable.backgroundColor=HEX_TO_UICOLOR(0x00bb9c, 1.0);
+            break;
+            
+        default:
+            break;
+    }
+
     //theNumber=1;
     msImages=[UIImage imageNamed:@"chuli"];
     [self selfViewLayout];
@@ -303,6 +324,24 @@ int H = 0,time_ID;
         _index=customerVC.cellIndex;
         nameString=customerVC.nameString;
     }
+    if (meetingVCid==100) {
+        if (meetingVC.textFieldString==nil||meetingVC.textFieldString==NULL) {
+            if (textFieldString==nil||textFieldString==NULL) {
+                meetingField.placeholder = @"请输入地址！";
+            }else{
+                meetingField.text=textFieldString;
+            }
+        }else{
+            textFieldString=meetingVC.textFieldString;
+        }
+        meetingVCid=0;
+    }else{
+        if (textFieldString==nil||textFieldString==NULL) {
+            meetingField.placeholder = @"请输入地址！";
+        }else{
+            meetingField.text=textFieldString;
+        }
+    }
     [self selfViewLayout];
 }
 -(void)viewDidAppear:(BOOL)animated
@@ -370,7 +409,7 @@ int H = 0,time_ID;
     [self msImageViewLayout];
     UILabel *label=[[UILabel alloc]init];
     label.frame=CGRectMake(msImageView.frame.origin.x+msImageView.frame.size.width+10, 25/2, label.frame.size.width, 32/2);
-    label.text=@"需要秘书处理";
+    label.text=@"交给秘书处理";
     label.font=[UIFont fontWithName:@"Arial" size:14];
     label.textColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
     label.lineBreakMode=NSLineBreakByTruncatingTail;
@@ -433,7 +472,7 @@ int H = 0,time_ID;
     [sendView addSubview:lineView];
     UIButton *sendButton=[[UIButton alloc]initWithFrame:FRAME(14, 5, WIDTH-28, 41)];
     [sendButton addTarget:self action:@selector(sendAction:) forControlEvents:UIControlEventTouchUpInside];
-    sendButton.backgroundColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
+    sendButton.backgroundColor=self.backlable.backgroundColor;
     sendButton.layer.cornerRadius=5;
     if (_pushID==1) {
         [sendButton setTitle:@"确认修改" forState:UIControlStateNormal];
@@ -752,12 +791,25 @@ int H = 0,time_ID;
             plaLabel.frame=FRAME(10, 10, plaLabel.frame.size.width, placeButton.frame.size.height-20);
             plaLabel.font=[UIFont fontWithName:@"Arial" size:13];
             [placeButton addSubview:plaLabel];
-            meetingField=[[UITextField alloc]initWithFrame:FRAME(65, 1.5, placeButton.frame.size.width-80, 30)];
+            meetingField=[[UITextField alloc]initWithFrame:FRAME(65, 1.5, placeButton.frame.size.width-145, 30)];
             meetingField.delegate=self;
 //            meetingField.layer.cornerRadius=8.0f;
 //            meetingField.layer.masksToBounds=YES;
 //            meetingField.layer.borderColor=[[UIColor colorWithRed:215.0 / 255.0 green:215.0 / 255.0 blue:215.0 / 255.0 alpha:1]CGColor];
 //            meetingField.layer.borderWidth= 1.0f;
+            UIButton *meeting_roomBut=[[UIButton alloc]initWithFrame:FRAME(placeButton.frame.size.width-62, (33-25)/2, 60, 25)];
+            [meeting_roomBut.layer setCornerRadius:25/2]; //设置矩圆角半径
+            [meeting_roomBut.layer setBorderWidth:1.0];//边框宽度
+            meeting_roomBut.layer.backgroundColor=[[UIColor colorWithRed:241.0 / 255.0 green:241.0 / 255.0 blue:241.0 / 255.0 alpha:1] CGColor];
+            meeting_roomBut.layer.cornerRadius=25/2;
+            meeting_roomBut.layer.masksToBounds=YES;
+            meeting_roomBut.layer.borderColor = [[UIColor colorWithRed:190 / 255.0 green:190 / 255.0 blue:190 / 255.0 alpha:1] CGColor];
+            meeting_roomBut.layer.borderWidth= 1.0f;
+            [meeting_roomBut setTitle:@"会议室" forState:UIControlStateNormal];
+            [meeting_roomBut setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+            meeting_roomBut.titleLabel.font=[UIFont fontWithName:@"Arial" size:13];
+            [meeting_roomBut addTarget:self action:@selector(meeting_roomBut) forControlEvents:UIControlEventTouchUpInside];
+            [placeButton addSubview:meeting_roomBut];
             if (textFieldString==nil||textFieldString==NULL) {
                 meetingField.placeholder = @"请输入地址！";
             }else{
@@ -869,6 +921,12 @@ int H = 0,time_ID;
         [backgroundView addSubview:labelView];
     }
 }
+-(void)meeting_roomBut
+{
+    meetingVC=[[Meeting_roomButViewController alloc]init];
+    meetingVCid=100;
+    [self.navigationController pushViewController:meetingVC animated:YES];
+}
 #pragma mark参会人员及个数label显示
 -(void)ParticipationLabelLayout
 {
@@ -969,33 +1027,9 @@ int H = 0,time_ID;
 -(void)switchAction:(id)sender
 {
     if (periodID==0) {
-//        [maskView removeFromSuperview];
-//        maskView=[FXBlurView new];
-//        maskView.frame=FRAME(0, 0, WIDTH, HEIGHT);
-//        [maskView setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleLeftMargin];
-//        [self.view addSubview:maskView];
-//        UILabel *label=[[UILabel alloc]init];
-//        label.textAlignment=NSTextAlignmentCenter;
-//        label.text=@"您还没有购买秘书，是否现在购买?";
-//        label.lineBreakMode=NSLineBreakByTruncatingTail;
-//        [label setNumberOfLines:0];
-//        [label sizeToFit];
-//        label.frame=FRAME(20, (HEIGHT-20)/2, label.frame.size.width, 20);
-//        [maskView addSubview:label];
-//        UIButton *cancelBut=[[UIButton alloc]initWithFrame:FRAME((WIDTH/2-60)/2, label.frame.size.height+label.frame.origin.y+30, 60, 30)];
-//        [cancelBut setTitle:@"取消" forState:UIControlStateNormal];
-//        [cancelBut addTarget:self action:@selector(cancelAction:) forControlEvents:UIControlEventTouchUpInside];
-//        cancelBut.backgroundColor=[UIColor redColor];
-//        cancelBut.layer.cornerRadius=8;
-//        [maskView addSubview:cancelBut];
-//        UIButton *sureBut=[[UIButton alloc]initWithFrame:FRAME(WIDTH/2+(WIDTH/2-60)/2, label.frame.size.height+label.frame.origin.y+30, 60, 30)];
-//        [sureBut setTitle:@"确定" forState:UIControlStateNormal];
-//        [sureBut addTarget:self action:@selector(sureAction:) forControlEvents:UIControlEventTouchUpInside];
-//        sureBut.backgroundColor=[UIColor redColor];
-//        sureBut.layer.cornerRadius=8;
-//        [maskView addSubview:sureBut];
-        SeekViewController *vc=[[SeekViewController alloc]init];
-        [self.navigationController pushViewController:vc animated:YES];
+        ClerkViewController *seekVC=[[ClerkViewController alloc]init];
+        seekVC.service_type_id=@"75";
+        [self.navigationController pushViewController:seekVC animated:YES];
     }else{
         switchButton.ID=1;
         UISwitch *switchBuT=(UISwitch *)sender;
@@ -1029,8 +1063,8 @@ int H = 0,time_ID;
 //确定按钮点击方法
 -(void)sureAction:(id)sender
 {
-    SeekViewController *vc=[[SeekViewController alloc]init];
-    [self.navigationController pushViewController:vc animated:YES];
+//    SeekViewController *vc=[[SeekViewController alloc]init];
+//    [self.navigationController pushViewController:vc animated:YES];
 }
 #pragma mark 开关按钮switchButton的相应事件方法
 -(void)switchButAction:(id)sender
@@ -1060,7 +1094,13 @@ int H = 0,time_ID;
 -(void)textFieldDidEndEditing:(UITextField *)textField
 {
     textFieldString=meetingField.text;
+    if (textFieldString==nil) {
+        meetingField.placeholder = @"请输入地址！";
+    }else{
+        meetingField.text=textFieldString;
+    }
 }
+
 -(void)textViewDidBeginEditing:(UITextView *)textView
 {
     fieldID=0;

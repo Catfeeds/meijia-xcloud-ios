@@ -73,7 +73,7 @@
     //设置定位精确度，默认：kCLLocationAccuracyBest
     [BMKLocationService setLocationDesiredAccuracy:kCLLocationAccuracyNearestTenMeters];
     //指定最小距离更新(米)，默认：kCLDistanceFilterNone
-    [BMKLocationService setLocationDistanceFilter:100.f];
+    [BMKLocationService setLocationDistanceFilter:10.f];
     
     _locService = [[BMKLocationService alloc]init];
     [_locService startUserLocationService];
@@ -178,6 +178,7 @@
     if (textfield.text.length == 0) {
         [_busPoiArray removeAllObjects];
         dataArray = _zhoubianArray;
+        NSLog(@"城市:%@",_zhoubianArray);
         _myTableView.frame = FRAME(0, _mapView.bottom, SELF_VIEW_WIDTH, SELF_VIEW_HEIGHT-_mapView.bottom-40);
         headHeight = 22.0;
         [_myTableView reloadData];
@@ -186,7 +187,6 @@
 
 - (BOOL) textFieldShouldReturn:(UITextField *)textField
 {
-    //    NSLog(@"搜索:%@",textField.text);
     [myTextField resignFirstResponder];
     return YES;
 }
@@ -210,7 +210,6 @@
                     
                     [_myTableView reloadData];
                     _myTableView.frame = FRAME(0, _mapView.bottom, SELF_VIEW_WIDTH, SELF_VIEW_HEIGHT-_mapView.bottom-40);
-                    //                    _myTableView.hidden = (_busPoiArray.count > 0)?  NO : YES;
                     _myTableView.hidden = NO;
                     dataArray = _zhoubianArray;
                 }
@@ -237,7 +236,6 @@
     }
     else if (error == BMK_SEARCH_AMBIGUOUS_KEYWORD){
         //当在设置城市未找到结果，但在其他城市找到结果时，回调建议检索城市列表
-        // result.cityList;
         NSLog(@"起始点有歧义");
     } else {
         NSLog(@"抱歉，未找到结果");
@@ -300,7 +298,6 @@
     [_mapView addAnnotation:annoTation];
     
     myTextField.text = mapModel.name;
-    //    _myTableView.hidden = YES;
     [myTextField resignFirstResponder];
     
 #warning 显示指定位置坐标
@@ -370,9 +367,6 @@
         BMKPinAnnotationView *newAnnotationView = [[BMKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"myAnnotation"];
         newAnnotationView.pinColor = BMKPinAnnotationColorPurple;
         newAnnotationView.animatesDrop = YES;// 设置该标注点动画显示
-        
-        //        [_mapView updateLocationData:userLocation];
-        
         return newAnnotationView;
     }
     return nil;
@@ -399,19 +393,19 @@
     BMKCoordinateRegion region ;//表示范围的结构体
     CLLocationCoordinate2D a = CLLocationCoordinate2DMake(userLocation.location.coordinate.latitude, userLocation.location.coordinate.longitude);
     region.center = a;//中心点
-    //   NSLog(@"%@",a);
     region.span.latitudeDelta = 0.1;//经度范围（设置为0.1表示显示范围为0.2的纬度范围）
     region.span.longitudeDelta = 0.2;//纬度范围
     [_mapView setRegion:region animated:YES];
     
     //发起检索
     BMKNearbySearchOption *option = [[BMKNearbySearchOption alloc]init];
+    option.sortType=BMK_POI_SORT_BY_DISTANCE;
     option.pageIndex = 0;
     option.pageCapacity = 10;
     option.location = a;
     option.location = CLLocationCoordinate2DMake(userLocation.location.coordinate.latitude, userLocation.location.coordinate.longitude);
     option.radius = 1000;  //检索半径
-    option.keyword = @"写字楼";
+    option.keyword = @"大厦";
     BOOL flag = [_searcher poiSearchNearBy:option];
     
     if(flag)
@@ -422,7 +416,6 @@
     {
         NSLog(@"周边检索发送失败");
     }
-    //NSLog(@"didUpdateUserLocation lat %f,long %f",userLocation.location.coordinate.latitude,userLocation.location.coordinate.longitude);
 }
 - (void)didFailToLocateUserWithError:(NSError *)error{
     NSLog(@"定位失败");

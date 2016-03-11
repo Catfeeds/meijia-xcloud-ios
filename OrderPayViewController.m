@@ -22,6 +22,7 @@
 
 #import "UsedDressViewController.h"
 #import "MineJifenViewController.h"
+#import "Water_Order_DetailsViewController.h"
 @interface OrderPayViewController ()<BUYDELEGATE>
 {
     OrderPay *_buyview;
@@ -53,7 +54,7 @@
         couponId=volumeVC.coupon_id;
     }else{
         NSString *str=[NSString stringWithFormat:@"%@",[_orderPayDic objectForKey:@"user_coupon_value"]];
-        if (str==nil||str==NULL) {
+        if (str==nil||str==NULL||[str isEqualToString:@"(null)"]) {
             _actualStr=@"0";
         }else{
             _actualStr=str;
@@ -125,8 +126,12 @@
         orderVC.user_ID=_user_ID;
         orderVC.order_ID=_order_ID;
         [self.navigationController pushViewController:orderVC animated:YES];
-    }else{
-        
+    }else if(_orderVCID==100){
+        Water_Order_DetailsViewController *orderVC=[[Water_Order_DetailsViewController alloc]init];
+        orderVC.details_ID=5;
+        orderVC.user_ID=_user_ID;
+        orderVC.order_ID=_order_ID;
+        [self.navigationController pushViewController:orderVC animated:YES];
     }
     [self showAlertViewWithTitle:@"提示" message:@"购买成功"];
     
@@ -139,8 +144,12 @@
         orderVC.user_ID=_user_ID;
         orderVC.order_ID=_order_ID;
         [self.navigationController pushViewController:orderVC animated:YES];
-    }else{
-        
+    }else if(_orderVCID==100){
+        Water_Order_DetailsViewController *orderVC=[[Water_Order_DetailsViewController alloc]init];
+        orderVC.details_ID=5;
+        orderVC.user_ID=_user_ID;
+        orderVC.order_ID=_order_ID;
+        [self.navigationController pushViewController:orderVC animated:YES];
     }
 //    [self.navigationController popViewControllerAnimated:YES];
     [self showAlertViewWithTitle:@"提示" message:@"购买成功"];
@@ -155,8 +164,12 @@
         orderVC.user_ID=_user_ID;
         orderVC.order_ID=_order_ID;
         [self.navigationController pushViewController:orderVC animated:YES];
-    }else{
-        
+    }else if(_orderVCID==100){
+        Water_Order_DetailsViewController *orderVC=[[Water_Order_DetailsViewController alloc]init];
+        orderVC.details_ID=5;
+        orderVC.user_ID=_user_ID;
+        orderVC.order_ID=_order_ID;
+        [self.navigationController pushViewController:orderVC animated:YES];
     }
     [self showAlertViewWithTitle:@"提示" message:@"购买成功"];
 //    [self.navigationController popViewControllerAnimated:YES];
@@ -366,7 +379,7 @@
             
         }else{
             NSLog(@"wx");
-            [WeiXinPay WXPaywithOrderNo:_payd.ordernumber orderType:@"2"];
+            [WeiXinPay WXPaywithOrderNo:_payd.ordernumber orderType:@"0"];
             
         }
        
@@ -447,7 +460,12 @@
 - (void)GotoZhifuBaoWithData:(PayData *)paydata noty:(NSString *)notyurl
 {
     AliPayManager *_alimanager = [[AliPayManager alloc]init];
-    _alimanager.categoryID=2;
+    if (_vCID==100) {
+        _alimanager.categoryID=3;
+    }else{
+        _alimanager.categoryID=2;
+    }
+    
     [_alimanager requestWitDelegate:self data:paydata finishedSEL:@selector(PaySuccess:) notyurl:notyurl];
     
 }

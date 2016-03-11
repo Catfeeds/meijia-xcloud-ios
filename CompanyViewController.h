@@ -22,4 +22,6 @@
 @property (nonatomic ,strong)NSArray *dataMobileArray;
 @property (nonatomic ,strong)NSArray *dataIdArray;
 @property (nonatomic ,strong)NSString *nameString;
+
+@property (nonatomic ,assign)int vcIDs;
 @end

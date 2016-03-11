@@ -10,6 +10,7 @@
 #import "OrderPayViewController.h"
 #import "BuySecretaryViewController.h"
 #import "Order_ListViewController.h"
+#import "WaterOrderViewController.h"
 @interface Order_DetailsViewController ()
 {
     UIView *detailsView;
@@ -18,8 +19,10 @@
 @end
 
 @implementation Order_DetailsViewController
+
 -(void)viewWillAppear:(BOOL)animated
 {
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
     if (_details_ID!=2) {
         DownloadManager *_download = [[DownloadManager alloc]init];
         NSDictionary *dic=@{@"user_id":_user_ID,@"order_id":_order_ID};
@@ -102,6 +105,8 @@
             if (i==1) {
                 UIImageView *headImageView=[[UIImageView alloc]initWithFrame:FRAME(10, 10, 30, 30)];
                 headImageView.image=[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[orderDic objectForKey:@"partner_user_head_img"]]]];
+                headImageView.layer.cornerRadius=headImageView.frame.size.width/2;
+                headImageView.clipsToBounds = YES;
                 [view addSubview:headImageView];
                 
                 UILabel *cateGroyLabel=[[UILabel alloc]initWithFrame:FRAME(headImageView.frame.size.width+headImageView.frame.origin.x+10, 15, WIDTH-120, 20)];
@@ -274,12 +279,16 @@
                 [self.navigationController popToViewController:controller animated:YES];
             }
         }
-    }else{
+    }else if(_details_ID==5){
         for (UIViewController *controller in self.navigationController.viewControllers) {
-            if ([controller isKindOfClass:[Order_ListViewController class]]) {
+            if ([controller isKindOfClass:[WaterOrderViewController class]]) {
                 [self.navigationController popToViewController:controller animated:YES];
             }
         }
+
+    }else{
+        [self.navigationController popViewControllerAnimated:YES];
+       
     }
     
 }

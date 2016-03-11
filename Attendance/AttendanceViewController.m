@@ -36,6 +36,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navlabel.text=@"签到";
+    self.backlable.backgroundColor=HEX_TO_UICOLOR(0xea8010, 1.0);
+    self.view.backgroundColor=[UIColor whiteColor];
     NSArray * arrWeek=[NSArray arrayWithObjects:@"星期六",@"星期日",@"星期一",@"星期二",@"星期三",@"星期四",@"星期五", nil];
     NSDate *date = [NSDate date];
     NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
@@ -95,20 +97,16 @@
 }
 -(void)viewWillAppear:(BOOL)animated
 {
-//    nameString=compVC.compNameString;
-//    compID=compVC.compID;
-//    [self nameLabelLayout];
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
     [self defaultInterfaceLayout];
 }
 -(void)webViewLayout
 {
     UIWebView *meWebView= [[UIWebView alloc]initWithFrame:FRAME(0, 64, WIDTH, HEIGHT-64)];
     meWebView.delegate=self;
-    //self.meWebView.hidden=YES;
     meWebView.scrollView.delegate=self;
     [self.view addSubview:meWebView];
     NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://123.57.173.36/simi-h5/show/company-reg.html"]];//http://123.57.173.36/simi-h5/show/company-reg.html
-    //NSLog(@"gourl  =  %@",_imgurl);
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     [meWebView loadRequest:request];
 
@@ -131,7 +129,7 @@
 -(void)viewLayout
 {
     UIView *attendanceView=[[UIView alloc]initWithFrame:FRAME(0, 64, WIDTH, 100)];
-    attendanceView.backgroundColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
+    attendanceView.backgroundColor=self.backlable.backgroundColor;
     [self.view addSubview:attendanceView];
     nameLabel=[[UILabel alloc]init];//WithFrame:FRAME(20, 20, <#w#>, <#h#>)
     [self nameLabelLayout];
@@ -161,7 +159,7 @@
     [signButton setTitle:@"签到记录" forState:UIControlStateNormal];
     signButton.titleLabel.font=[UIFont fontWithName:@"Arial" size:18];
     [signButton addTarget:self action:@selector(signBut) forControlEvents:UIControlEventTouchUpInside];
-    [signButton setTitleColor:[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1] forState:UIControlStateNormal];
+    [signButton setTitleColor:self.backlable.backgroundColor forState:UIControlStateNormal];
     [attendanceView addSubview:signButton];
     
     UIButton *attendanceBut=[[UIButton alloc]initWithFrame:FRAME((WIDTH-WIDTH/4)/2, HEIGHT-WIDTH/4, WIDTH/4, WIDTH/4)];
@@ -175,7 +173,6 @@
     [companyBut addTarget:self action:@selector(companyBut) forControlEvents:UIControlEventTouchUpInside];
     companyBut.layer.cornerRadius=5;
     companyBut.backgroundColor=[UIColor colorWithRed:232/255.0f green:232/255.0f blue:232/255.0f alpha:1];
-//    [self.view addSubview:companyBut];
 }
 -(void)signBut
 {
@@ -253,7 +250,7 @@
     NSLog(@"数据详情%@",sender);
     NSDictionary *dic=[sender objectForKey:@"data"];
     AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication] delegate];
-    delegate.globalDic=@{@"user_id":[dic objectForKey:@"id"],@"sec_id":[dic objectForKey:@"sec_id"],@"is_senior":[dic objectForKey:@"is_senior"],@"senior_range":[dic objectForKey:@"senior_range"],@"mobile":[dic objectForKey:@"mobile"],@"user_type":[dic objectForKey:@"user_type"],@"name":[dic objectForKey:@"name"],@"has_company":[dic objectForKey:@"has_company"],@"head_img":[dic objectForKey:@"head_img"]};
+    delegate.globalDic=@{@"user_id":[dic objectForKey:@"id"],@"sec_id":[dic objectForKey:@"sec_id"],@"is_senior":[dic objectForKey:@"is_senior"],@"senior_range":[dic objectForKey:@"senior_range"],@"mobile":[dic objectForKey:@"mobile"],@"user_type":[dic objectForKey:@"user_type"],@"name":[dic objectForKey:@"name"],@"has_company":[dic objectForKey:@"has_company"],@"head_img":[dic objectForKey:@"head_img"],@"company_id":[dic objectForKey:@"company_id"],@"company_name":[dic objectForKey:@"company_name"]};
     NSLog(@"看看是什么啊%@",delegate.globalDic);
     [self.navigationController popViewControllerAnimated:YES];
 }
@@ -320,16 +317,13 @@
     [myWebView removeFromSuperview];
     myWebView= [[UIWebView alloc]initWithFrame:FRAME(0, 64, WIDTH, HEIGHT-64)];
     myWebView.delegate=self;
-    //self.meWebView.hidden=YES;
     myWebView.scrollView.delegate=self;
     [layoutView addSubview:myWebView];
     NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@",urlString]];
-    //NSLog(@"gourl  =  %@",_imgurl);
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     [myWebView loadRequest:request];
     
     UIButton *liftButton=[[UIButton alloc]initWithFrame:FRAME(10, 20, 50, 30)];
-    //liftButton.backgroundColor=[UIColor blackColor];
     [liftButton addTarget:self action:@selector(liftWebButAction) forControlEvents:UIControlEventTouchUpInside];
     [layoutView addSubview:liftButton];
     
@@ -343,7 +337,6 @@
     [layoutView addSubview:webTitleLabel];
     
     UIButton *rightButton=[[UIButton alloc]initWithFrame:FRAME(WIDTH-60, 20, 50, 30)];
-    //rightButton.backgroundColor=[UIColor blackColor];
     [rightButton addTarget:self action:@selector(rightButAction) forControlEvents:UIControlEventTouchUpInside];
     [layoutView addSubview:rightButton];
     
@@ -369,7 +362,6 @@
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 /*

@@ -66,7 +66,7 @@
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    self.view.backgroundColor=[UIColor whiteColor];
     self.navlabel.text = @"地址管理";
     islog = [[ISLoginManager alloc]init];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(AddDressWithData:) name:@"ADDDRESS_SUCCESS" object:nil];
@@ -169,6 +169,9 @@
     cell.tag = indexPath.row;
     if(mydata.isDefault == 1){
         cell.btn.hidden = NO;
+        _ctiyString=cell.nameLabel.text;
+        int a=(int)mydata.dataIdentifier;
+        _addCityID=[NSString stringWithFormat:@"%d",a];
     }else{
         cell.btn.hidden = YES;
     }
@@ -317,8 +320,7 @@
     return @"删除";
 }
 //完成编辑的触发事件
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
-forRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (editingStyle == UITableViewCellEditingStyleDelete)
     {

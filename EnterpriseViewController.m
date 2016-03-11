@@ -45,7 +45,6 @@
         _mobileArray=companyVC.mobileArray;
         _idArray=companyVC.idArray;
     }
-    
 }
 #pragma mark 用户所属企业列表成功返回
 -(void)CompanySuccess:(id)sender
@@ -57,7 +56,6 @@
 #pragma mark 用户所属企业列表失败返回
 -(void)CompanyFailure:(id)sender
 {
-    
 }
 -(void)webViewLayout
 {
@@ -70,7 +68,6 @@
     //NSLog(@"gourl  =  %@",_imgurl);
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     [meWebView loadRequest:request];
-
 }
 - (void)webViewDidStartLoad:(UIWebView *)webView {
     view=[[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
@@ -96,77 +93,53 @@
     NSLog(@"数据详情%@",sender);
     NSDictionary *dic=[sender objectForKey:@"data"];
     AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication] delegate];
-    delegate.globalDic=@{@"user_id":[dic objectForKey:@"id"],@"sec_id":[dic objectForKey:@"sec_id"],@"is_senior":[dic objectForKey:@"is_senior"],@"senior_range":[dic objectForKey:@"senior_range"],@"mobile":[dic objectForKey:@"mobile"],@"user_type":[dic objectForKey:@"user_type"],@"name":[dic objectForKey:@"name"],@"has_company":[dic objectForKey:@"has_company"],@"head_img":[dic objectForKey:@"head_img"]};
+    delegate.globalDic=@{@"user_id":[dic objectForKey:@"id"],@"sec_id":[dic objectForKey:@"sec_id"],@"is_senior":[dic objectForKey:@"is_senior"],@"senior_range":[dic objectForKey:@"senior_range"],@"mobile":[dic objectForKey:@"mobile"],@"user_type":[dic objectForKey:@"user_type"],@"name":[dic objectForKey:@"name"],@"has_company":[dic objectForKey:@"has_company"],@"head_img":[dic objectForKey:@"head_img"],@"company_id":[dic objectForKey:@"company_id"],@"company_name":[dic objectForKey:@"company_name"]};
     NSLog(@"看看是什么啊%@",delegate.globalDic);
     [self.navigationController popViewControllerAnimated:YES];
 }
 #pragma mark用户信息详情获取失败方法
 -(void)QJDownFail:(id)sender
 {
-    
 }
 #pragma mark 表格初始化方法
 -(void)tableViewLayout
 {
-    
     [myTableView removeFromSuperview];
     myTableView =[[UITableView alloc]initWithFrame:FRAME(0, 64, WIDTH, HEIGHT-64)];
     myTableView.dataSource=self;
     myTableView.delegate=self;
     [self.view addSubview:myTableView];
     UIView *v = [[UIView alloc] initWithFrame:CGRectZero];
-    
     [myTableView setTableFooterView:v];
 }
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    
     return 1;
-    
 }
-
-
-
 //指定每个分区中有多少行，默认为1
-
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return companyArray.count;
 }
-
-
-
 //绘制Cell
-
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    
     //    NSString *string=[array objectAtIndex:indexPath.row];
     NSDictionary *dic=companyArray[indexPath.row];
     NSString *identifier = [NSString stringWithFormat:@"（%ld,%ld)",(long)indexPath.row,(long)indexPath.section];
-    
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     if (cell == nil) {
-        
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
-        
     }
-    
     cell.textLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"company_name"]];
     cell.textLabel.font=[UIFont fontWithName:@"Arial" size:15];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    
     UIImageView *arrowImageView=[[UIImageView alloc]initWithFrame:FRAME(WIDTH-30, 15, 20, 20)];
     arrowImageView.image=[UIImage imageNamed:@"JH_JT_TB_@2x"];
     [cell addSubview:arrowImageView];
-
     return cell;
 }
 //改变行的高度
-
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    
     return 50;
-    
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -174,6 +147,7 @@
     NSDictionary *dic=companyArray[indexPath.row];
     _company_idStr=[NSString stringWithFormat:@"%@",[dic objectForKey:@"company_id"]];
     companyVC=[[CompanyViewController alloc]init];
+    companyVC.vcIDs=_vcIDs;
     companyVC.companyDic=dic;
     companyVC.theNumber=_theNumber;
     companyVC.companyVcId=_enterVcID;
@@ -184,12 +158,10 @@
     companyVC.nameString=[NSString stringWithFormat:@"%@",[dic objectForKey:@"company_name"]];
     [self.navigationController pushViewController:companyVC animated:YES];
 }
-
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
 /*
 #pragma mark - Navigation
 

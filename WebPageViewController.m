@@ -29,7 +29,7 @@
 }
 -(void)viewWillAppear:(BOOL)animated
 {
-    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault animated:NO];
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
 }
 -(void)webViewLayout
 {
@@ -83,7 +83,12 @@
 }
 -(void)todoSomething
 {
-    [self.navigationController popViewControllerAnimated:YES];
+    if (_vcIDs==1000) {
+       [self dismissViewControllerAnimated:YES completion:nil];
+    }else{
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+    
 }
 - (void)backAction
 {

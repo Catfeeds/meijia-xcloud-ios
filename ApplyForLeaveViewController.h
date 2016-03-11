@@ -9,5 +9,5 @@
 #import "FatherViewController.h"
 
 @interface ApplyForLeaveViewController : FatherViewController
-
+@property(nonatomic ,assign)int colorid;
 @end

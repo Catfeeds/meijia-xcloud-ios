@@ -40,7 +40,7 @@ appDelegate
     
     int wxID;
     NSDictionary *cGDic;
-    
+    CLLocationManager *_locationManager;
     
 }
 @end
@@ -61,7 +61,7 @@ appDelegate
 }
 - (void)viewWillAppear:(BOOL)animated
 {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(back) name:@"WEIXINDENGLU_CG" object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(back) name:@"WEIXINDENGLU_CG" object:nil];
     if (self.loginYesOrNo == YES) {
         [[NSNotificationCenter defaultCenter] postNotificationName:@"LOGIN_SUCCESS" object:nil];
 
@@ -71,6 +71,18 @@ appDelegate
 - (void)viewDidLoad {
     [super viewDidLoad];
     wxID=0;
+    
+    // 初始化定位管理器
+    _locationManager = [[CLLocationManager alloc] init];
+    // 设置代理
+    _locationManager.delegate = self;
+    // 设置定位精确度到米
+    _locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+    // 设置过滤器为无
+    _locationManager.distanceFilter = kCLDistanceFilterNone;
+    // 开始定位
+    [_locationManager startUpdatingLocation];
+    
    // super.backBtn.hidden=YES;
     self.navlabel.text = @"快速注册与登录";
 //    self.title=@"快速注册与登录";
@@ -86,8 +98,8 @@ appDelegate
         
         
         self.backBtn.hidden = YES;
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(back) name:@"MylogVcBack" object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pushToIM) name:@"PUSHTOCHAT" object:nil];
+//        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(back) name:@"MylogVcBack" object:nil];
+//        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pushToIM) name:@"PUSHTOCHAT" object:nil];
         
         view = [[UIView alloc]initWithFrame:FRAME(0, NAV_HEIGHT+9, SELF_VIEW_WIDTH, 1.5+108)];
         view.backgroundColor = HEX_TO_UICOLOR(CHOICE_BACK_VIEW_COLOR, 1.0);
@@ -228,7 +240,7 @@ appDelegate
     NSLog(@"数据详情%@",sender);
     NSDictionary *dic=[sender objectForKey:@"data"];
     AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication] delegate];
-    delegate.globalDic=@{@"user_id":[dic objectForKey:@"id"],@"sec_id":[dic objectForKey:@"sec_id"],@"is_senior":[dic objectForKey:@"is_senior"],@"senior_range":[dic objectForKey:@"senior_range"],@"mobile":[dic objectForKey:@"mobile"],@"user_type":[dic objectForKey:@"user_type"],@"name":[dic objectForKey:@"name"],@"has_company":[dic objectForKey:@"has_company"],@"head_img":[dic objectForKey:@"head_img"]};
+    delegate.globalDic=@{@"user_id":[dic objectForKey:@"id"],@"sec_id":[dic objectForKey:@"sec_id"],@"is_senior":[dic objectForKey:@"is_senior"],@"senior_range":[dic objectForKey:@"senior_range"],@"mobile":[dic objectForKey:@"mobile"],@"user_type":[dic objectForKey:@"user_type"],@"name":[dic objectForKey:@"name"],@"has_company":[dic objectForKey:@"has_company"],@"head_img":[dic objectForKey:@"head_img"],@"company_id":[dic objectForKey:@"company_id"],@"company_name":[dic objectForKey:@"company_name"]};
     NSLog(@"看看是什么啊%@",delegate.globalDic);
 }
 #pragma mark用户信息详情获取失败方法
@@ -240,10 +252,10 @@ appDelegate
 - (void)ThirdPartyLogSuccessWhitOpenID:(NSString *)openid type:(NSString *)type name:(NSString *)name headImgUrl:(NSString *)imgurl
 {
     DownloadManager *_download = [[DownloadManager alloc]init];
-    NSDictionary *param = @{@"openid":openid,@"3rd_type":type,@"name":name,@"head_img":imgurl,@"login_from":@"0"};
+    NSDictionary *param = @{@"openid":openid,@"3rd_type":type,@"name":name,@"head_img":imgurl,@"login_from":@"0",@"login_from":@"ios"};
     
     [_download requestWithUrl:Third_LOG dict:param view:self.view delegate:self finishedSEL:@selector(ThirdPardyLogSuccess:) isPost:YES failedSEL:@selector(DownFail:)];
-    [self back];
+    
 }
 -(void)back
 {
@@ -252,10 +264,103 @@ appDelegate
         [self.navigationController pushViewController:vc animated:YES];
         _vCLID=0;
         [self AppdeleAction];
-        //[self getUserInfo];//2
+//        [self userAddress];
+        [self getUserInfo];//2
         
     }
     //[self.navigationController popViewControllerAnimated:YES];
+}
+
+// 6.0 以上调用这个函数
+-(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
+    
+    NSLog(@"%lu", (unsigned long)[locations count]);
+    
+    CLLocation *newLocation = locations[0];
+    CLLocationCoordinate2D oldCoordinate= newLocation.coordinate;
+    NSLog(@"旧的经度：%f,旧的纬度：%f",oldCoordinate.longitude,oldCoordinate.latitude);
+    _lngString=[NSString stringWithFormat:@"%f",oldCoordinate.longitude];
+    _latString=[NSString stringWithFormat:@"%f",oldCoordinate.latitude];
+    [manager stopUpdatingLocation];
+    
+    CLLocation *currentLocation = [locations lastObject];
+    
+    CLGeocoder *geocoder = [[CLGeocoder alloc] init];
+    [geocoder reverseGeocodeLocation:currentLocation completionHandler:^(NSArray *array, NSError *error)
+     
+     {
+         
+         if (array.count > 0)
+             
+         {
+             
+             CLPlacemark *placemark = [array objectAtIndex:0];
+             
+             
+             
+             //将获得的所有信息显示到label上
+             
+             NSLog(@"%@",placemark.name);
+             
+             //获取城市
+             
+             NSString *city = placemark.locality;
+             if (!city) {
+                 
+                 //四大直辖市的城市信息无法通过locality获得，只能通过获取省份的方法来获得（如果city为空，则可知为直辖市）
+                 
+                 city = placemark.administrativeArea;
+                 
+             }
+             
+             _cityStr =[NSString stringWithFormat:@"%@",city];
+             _addressName=[NSString stringWithFormat:@"%@",placemark.name];
+             [self userAddress];
+         }
+         
+         else if (error == nil && [array count] == 0)
+             
+         {
+             
+             NSLog(@"No results were returned.");
+             
+         }
+         
+         else if (error != nil)
+             
+         {
+             
+             NSLog(@"An error occurred = %@", error);
+             
+         }
+         
+     }];
+    
+    [manager stopUpdatingLocation];
+}
+
+// 6.0 调用此函数
+-(void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation {
+    NSLog(@"%@", @"ok");
+}
+
+
+
+-(void)userAddress
+{
+    if (self.loginYesOrNo==YES) {
+        ISLoginManager *_manager = [ISLoginManager shareManager];
+        NSLog(@"有值么%@",_manager.telephone);
+        DownloadManager *_download = [[DownloadManager alloc]init];
+        NSDictionary *_dict=@{@"user_id":_manager.telephone,@"lat":_latString,@"lng":_lngString,@"poi_name":_addressName,@"city":_cityStr};
+        [_download requestWithUrl:ADDRESS_USER dict:_dict view:self.view delegate:self finishedSEL:@selector(AddressFinish:) isPost:YES failedSEL:@selector(QJDownFail:)];
+    }
+    
+}
+#pragma mark 获取用户当前地理位置成功返回
+-(void)AddressFinish:(id)source
+{
+    
 }
 - (void)ThirdPardyLogSuccess:(id)dict
 {
@@ -275,7 +380,7 @@ appDelegate
         [mydefaults setObject:userid forKey:@"telephone"];
         [mydefaults synchronize];
         
-        [self getUserInfo];//3
+//        [self getUserInfo];//3
 //        [self dismissViewControllerAnimated:YES completion:nil];
         
 //        textfield.text = [textfield.text isEqual:[NSNull null] ]? @"":textfield.text;
@@ -297,6 +402,7 @@ appDelegate
         }
         
     }
+    [self back];
 }
 
 - (void)viewAction
@@ -317,6 +423,7 @@ appDelegate
 }
 - (void)thirdLogin:(UIButton *)sender
 {
+    NSLog(@"%ld",(long)sender.tag);
     if (sender.tag == 0) {
         
         NSLog(@"qq登陆");
@@ -343,7 +450,7 @@ appDelegate
         
     }else if(sender.tag == 1)
     {
-//        wxID=1;
+        wxID=1;
 //        [WeiXinPay sendAuthRequest];
 //        NSLog(@"微信登陆");
         UMSocialSnsPlatform *snsPlatform = [UMSocialSnsPlatformManager getSocialPlatformWithName:UMShareToWechatSession];
@@ -360,22 +467,11 @@ appDelegate
             }
             
         });
-        [[UMSocialDataService defaultDataService] requestSnsInformation:UMShareToWechatSession  completion:^(UMSocialResponseEntity *response){
-            NSLog(@"SnsInformation is %@",response.data);
-        }];
+//        [[UMSocialDataService defaultDataService] requestSnsInformation:UMShareToWechatSession  completion:^(UMSocialResponseEntity *response){
+//            NSLog(@"SnsInformation is %@",response.data);
+//        }];
     }else
     {
-//        NSLog(@"新浪登陆");
-//        WBAuthorizeRequest *request = [WBAuthorizeRequest request];
-//        request.redirectURI = XLRedirectURI;
-//        request.scope = @"all";
-//        request.userInfo = @{@"SSO_From": @"SendMessageToWeiboViewController",
-//                             @"Other_Info_1": [NSNumber numberWithInt:123],
-//                             @"Other_Info_2": @[@"obj1", @"obj2"],
-//                             @"Other_Info_3": @{@"key1": @"obj1", @"key2": @"obj2"}};
-//        [WeiboSDK sendRequest:request];
-        
-        
         
         UMSocialSnsPlatform *snsPlatform = [UMSocialSnsPlatformManager getSocialPlatformWithName:UMShareToSina];
         
@@ -399,23 +495,6 @@ appDelegate
         [[UMSocialDataService defaultDataService] requestUnOauthWithType:UMShareToSina  completion:^(UMSocialResponseEntity *response){
             NSLog(@"response is %@",response);
         }];
-//        NSString *platformName = [UMSocialSnsPlatformManager getSnsPlatformString:UMSocialSnsTypeSina];
-//        
-//        UMSocialSnsPlatform *snsPlatform = [UMSocialSnsPlatformManager getSocialPlatformWithName:UMShareToSina];
-//        
-//        snsPlatform.loginClickHandler(self,[UMSocialControllerService defaultControllerService],YES,^(UMSocialResponseEntity *response){
-//            
-//            NSLog(@"response is %@",response);
-//            
-//            if (response.responseCode == UMSResponseCodeSuccess) {
-//                
-//                UMSocialAccountEntity *snsAccount = [[UMSocialAccountManager socialAccountDictionary] valueForKey:platformName];
-//                
-//                NSLog(@"=========%@",snsAccount.accessToken);
-//                
-//            }
-//            
-//        });
 
     }
 }
@@ -583,7 +662,7 @@ appDelegate
         [mydefaults setObject:[[string objectForKey:@"data"] objectForKey:@"id"] forKey:@"telephone"];
         [mydefaults synchronize];
         
-        [self getUserInfo];//4
+//        [self getUserInfo];//4
         //[self.navigationController popViewControllerAnimated:YES];
         
         
@@ -634,7 +713,7 @@ appDelegate
 {
     NSDictionary *dict = [dic objectForKey:@"data"];
 //    if (wxID==1) {
-        [[NSNotificationCenter defaultCenter]postNotificationName:@"MylogVcBack" object:nil];
+//        [[NSNotificationCenter defaultCenter]postNotificationName:@"MylogVcBack" object:nil];
 //    }
     NSString *clientId=GeTuiSdk.clientId;
     
@@ -701,6 +780,10 @@ appDelegate
     }
     if(status){
         NSLog(@"1");
+    }
+    if (wxID==1) {
+        RootViewController *vc=[[RootViewController alloc]init];
+        [self presentViewController:vc animated:YES completion:nil];
     }
 }
 

@@ -70,8 +70,6 @@
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    
-    //    NSString *string=[array objectAtIndex:indexPath.row];
     NSDictionary *dic=companyArray[indexPath.row];
     NSString *identifier = [NSString stringWithFormat:@"（%ld,%ld)",(long)indexPath.row,(long)indexPath.section];
     

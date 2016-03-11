@@ -31,8 +31,6 @@
     UIImageView *img = [[UIImageView alloc]initWithFrame:FRAME(18, (44-20)/2, 10, 20)];
     img.image = [UIImage imageNamed:@"title_left_back"];
     [liftButton addSubview:img];
-//    self.navlabel.text=@"绑定手机号";
-    //self.view.backgroundColor=[UIColor colorWithRed:220/255.0f green:220/255.0f blue:220/255.0f alpha:1];
     
     UIView *bindMobileView=[[UIView alloc]initWithFrame:FRAME(0, 84, WIDTH, 121)];
     bindMobileView.backgroundColor=[UIColor whiteColor];
@@ -45,7 +43,6 @@
     _veriFicationButton=[[UIButton alloc]initWithFrame:FRAME(WIDTH-100, 10, 80, 40)];
     _veriFicationButton.backgroundColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
     [_veriFicationButton setTitle:@"获取验证码" forState:UIControlStateNormal];
-    //_veriFicationButton.titleLabel.text=@"获取验证码";
     _veriFicationButton.titleLabel.font=[UIFont fontWithName:@"Arial" size:15];
     _veriFicationButton.layer.cornerRadius=10;
     _veriFicationButton.clipsToBounds=YES;
@@ -84,8 +81,6 @@
 -(void)veriButAction:(UIButton*)sender
 {
     NSLog(@"获取验证码");
-    //    UITextField *textfield  = (UITextField *) [view viewWithTag:100];
-    //    NSLog(@"手机号： %@",textfield.text);
     NSString *phonestring = _mobileField.text;
     NSString * MOBILE = @"1[0-9]{10}";
     
@@ -94,9 +89,6 @@
     NSString * CU = @"^1(3[0-2]|5[256]|8[56])\\d{8}$";
     
     NSString * CT = @"^1((33|53|8[09])[0-9]|349)\\d{7}$";
-    
-    // NSString * PHS = @"^0(10|2[0-5789]|\\d{3})\\d{7,8}$";
-    
     NSPredicate *regextestmobile = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", MOBILE];
     NSPredicate *regextestcm = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", CM];
     NSPredicate *regextestcu = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", CU];
@@ -120,12 +112,6 @@
 {
     
     //请求成功之后 开始倒计时
-    //UITextField *textfield  = (UITextField *) [view viewWithTag:100];
-    
-//    NSUserDefaults *_default = [NSUserDefaults standardUserDefaults];
-//    [_default setObject:_mobileField.text forKey:@"telephone"];
-    
-    
     DownloadManager *_download = [[DownloadManager alloc]init];
     NSDictionary *param = @{@"mobile":_mobileField.text,@"sms_type":@"0"};
     
@@ -157,8 +143,6 @@
     secondsDown--;
     
     [_veriFicationButton setTitle:[NSString stringWithFormat:@"%lds",(long)secondsDown] forState:UIControlStateNormal];
-    //_veriFicationButton.titleLabel.text=[NSString stringWithFormat:@"重发验证码%lds",(long)secondsDown];
-    //[noGetbtn setHidden:NO];
     if(secondsDown==0){
         [countDownTimer invalidate];
         [_veriFicationButton setBackgroundColor:HEX_TO_UICOLOR(0xE8374A, 1.0)];
@@ -166,7 +150,6 @@
         _veriFicationButton.userInteractionEnabled = YES;
         secondsDown = 60;
         
-        //noGetbtn.userInteractionEnabled = YES;
     }
 }
 
@@ -212,7 +195,7 @@
     NSLog(@"数据详情%@",sender);
     NSDictionary *dic=[sender objectForKey:@"data"];
     AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication] delegate];
-    delegate.globalDic=@{@"user_id":[dic objectForKey:@"id"],@"sec_id":[dic objectForKey:@"sec_id"],@"is_senior":[dic objectForKey:@"is_senior"],@"senior_range":[dic objectForKey:@"senior_range"],@"mobile":[dic objectForKey:@"mobile"],@"user_type":[dic objectForKey:@"user_type"],@"name":[dic objectForKey:@"name"],@"has_company":[dic objectForKey:@"has_company"],@"head_img":[dic objectForKey:@"head_img"]};
+    delegate.globalDic=@{@"user_id":[dic objectForKey:@"id"],@"sec_id":[dic objectForKey:@"sec_id"],@"is_senior":[dic objectForKey:@"is_senior"],@"senior_range":[dic objectForKey:@"senior_range"],@"mobile":[dic objectForKey:@"mobile"],@"user_type":[dic objectForKey:@"user_type"],@"name":[dic objectForKey:@"name"],@"has_company":[dic objectForKey:@"has_company"],@"head_img":[dic objectForKey:@"head_img"],@"company_id":[dic objectForKey:@"company_id"],@"company_name":[dic objectForKey:@"company_name"]};
     NSLog(@"看看是什么啊%@",delegate.globalDic);
     [self.navigationController popViewControllerAnimated:YES];
 }

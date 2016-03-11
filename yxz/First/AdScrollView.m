@@ -86,12 +86,6 @@ static NSUInteger currentImage = 1;//记录中间图片的下标,开始总是为
 - (void)setImageNameArray:(NSArray *)imageNameArray
 {
     _imageNameArray = imageNameArray;
-
-//    _leftImageView.image = [UIImage imageNamed:_imageNameArray[0]];
-//    _centerImageView.image = [UIImage imageNamed:_imageNameArray[1]];
-//    _rightImageView.image = [UIImage imageNamed:_imageNameArray[2]];
-   
-    
     [_leftImageView setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",_imageNameArray[0]]]];
     [_centerImageView setImageWithURL:[NSURL URLWithString:                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   [NSString stringWithFormat:@"%@",_imageNameArray[1]]]];
     [_rightImageView setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",_imageNameArray[2]]]];
@@ -246,19 +240,16 @@ static NSUInteger currentImage = 1;//记录中间图片的下标,开始总是为
         return;
     }
     
-//    _leftImageView.image = [UIImage imageNamed:_imageNameArray[(currentImage-1)%_imageNameArray.count]];
     [_leftImageView setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",_imageNameArray[(currentImage+_imageNameArray.count-1)%_imageNameArray.count]]]];
     _leftAdLabel.text = _adTitleArray[(currentImage-1)%_imageNameArray.count];
     [_leftImageView addSubview:_leftBtn];
     imgToUrl = [NSString stringWithFormat:@"%@",_imgGoUrlArray[(currentImage + _imgGoUrlArray.count-1)%_imgGoUrlArray.count]];
     
-//    _centerImageView.image = [UIImage imageNamed:_imageNameArray[currentImage%_imageNameArray.count]];
     [_centerImageView setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",_imageNameArray[currentImage%_imageNameArray.count]]]];
     _centerAdLabel.text = _adTitleArray[currentImage%_imageNameArray.count];
     [_centerImageView addSubview:_centerBtn];
     imgToUrl = [NSString stringWithFormat:@"%@",_imgGoUrlArray[currentImage%_imgGoUrlArray.count]];
     
-//    _rightImageView.image = [UIImage imageNamed:_imageNameArray[(currentImage+1)%_imageNameArray.count]];
     [_rightImageView setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",_imageNameArray[(currentImage+1)%_imageNameArray.count]]]];
     _rightAdLabel.text = _adTitleArray[(currentImage+1)%_imageNameArray.count];
     [_rightImageView addSubview:_rightBtn];

@@ -29,10 +29,11 @@
         headView.backgroundColor=[UIColor whiteColor];
         [_view addSubview:headView];
         
-        _heideImage=[[UIImageView alloc]initWithFrame:CGRectMake(10, 4.5, 46, 46)];
+        _heideImage=[[UIImageView alloc]initWithFrame:CGRectMake(10, 7.5, 40, 40)];
         //_heideImage.image=@"";
         //_heideImage.backgroundColor=[UIColor redColor];
         _heideImage.layer.cornerRadius=_heideImage.frame.size.width/2;
+        _heideImage.clipsToBounds=YES;
         [headView addSubview:_heideImage];
         
         _titleLabel=[[UILabel alloc]initWithFrame:CGRectMake(58, headView.frame.size.height-42, (WIDTH-58)*0.66, 15)];

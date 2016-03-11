@@ -8,6 +8,7 @@
 
 #import "CompanyViewController.h"
 #import "MeetTableViewCell.h"
+#import "FriendsHomeViewController.h"
 @interface CompanyViewController ()
 {
     NSArray *companyArray;
@@ -16,9 +17,7 @@
     UIView *qrCodeView;
 }
 @end
-
 @implementation CompanyViewController
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -32,7 +31,6 @@
     [_mobileArray addObjectsFromArray:_dataMobileArray];
     _idArray=[[NSMutableArray alloc]init];
     [_idArray addObjectsFromArray:_dataIdArray];
-    
     _theNumber=(int)_nameArray.count;
     
     UIButton *reBut=[[UIButton alloc]initWithFrame:FRAME(WIDTH-50, 20, 50, 44)];
@@ -47,7 +45,6 @@
     NSString *companyString=[NSString stringWithFormat:@"%@",[_companyDic objectForKey:@"company_id"]];
     NSDictionary *_dict=@{@"user_id":_manager.telephone,@"company_id":companyString};
     [_download requestWithUrl:ENTERPRISE_STAFF dict:_dict view:self.view delegate:self finishedSEL:@selector(CompanySuccess:) isPost:NO failedSEL:@selector(CompanyFailure:)];
-    
     DownloadManager *download = [[DownloadManager alloc]init];
     [download requestWithUrl:WAGE_ORCODE dict:_dict view:self.view delegate:self finishedSEL:@selector(DetailsSuccess:) isPost:NO failedSEL:@selector(DetailsFailure:)];
     // Do any additional setup after loading the view.
@@ -68,7 +65,6 @@
     UIImageView *img = [[UIImageView alloc]initWithFrame:FRAME(18, (40-20)/2, 10, 20)];
     img.image = [UIImage imageNamed:@"title_left_back"];
     [returnBut addSubview:img];
-    
     UILabel *textLabel=[[UILabel alloc]initWithFrame:FRAME(10, (qrCodeView.frame.size.height-(WIDTH-60))/2-28, WIDTH-20, 18)];
     textLabel.text=@"企业二维码名片";
     textLabel.textAlignment=NSTextAlignmentCenter;
@@ -78,7 +74,6 @@
     NSString *imageUrl=[NSString stringWithFormat:@"%@",[[sender objectForKey:@"data"] objectForKey:@"qrCode"]];
     [qrImageView setImageWithURL:[NSURL URLWithString:imageUrl]placeholderImage:nil];
     [qrCodeView addSubview:qrImageView];
-    
     UILabel *explainLabel=[[UILabel alloc]initWithFrame:FRAME(10, qrImageView.frame.size.height+qrImageView.frame.origin.y+30, WIDTH-20, 20)];
     explainLabel.text=@"点击任意处可退出";
     explainLabel.textAlignment=NSTextAlignmentCenter;
@@ -89,9 +84,7 @@
 }
 -(void)DetailsFailure:(id)sender
 {
-    
 }
-
 -(void)tapQRActiion
 {
     qrCodeView.frame=FRAME(WIDTH, 0, WIDTH, HEIGHT);
@@ -99,7 +92,6 @@
 -(void)reButAction
 {
     qrCodeView.frame=FRAME(0, 0, WIDTH, HEIGHT);
-    
     [self.view addSubview:qrCodeView];
 }
 #pragma mark 用户企业员工列表成功返回
@@ -107,22 +99,11 @@
 {
     NSLog(@"用户所属企业列表数据%@",sender);
     companyArray=[sender objectForKey:@"data"];
-//    for (int i=0; i<companyArray.count; i++) {
-//        NSDictionary *dic=companyArray[i];
-//        UIImage *image=[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[dic objectForKey:@"head_img"]]]];
-//        CGSize newSize=CGSizeMake(40, 40);
-//        UIGraphicsBeginImageContextWithOptions(newSize, NO, 0.0);
-//        [image drawInRect:CGRectMake(0, 0, newSize.width, newSize.height)];
-//        image = UIGraphicsGetImageFromCurrentImageContext();
-//        UIGraphicsEndImageContext();
-//        [imageArray addObject:image];
-//    }
     [self tableViewLayout];
 }
 #pragma mark 用户企业员工列表失败返回
 -(void)CompanyFailure:(id)sender
 {
-    
 }
 -(void)tableViewLayout
 {
@@ -135,29 +116,17 @@
     }
     [self.view addSubview:myTableView];
     UIView *v = [[UIView alloc] initWithFrame:CGRectZero];
-    
     [myTableView setTableFooterView:v];
 }
-
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    
     return 1;
-    
 }
-
-
-
 //指定每个分区中有多少行，默认为1
-
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return companyArray.count;
 }
-
-
-
 //绘制Cell
-
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSString *identifier;
@@ -166,28 +135,17 @@
     }else{
         identifier = [NSString stringWithFormat:@"（%ld,%ld)",(long)indexPath.row,(long)indexPath.section];
     }
-    
-   
     if (_companyVcId==10) {
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
         UILabel *contactNameLabel = (UILabel *)[cell viewWithTag:101];
         UIImageView *contactImage = (UIImageView *)[cell viewWithTag:103];
         UIImageView *checkboxImageView = (UIImageView *)[cell viewWithTag:104];
         if (cell == nil) {
-            
             cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
-            
         }
-        
-//        UILabel *contactNameLabel = (UILabel *)[cell viewWithTag:101];
-//        UIImageView *contactImage = (UIImageView *)[cell viewWithTag:103];
-//        UIImageView *checkboxImageView = (UIImageView *)[cell viewWithTag:104];
-        
         contactNameLabel.frame=FRAME(70, 20, WIDTH-110, 20);
-        
         contactImage.clipsToBounds=YES;   
         contactImage.layer.cornerRadius=20;
-        
         checkboxImageView.frame=FRAME(WIDTH-40, 20, 20, 20);
         checkboxImageView.image=NULL;
         UIImage *image;
@@ -203,18 +161,13 @@
 //            contactImage.image=[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[dic objectForKey:@"head_img"]]]];
         }
         if ([self.mutableArray containsObject:[dic objectForKey:@"mobile"]]||[_idArray containsObject:[dic objectForKey:@"friend_id"]]){
-            
             image = [UIImage imageNamed:@"icon-checkbox-selected-green-25x25"];
         } else {
-            
             image = [UIImage imageNamed:@"icon-checkbox-unselected-25x25"];
         }
-
         checkboxImageView.image = image;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         return cell;
-
-
     }else{
          UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
         UIImageView *headImage=[[UIImageView alloc]init];
@@ -222,9 +175,7 @@
         //    UIImageView *arrowImage=[[UIImageView alloc]init];
         //    NSString *string=[array objectAtIndex:indexPath.row];
         NSDictionary *dic=companyArray[indexPath.row];
-        
         if (cell == nil) {
-            
             cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
             headImage.frame=FRAME(10, 10, 40, 40);
             //headImage.backgroundColor=[UIColor blackColor];
@@ -234,11 +185,6 @@
             textLabel.frame=FRAME(60, 20, WIDTH-80, 20);
             textLabel.font=[UIFont fontWithName:@"Arial" size:17];
             [cell addSubview:textLabel];
-            
-            //        arrowImage.frame=FRAME(WIDTH-20, 35/2, 10, 15);
-            //        arrowImage.image=[UIImage imageNamed:@"JH_JT_TB_@2x"];
-            //        [cell addSubview:arrowImage];
-            
         }
         [textLabel setText:[dic objectForKey:@"name"]];
         textLabel.font=[UIFont fontWithName:@"Arial" size:15];
@@ -254,75 +200,74 @@
         }
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         return cell;
- 
     }
 }
 //改变行的高度
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    
     return 60;
-    
 }
-
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *dic=companyArray[indexPath.row];
-    int idString=[[dic objectForKey:@"friend_id"]intValue];
-    ISLoginManager *manager = [[ISLoginManager alloc]init];
-    int userID=[[NSString stringWithFormat:@"%@",manager.telephone]intValue];
-    if (userID==idString) {
-        UIAlertView *tsView=[[UIAlertView alloc]initWithTitle:@"提醒" message:@"审批人不可以选择自己，请重新选择！" delegate:self cancelButtonTitle:@"我知道了" otherButtonTitles:nil, nil];
-        [tsView show];
-        return;
-    }
-    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    UIImageView *checkboxImageView = (UIImageView *)[cell viewWithTag:104];
-    UIImage *image;
-    
-    if (_theNumber<10) {
-        NSDictionary *dic=companyArray[indexPath.row];
-        if ([self.mutableArray containsObject:[dic objectForKey:@"mobile"]]||[_idArray containsObject:[dic objectForKey:@"friend_id"]]){ // contact is already selected so remove it from ContactPickerView
-            [_mutableArray removeObject:[dic objectForKey:@"mobile"]];
-            [_nameArray removeObject:[dic objectForKey:@"name"]];
-            [_mobileArray removeObject:[dic objectForKey:@"mobile"]];
-            [_idArray removeObject:[dic objectForKey:@"friend_id"]];
-            image = [UIImage imageNamed:@"icon-checkbox-unselected-25x25"];
-            _theNumber-=1;
-        } else {
-            [_mutableArray addObject:[dic objectForKey:@"mobile"]];
-            
-            [_nameArray addObject:[dic objectForKey:@"name"]];                                                                                                         
-            [_mobileArray addObject:[dic objectForKey:@"mobile"]];
-            [_idArray addObject:[dic objectForKey:@"friend_id"]];
-            image = [UIImage imageNamed:@"icon-checkbox-selected-green-25x25"];
-            _theNumber++;
-            
-        }
-
+    if (_vcIDs==100) {
+        NSString *view_userid=[NSString stringWithFormat:@"%@",[dic objectForKey:@"friend_id"]];
+        FriendsHomeViewController *vc=[[FriendsHomeViewController alloc]init];
+        vc.view_user_id=view_userid;
+        vc.array=companyArray;
+        [self.navigationController pushViewController:vc animated:YES];
     }else{
-        NSDictionary *dic=companyArray[indexPath.row];
-        if ([self.mutableArray containsObject:[dic objectForKey:@"mobile"]]||[_idArray containsObject:[dic objectForKey:@"friend_id"]]){ // contact is already selected so remove it from ContactPickerView
-            [_mutableArray removeObject:[dic objectForKey:@"mobile"]];
-            [_nameArray removeObject:[dic objectForKey:@"name"]];
-            [_mobileArray removeObject:[dic objectForKey:@"mobile"]];
-            [_idArray removeObject:[dic objectForKey:@"friend_id"]];
-            image = [UIImage imageNamed:@"icon-checkbox-unselected-25x25"];
-            _theNumber-=1;
-        } else {
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Done!"
-                                                                message:@"最多可选择10人！！"
-                                                               delegate:nil
-                                                      cancelButtonTitle:@"Ok"
-                                                      otherButtonTitles:nil];
-            [alertView show];
-            
+        
+        int idString=[[dic objectForKey:@"friend_id"]intValue];
+        ISLoginManager *manager = [[ISLoginManager alloc]init];
+        int userID=[[NSString stringWithFormat:@"%@",manager.telephone]intValue];
+        if (userID==idString) {
+            UIAlertView *tsView=[[UIAlertView alloc]initWithTitle:@"提醒" message:@"审批人不可以选择自己，请重新选择！" delegate:self cancelButtonTitle:@"我知道了" otherButtonTitles:nil, nil];
+            [tsView show];
+            return;
         }
-
+        UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+        UIImageView *checkboxImageView = (UIImageView *)[cell viewWithTag:104];
+        UIImage *image;
+        if (_theNumber<10) {
+            NSDictionary *dic=companyArray[indexPath.row];
+            if ([self.mutableArray containsObject:[dic objectForKey:@"mobile"]]||[_idArray containsObject:[dic objectForKey:@"friend_id"]]){ // contact is already selected so remove it from ContactPickerView
+                [_mutableArray removeObject:[dic objectForKey:@"mobile"]];
+                [_nameArray removeObject:[dic objectForKey:@"name"]];
+                [_mobileArray removeObject:[dic objectForKey:@"mobile"]];
+                [_idArray removeObject:[dic objectForKey:@"friend_id"]];
+                image = [UIImage imageNamed:@"icon-checkbox-unselected-25x25"];
+                _theNumber-=1;
+            } else {
+                [_mutableArray addObject:[dic objectForKey:@"mobile"]];
+                
+                [_nameArray addObject:[dic objectForKey:@"name"]];
+                [_mobileArray addObject:[dic objectForKey:@"mobile"]];
+                [_idArray addObject:[dic objectForKey:@"friend_id"]];
+                image = [UIImage imageNamed:@"icon-checkbox-selected-green-25x25"];
+                _theNumber++;
+            }
+        }else{
+            NSDictionary *dic=companyArray[indexPath.row];
+            if ([self.mutableArray containsObject:[dic objectForKey:@"mobile"]]||[_idArray containsObject:[dic objectForKey:@"friend_id"]]){ // contact is already selected so remove it from ContactPickerView
+                [_mutableArray removeObject:[dic objectForKey:@"mobile"]];
+                [_nameArray removeObject:[dic objectForKey:@"name"]];
+                [_mobileArray removeObject:[dic objectForKey:@"mobile"]];
+                [_idArray removeObject:[dic objectForKey:@"friend_id"]];
+                image = [UIImage imageNamed:@"icon-checkbox-unselected-25x25"];
+                _theNumber-=1;
+            } else {
+                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Done!"
+                                                                    message:@"最多可选择10人！！"
+                                                                   delegate:nil
+                                                          cancelButtonTitle:@"Ok"
+                                                          otherButtonTitles:nil];
+                [alertView show];
+            }
+        }
+        checkboxImageView.image = image;
+        [myTableView reloadData];
     }
-    
-    checkboxImageView.image = image;
-    [myTableView reloadData];
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

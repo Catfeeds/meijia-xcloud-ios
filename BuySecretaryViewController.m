@@ -118,7 +118,7 @@
     buyView.backgroundColor=[UIColor whiteColor];
     [payView addSubview:buyView];
     
-    UIImageView *headView=[[UIImageView alloc]initWithFrame:FRAME(10, 10, 50, 50)];
+    UIImageView *headView=[[UIImageView alloc]initWithFrame:FRAME(10, (buyView.frame.size.height-50)/2, 50, 50)];
     NSString *headString=[NSString stringWithFormat:@"%@",[detailsDic objectForKey:@"head_img"]];
     if ([headString length]==1||[headString length]==0) {
         headView.image =[UIImage imageNamed:@"家-我_默认头像"];
@@ -144,7 +144,7 @@
     
     UILabel *occupationLabel=[[UILabel alloc]initWithFrame:FRAME(nameLabel.frame.size.width+nameLabel.frame.origin.x, nameLabel.frame.origin.y+2, WIDTH-210, 16)];
     occupationLabel.font=[UIFont fontWithName:@"Arial" size:12];
-    occupationLabel.textColor=[UIColor colorWithRed:100 / 255.0 green:100 / 255.0 blue:100 / 255.0 alpha:1];
+    occupationLabel.textColor=[UIColor colorWithRed:232 / 255.0 green:55 / 255.0 blue:74 / 255.0 alpha:1];
     occupationLabel.text=[NSString stringWithFormat:@"%@",[detailsDic objectForKey:@"service_type_name"]];
     [buyView addSubview:occupationLabel];
     
@@ -218,7 +218,7 @@
     [buyView addSubview:textLabel];
     
     buyView.frame=FRAME(0, 6, WIDTH, textLabel.frame.origin.y+textLabel.frame.size.height+17);
-    
+    headView.frame=FRAME(10, (buyView.frame.size.height-50)/2, 50, 50);
     scrollView=[[UIScrollView alloc]initWithFrame:CGRectMake(0, buyView.frame.size.height+buyView.frame.origin.y, WIDTH, (WIDTH-10)/3)];
     scrollView.contentSize=CGSizeMake(WIDTH/3*imageArray.count, (WIDTH-10)/3);
     scrollView.delegate=self;

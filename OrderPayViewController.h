@@ -28,4 +28,5 @@
 @property(nonatomic ,strong)NSString *addssID;
 @property(nonatomic ,strong)NSString *actualStr;
 @property(nonatomic ,strong)NSDictionary *orderPayDic;
+@property(nonatomic ,assign)int vCID;
 @end

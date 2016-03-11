@@ -345,8 +345,9 @@
 //            NSString *type=[NSString stringWithFormat:@"%@",[delegate.globalDic objectForKey:@"user_type"]];
 //            int user_type=[type intValue];
 //            if (user_type==1) {
-                UpLoadViewController *vc=[[UpLoadViewController alloc]init];
-                [self presentViewController:vc animated:YES completion:nil];
+            UpLoadViewController *vc=[[UpLoadViewController alloc]init];
+            vc.vcIDS=100;
+            [self presentViewController:vc animated:YES completion:nil];
 //            }
             
         }

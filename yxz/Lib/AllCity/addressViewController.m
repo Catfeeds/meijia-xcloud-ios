@@ -87,7 +87,6 @@
     menpaiField.placeholder = @"请输入具体门牌号";
     menpaiField.textColor = HEX_TO_UICOLOR(ROUND_TITLE_COLOR, 1.0);
     menpaiField.delegate = self;
-//    menpaiField.keyboardType = UIKeyboardTypeNumberPad;
     menpaiField.font = [UIFont systemFontOfSize:13];
     [view addSubview:menpaiField];
     
@@ -101,7 +100,6 @@
     [self.view addSubview:bttn];
     
     [self makeTableview];
-    // Do any additional setup after loading the view.
 }
 #define XSPACE 16
 #define YSPACE 64
@@ -360,17 +358,7 @@
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
 }
-*/
 
 @end

@@ -11,7 +11,6 @@
 #import "DownloadManager.h"
 #import "PageTableViewCell.h"
 #import "DetailsViewController.h"
-#import "ShareFriendViewController.h"
 #import "WXApi.h"
 #import "MineViewController.h"
 #import "QRcodeViewController.h"
@@ -85,7 +84,6 @@ float lastContentOffset;
     if (vc.L==1) {
         _tableView.scrollEnabled =NO;
     }
-    //    [self rlLayout];
     
 }
 - (void)viewWillDisappear:(BOOL)animated
@@ -94,26 +92,15 @@ float lastContentOffset;
     [MobClick endLogPageView:@"首页"];
     
 }
--(void)helpLayout:(NSNotification *)dataSource
-{
-    NSDictionary *dic=dataSource.object;
-    WebPageViewController *webVC=[[WebPageViewController alloc]init];
-    webVC.webURL=[NSString stringWithFormat:@"%@",[dic objectForKey:@"webUrl"]];
-    [self.navigationController pushViewController:webVC animated:YES];
-}
 - (void)viewDidLoad
 {
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(helpLayout:) name:@"WEBURL" object:nil];
+
     [super viewDidLoad];
-//    self.backlable.hidden=YES;
-//    self.navlabel.hidden=YES;
+
     page=1;
     numberArray=[[NSMutableArray alloc]init];
-//    self.imageView.image=[UIImage imageNamed:@"cal-bg.jpg"];
-    
+
     self.imageView.backgroundColor=[UIColor colorWithRed:232/255.0f green:232/255.0f blue:232/255.0f alpha:1];
-    //    UIImageView *imageView=(UIImageView *)[self.view viewWithTag:100];
-    //    imageView.image=[UIImage imageNamed:@"cal-bg.jpg"];
     
     locationManager = [[CLLocationManager alloc] init];
     
@@ -154,10 +141,6 @@ float lastContentOffset;
     [eyeButton setTitle:@"新建" forState:UIControlStateNormal];
     [eyeButton setTitleColor:[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1] forState:UIControlStateNormal];
     [self.view addSubview:eyeButton];
-    
-//    UIImageView *eyeImage=[[UIImageView alloc]initWithFrame:FRAME(10, 10, 20, 20)];
-//    eyeImage.image=[UIImage imageNamed:@"iconfont-saoma"];//EYE_BT
-//    [eyeButton addSubview:eyeImage];
     
     UIButton *calenderButton=[[UIButton alloc]initWithFrame:FRAME(WIDTH-50, 25, 50, 40)];
     [calenderButton addTarget:self action:@selector(didChangeModeTouch) forControlEvents:UIControlEventTouchUpInside];
@@ -231,22 +214,7 @@ float lastContentOffset;
 
 -(void)loadData
 {
-    //    if (_service == nil) {
-    //        _service = [[zzProjectListService alloc] init];
-    //        _service.delegate = self;
-    //    }
-    
-    //通过控制page控制更多 网路数据
-    //    [_service reqwithPageSize:INVESTPAGESIZE page:page];
-    //    [self loadImg];
-    
-    //本底数据
-    //    [_arrData addObjectsFromArray:[UIFont familyNames]];
-    
     [self PLJKLayout];
-    
-    
-    
 }
 
 #pragma mark 表格刷新相关
@@ -309,11 +277,6 @@ float lastContentOffset;
 #pragma mark 首页右上按钮点击方法
 -(void)eyeButtonAction:(UIButton *)button
 {
-//#import "BookingViewController.h"
-//#import "MeetingViewController.h"
-//#import "UpLoadViewController.h"
-//    
-//#import "AttendanceViewController.h"
     if (_vcID<1005) {
         MeetingViewController *meetVC=[[MeetingViewController alloc]init];
         meetVC.vcID=_vcID;
@@ -343,7 +306,7 @@ float lastContentOffset;
 }
 -(void)tableViewLayout
 {
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0.0f, newHeighT+70, WIDTH,HEIGHT-newHeighT)];
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0.0f, newHeighT+70, WIDTH,HEIGHT-newHeighT-70)];
     self.tableView.separatorStyle=UITableViewCellSelectionStyleNone;
     self.tableView.delegate=self;
     self.tableView.dataSource=self;
@@ -374,17 +337,6 @@ float lastContentOffset;
 {
     [adView removeFromSuperview];
     NSMutableArray *viewsArray = [@[] mutableCopy];
-    //    adView=[[UIScrollView alloc]initWithFrame:FRAME(0, newHeight+70, WIDTH, (WIDTH*0.42+40))];
-    //    adView.bounces=NO;
-    //    adView.delegate=self;
-    //    adView.pagingEnabled = YES;
-    //    adView.showsHorizontalScrollIndicator = NO;
-    //    adView.contentSize=CGSizeMake(WIDTH*arrayImage.count, WIDTH*0.42+40);
-    //    adView.autoresizingMask = 0xFF;
-    //    adView.contentMode = UIViewContentModeCenter;
-    //    adView.contentOffset = CGPointMake(CGRectGetWidth(adView.frame), 0);
-    //    adView.pagingEnabled = YES;
-    //[self.view addSubview:adView];
     for (int i=0; i<arrayImage.count; i++) {
         NSDictionary *dic=arrayImage[i];
         UIButton *viewImage=[[UIButton alloc]initWithFrame:FRAME(WIDTH*i, 0, WIDTH, (WIDTH*0.42+40))];
@@ -440,43 +392,6 @@ float lastContentOffset;
         [self.navigationController pushViewController:fountVC animated:YES];
     }
 }
-//-(void)scrollViewDidScroll:(UIScrollView *)scrollView1
-//{
-//    pageControl.currentPage = scrollView1.contentOffset.x/WIDTH;
-//}
-//
-//-(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
-//{
-//    [self removeTimer];
-//}
-//
-//-(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
-//{
-//    [self addTimer];
-//}
-//
-//-(void)addTimer
-//{
-//    timer = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(nextPage) userInfo:nil repeats:YES];
-//}
-
-//-(void)nextPage
-//{
-//    long page = pageControl.currentPage;
-//    if (page == arrayImage.count - 1) {
-//        page =0;
-//        CGFloat offsetX = page * adView.frame.size.width;
-//        CGPoint offset = CGPointMake(offsetX, 0);
-//        [adView setContentOffset:offset animated:NO];
-//    }
-//    else {
-//        page = pageControl.currentPage + 1;
-//        CGFloat offsetX = page * adView.frame.size.width;
-//        CGPoint offset = CGPointMake(offsetX, 0);
-//        [adView setContentOffset:offset animated:YES];
-//    }
-//
-//}
 
 -(void)removeTimer
 {
@@ -646,7 +561,7 @@ float lastContentOffset;
             
         }
     }
-    _tableView.frame=CGRectMake(0, newHeighT+70, WIDTH,HEIGHT-newHeighT);
+    _tableView.frame=CGRectMake(0, newHeighT+70, WIDTH,HEIGHT-newHeighT-70);
 //    self.tableView.tableHeaderView=adView;
     [self.view addSubview:self.tableView];
     [_tableView reloadData];

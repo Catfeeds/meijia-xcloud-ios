@@ -350,7 +350,7 @@
     payVC.orderStr=[NSString stringWithFormat:@"%@",[dic objectForKey:@"order_no"]];
     payVC.moneyStr=[NSString stringWithFormat:@"%@",[dic objectForKey:@"order_pay"]];
     payVC.orderVCID=1;
-    payVC.addssID=[NSString stringWithFormat:@"%@",[dic objectForKey:@"is_addr"]];
+    payVC.addssID=@"0";//[NSString stringWithFormat:@"%@",[dic objectForKey:@"is_addr"]];
     payVC.user_ID=[NSString stringWithFormat:@"%@",[dic objectForKey:@"user_id"]];
     payVC.order_ID=[NSString stringWithFormat:@"%@",[dic objectForKey:@"order_id"]];
     payVC.orderPayDic=dic;

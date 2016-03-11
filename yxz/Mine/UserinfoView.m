@@ -179,7 +179,7 @@
                     image.image=[UIImage imageNamed:@"JH_JT_TB_@2x"];
                     [self addSubview:image];
                 }else{
-//                    _label.hidden=NO;
+                    _label.hidden=YES;
                     UIImageView *image=[[UIImageView alloc]initWithFrame:FRAME(WIDTH-40, 41+54*4+5/2, 15, 15)];
                     image.image=[UIImage imageNamed:@"JH_JT_TB_@2x"];
                     [self addSubview:image];

@@ -17,7 +17,7 @@
 #import "SMBaseViewController.h"
 #import "ChatViewController.h"
 #import "AppDelegate.h"
-#import "PageViewController.h"
+#import "CardPageViewController.h"
 #import "FriendViewController.h"
 #import "EaseMob.h"
 #import "FoundViewController.h"
@@ -37,6 +37,15 @@
 #import "PageTableViewCell.h"
 #import "LeaveListViewController.h"
 #import "PlusCollectionViewCell.h"
+#import "AppCenterViewController.h"
+
+#import "BookingViewController.h"
+#import "MeetingViewController.h"
+#import "UpLoadViewController.h"
+#import "AttendanceViewController.h"
+#import "ApplyForLeaveViewController.h"
+#import "WaterListViewController.h"
+#import "WasteRecoveryViewController.h"
 @interface RootViewController ()<UIAlertViewDelegate, IChatManagerDelegate,UIAlertViewDelegate>
 {
     UIView *mainView;
@@ -64,11 +73,13 @@
     UIView *spotView;
     UIActivityIndicatorView *meView;
     UICollectionViewFlowLayout *flowView;
-    NSArray *plusArray;
+    NSMutableArray *plusArray;
+    UILabel *alertLabel;
+    NSDictionary *coreDic;
 }
 @end
 #pragma mark - View lifecycle
-PageViewController *pageViewVC;
+CardPageViewController *pageViewVC;
 ViewController * viewController;
 FoundViewController * firstViewController;
 ViewController *secondViewController;
@@ -77,6 +88,7 @@ MyselfViewController *thirdViewController;
 //MyLogInViewController *myLogInViewController;
 @implementation RootViewController
 @synthesize tab;
+
 -(void)viewWillAppear:(BOOL)animated
 {
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
@@ -84,17 +96,29 @@ MyselfViewController *thirdViewController;
     if (indexesID==1) {
         [self bottomButton];
     }
+    @try{
+        
+    }
+    @catch(NSException *exception) {
+        NSLog(@"异常错误是:%@", exception);
+    }
+    @finally {
+        
+    }
 }
 -(void)plusLAyout
 {
     DownloadManager *_download = [[DownloadManager alloc]init];
-    NSDictionary *_dic = @{@"app_type":@"xcloud"};
+    NSDictionary *_dic = @{@"app_type":@"xcloud",@"user_id":_manager.telephone};
     [_download requestWithUrl:USER_PLUE_LIST dict:_dic view:self.view delegate:self finishedSEL:@selector(PlusSuccess:) isPost:NO failedSEL:@selector(PlusFailure:)];
 }
 -(void)PlusSuccess:(id)dataSource
 {
     NSLog(@"导航接口返回数据：%@",dataSource);
-    plusArray=[dataSource objectForKey:@"data"];
+    [plusArray removeAllObjects];
+    NSArray  *array=[dataSource objectForKey:@"data"];
+    [plusArray addObjectsFromArray:array];
+    [plusArray addObject:coreDic];
     [_collectionView reloadData];
     
 }
@@ -105,16 +129,47 @@ MyselfViewController *thirdViewController;
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex save2File:(BOOL) save2File save2Album:(BOOL) save2Album{
     
 }
-
+//获取当前屏幕显示的viewcontroller
+- (UIViewController *)getCurrentVC
+{
+    UIViewController *result = nil;
+    
+    UIWindow * window = [[UIApplication sharedApplication] keyWindow];
+    if (window.windowLevel != UIWindowLevelNormal)
+    {
+        NSArray *windows = [[UIApplication sharedApplication] windows];
+        for(UIWindow * tmpWin in windows)
+        {
+            if (tmpWin.windowLevel == UIWindowLevelNormal)
+            {
+                window = tmpWin;
+                break;
+            }
+        }
+    }
+    
+    UIView *frontView = [[window subviews] objectAtIndex:0];
+    id nextResponder = [frontView nextResponder];
+    
+    if ([nextResponder isKindOfClass:[UIViewController class]])
+        result = nextResponder;
+    else
+        result = window.rootViewController;
+    
+    return result;
+}
 -(void)helpLayout:(NSNotification *)dataSource
 {
     NSDictionary *dic=dataSource.object;
     WebPageViewController *webVC=[[WebPageViewController alloc]init];
     webVC.webURL=[NSString stringWithFormat:@"%@",[dic objectForKey:@"webUrl"]];
-    [self.navigationController pushViewController:webVC animated:YES];
+    webVC.vcIDs=1000;
+    [[self getCurrentVC] presentViewController:webVC animated:YES completion:nil];
 }
 - (void)viewDidLoad {
     NSDictionary *helpDic;
+    plusArray=[[NSMutableArray alloc]init];
+    coreDic=@{@"name":@"应用中心",@"logo":@"http://img.51xingzheng.cn/437396cc0b49b04dc89a0552f7e90cae?p=0",@"action":@"asdsad",@"open_type":@"app"};
     helpDic=@{@"action":@"index"};
     [[NSNotificationCenter defaultCenter] postNotificationName:@"HELP" object:helpDic];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(helpLayout:) name:@"WEBURL" object:nil];
@@ -192,7 +247,7 @@ MyselfViewController *thirdViewController;
     [self bottomViewLayout];
     
     [self setupUnreadMessageCount];
-    [self plusLAyout];
+//    [self plusLAyout];
 }
 #pragma mark - private
 // 未读消息数量变化回调
@@ -287,15 +342,32 @@ MyselfViewController *thirdViewController;
 }
 -(void)RiLiFailure:(id)sender
 {
-    NSLog(@"日历布局失败返回:%@",sender);
+    NSLog(@"日历布局失败返回:是啥%@",sender);
+    alertLabel=[[UILabel alloc]initWithFrame:FRAME((WIDTH-260)/2, (HEIGHT-40)/2, 260, 40)];
+    alertLabel.backgroundColor=[UIColor blackColor];
+    alertLabel.alpha=0.4;
+    alertLabel.text=@"还没有输入评论内容哦～";
+    alertLabel.textColor=[UIColor whiteColor];
+    alertLabel.textAlignment=NSTextAlignmentCenter;
+//    [self.view addSubview:alertLabel];
+    
+    [NSTimer scheduledTimerWithTimeInterval:2.0f
+                                     target:self
+                                   selector:@selector(viewLayout:)
+                                   userInfo:alertLabel
+                                    repeats:NO];
 }
-
+-(void)viewLayout:(NSTimer *)theTimer
+{
+    alertLabel.hidden=YES;
+}
 
 -(void)bottomViewLayout
 {
     
     bottomView=[[UIImageView alloc]initWithFrame:FRAME(0, 0, WIDTH, HEIGHT)];
-    bottomView.image=[UIImage imageNamed:@"95%"];
+//    bottomView.image=[UIImage imageNamed:@"95%"];
+    bottomView.backgroundColor=[UIColor whiteColor];
     bottomView.userInteractionEnabled=YES;
     bottomView.hidden=YES;
     [self.view addSubview:bottomView];
@@ -346,7 +418,7 @@ MyselfViewController *thirdViewController;
 {
     [tab removeFromSuperview];
     NSArray *barArr = @[@"首页",@"发现",@"工作",@"圈子",@"我的"];
-    NSArray *imagesArray =@[@"common_icon_home@2x",@"common_icon_find@2x",@"icon_plus_add副本(1)",@"common_icon_chum@2x",@"common_icon_mine@2x"];
+    NSArray *imagesArray =@[@"common_icon_home@2x",@"common_icon_find@2x",@"icon_plus_add",@"common_icon_chum@2x",@"common_icon_mine@2x"];
     float _btnwidth = self.view.frame.size.width/5;
     tab=[[UIImageView alloc]initWithFrame:CGRectMake(0, SELF_VIEW_HEIGHT-49, SELF_VIEW_WIDTH, 49)];
     tab.image=[UIImage imageNamed:@"bg_menu_bottom副本"];
@@ -548,6 +620,7 @@ MyselfViewController *thirdViewController;
                     tab.hidden=YES;
                     [UIView commitAnimations];
                     bottomView.hidden=NO;
+                    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
                     [self plusLAyout];
                 }else{
                     currentViewController=oldViewController;
@@ -704,6 +777,7 @@ MyselfViewController *thirdViewController;
     meImage.image=[UIImage imageNamed:@"common_icon_mine@2x"];
     meLabel.textColor=[UIColor blackColor];
     [mainView addSubview:viewController.view];
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     [self tabBarAction];
 }
 
@@ -762,12 +836,14 @@ MyselfViewController *thirdViewController;
     if (!cell) {
         NSLog(@"无法创建CollectionViewCell时打印，自定义cell就不可能进来了");
     }
-    NSString *nameStr=[NSString stringWithFormat:@"%@",[dataDic objectForKey:@"title"]];
+    NSString *nameStr=[NSString stringWithFormat:@"%@",[dataDic objectForKey:@"name"]];
     
-    NSString *imageUrl=[NSString stringWithFormat:@"%@",[dataDic objectForKey:@"icon_url"]];
+    NSString *imageUrl=[NSString stringWithFormat:@"%@",[dataDic objectForKey:@"logo"]];
     [cell.lconImageView setImageWithURL:[NSURL URLWithString:imageUrl]placeholderImage:nil];
-   
+    
     cell.lconImageView.frame=FRAME((WIDTH/4-50)/2, 10, 50, 50);
+    cell.lconImageView.layer.cornerRadius=cell.lconImageView.frame.size.width/2;
+    cell.lconImageView.clipsToBounds=YES;
     cell.nameLabel.text=nameStr;
     cell.nameLabel.font=[UIFont fontWithName:@"Arial" size:13];
     cell.nameLabel.textColor=[UIColor colorWithRed:100/255.0f green:100/255.0f blue:100/255.0f alpha:1];
@@ -813,72 +889,186 @@ MyselfViewController *thirdViewController;
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *dic=plusArray[indexPath.row];
+    NSLog(@"%ld",(long)indexPath.row);
     NSDictionary *helpDic;
-    NSString *category=[NSString stringWithFormat:@"%@",[dic objectForKey:@"category"]];
+    NSString *category=[NSString stringWithFormat:@"%@",[dic objectForKey:@"open_type"]];
     NSString *action=[NSString stringWithFormat:@"%@",[dic objectForKey:@"action"]];
+    NSString *params=[NSString stringWithFormat:@"%@",[dic objectForKey:@"params"]];
     if ([category isEqualToString:@"app"]) {
         if ([action isEqualToString:@"alarm"]) {
-            helpDic=@{@"action":@"alarm"};
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"HELP" object:helpDic];
-            PageViewController *pageViewVC=[[PageViewController alloc]init];
-            UIStoryboard *storys  = [UIStoryboard storyboardWithName:@"PageStoryboard" bundle:nil];
-            pageViewVC=[storys instantiateInitialViewController];
-            pageViewVC.vcID=1003;
-            [self.navigationController pushViewController:pageViewVC animated:YES];
+            if ([params isEqualToString:@"add"]) {
+                MeetingViewController *meetVC=[[MeetingViewController alloc]init];
+                meetVC.vcID=1003;
+                [self.navigationController pushViewController:meetVC animated:YES];
+            }else if ([params isEqualToString:@"list"]){
+                helpDic=@{@"action":@"alarm"};
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"HELP" object:helpDic];
+                CardPageViewController *pageViewVC=[[CardPageViewController alloc]init];
+                pageViewVC.navlabelName=[NSString stringWithFormat:@"%@",[dic objectForKey:@"name"]];
+//                UIStoryboard *storys  = [UIStoryboard storyboardWithName:@"PageStoryboard" bundle:nil];
+//                pageViewVC=[storys instantiateInitialViewController];
+                pageViewVC.vcID=1003;
+                [self.navigationController pushViewController:pageViewVC animated:YES];
+            }
+            
         }else if ([action isEqualToString:@"meeting"]){
-            helpDic=@{@"action":@"meeting"};
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"HELP" object:helpDic];
-            PageViewController *pageViewVC=[[PageViewController alloc]init];
-            UIStoryboard *storys  = [UIStoryboard storyboardWithName:@"PageStoryboard" bundle:nil];
-            pageViewVC=[storys instantiateInitialViewController];
-            pageViewVC.vcID=1001;
-            [self.navigationController pushViewController:pageViewVC animated:YES];
+            if ([params isEqualToString:@"add"]) {
+                MeetingViewController *meetVC=[[MeetingViewController alloc]init];
+                meetVC.vcID=1001;
+                [self.navigationController pushViewController:meetVC animated:YES];
+            }else if ([params isEqualToString:@"list"]){
+                helpDic=@{@"action":@"meeting"};
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"HELP" object:helpDic];
+                CardPageViewController *pageViewVC=[[CardPageViewController alloc]init];
+                pageViewVC.navlabelName=[NSString stringWithFormat:@"%@",[dic objectForKey:@"name"]];
+//                UIStoryboard *storys  = [UIStoryboard storyboardWithName:@"PageStoryboard" bundle:nil];
+//                pageViewVC=[storys instantiateInitialViewController];
+                pageViewVC.vcID=1001;
+                [self.navigationController pushViewController:pageViewVC animated:YES];
+            }
+           
         }else if ([action isEqualToString:@"notice"]){
-            helpDic=@{@"action":@"notice"};
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"HELP" object:helpDic];
-            PageViewController *pageViewVC=[[PageViewController alloc]init];
-            UIStoryboard *storys  = [UIStoryboard storyboardWithName:@"PageStoryboard" bundle:nil];
-            pageViewVC=[storys instantiateInitialViewController];
-            pageViewVC.vcID=1002;
-            [self.navigationController pushViewController:pageViewVC animated:YES];
+            if ([params isEqualToString:@"add"]) {
+                MeetingViewController *meetVC=[[MeetingViewController alloc]init];
+                meetVC.vcID=1002;
+                [self.navigationController pushViewController:meetVC animated:YES];
+            }else if ([params isEqualToString:@"list"]){
+                helpDic=@{@"action":@"notice"};
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"HELP" object:helpDic];
+                CardPageViewController *pageViewVC=[[CardPageViewController alloc]init];
+                pageViewVC.navlabelName=[NSString stringWithFormat:@"%@",[dic objectForKey:@"name"]];
+//                UIStoryboard *storys  = [UIStoryboard storyboardWithName:@"PageStoryboard" bundle:nil];
+//                pageViewVC=[storys instantiateInitialViewController];
+                pageViewVC.vcID=1002;
+                [self.navigationController pushViewController:pageViewVC animated:YES];
+            }
+            
         }else if ([action isEqualToString:@"interview"]){
-            helpDic=@{@"action":@"interview"};
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"HELP" object:helpDic];
-            PageViewController *pageViewVC=[[PageViewController alloc]init];
-            UIStoryboard *storys  = [UIStoryboard storyboardWithName:@"PageStoryboard" bundle:nil];
-            pageViewVC=[storys instantiateInitialViewController];
-            pageViewVC.vcID=1004;
-            [self.navigationController pushViewController:pageViewVC animated:YES];
+            if ([params isEqualToString:@"add"]) {
+                MeetingViewController *meetVC=[[MeetingViewController alloc]init];
+                meetVC.vcID=1004;
+                [self.navigationController pushViewController:meetVC animated:YES];
+            }else if ([params isEqualToString:@"list"]){
+                helpDic=@{@"action":@"interview"};
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"HELP" object:helpDic];
+                CardPageViewController *pageViewVC=[[CardPageViewController alloc]init];
+                pageViewVC.navlabelName=[NSString stringWithFormat:@"%@",[dic objectForKey:@"name"]];
+//                UIStoryboard *storys  = [UIStoryboard storyboardWithName:@"PageStoryboard" bundle:nil];
+//                pageViewVC=[storys instantiateInitialViewController];
+                pageViewVC.vcID=1004;
+                [self.navigationController pushViewController:pageViewVC animated:YES];
+            }
+            
         }else if ([action isEqualToString:@"trip"]){
-            helpDic=@{@"action":@"trip"};
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"HELP" object:helpDic];
-            PageViewController *pageViewVC=[[PageViewController alloc]init];
-            UIStoryboard *storys  = [UIStoryboard storyboardWithName:@"PageStoryboard" bundle:nil];
-            pageViewVC=[storys instantiateInitialViewController];
-            pageViewVC.vcID=1005;
-            [self.navigationController pushViewController:pageViewVC animated:YES];
+            if ([params isEqualToString:@"add"]) {
+                BookingViewController *bookVC=[[BookingViewController alloc]init];
+                [self.navigationController pushViewController:bookVC animated:YES];
+            }else if ([params isEqualToString:@"list"]){
+                helpDic=@{@"action":@"trip"};
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"HELP" object:helpDic];
+                CardPageViewController *pageViewVC=[[CardPageViewController alloc]init];
+                pageViewVC.navlabelName=[NSString stringWithFormat:@"%@",[dic objectForKey:@"name"]];
+//                UIStoryboard *storys  = [UIStoryboard storyboardWithName:@"PageStoryboard" bundle:nil];
+//                pageViewVC=[storys instantiateInitialViewController];
+                pageViewVC.vcID=1005;
+                [self.navigationController pushViewController:pageViewVC animated:YES];
+            }
+            
         }else if ([action isEqualToString:@"punch_sign"]){
-            helpDic=@{@"action":@"punch_sign"};
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"HELP" object:helpDic];
-            PageViewController *pageViewVC=[[PageViewController alloc]init];
-            UIStoryboard *storys  = [UIStoryboard storyboardWithName:@"PageStoryboard" bundle:nil];
-            pageViewVC=[storys instantiateInitialViewController];
-            pageViewVC.vcID=1006;
-            [self.navigationController pushViewController:pageViewVC animated:YES];
+            if ([params isEqualToString:@"add"]) {
+                AttendanceViewController *userVC=[[AttendanceViewController alloc]init];
+                AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication] delegate];
+                NSString *has_company=[NSString stringWithFormat:@"%@",[delegate.globalDic objectForKey:@"has_company"]];
+                int has=[has_company intValue];
+                if (has==0) {
+                    userVC.webID=0;
+                }else{
+                    userVC.webID=1;
+                }
+                
+                [self.navigationController pushViewController:userVC animated:YES];
+            }else if ([params isEqualToString:@"list"]){
+                helpDic=@{@"action":@"punch_sign"};
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"HELP" object:helpDic];
+                CardPageViewController *pageViewVC=[[CardPageViewController alloc]init];
+                pageViewVC.navlabelName=[NSString stringWithFormat:@"%@",[dic objectForKey:@"name"]];
+//                UIStoryboard *storys  = [UIStoryboard storyboardWithName:@"PageStoryboard" bundle:nil];
+//                pageViewVC=[storys instantiateInitialViewController];
+                pageViewVC.vcID=1006;
+                [self.navigationController pushViewController:pageViewVC animated:YES];
+            }
+            
         }else if ([action isEqualToString:@"leave_pass"]){
-            helpDic=@{@"action":@"leave_pass"};
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"HELP" object:helpDic];
-            LeaveListViewController *leaveListVC=[[LeaveListViewController alloc]init];
-            [self.navigationController pushViewController:leaveListVC animated:YES];
+            if ([params isEqualToString:@"add"]) {
+                ApplyForLeaveViewController *applyVC=[[ApplyForLeaveViewController alloc]init];
+                applyVC.colorid=100;
+                [self.navigationController pushViewController:applyVC animated:YES];
+            }else if ([params isEqualToString:@"list"]){
+                helpDic=@{@"action":@"leave_pass"};
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"HELP" object:helpDic];
+                LeaveListViewController *leaveListVC=[[LeaveListViewController alloc]init];
+                [self.navigationController pushViewController:leaveListVC animated:YES];
+            }
+            
         }else if ([action isEqualToString:@"punch_dynamic"]){
-            helpDic=@{@"action":@"punch_dynamic"};
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"HELP" object:helpDic];
-            PageViewController *pageViewVC=[[PageViewController alloc]init];
-            UIStoryboard *storys  = [UIStoryboard storyboardWithName:@"PageStoryboard" bundle:nil];
-            pageViewVC=[storys instantiateInitialViewController];
-            pageViewVC.vcID=1008;
-            [self.navigationController pushViewController:pageViewVC animated:YES];
+            if ([params isEqualToString:@"add"]) {
+                UpLoadViewController *vcd=[[UpLoadViewController alloc]init];
+                [self.navigationController pushViewController:vcd animated:YES];
+            }else if ([params isEqualToString:@"list"]){
+                helpDic=@{@"action":@"punch_dynamic"};
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"HELP" object:helpDic];
+                CardPageViewController *pageViewVC=[[CardPageViewController alloc]init];
+                pageViewVC.vcID=1008;
+                [self.navigationController pushViewController:pageViewVC animated:YES];
+            }
+            
+        }else if([action isEqualToString:@"water"]){
+            if ([params isEqualToString:@"add"]) {
+                
+            }else if ([params isEqualToString:@"list"]){
+                WaterListViewController *plantsVc=[[WaterListViewController alloc]init];
+                [self.navigationController pushViewController:plantsVc animated:YES];
+            }
+        }else if([action isEqualToString:@"recycle"]){
+            if ([params isEqualToString:@"add"]) {
+                
+            }else if ([params isEqualToString:@"list"]){
+                WasteRecoveryViewController *plantsVc=[[WasteRecoveryViewController alloc]init];
+                plantsVc.wasteID=100;
+                [self.navigationController pushViewController:plantsVc animated:YES];
+            }
+        }else if([action isEqualToString:@"clean"]){
+            if ([params isEqualToString:@"add"]) {
+                
+            }else if ([params isEqualToString:@"list"]){
+                WasteRecoveryViewController *plantsVc=[[WasteRecoveryViewController alloc]init];
+                plantsVc.wasteID=101;
+                [self.navigationController pushViewController:plantsVc animated:YES];
+            }
+        }else if([action isEqualToString:@"teamwork"]){
+            if ([params isEqualToString:@"add"]) {
+                
+            }else if ([params isEqualToString:@"list"]){
+                WasteRecoveryViewController *plantsVc=[[WasteRecoveryViewController alloc]init];
+                plantsVc.wasteID=102;
+                [self.navigationController pushViewController:plantsVc animated:YES];
+            }
+        }else if([action isEqualToString:@"express"]){
+            if ([params isEqualToString:@"add"]) {
+                
+            }else if ([params isEqualToString:@"list"]){
+                WasteRecoveryViewController *plantsVc=[[WasteRecoveryViewController alloc]init];
+                plantsVc.wasteID=103;
+                [self.navigationController pushViewController:plantsVc animated:YES];
+            }
+        }else{
+            AppCenterViewController *appCenterVC=[[AppCenterViewController alloc]init];
+            [self.navigationController pushViewController:appCenterVC animated:YES];
         }
+    }else if ([category isEqualToString:@"h5"]){
+        WebPageViewController *webPageVC=[[WebPageViewController alloc]init];
+        webPageVC.webURL=[NSString stringWithFormat:@"%@",[dic objectForKey:@"url"]];
+        [self.navigationController pushViewController:webPageVC animated:YES];
     }
     
 }

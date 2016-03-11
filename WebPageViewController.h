@@ -10,4 +10,5 @@
 
 @interface WebPageViewController : FatherViewController<UIWebViewDelegate,UIScrollViewDelegate>
 @property (nonatomic ,strong)NSString *webURL;
+@property (nonatomic ,assign)int vcIDs;
 @end

@@ -15,7 +15,7 @@
     NSArray *titleArray;
     NSArray *sectionArray;
     NSDictionary *zjDic;
-    NSArray *dataListArray;
+    NSMutableArray *dataListArray;
     int theNumber;
     UIScrollView *titleView;
     UILabel *titleLabel;
@@ -26,6 +26,13 @@
 //    NSMutableArray *imageArray;
     
     int dataID;
+    
+    MJRefreshHeaderView *_refreshHeader;
+    MJRefreshFooterView *_moreFooter;
+    BOOL _needRefresh;
+    BOOL _hasMore;
+    NSInteger   page;
+    NSString *senderStr;
 }
 
 @end
@@ -34,10 +41,12 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-//    imageArray=[[NSMutableArray alloc]init];
+    dataListArray=[[NSMutableArray alloc]init];
+    page=1;
     AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication] delegate];
     NSString *has_company=[NSString stringWithFormat:@"%@",[delegate.globalDic objectForKey:@"has_company"]];
     int has=[has_company intValue];
+    
     //_passDic=@{@"relevantNameArray":_nameArray,@"relevantMobileArray":_mobileArray,@"relevantUserArray":_mutableArray,@"mailNameArray":mailNameArray,@"mailMobileArray":mailMobileArray,@"mailIdArray":
     titleArray=@[@"",@"我的好友",@""];
     if (has==0) {
@@ -65,8 +74,81 @@
     //[self.view insertSubview:_relevantTableview belowSubview:self.view];
     
     [self.view addSubview:_relevantTableview];
+    
+    _refreshHeader = [[MJRefreshHeaderView alloc] init];
+    _refreshHeader.delegate = self;
+    _refreshHeader.scrollView = _relevantTableview;
+    
+    _moreFooter = [[MJRefreshFooterView alloc] init];
+    _moreFooter.delegate = self;
+    _moreFooter.scrollView = _relevantTableview;
     // Do any additional setup after loading the view.
 }
+#pragma mark 刷新
+-(void)refresh
+{
+    [_refreshHeader beginRefreshing];
+}
+
+
+#pragma mark - MJRefreshBaseViewDelegate
+- (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
+{
+    
+    if ([refreshView isKindOfClass:[MJRefreshHeaderView class]]) {
+        //头 -》 刷新
+        if (_moreFooter.isRefreshing) {
+            //正在加载更多，取消本次请求
+            [_refreshHeader performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+            return;
+        }
+        page = 1;
+        //刷新
+        [self loadData];
+        
+    }else if ([refreshView isKindOfClass:[MJRefreshFooterView class]]) {
+        //尾 -》 更多
+        if (_refreshHeader.isRefreshing) {
+            //正在刷新，取消本次请求
+            [_moreFooter performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+            
+            return;
+        }
+        
+        if (_hasMore==YES) {
+            //没有更多了
+            [_moreFooter performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+            //            [_tableView reloadData];
+            return;
+        }
+        page++;
+        
+        //加载更多
+        
+        [self loadData];
+    }
+}
+
+-(void)loadData
+{
+    //    if (_service == nil) {
+    //        _service = [[zzProjectListService alloc] init];
+    //        _service.delegate = self;
+    //    }
+    
+    //通过控制page控制更多 网路数据
+    //    [_service reqwithPageSize:INVESTPAGESIZE page:page];
+    //    [self loadImg];
+    
+    //本底数据
+    //    [_arrData addObjectsFromArray:[UIFont familyNames]];
+    
+    [self dataLayout];
+    
+    
+}
+#pragma mark 表格刷新相关
+
 -(void)viewWillAppear:(BOOL)animated
 {
     if (dataID==100) {
@@ -158,25 +240,41 @@
     ISLoginManager *_manager = [ISLoginManager shareManager];
     
     DownloadManager *_download = [[DownloadManager alloc]init];
-    //user_ID=_manager.telephone;
-    NSDictionary *_dict = @{@"user_id":_manager.telephone};
+    NSString *pageStr=[NSString stringWithFormat:@"%ld",(long)page];
+    NSDictionary *_dict = @{@"user_id":_manager.telephone,@"page":pageStr};
     NSLog(@"字典数据%@",_dict);
     [_download requestWithUrl:USER_HYLB dict:_dict view:self.view delegate:self finishedSEL:@selector(logDowLoadFinish:) isPost:NO failedSEL:@selector(DownFail:)];
 }
 -(void)logDowLoadFinish:(id)sender
 {
     NSLog(@"数据信息－－%@",sender);
-    dataListArray=[sender objectForKey:@"data"];
-//    for (int i=0; i<dataListArray.count; i++) {
-//        NSDictionary *dic=dataListArray[i];
-//        UIImage *image=[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[dic objectForKey:@"head_img"]]]];
-//        CGSize newSize=CGSizeMake(40, 40);
-//        UIGraphicsBeginImageContextWithOptions(newSize, NO, 0.0);
-//        [image drawInRect:CGRectMake(0, 0, newSize.width, newSize.height)];
-//        image = UIGraphicsGetImageFromCurrentImageContext();
-//        UIGraphicsEndImageContext();
-//        [imageArray addObject:image];
-//    }
+//    dataListArray=[sender objectForKey:@"data"];
+    senderStr=[NSString stringWithFormat:@"%@",[sender objectForKey:@"data"]];
+    if (senderStr==nil||senderStr==NULL||[senderStr isEqualToString:@"(\n)"]||[senderStr length]==0) {
+        [_refreshHeader performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+        [_moreFooter performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+        
+    }else{
+        NSArray *array=[sender objectForKey:@"data"];
+        if (array.count<10*page) {
+            _hasMore=YES;
+        }else{
+            _hasMore=NO;
+        }
+        if (page==1) {
+            [dataListArray removeAllObjects];
+            [dataListArray addObjectsFromArray:array];
+        }else{
+            for (int i=0; i<array.count; i++) {
+                if ([dataListArray containsObject:array[i]]) {
+                    
+                }else{
+                    [dataListArray addObject:array[i]];
+                }
+            }
+        }
+        
+    }
 
     [_relevantTableview reloadData];
     
@@ -323,6 +421,13 @@
     }
     checkboxImageView.image = image;
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    if([indexPath row] == ((NSIndexPath*)[[tableView indexPathsForVisibleRows] lastObject]).row){
+        //end of loading
+        dispatch_async(dispatch_get_main_queue(),^{
+            [_refreshHeader performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+            [_moreFooter performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+        });
+    }
         return cell;
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{

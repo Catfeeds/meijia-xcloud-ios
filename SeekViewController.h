@@ -8,7 +8,7 @@
 
 #import "FatherViewController.h"
 
-@interface SeekViewController : FatherViewController<UITableViewDataSource,UITableViewDelegate>
+@interface SeekViewController : FatherViewController<UITableViewDataSource,UITableViewDelegate,MJRefreshBaseViewDelegate>
 @property(nonatomic ,strong)UITableView *_tableView;
 @property(nonatomic ,strong)NSString *service_type_id;
 

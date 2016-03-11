@@ -54,6 +54,10 @@
     self.navlabel.text=@"请假";
     startString=@"请点击选择时间";
     endString=@"请点击选择时间";
+    if (_colorid==100) {
+        self.backlable.backgroundColor=HEX_TO_UICOLOR(0x11cd6e, 1.0);
+    }
+    
     NSDate *  senddate=[NSDate date];
     
     NSDateFormatter  *dateformatter=[[NSDateFormatter alloc] init];
@@ -259,6 +263,8 @@
     submitBut.backgroundColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
     [submitBut setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     submitBut.layer.cornerRadius=5;
+    submitBut.clipsToBounds=YES;
+    submitBut.backgroundColor=self.backlable.backgroundColor;
     [submitBut addTarget:self action:@selector(submitBut:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:submitBut];
     // Do any additional setup after loading the view.
@@ -420,23 +426,6 @@
     }
     [UIView commitAnimations];
 }
-
-
-//-(NSInteger)getDaysFrom:(NSDate *)serverDate To:(NSDate *)endDate
-//{
-//    NSCalendar *gregorian = [[NSCalendar alloc]
-//                             initWithCalendarIdentifier:NSGregorianCalendar];
-//    [gregorian setFirstWeekday:2];
-//    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-//    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-//    NSDate *fromDate;
-//    NSDate *toDate;
-//    [gregorian rangeOfUnit:NSDayCalendarUnit startDate:&fromDate interval:NULL forDate:serverDate];
-//    [gregorian rangeOfUnit:NSDayCalendarUnit startDate:&toDate interval:NULL forDate:endDate];
-//    NSDateComponents *dayComponents = [gregorian components:NSDayCalendarUnit fromDate:fromDate toDate:toDate options:0];
-//    
-//    return dayComponents.day;
-//}
 -(void)contentLayout
 {
     contentLabel.text=contentString;
@@ -464,7 +453,6 @@
     NSDate* alertDate = [alertDateformatte dateFromString:startString];
     int alertDateint = [alertDate timeIntervalSince1970]*1;
     
-//    NSString *alertThreeTime2=[endString substringWithRange:NSMakeRange(0,10)];
     NSDateFormatter *alertThreeformatte2 = [[NSDateFormatter alloc] init];
     [alertThreeformatte2 setDateStyle:NSDateFormatterMediumStyle];
     [alertThreeformatte2 setTimeStyle:NSDateFormatterShortStyle];
@@ -574,7 +562,6 @@
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 /*

@@ -7,7 +7,6 @@
 //
 
 #import "THContactPickerTableViewCell.h"
-
 @implementation THContactPickerTableViewCell
 
 - (void)awakeFromNib

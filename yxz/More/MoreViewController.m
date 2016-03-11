@@ -8,9 +8,6 @@
 
 #import "MoreViewController.h"
 #import "MoreView.h"
-#import "ShareFriendViewController.h"
-#import "YijianFankuiViewController.h"
-
 #import "MoreWebViewController.h"
 
 @interface MoreViewController ()

@@ -24,27 +24,33 @@
 @implementation FatherViewController
 @synthesize navlabel = _navlabel;
 @synthesize backBtn = _backBtn;
-@synthesize backlable = _backlable;
-@synthesize hxPassword,hxUserName,imToUserID,imToUserName,ID,_backLable;
+@synthesize hxPassword,hxUserName,imToUserID,imToUserName,ID,backlable,helpBut;
 - (void)viewWillAppear:(BOOL)animated
 {
     self.navigationController.navigationBarHidden = YES;
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
-
+    
     self.view.backgroundColor = HEX_TO_UICOLOR(BAC_VIEW_COLOR, 1.0);
     
-    _backLable = [[UILabel alloc]initWithFrame:FRAME(0, 0, SELF_VIEW_WIDTH, NAV_HEIGHT)];
-    _backLable.backgroundColor = HEX_TO_UICOLOR(0xf9f9f9, 1.0);
-    [self.view addSubview:_backLable];
+    
+    
+    backlable = [[UIView alloc]initWithFrame:FRAME(0, 0, SELF_VIEW_WIDTH, NAV_HEIGHT)];
+    backlable.backgroundColor = HEX_TO_UICOLOR(0xf9f9f9, 1.0);
+    [self.view addSubview:backlable];
     
     _navlabel = [[UILabel alloc]initWithFrame:CGRectMake(50, 20, self.view.frame.size.width-100, 44)];
-    _navlabel.backgroundColor = HEX_TO_UICOLOR(0xf9f9f9, 1.0);
+    _navlabel.backgroundColor = [UIColor clearColor];
     _navlabel.textAlignment = NSTextAlignmentCenter;
     _navlabel.font = [UIFont systemFontOfSize:16];
     _navlabel.textColor = [UIColor blackColor];
     [self.view addSubview:_navlabel];
+    
+    helpBut=[[UIButton alloc]init];
+    helpBut.hidden=YES;
+    [helpBut addTarget:self action:@selector(helpButAvtion:) forControlEvents:UIControlEventTouchDragInside];
+    [self.view addSubview:helpBut];
     
     _lineLable = [[UILabel alloc]initWithFrame:FRAME(0, 63, SELF_VIEW_WIDTH, 1)];
     _lineLable.backgroundColor = [UIColor grayColor];
@@ -65,6 +71,63 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(openWebView:) name:@"OPENWEBVIEW" object:nil];
     
 }
+-(void)helpButAvtion:(UIButton *)button
+{
+    NSArray *array=@[@"alarm",@"notice",@"meeting",@"interview",@"leave_pass",@"trip",@"",@"water",@"clean",@"",@"",@"punch_sign",@"recycle"];
+    ISLoginManager *_manager = [ISLoginManager shareManager];
+    DownloadManager *_download = [[DownloadManager alloc]init];
+    NSString *action=[NSString stringWithFormat:@"%@",array[button.tag]];
+    NSDictionary *_dic = @{@"action":action,@"user_id":_manager.telephone};
+    [_download requestWithUrl:USER_HELP dict:_dic view:self.view delegate:self finishedSEL:@selector(HelpSuccess:) isPost:NO failedSEL:@selector(HelpFailure:)];
+}
+-(void)HelpSuccess:(id)dataSource
+{
+    NSDictionary *dic=[dataSource objectForKey:@"data"];
+    NSString *dataStr=[NSString stringWithFormat:@"%@",[dataSource objectForKey:@"data"]];
+    if (dataStr==nil||dataStr==NULL||[dataStr length]==0||[dataStr isEqualToString:@""]) {
+        
+    }else{
+        WebPageViewController *webVC=[[WebPageViewController alloc]init];
+        webVC.webURL=[NSString stringWithFormat:@"%@",[dic objectForKey:@"goto_url"]];
+        webVC.vcIDs=1000;
+        [[self getCurrentVC] presentViewController:webVC animated:YES completion:nil];
+    }
+    
+}
+-(void)HelpFailure:(id)dataSource
+{
+    
+}
+//获取当前屏幕显示的viewcontroller
+- (UIViewController *)getCurrentVC
+{
+    UIViewController *result = nil;
+    
+    UIWindow * window = [[UIApplication sharedApplication] keyWindow];
+    if (window.windowLevel != UIWindowLevelNormal)
+    {
+        NSArray *windows = [[UIApplication sharedApplication] windows];
+        for(UIWindow * tmpWin in windows)
+        {
+            if (tmpWin.windowLevel == UIWindowLevelNormal)
+            {
+                window = tmpWin;
+                break;
+            }
+        }
+    }
+    
+    UIView *frontView = [[window subviews] objectAtIndex:0];
+    id nextResponder = [frontView nextResponder];
+    
+    if ([nextResponder isKindOfClass:[UIViewController class]])
+        result = nextResponder;
+    else
+        result = window.rootViewController;
+    
+    return result;
+}
+
 -(void)todoSomething
 {
     [self.navigationController popViewControllerAnimated:YES];

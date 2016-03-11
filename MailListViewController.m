@@ -265,7 +265,7 @@
     UILabel *mobilePhoneNumberLabel = (UILabel *)[cell viewWithTag:102];
     UIImageView *contactImage = (UIImageView *)[cell viewWithTag:103];
     UIImageView *checkboxImageView = (UIImageView *)[cell viewWithTag:104];
-    
+    checkboxImageView.frame=FRAME(WIDTH-40, 21, 20, 20);
     // Assign values to to US elements
     
     contactNameLabel.text = [contact fullName];
@@ -274,7 +274,6 @@
         contactImage.image = contact.image;
     }
     contactImage.layer.masksToBounds = YES;
-    contactImage.layer.cornerRadius = 25;
     
     // Set the checked state for the contact selection checkbox
     UIImage *image;

@@ -34,7 +34,6 @@
 {
     self = [super initWithStyle:style];
     if (self) {
-        // Custom initialization
         _dataSource = [NSMutableArray array];
     }
     return self;
@@ -43,7 +42,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view.
     if ([self respondsToSelector:@selector(setEdgesForExtendedLayout:)])
     {
         [self setEdgesForExtendedLayout:UIRectEdgeNone];
@@ -76,7 +74,6 @@
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 #pragma mark - getter
@@ -118,13 +115,11 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    // Return the number of sections.
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    // Return the number of rows in the section.
     return [self.dataSource count];
 }
 
@@ -133,7 +128,6 @@
     static NSString *CellIdentifier = @"AddFriendCell";
     AddFriendCell *cell = (AddFriendCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
-    // Configure the cell...
     if (cell == nil) {
         cell = [[AddFriendCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
@@ -206,7 +200,6 @@
             
             return;
         }
-        
         //判断是否已发来申请
         NSArray *applyArray = [[ApplyViewController shareController] dataSource];
         if (applyArray && [applyArray count] > 0) {

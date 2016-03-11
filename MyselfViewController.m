@@ -20,8 +20,6 @@
 #import "UserInfoViewController.h"
 #import "ChatViewController.h"
 
-#import "ShareFriendViewController.h"
-
 #import "WXApi.h"
 #import "MineJifenViewController.h"
 #import "Order_ListViewController.h"
@@ -536,7 +534,7 @@
             break;
         case 1003:
         {
-            webURL=@"http://123.57.173.36/simi-h5/show/store-my-index.html";
+            webURL=[NSString stringWithFormat:@"http://123.57.173.36/simi-h5/show/store-my-index.html?user_id=%@",_userID];
             [self webViewLayout];
             
         }
@@ -775,7 +773,7 @@
     UIButton *envelopeButton=[[UIButton alloc]initWithFrame:FRAME(WIDTH-29/2-40, 38/2, 40, 30)];
     envelopeButton.backgroundColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
     [envelopeButton setImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
-    UIButton *qrCode=[[UIButton alloc]initWithFrame:FRAME(WIDTH-109/2, 38/2,40, 40)];
+    UIButton *qrCode=[[UIButton alloc]initWithFrame:FRAME(WIDTH-109/2, 38/2+10,40, 40)];
     if(_rootId==1){
         qrCode.hidden=YES;
     }else{
@@ -784,8 +782,12 @@
     qrCode.layer.cornerRadius=qrCode.frame.size.width/2;
     qrCode.clipsToBounds=YES;
     [qrCode addTarget:self action:@selector(qrCodeAction:) forControlEvents:UIControlEventTouchUpInside];
-    [qrCode setImage:[UIImage imageNamed:@"QRcode"] forState:UIControlStateNormal];
+    //[qrCode setImage:[UIImage imageNamed:@"QRcode"] forState:UIControlStateNormal];
     [blurView addSubview:qrCode];
+    
+    UIImageView *qrCodeIamge=[[UIImageView alloc]initWithFrame:FRAME(5/2, 5/2, 25, 25)];
+    qrCodeIamge.image=[UIImage imageNamed:@"QRcode"];
+    [qrCode addSubview:qrCodeIamge];
 
     NSArray *array=@[@"钱包",@"优惠券",@"积分"];
     for (int i=0; i<array.count; i++) {
@@ -846,7 +848,8 @@
     textLabel.font=[UIFont fontWithName:@"Arial" size:16];
     [qrCodeView addSubview:textLabel];
     UIImageView *qrImageView=[[UIImageView alloc]initWithFrame:FRAME(30, (qrCodeView.frame.size.height-(WIDTH-60))/2, WIDTH-60, WIDTH-60)];
-    qrImageView.image=[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[sender objectForKey:@"data"]]]];
+    NSString *imageUrl=[NSString stringWithFormat:@"%@",[sender objectForKey:@"data"]];
+    [qrImageView setImageWithURL:[NSURL URLWithString:imageUrl]placeholderImage:nil];
     [qrCodeView addSubview:qrImageView];
     
     UILabel *explainLabel=[[UILabel alloc]initWithFrame:FRAME(10, qrImageView.frame.size.height+qrImageView.frame.origin.y+30, WIDTH-20, 20)];
@@ -940,13 +943,13 @@
 -(void)distanceLabelLayout
 {
     distanceString=[NSString stringWithFormat:@"%@",[dict objectForKey:@"province_name"]];
-    positionString=[NSString stringWithFormat:@"%@",[dict objectForKey:@"province_name"]];
+//    positionString=[NSString stringWithFormat:@"%@",[dict objectForKey:@"province_name"]];
     distanceLabel.text=distanceString;
     distanceLabel.textAlignment = NSTextAlignmentRight;
     distanceLabel.adjustsFontSizeToFitWidth=YES;
     [distanceLabel setNumberOfLines:1];
     [distanceLabel sizeToFit];
-    distanceLabel.frame=FRAME((WIDTH-distanceLabel.frame.size.width)/2-distanceLabel.frame.size.width/2-5, nameLabel.frame.size.height+nameLabel.frame.origin.y+HEIGHT*0.02, distanceLabel.frame.size.width, 10);
+    distanceLabel.frame=FRAME((WIDTH-distanceLabel.frame.size.width)/2/*-distanceLabel.frame.size.width/2-5*/, nameLabel.frame.size.height+nameLabel.frame.origin.y+HEIGHT*0.02, distanceLabel.frame.size.width, 10);
     distanceLabel.font=[UIFont fontWithName:@"Arial" size:10];
     distanceLabel.textColor=[UIColor whiteColor];
     [blurView addSubview:distanceLabel];

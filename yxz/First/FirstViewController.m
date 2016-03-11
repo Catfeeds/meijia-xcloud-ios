@@ -28,7 +28,6 @@
 #import "ISLoginManager.h"
 #import "AdScrollView.h"
 #import "HuanxinBase.h"
-//#import "MyLogInViewController.h"
 #import "UserDressMapViewController.h"
 //环信
 #import "LoginViewController.h"
@@ -43,7 +42,6 @@
 {
     UIButton *citybtn;
     SelectCityView *listView;
-//    ImagesPage *myImagePage;
     SERVICEBaseClass *_baseclass;
     NSString *simi_call;
     UIScrollView *_myscroll;
@@ -71,7 +69,6 @@
 {
     self.navlabel.text = @"私 秘";
     self.backBtn.hidden = YES;
-//    self.navlabel.backgroundColor = HEX_TO_UICOLOR(ROUND_COLOR, 1.0);
     
     [self.navigationController setNavigationBarHidden:YES];
     
@@ -88,17 +85,7 @@
 }
 - (void)DownlLoadFinish:(id)dict
 {
-    
-   // int status = [[dict objectForKey:@"status"] intValue];
-    
-    //NSDictionary *baseDic = [dict objectForKey:@"data"];
-    
-    //NSString *service_call = [baseDic objectForKey:@"service_call"];
-    
-    
-    
-    
-    
+
     _baseclass = [[SERVICEBaseClass alloc]initWithDictionary:dict];
     
     APPLIACTION._baseSource = _baseclass;
@@ -114,16 +101,7 @@
         NSLog(@"id is %f \n  img_url is %@",_admodel.bannerAdIdentifier,_admodel.imgUrl);
     }
     
-//    ImagesPage *myImagePage = [[ImagesPage alloc]initWithFrame:FRAME(0, YSPACE, SELF_VIEW_WIDTH,244/2) imgArray:_baseclass.data.bannerAd];
-//    
-//  
-//    myImagePage.delegate = self;
-//    
-//    [self.view addSubview:myImagePage];
-    
     [self createScrollView];
-    
-//    [self CityBtn];
     
     [self getUserInfo];
     
@@ -150,8 +128,6 @@
     scrollView.PageControlShowStyle = UIPageControlShowStyleRight;
     scrollView.pageControl.pageIndicatorTintColor = [UIColor whiteColor];
     
-//    NSArray *array = [[NSArray alloc]initWithObjects:@"123",@"456",@"789", nil];
-//   [scrollView setAdTitleArray:array withShowStyle:AdTitleShowStyleLeft];
     scrollView.pageControl.frame = FRAME(SELF_VIEW_WIDTH-50, 170-_height, 40, 20);
     scrollView.pageControl.currentPageIndicatorTintColor = [UIColor grayColor];
     
@@ -297,61 +273,10 @@
     [centbtn setTag:200];
     [_myscroll addSubview:centbtn];
     
-//    UIButton *rigbtn = [UIButton buttonWithType:UIButtonTypeCustom];
-//    rigbtn.frame = FRAME(31+78/2+22+273/2+22, 726/2+176/4+10, 78/2, 78/2);
-//    [rigbtn setBackgroundImage:[UIImage imageNamed:@"index-right-arrow"] forState:UIControlStateNormal];
-//    [rigbtn setBackgroundImage:[UIImage imageNamed:@"index-right-pressdown"] forState:UIControlStateHighlighted];
-//    [_myscroll addSubview:rigbtn];
-    
-    
-    //banner默认图片
-    
     UIImageView *bannerImg = [[UIImageView alloc]initWithFrame:CGRectMake(0, YSPACE-_height, SELF_VIEW_WIDTH, 244/2)];
     bannerImg.image = [UIImage imageNamed:@"bannerMoren"];
     bannerImg.tag = 666;
     [_myscroll addSubview:bannerImg];
-    
-//    [self GetBasicData];
-
-
-    
-    
-//    UIImageView *img = [[UIImageView alloc]initWithFrame:FRAME(0, 0, SELF_VIEW_WIDTH, SELF_VIEW_HEIGHT)];
-//    img.image = [UIImage imageNamed:@"Default@2x"];
-//    img.userInteractionEnabled = NO;
-//    [self.view addSubview:img];
-    
-//    ISLoginManager *logManager = [[ISLoginManager alloc]init];
-//    
-//    if (logManager.isLogin == NO) {
-//        MyLogInViewController *log = [[MyLogInViewController alloc]init];
-//        log.leiMing = @"首页";
-//        [self.navigationController pushViewController:log animated:YES];
-////        [self.navigationController presentViewController:log animated:YES completion:nil];
-//        
-//    }else{
-//        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-//
-//        NSString *tohxuserID = [userDefaults objectForKey:@"TOHXUSERID"];
-//        NSString *tohxuserName = [userDefaults objectForKey:@"TOHXUSERNAME"];
-//        
-//        //自动登录
-//        BOOL isAutoLogin = [[[EaseMob sharedInstance] chatManager] isAutoLoginEnabled];
-//
-//        if (tohxuserID && isAutoLogin) {
-//            
-//            ChatViewController *chatVC = [[ChatViewController alloc] initWithChatter:tohxuserID isGroup:NO];
-//            chatVC.title = tohxuserName;
-//            [chatVC.navigationController setNavigationBarHidden:NO];
-//            [self.navigationController pushViewController:chatVC animated:YES];
-//            
-//        }else{
-//            [self getUserInfo];
-//
-//        }
-//        
-//
-//    }
 
 }
 - (void)loginStateChange:(NSNotification *)obj
@@ -366,7 +291,6 @@
 -(void)LoginSuccess:(NSNotification *)obj
 {
     [self getUserInfo];
-//    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"LOGIN_SUCCESS" object:nil];
 
 }
 - (void)getUserInfo
@@ -374,7 +298,6 @@
     ISLoginManager *logManager = [[ISLoginManager alloc]init];
     NSDictionary *mobelDic = [[NSDictionary alloc]initWithObjectsAndKeys:logManager.telephone,@"user_id", nil];
     DownloadManager *_download = [[DownloadManager alloc]init];
-//    [_download requestWithUrl:[NSString stringWithFormat:@"%@",USERINFO_API] dict:mobelDic view:self.view delegate:self finishedSEL:@selector(DownlLoadFinish:)];
     [_download requestWithUrl:[NSString stringWithFormat:@"%@",USERINFO_API]  dict:mobelDic view:self.view delegate:self finishedSEL:@selector(getUserInfoSuccess:) isPost:NO failedSEL:@selector(getUserInfoFail:)];
     [self hideHud];
     
@@ -385,9 +308,6 @@
     NSDictionary *dict = [dic objectForKey:@"data"];
     int status = [dict[@"status"] intValue];
     if (status == 0) {
-//        UserData  = [[HuanxinBase alloc]initWithDictionary:dict];
-//        APPLIACTION.huanxinBase = UserData;
-//        NSLog(@"环信账号：%@环信密码：%@",UserData.imUsername,UserData.imUserPassword);
         self.hxUserName = [dict objectForKey:@"im_username"];
         self.hxPassword = [dict objectForKey:@"im_password"];
         NSLog(@"环信账号：%@环信密码：%@",self.hxUserName,self.hxPassword);
@@ -432,39 +352,17 @@
 #pragma  warning 测试用
         UIButton *btn = (UIButton *)[rightbtn viewWithTag:321];
         btn.hidden = YES;
-//        
         ImgWebViewController *img = [[ImgWebViewController alloc]init];
         img.imgurl = @"http://123.57.173.36/simi-wwz/wwz/news_list.html";
         img.title = @"消息列表";
         [self.navigationController pushViewController:img animated:YES];
-//        
-//        
+      
         NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
         [user setObject:@"55" forKey:@"UNREADMESSAGES"];
         [user synchronize];
         
-        
-//        UserDressMapViewController *map = [[UserDressMapViewController alloc]init];
-//        [self.navigationController pushViewController:map animated:YES];
-        
-        
-//        [WeiXinPay pay:nil];
-//        payRequsestHandler *pay = [[payRequsestHandler alloc]init];
-//        [pay sendPay_demo];
-        
-//        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:@"联系我们的客服专线" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
-//        
-//        [alert show];
     }else{
-//        DXMessageToolBar *mess = [[DXMessageToolBar alloc]init];
-////        [mess.delegate didStartRecordingVoiceAction:mess.recordView];
-//        [mess recordButtonTouchDown];
-//        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:@"与客服在线交流" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
-//        
-//        [alert show];
-        
         [self CallTelephone];
-        
     }
 
 
@@ -476,32 +374,13 @@
     if (alertView.tag == 10) {
         if (buttonIndex == 0) {
         }else{
-//            MyLogInViewController *login = [[MyLogInViewController alloc]init];
-//            login.vCLID=0;;
-//            [self.navigationController presentViewController:login animated:YES completion:nil];
+
         }
     }
 
 }
 - (void)CallTelephone
 {
-//    NSString *phoneNum = @"";// 电话号码
-//
-//    phoneNum = simi_call;
-// 
-//    NSURL *phoneURL = [NSURL URLWithString:[NSString stringWithFormat:@"tel:%@",phoneNum]];
-//    
-//    UIWebView *phoneCallWebView;
-//    
-//    if ( !phoneCallWebView ) {
-//        
-//        phoneCallWebView = [[UIWebView alloc] initWithFrame:CGRectZero];
-//        
-//    }
-//    
-//    [phoneCallWebView loadRequest:[NSURLRequest requestWithURL:phoneURL]];
-//    
-//    [_myscroll addSubview:phoneCallWebView];
     
     BOOL login = [self loginYesOrNo];
     if (login == YES) {
@@ -511,7 +390,6 @@
     }
     else{
         
-//        [self showAlertViewWithTitle:@"提示" message:@"请先登陆"];
         UIAlertView *LogalertView = [[UIAlertView alloc]initWithTitle:@"提示" message:@"请先登录" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
         LogalertView.tag = 10;
         [LogalertView show];
@@ -522,9 +400,6 @@
 - (void)LoginSuccessNavPush
 {
     //判断是否真人聊天
-//    NSString *imToUserID;
-//    imToUserID = self.imToUserID;
-    
     ChatViewController *chatVC = [[ChatViewController alloc] initWithChatter:self.imToUserID isGroup:NO];
     chatVC.title = self.imToUserName;
     [chatVC.navigationController setNavigationBarHidden:NO];
@@ -612,12 +487,7 @@
     }
 }
 #pragma mark 图片点击代理
-//- (void)imgdelegate:(UIButton *)btn imgUrl:(NSString *)url
-//{
-//    ImgWebViewController *web = [[ImgWebViewController alloc]init];
-//    web.imgurl = url;
-//    [self.navigationController pushViewController:web animated:YES];
-//}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

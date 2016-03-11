@@ -521,7 +521,7 @@
     [cell addSubview:timeLabel];
     
     UIView *upperView=[[UIView alloc]initWithFrame:FRAME(30+(30-1)/2, 0, 1, 5)];
-    upperView.backgroundColor=[UIColor colorWithRed:232/255.0f green:232/255.0f blue:232/255.0f alpha:1];
+    upperView.backgroundColor=[UIColor colorWithRed:190/255.0f green:190/255.0f blue:190/255.0f alpha:1];
     [cell addSubview:upperView];
     if (indexPath.row==0) {
         upperView.hidden=YES;
@@ -529,7 +529,7 @@
         upperView.hidden=NO;
     }
     UIView *lowerView=[[UIView alloc]initWithFrame:FRAME(30+(30-1)/2, 35, 1, 5)];
-    lowerView.backgroundColor=[UIColor colorWithRed:232/255.0f green:232/255.0f blue:232/255.0f alpha:1];
+    lowerView.backgroundColor=[UIColor colorWithRed:190/255.0f green:190/255.0f blue:190/255.0f alpha:1];
     [cell addSubview:lowerView];
     if (indexPath.row==numberArray.count-1) {
         lowerView.hidden=YES;

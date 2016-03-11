@@ -10,7 +10,6 @@
 #import "DownloadManager.h"
 #import "ISLoginManager.h"
 #import "DetailsTableViewCell.h"
-#import "ShareFriendViewController.h"
 #import "WXApi.h"
 
 #import "BookingViewController.h"
@@ -87,16 +86,18 @@ int height,Y,processID=0;
     NSLog(@"字典数据%@",_dict);
     [_download requestWithUrl:CARD_DETAILS dict:_dict view:self.view delegate:self finishedSEL:@selector(logDowLoadFinish:) isPost:NO failedSEL:@selector(DownFail:)];
     
-    
-    NSDictionary *dict = @{@"user_id":_manager.telephone};
-    NSLog(@"字典数据%@",dict);
-    [_download requestWithUrl:USER_INFO dict:dict view:self.view delegate:self finishedSEL:@selector(msgm:) isPost:NO failedSEL:@selector(Downmsgm:)];
-    if (_S==1) {
-        _L=1;
-    }
+    [self userInfo];
     [self selfViewLayout];
    // NSDictionary *processDic=
     
+}
+-(void)userInfo
+{
+    ISLoginManager *_manager = [ISLoginManager shareManager];
+    DownloadManager *_download = [[DownloadManager alloc]init];
+    NSDictionary *dict = @{@"user_id":_manager.telephone};
+    NSLog(@"字典数据%@",dict);
+    [_download requestWithUrl:USER_INFO dict:dict view:self.view delegate:self finishedSEL:@selector(msgm:) isPost:NO failedSEL:@selector(Downmsgm:)];
 }
 #pragma mark 刷新
 -(void)refresh
@@ -431,8 +432,14 @@ int height,Y,processID=0;
     [selfView addSubview:line];
     
     UILabel *addressLabel=[[UILabel alloc]init];
-    NSString *fromCityString=[dic objectForKey:@"ticket_from_city_name"];
-    NSString *toCityString=[dic objectForKey:@"ticket_to_city_name"];
+    NSString *cityDicjson=[NSString stringWithFormat:@"%@",[dic objectForKey:@"card_extra"]];
+    NSData *jsonData = [cityDicjson dataUsingEncoding:NSUTF8StringEncoding];
+    NSError *err;
+    NSDictionary *cityDic = [NSJSONSerialization JSONObjectWithData:jsonData
+                                                        options:NSJSONReadingMutableContainers
+                                                          error:&err];
+    NSString *fromCityString=[cityDic objectForKey:@"ticket_from_city_name"];
+    NSString *toCityString=[cityDic objectForKey:@"ticket_to_city_name"];
     NSString *textString=[NSString stringWithFormat:@"从 %@ 到 %@",fromCityString,toCityString];
     [selfView addSubview:addressLabel];
     

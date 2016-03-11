@@ -14,7 +14,6 @@
 #import "ISLoginManager.h"
 
 #import "HuiYuanCenterController.h"
-#import "simiViewController.h"
 #import "JifenViewController.h"
 
 #import "AliPayManager.h"

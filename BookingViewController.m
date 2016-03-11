@@ -17,7 +17,7 @@
 #import "ISLoginManager.h"
 #import "DownloadManager.h"
 #import "ConTentViewController.h"
-#import "SeekViewController.h"
+#import "ClerkViewController.h"
 #import "FXBlurView.h"
 
 #import "SetRemindViewController.h"
@@ -139,7 +139,6 @@ int y,x=0,time_ID;
     [self personnelLayout];
     maskView.hidden=YES;
     if (viewController.textString==NULL||viewController.textString==nil) {
-//        contentString=contentString;
     }else
     {
         contentString=viewController.textString;
@@ -153,8 +152,7 @@ int y,x=0,time_ID;
     if (ctID==20001) {
         if(vc.setout==nil||vc.setout==NULL)
         {
-//            setoutString=setoutString;
-//            from_ID=from_ID;
+
         }else{
             setoutString=vc.setout;
             from_ID=vc.fromCityID;
@@ -165,8 +163,7 @@ int y,x=0,time_ID;
     {
         if(vc.destination==nil||vc.destination==NULL)
         {
-//            destinationString=destinationString;
-//            to_ID=to_ID;
+
         }else{
             to_ID=vc.toCityId;
             destinationString=vc.destination;
@@ -187,8 +184,7 @@ int y,x=0,time_ID;
     NSLog(@"字典数据%@",_dict);
     [_download requestWithUrl:USER_INFO dict:_dict view:self.view delegate:self finishedSEL:@selector(msgm:) isPost:NO failedSEL:@selector(Downmsgm:)];
     if (customerVC.clientString==nil||customerVC.clientString==NULL) {
-//        clientString=clientString;
-//        _index=_index;
+
     }else {
         clientString=customerVC.clientString;
         _index=customerVC.cellIndex;
@@ -226,6 +222,7 @@ int y,x=0,time_ID;
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.backlable.backgroundColor=HEX_TO_UICOLOR(0x56abe4, 1.0);
     ISLoginManager *_manager = [ISLoginManager shareManager];
     AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication] delegate];
     NSString *mobli=[NSString stringWithFormat:@"%@",[delegate.globalDic objectForKey:@"mobile"]];
@@ -263,8 +260,7 @@ int y,x=0,time_ID;
         [_download requestWithUrl:CARD_DETAILS dict:_dict view:self.view delegate:self finishedSEL:@selector(KPgm:) isPost:NO failedSEL:@selector(KPDownmsgm:)];
 
     }
-        //[self pickerLayout];
-    // Do any additional setup after loading the view.
+
 }
 -(void)KPgm:(id)sender
 {
@@ -331,10 +327,8 @@ int y,x=0,time_ID;
 {
     [clientButton removeFromSuperview];
     clientButton=[[UIButton alloc]initWithFrame:FRAME(0, 64+13/2, WIDTH, 34)];
-//    [clientButton setTitle:@"客户" forState:UIControlStateNormal];
     [clientButton addTarget:self action:@selector(clientAction:) forControlEvents:UIControlEventTouchUpInside];
-    clientButton.backgroundColor=[UIColor whiteColor];//colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
-//    clientButton.layer.cornerRadius=5;
+    clientButton.backgroundColor=[UIColor whiteColor];
     [self.view addSubview:clientButton];
     
     UIImageView *clientImage=[[UIImageView alloc]initWithFrame:FRAME(WIDTH-35/2-20, (34-15)/2, 15, 15)];
@@ -426,7 +420,6 @@ int y,x=0,time_ID;
     setoutLabel=[[UILabel alloc]initWithFrame:FRAME(startingLabel.frame.origin.x+startingLabel.frame.size.width, 15/2, startingButton.frame.size.width-15-(startingLabel.frame.origin.x+startingLabel.frame.size.width), startingButton.frame.size.height-15)];
     setoutLabel.textAlignment=NSTextAlignmentCenter;
     setoutLabel.textColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
-    //setoutLabel.backgroundColor=[UIColor brownColor];
     [startingButton addSubview:setoutLabel];
     
     
@@ -444,7 +437,6 @@ int y,x=0,time_ID;
     arriveButton.layer.borderWidth= 1.0f;
     
     arriveImage=[[UIImageView alloc]initWithFrame:CGRectMake(11/2, 15/2, startingButton.frame.size.height-15, startingButton.frame.size.height-15)];
-    //arriveImage.backgroundColor=[UIColor yellowColor];
     
     arriveLabel=[[UILabel alloc]initWithFrame:CGRectMake(arriveImage.frame.origin.x+arriveImage.frame.size.width+6, 15/2, arriveLabel.frame.size.width, arriveButton.frame.size.height-15)];
     UIImageView *arrImage=[[UIImageView alloc]initWithFrame:FRAME(arriveButton.frame.size.width-20, (33-15)/2, 15, 15)];
@@ -465,7 +457,6 @@ int y,x=0,time_ID;
     //出发城市与到达城市转换按钮
     UIButton *exchangeButton=[[UIButton alloc]initWithFrame:CGRectMake(WIDTH-51, 84+11/2-15, 30, 30)];
     [exchangeButton setImage:[UIImage imageNamed:@"CLGH_ZH_TB_@2x"] forState:UIControlStateNormal];
-    //exchangeButton.backgroundColor=[UIColor redColor];
     [exchangeButton addTarget:self action:@selector(exchangeButtonAN) forControlEvents:UIControlEventTouchUpInside];
     [headeView addSubview:exchangeButton];
     
@@ -522,7 +513,6 @@ int y,x=0,time_ID;
     
     UIImageView *timeImage=[[UIImageView alloc]initWithFrame:CGRectMake(11/2, 15/2, startingButton.frame.size.height-15, startingButton.frame.size.height-15)];
     timeImage.image=[UIImage imageNamed:@"CLGH_SJ_TB_@2x"];
-    //timeImage.backgroundColor=[UIColor brownColor];
     timeImage.layer.cornerRadius=timeImage.frame.size.width/2;
     [timeButton addSubview:timeImage];
     UILabel *timeLabel=[[UILabel alloc]init];
@@ -559,7 +549,6 @@ int y,x=0,time_ID;
             headimageView.frame=CGRectMake(39/2, 27/2, 20, 32/2);
         }
         headimageView.image=[UIImage imageNamed:imageArray[i]];
-        //headimageView.backgroundColor=[UIColor redColor];
         [labelView addSubview:headimageView];
         UILabel *label=[[UILabel alloc]init];
         label.frame=CGRectMake(headimageView.frame.origin.x+30, 23/2, label.frame.size.width, 32/2);
@@ -567,15 +556,12 @@ int y,x=0,time_ID;
         label.lineBreakMode=NSLineBreakByTruncatingTail;
         [label sizeToFit];
         label.font=[UIFont fontWithName:@"Arial" size:14];
-        //label.backgroundColor=[UIColor blueColor];
         [labelView addSubview:label];
         if (i==0) {
             UITapGestureRecognizer *tap=[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(contentTap:)];
             [labelView addGestureRecognizer:tap];
             contentLabel=[[UILabel alloc]initWithFrame:FRAME(label.frame.size.width+label.frame.origin.x+5, 23/2, WIDTH-(label.frame.size.width+label.frame.origin.x+5)-10, labelView.frame.size.height-22)];
             contentLabel.font=[UIFont fontWithName:@"Arial" size:14];
-            //contentLabel.backgroundColor=[UIColor brownColor];
-           // [contentLabel sizeToFit];
             [self contentLayout];
             [labelView addSubview:contentLabel];
             UIImageView *bzImage=[[UIImageView alloc]initWithFrame:FRAME(WIDTH-35/2-20, (42-15)/2, 15, 15)];
@@ -595,8 +581,6 @@ int y,x=0,time_ID;
         if (i==2) {
             
             switchButton=[[SwickControl alloc]initWithFrame:CGRectMake(WIDTH-50-35/2, 44/4, 50, 42/2)];
-            //switchButton.backgroundColor=[UIColor redColor];
-            //
             if(_pushID==1)
             {
                 if (switchButID==1) {
@@ -622,7 +606,6 @@ int y,x=0,time_ID;
         headeView.frame=CGRectMake(0, 64+15/2, WIDTH, y+43);
     }
     [self textLabelLayout];
-    //headeView.frame=CGRectMake(0, 97+15/2, WIDTH, y+43);
     
 }
 #pragma mark 差旅人员显示方法
@@ -667,7 +650,6 @@ int y,x=0,time_ID;
 {
     [headeView addSubview:startingButton];
     
-    //startingImage.backgroundColor=[UIColor redColor];
     startingImage.image=startingImages;
     startingImage.layer.cornerRadius=startingImage.frame.size.width/2;
     [startingButton addSubview:startingImage];
@@ -717,7 +699,6 @@ int y,x=0,time_ID;
     }else{
         timeViewLabel.text=timeString;
     }
-    //timeViewLabel.text=timeString;
     timeViewLabel.font=[UIFont fontWithName:@"Arial" size:14];
     timeViewLabel.lineBreakMode=NSLineBreakByTruncatingTail;
     [timeViewLabel setNumberOfLines:1];
@@ -753,11 +734,10 @@ int y,x=0,time_ID;
     
     msImageView=[[UIImageView alloc]init];
     msImageView.frame=CGRectMake(39/2, 29/2, 32/2, 32/2);
-//    msImageView.backgroundColor=[UIColor redColor];
     
     UILabel *label=[[UILabel alloc]init];
     label.frame=CGRectMake(msImageView.frame.origin.x+msImageView.frame.size.width+10, 25/2, label.frame.size.width, 32/2);
-    label.text=@"需要秘书处理";
+    label.text=@"交给秘书处理";
     label.font=[UIFont fontWithName:@"Arial" size:14];
     label.textColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
     label.lineBreakMode=NSLineBreakByTruncatingTail;
@@ -768,8 +748,6 @@ int y,x=0,time_ID;
     
     switchBut=[[SwickControl alloc]initWithFrame:CGRectMake(WIDTH-50-35/2, 44/4, 50, 42/2)];
     switchBut.noId=1;
-    //switchButton.backgroundColor=[UIColor redColor];
-    //switchBut.userInteractionEnabled=NO;
     
     [switchBut addTarget:self action:@selector(switchAction:) forControlEvents:UIControlEventValueChanged];
     if (periodID==0) {
@@ -809,7 +787,7 @@ int y,x=0,time_ID;
         [button setTitle:@"创建" forState:UIControlStateNormal];
     }
     
-    button.backgroundColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
+    button.backgroundColor=self.backlable.backgroundColor;
     [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     button.layer.cornerRadius=5;
     [button addTarget:self action:@selector(establish:) forControlEvents:UIControlEventTouchUpInside];
@@ -827,7 +805,6 @@ int y,x=0,time_ID;
     datePicker = [[DatePicker alloc]initWithFrame:FRAME(0, HEIGHT, WIDTH, 250)];
     datePicker.delegate = self;
     [self.view addSubview:datePicker];
-       //        datePicker.backgroundColor = [UIColor grayColor];
     [UIView beginAnimations: @"Animation" context:nil];
     [UIView setAnimationDuration:0.3];
     datePicker.frame = CGRectMake(0, HEIGHT-250, WIDTH, 250);
@@ -888,9 +865,6 @@ int y,x=0,time_ID;
     [UIView setAnimationDuration:0.3];
     timePicker.frame = CGRectMake(0, SELF_VIEW_HEIGHT, SELF_VIEW_WIDTH, 220);
     [UIView commitAnimations];
-//    NSString *hour = [timeStr substringWithRange:NSMakeRange(0, 4)];
-//    NSString *minute = [timeStr substringWithRange:NSMakeRange(8, 2)];
-//    NSString *second = [timeStr substringWithRange:NSMakeRange(5, 2)];
     timeString=[NSString stringWithFormat:@"%@",timeStr];
     
     [self textLabelLayout];
@@ -911,8 +885,7 @@ int y,x=0,time_ID;
     picker.frame = CGRectMake(0, SELF_VIEW_HEIGHT, SELF_VIEW_WIDTH, 220);
     [UIView commitAnimations];
     remindString=[NSString stringWithFormat:@"%@",hours];
-    //int hoursInt=[hours intValue];
-    //[@"",@"",@"",@"",@"",@"",@"",@"",@"",@""]
+
     
     
     [self timeTXLayout];
@@ -920,8 +893,7 @@ int y,x=0,time_ID;
 #pragma mark目的地与始发地转换按钮方法
 -(void)exchangeButtonAN
 {
-//    startingImages=[UIImage imageNamed:@"CLGH_CFCS_TB_@2x"];
-//    arriveImages=[UIImage imageNamed:@"CLGH_FHCS_TB@2x"];
+
     if (x%2==0) {
         [UIView beginAnimations:@"Animation" context:nil];
         [UIView setAnimationDuration:0.5];
@@ -935,8 +907,7 @@ int y,x=0,time_ID;
         arriveImages=[UIImage imageNamed:@"CLGH_CFCS_TB_@2x"];
         arriveStr=@"出发城市";
         [UIView commitAnimations];
-//        fromID=vc.fromCityID;
-//        toID=vc.toCityId;
+
         
     }else{
         [UIView beginAnimations:@"Animation" context:nil];
@@ -960,8 +931,9 @@ int y,x=0,time_ID;
 -(void)switchAction:(id)sender
 {
     if (periodID==0) {
-        SeekViewController *vce=[[SeekViewController alloc]init];
-        [self.navigationController pushViewController:vce animated:YES];
+        ClerkViewController *seekVC=[[ClerkViewController alloc]init];
+        seekVC.service_type_id=@"75";
+        [self.navigationController pushViewController:seekVC animated:YES];
         switchBut.noId=1;
         
     }else{
@@ -999,14 +971,13 @@ int y,x=0,time_ID;
 //确定按钮点击方法
 -(void)sureAction:(id)sender
 {
-    SeekViewController *vce=[[SeekViewController alloc]init];
-    [self.navigationController pushViewController:vce animated:YES];
+//    SeekViewController *vce=[[SeekViewController alloc]init];
+//    [self.navigationController pushViewController:vce animated:YES];
 }
 #pragma mark 开关按钮switchButton的相应事件方法
 -(void)switchButAction:(id)sender
 {
     
-    //UISwitch *switchBuT=(UISwitch *)sender;
     if (switchButton.isOn)
     {
         set_now_send_ID=1;
@@ -1018,7 +989,6 @@ int y,x=0,time_ID;
             switchButton.ID=1;
         }else{
             switchButton.ID=0;
-            //switchButton.switchStr=@"NO";
         }
         
     }
@@ -1042,15 +1012,11 @@ int y,x=0,time_ID;
         picker = [[TimePicker alloc]initWithFrame:FRAME(0, HEIGHT, WIDTH, 220)];
         picker.delegate = self;
         [self.view addSubview:picker];
-        //        datePicker.backgroundColor = [UIColor grayColor];
         [UIView beginAnimations: @"Animation" context:nil];
         [UIView setAnimationDuration:0.3];
         picker.frame = CGRectMake(0, HEIGHT-220, WIDTH, 220);
         datePicker.frame = FRAME(0, SELF_VIEW_HEIGHT, SELF_VIEW_WIDTH, 250);
         timePicker.frame = CGRectMake(0, SELF_VIEW_HEIGHT, SELF_VIEW_WIDTH, 220);
-        //    SetRemindViewController *setremind = [[SetRemindViewController alloc]init];
-        //    setremind.delegate = self;
-        //    [self.navigationController pushViewController:setremind animated:YES];
         [UIView commitAnimations];
     }
     
@@ -1063,7 +1029,6 @@ int y,x=0,time_ID;
         
     }else
     {
-        //NSString *str=[[NSString alloc]init];
         
         if ([remindString isEqualToString:@"按时提醒"]) {
             time_ID=0;
@@ -1105,13 +1070,9 @@ int y,x=0,time_ID;
         
         int timeID=[[timeString substringWithRange:NSMakeRange(6,2)] intValue];
         NSLog(@"timeID___%d",timeID);
-//        for (int i=0; i<nameArray.count; i++) {
             if ([nameArray containsObject:@"自己"]) {
                 UILocalNotification *notification=[[UILocalNotification alloc] init];
                 if (notification!=nil) {
-                    
-                    //NSDate *now=[NSDate new];
-                    
                     notification.fireDate=[dat dateByAddingTimeInterval:-(time_ID+timeID)];//10秒后通知
                     
                     notification.repeatInterval=0;//循环次数，kCFCalendarUnitWeekday一周一次
@@ -1177,14 +1138,9 @@ int y,x=0,time_ID;
     [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     NSDate* dat = [formatter dateFromString:str]; //------------将字符串按formatter转成nsdate
     NSLog(@"%@",dat);
-    // NSDate *datenow = [NSDate date];
-    //NSDate* dat = [NSDate dateWithTimeIntervalSinceNow:0];
+
     NSTimeInterval _fitstDate;
-//    if (_pushID==1) {
-//        _fitstDate =[string integerValue];
-//    }else{
-//        _fitstDate = [dat timeIntervalSince1970]*1;
-//    }
+
     _fitstDate = [dat timeIntervalSince1970]*1;
     
     NSLog(@"创建");
@@ -1354,16 +1310,13 @@ int y,x=0,time_ID;
     [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     NSDate* dat = [formatter dateFromString:str]; //------------将字符串按formatter转成nsdate
     NSLog(@"%@",dat);
-    // NSDate *datenow = [NSDate date];
-    //NSDate* dat = [NSDate dateWithTimeIntervalSinceNow:0];
+
     int a=[dat timeIntervalSince1970];
     NSString *timestring = [NSString stringWithFormat:@"%d", a];
     NSLog( @"当前时间戳%@",timestring);
     NSTimeInterval timestr;
     timestr=a;
     NSLog(@"%f",timestr);
-    //        [UILocalNotification addNotificationWithTitle:@"约换提醒" andMessage:@"xingcheng" andTimeInterval: timestr andIdentifier:@"1"];
-    
     ISLoginManager *_manager = [ISLoginManager shareManager];
     NSLog(@"有值么%@",_manager.telephone);
     
@@ -1384,6 +1337,15 @@ int y,x=0,time_ID;
     NSError *error;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:infor options:NSJSONWritingPrettyPrinted error:&error];
     NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    
+    NSMutableArray *cityArray=[[NSMutableArray alloc]init];
+    NSDictionary *cityDic=@{@"ticket_type":sendString,@"ticket_from_city_id":fromString,@"ticket_to_city_id":toString};
+    [cityArray addObject:cityDic];
+    NSArray *cityinfor=[NSArray arrayWithArray:cityArray];
+    NSError *cityerror;
+    NSData *cityjsonData = [NSJSONSerialization dataWithJSONObject:cityinfor options:NSJSONWritingPrettyPrinted error:&cityerror];
+    NSString *cityJsonString = [[NSString alloc] initWithData:cityjsonData encoding:NSUTF8StringEncoding];
+    
     DownloadManager *_download = [[DownloadManager alloc]init];
     if (clientString==NULL||clientString==nil) {
         create_user_id=_manager.telephone;
@@ -1394,9 +1356,9 @@ int y,x=0,time_ID;
     }
     NSDictionary *_dict;
     if (_pushID==1) {
-        _dict = @{@"card_id":_cardString,@"card_type":type_ID,@"create_user_id":create_user_id,@"user_id":user_id,@"service_time":timestring,@"service_content":contentString,@"set_remind":txROW,@"set_now_send":sendString,@"set_sec_do":msclString,@"ticket_type":sendString,@"ticket_from_city_id":fromString,@"ticket_to_city_id":toString,@"attends":jsonString};
+        _dict = @{@"card_id":_cardString,@"card_type":type_ID,@"create_user_id":create_user_id,@"user_id":user_id,@"service_time":timestring,@"service_content":contentString,@"set_remind":txROW,@"set_now_send":sendString,@"set_sec_do":msclString,@"card_extra":cityJsonString,@"attends":jsonString};
     }else{
-        _dict = @{@"card_id":@"0",@"card_type":type_ID,@"create_user_id":create_user_id,@"user_id":user_id,@"service_time":timestring,@"service_content":contentString,@"set_remind":txROW,@"set_now_send":sendString,@"set_sec_do":msclString,@"ticket_type":sendString,@"ticket_from_city_id":fromString,@"ticket_to_city_id":toString,@"attends":jsonString};
+        _dict = @{@"card_id":@"0",@"card_type":type_ID,@"create_user_id":create_user_id,@"user_id":user_id,@"service_time":timestring,@"service_content":contentString,@"set_remind":txROW,@"set_now_send":sendString,@"set_sec_do":msclString,@"card_extra":cityJsonString,@"attends":jsonString};
     }
     
     NSLog(@"字典数据%@",_dict);
@@ -1414,16 +1376,14 @@ int y,x=0,time_ID;
     [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     NSDate* dat = [formatter dateFromString:str]; //------------将字符串按formatter转成nsdate
     NSLog(@"%@",dat);
-    // NSDate *datenow = [NSDate date];
-    //NSDate* dat = [NSDate dateWithTimeIntervalSinceNow:0];
+
     int a=[dat timeIntervalSince1970];
     NSString *timestring = [NSString stringWithFormat:@"%d", a];
     NSLog( @"当前时间戳%@",timestring);
     NSTimeInterval timestr;
     timestr=a;
     NSLog(@"%f",timestr);
-    //        [UILocalNotification addNotificationWithTitle:@"约换提醒" andMessage:@"xingcheng" andTimeInterval: timestr andIdentifier:@"1"];
-    
+
     ISLoginManager *_manager = [ISLoginManager shareManager];
     NSLog(@"有值么%@",_manager.telephone);
     
@@ -1444,6 +1404,15 @@ int y,x=0,time_ID;
     NSError *error;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:infor options:NSJSONWritingPrettyPrinted error:&error];
     NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    
+    NSMutableArray *cityArray=[[NSMutableArray alloc]init];
+    NSDictionary *cityDic=@{@"ticket_type":sendString,@"ticket_from_city_id":fromString,@"ticket_to_city_id":toString};
+//    [cityArray addObject:cityDic];
+//    NSArray *cityinfor=[NSArray arrayWithArray:cityArray];
+    NSError *cityerror;
+    NSData *cityjsonData = [NSJSONSerialization dataWithJSONObject:cityDic options:NSJSONWritingPrettyPrinted error:&cityerror];
+    NSString *cityJsonString = [[NSString alloc] initWithData:cityjsonData encoding:NSUTF8StringEncoding];
+    
     DownloadManager *_download = [[DownloadManager alloc]init];
     if (clientString==NULL||clientString==nil) {
         create_user_id=_manager.telephone;
@@ -1454,9 +1423,9 @@ int y,x=0,time_ID;
     }
     NSDictionary *_dict;
     if (_pushID==1) {
-        _dict = @{@"card_id":_cardString,@"card_type":type_ID,@"create_user_id":create_user_id,@"user_id":user_id,@"service_time":timestring,@"service_content":contentString,@"set_remind":txROW,@"set_now_send":sendString,@"set_sec_do":msclString,@"ticket_type":sendString,@"ticket_from_city_id":fromString,@"ticket_to_city_id":toString,@"attends":jsonString};
+        _dict = @{@"card_id":_cardString,@"card_type":type_ID,@"create_user_id":create_user_id,@"user_id":user_id,@"service_time":timestring,@"service_content":contentString,@"set_remind":txROW,@"set_now_send":sendString,@"set_sec_do":msclString,@"card_extra":cityJsonString,@"attends":jsonString};
     }else{
-        _dict = @{@"card_id":@"0",@"card_type":type_ID,@"create_user_id":create_user_id,@"user_id":user_id,@"service_time":timestring,@"service_content":contentString,@"set_remind":txROW,@"set_now_send":sendString,@"set_sec_do":msclString,@"ticket_type":sendString,@"ticket_from_city_id":fromString,@"ticket_to_city_id":toString,@"attends":jsonString};
+        _dict = @{@"card_id":@"0",@"card_type":type_ID,@"create_user_id":create_user_id,@"user_id":user_id,@"service_time":timestring,@"service_content":contentString,@"set_remind":txROW,@"set_now_send":sendString,@"set_sec_do":msclString,@"card_extra":cityJsonString,@"attends":jsonString};
     }
     NSLog(@"字典数据%@",_dict);
     [_download requestWithUrl:CREATE_CARD dict:_dict view:self.view delegate:self finishedSEL:@selector(logDowLoadFinish:) isPost:YES failedSEL:@selector(DownFail:)];
@@ -1465,7 +1434,7 @@ int y,x=0,time_ID;
 {
     [self backAction];
     NSLog(@"登录后信息：%@",sender);
-    //[self dismissViewControllerAnimated:YES completion:nil];
+
 }
 - (void)backAction
 {
@@ -1480,7 +1449,7 @@ int y,x=0,time_ID;
 -(void)cityAction:(UIButton *)sender
 {
     vc=[[CityViewController alloc]init];
-   // ctID=sender.tag;
+
     switch (sender.tag) {
         case 20001:
         {

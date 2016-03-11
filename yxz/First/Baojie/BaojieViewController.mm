@@ -23,7 +23,6 @@
 #import "OrderModel.h"
 #import "UsedDressViewController.h"
 #import "ISLoginManager.h"
-//#import "MyLoginViewController.h"
 #import "AppDelegate.h"
 #import "BaiduMobStat.h"
 #import "TimeManager.h"
@@ -101,10 +100,6 @@
                                              selector:@selector(PresentLogInViewController)
                                                  name:@"PRESENTMYLOGINVIEW"
                                                object:nil];
-//    [[NSNotificationCenter defaultCenter] addObserver:self
-//                                             selector:@selector(loginStateChange:)
-//                                                 name:KNOTIFICATION_LOGINCHANGE
-//                                               object:nil];
     
     hour = 2;
     NSArray *imagesArr = @[@"order-time",@"order-addr",@"M2"];
@@ -190,7 +185,6 @@
     
     xiaoquLab = [[UILabel alloc]initWithFrame:FRAME(36+17+30, 108/2, 150+35, 108/2)];
     xiaoquLab.tag = 10;
-    //    xiaoquLab.backgroundColor = [UIColor greenColor];
     xiaoquLab.textAlignment = NSTextAlignmentLeft;
     xiaoquLab.textColor = HEX_TO_UICOLOR(ROUND_TITLE_COLOR, 1.0);
     xiaoquLab.font = [UIFont boldSystemFontOfSize:13];
@@ -300,7 +294,6 @@
     [_comps setDay:[day intValue]];
     [_comps setMonth:[month intValue]];
     [_comps setYear:[[NSString stringWithFormat:@"20%@",year] intValue]];
-    //NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
     NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:GregorianCalendar];
     NSDate *_date = [gregorian dateFromComponents:_comps];
     NSDateComponents *weekdayComponents =
@@ -355,9 +348,6 @@
             dress.delegate = self;
             [self.navigationController pushViewController:dress animated:YES];
         }else{
-//            MyLogInViewController *log = [[MyLogInViewController alloc]init];
-//            log.vCLID=0;
-//            [self.navigationController presentViewController:log animated:YES completion:nil];
         }
     }
     if (btnTag == 32) {
@@ -442,7 +432,6 @@
     [_comps setDay:[day intValue]];
     [_comps setMonth:[month intValue]];
     [_comps setYear:[[NSString stringWithFormat:@"20%@",year] intValue]];
-    //NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
     NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:GregorianCalendar];
     NSDate *_date = [gregorian dateFromComponents:_comps];
     NSDateComponents *weekdayComponents =
@@ -523,9 +512,7 @@
 {
     BOOL login = [self loginYesOrNo];
     if (login == YES) {
-//        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:@"联系我们的客服专线" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
-//        alert.tag = 30;
-//        [alert show];
+
         [self CallTelephone];
     }
     else{
@@ -541,15 +528,10 @@
 {
 
     if (alertView.tag == 20) {
-//        MyLogInViewController *log = [[MyLogInViewController alloc]init];
-//        log.vCLID=0;
-//        [self.navigationController presentViewController:log animated:YES completion:nil];
+
     }
 }
-//- (void)loginStateChange:(NSNotification *)obj
-//{
-//    [self LoginSuccessNavPush];
-//}
+
 - (void)CallTelephone
 {
 
@@ -561,7 +543,6 @@
         [app huanxin];
     }
     else{
-        //        [self showAlertViewWithTitle:@"提示" message:@"请先登陆"];
         UIAlertView *LogalertView = [[UIAlertView alloc]initWithTitle:@"提示" message:@"请先登录" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
         LogalertView.tag = 10;
         [LogalertView show];
@@ -659,13 +640,7 @@
     NSString *year = [picDate substringWithRange:NSMakeRange(0, 2)];
     
     if ([today isEqualToString:[NSString stringWithFormat:@"%@.%@.%@",year,month,day]]) {
-        //表示选择的是今天的日期
-//        TimeManager *manager = [[TimeManager alloc]init];
-//        [manager TimeOutWith:[NSString stringWithFormat:@"%@:%@:00",[pichours substringWithRange:NSMakeRange(0, 2)],[picMinutes substringWithRange:NSMakeRange(0, 2)]]];
-//        if (manager.KtimeOut == YES) {
-//            [MBProgressHUD showError:@"服务来不及了" toView:self.view];
-//            return;
-//        }
+
         
         if (hour == 3) {
             BOOL timeOut = [self compareFirstStr:[NSString stringWithFormat:@"%@:%@:00",[pichours substringWithRange:NSMakeRange(0, 2)],[picMinutes substringWithRange:NSMakeRange(0, 2)]] secondStr:@"19:00:00"];
@@ -717,7 +692,6 @@
 
         NSMutableDictionary *sourceDic = [[NSMutableDictionary alloc]init];
         [sourceDic setObject:logmanager.telephone  forKey:@"user_id"];
-//        [sourceDic setObject:@"2"  forKey:@"city_id"];
         [sourceDic setObject:@"4"  forKey:@"service_type"];
         [sourceDic setObject:jsonString  forKey:@"send_datas"];
         [sourceDic setObject:dateChuo  forKey:@"service_date"];

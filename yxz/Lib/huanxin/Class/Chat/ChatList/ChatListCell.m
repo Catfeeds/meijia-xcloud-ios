@@ -33,9 +33,12 @@
     if (self) {
         // Initialization code
         hedImageView=[[UIImageView alloc]initWithFrame:CGRectMake(10, 7, 45, 45)];
+        hedImageView.layer.cornerRadius=hedImageView.frame.size.width/2;
+        hedImageView.clipsToBounds=YES;
         [self.contentView addSubview:hedImageView];
-        _timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(240, 7, 80, 16)];
+        _timeLabel = [[UILabel alloc] initWithFrame:CGRectMake((WIDTH-90), 7, 80, 16)];
         _timeLabel.font = [UIFont systemFontOfSize:13];
+        _timeLabel.textAlignment=NSTextAlignmentRight;
         _timeLabel.backgroundColor = [UIColor clearColor];
         [self.contentView addSubview:_timeLabel];
         
@@ -56,9 +59,11 @@
         [self.contentView addSubview:_detailLabel];
         
         self.textLabel.backgroundColor = [UIColor clearColor];
+        self.textLabel.font=[UIFont fontWithName:@"Arial" size:16];
         
-        _lineView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.contentView.frame.size.width, 1)];
+        _lineView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, WIDTH, 1)];
         _lineView.backgroundColor = RGBACOLOR(207, 210, 213, 0.7);
+        
         [self.contentView addSubview:_lineView];
     }
     return self;

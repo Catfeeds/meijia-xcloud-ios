@@ -14,20 +14,18 @@
 {
     UILabel *_navlabel;
     UIButton *_backBtn;
-    
     SERVICEBaseClass *_baseSource;
 }
 @property (nonatomic, strong)UILabel *navlabel;
 @property (nonatomic, strong)UIButton *backBtn;
-@property (nonatomic, strong)UILabel *backlable;
+@property (nonatomic, strong)UIView *backlable;
 @property (nonatomic, strong)NSString *hxUserName;
 @property (nonatomic, strong)NSString *hxPassword;
 @property (nonatomic, strong)NSString *imToUserID;
 @property (nonatomic, strong)NSString *imToUserName;
 @property (nonatomic, strong)NSString *ID;
 @property (nonatomic, strong)UILabel *lineLable;
-
-@property (nonatomic, strong)UILabel *_backLable;
+@property (nonatomic, strong)UIButton *helpBut;
 
 - (void)showAlertViewWithTitle:(NSString *)title
                        message:(NSString *)message;

@@ -20,4 +20,5 @@
 @property (strong ,nonatomic)UITextField *labelField;
 @property (strong ,nonatomic)UITextField *priceField;
 @property (strong ,nonatomic)UIView *fieldView;
+@property (nonatomic ,assign)int vcIDS;
 @end

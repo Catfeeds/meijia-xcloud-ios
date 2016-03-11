@@ -475,7 +475,13 @@
 
 -(void)leftButton
 {
-    [self.navigationController popViewControllerAnimated:YES];
+    if (_vcIDS==100) {
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }else
+    {
+       [self.navigationController popViewControllerAnimated:YES];
+    }
+    
 }
 
 -(void)btnDown

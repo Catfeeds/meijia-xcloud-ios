@@ -33,6 +33,7 @@
     BOOL _needRefresh;
     BOOL _hasMore;
     NSInteger   page;
+    NSString *senderStr;
 
 }
 @property (nonatomic, assign) ABAddressBookRef addressBookRef;
@@ -147,11 +148,9 @@
     
     [self dataLayout];
     
-    
-    
+        
 }
 #pragma mark 表格刷新相关
-
 -(void)appDeleateLayout
 {
     ISLoginManager *_manager = [ISLoginManager shareManager];
@@ -166,15 +165,13 @@
     NSLog(@"数据详情%@",sender);
     NSDictionary *dic=[sender objectForKey:@"data"];
     AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication] delegate];
-    delegate.globalDic=@{@"user_id":[dic objectForKey:@"id"],@"sec_id":[dic objectForKey:@"sec_id"],@"is_senior":[dic objectForKey:@"is_senior"],@"senior_range":[dic objectForKey:@"senior_range"],@"mobile":[dic objectForKey:@"mobile"],@"user_type":[dic objectForKey:@"user_type"],@"name":[dic objectForKey:@"name"],@"has_company":[dic objectForKey:@"has_company"],@"head_img":[dic objectForKey:@"head_img"]};
+    delegate.globalDic=@{@"user_id":[dic objectForKey:@"id"],@"sec_id":[dic objectForKey:@"sec_id"],@"is_senior":[dic objectForKey:@"is_senior"],@"senior_range":[dic objectForKey:@"senior_range"],@"mobile":[dic objectForKey:@"mobile"],@"user_type":[dic objectForKey:@"user_type"],@"name":[dic objectForKey:@"name"],@"has_company":[dic objectForKey:@"has_company"],@"head_img":[dic objectForKey:@"head_img"],@"company_id":[dic objectForKey:@"company_id"],@"company_name":[dic objectForKey:@"company_name"]};
     NSLog(@"看看是什么啊%@",delegate.globalDic);
 }
 #pragma mark用户信息详情获取失败方法
 -(void)QJDownFailure:(id)sender
 {
-    
 }
-
 -(void)getContactsFromAddressBook
 {
     CFErrorRef error=NULL;
@@ -203,13 +200,10 @@
             if (!contact.image) {
                 contact.image = [UIImage imageNamed:@"icon-avatar-60x60"];
             }            [mutableContacts addObject:contact];
-            
         }
-        
         if(addressBOok) {
             CFRelease(addressBOok);
         }
-        
         self.contacts = [NSArray arrayWithArray:mutableContacts];
         self.selectedContacts = [NSMutableArray array];
         self.filteredContacts = self.contacts;
@@ -223,7 +217,6 @@
             NSDictionary *dic=@{@"name":nameString,@"phone":phoneString,@"image":headImage};
             [cellArray addObject:dic];
         }
-        
         NSString *jsonString=[cellArray componentsJoinedByString:@","];
         NSLog(@"%@",jsonString);
     }
@@ -255,10 +248,8 @@
             CFRelease(currentPhoneValue);
         }
     }
-    
     return nil;
 }
-
 -(void)viewDidAppear:(BOOL)animated
 {
     [self appDeleateLayout];
@@ -267,7 +258,6 @@
 -(void)dataLayout
 {
     ISLoginManager *_manager = [ISLoginManager shareManager];
-    
     DownloadManager *_download = [[DownloadManager alloc]init];
     user_ID=_manager.telephone;
     NSString *pageStr=[NSString stringWithFormat:@"%ld",(long)page];
@@ -278,56 +268,51 @@
 -(void)logDowLoadFinish:(id)sender
 {
 //    secretArray=[sender objectForKey:@"data"];
-    NSArray *array=[sender objectForKey:@"data"];
-    if (array.count<10*page) {
-        _hasMore=YES;
+    senderStr=[NSString stringWithFormat:@"%@",[sender objectForKey:@"data"]];
+    if (senderStr==nil||senderStr==NULL||[senderStr isEqualToString:@"(\n)"]||[senderStr length]==0) {
+        [_refreshHeader performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+        [_moreFooter performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+        
     }else{
-        _hasMore=NO;
-    }
-    if (page==1) {
-        [secretArray removeAllObjects];
-        [secretArray addObjectsFromArray:array];
-    }else{
-        for (int i=0; i<array.count; i++) {
-            if ([secretArray containsObject:array[i]]) {
-                
-            }else{
-                [secretArray addObject:array[i]];
+        NSArray *array=[sender objectForKey:@"data"];
+        if (array.count<10*page) {
+            _hasMore=YES;
+        }else{
+            _hasMore=NO;
+        }
+        if (page==1) {
+            [secretArray removeAllObjects];
+            [secretArray addObjectsFromArray:array];
+        }else{
+            for (int i=0; i<array.count; i++) {
+                if ([secretArray containsObject:array[i]]) {
+                    
+                }else{
+                    [secretArray addObject:array[i]];
+                }
             }
         }
-        
-    }
 
+    }
+    
     [_tableView reloadData];
     NSLog(@"好友列表数据%@",sender);
-    
 }
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
-    
 }
 //制定个性标题，这里通过UIview来设计标题，功能上丰富，变化多。
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, WIDTH, 30)];
-    
     [view setBackgroundColor:[UIColor colorWithRed:231/255.0f green:231/255.0f blue:231/255.0f alpha:1]];//改变标题的颜色，也可用图片
-    
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(10, 5, WIDTH, 20)];
-    
     label.backgroundColor = [UIColor clearColor];
-    
     label.text = [titleArray objectAtIndex:section];
-    
     [view addSubview:label];
-    
     return view;
-    
 }
-
 //指定标题的高度
-
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
     if (section==0) {
         return 0;
@@ -336,17 +321,10 @@
     }
 }
 //指定有多少个分区(Section)，默认为1
-
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    
     return [titleArray count];
-    
 }
-
-
-
 //指定每个分区中有多少行，默认为1
-
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     NSInteger count;
     //上面的方法也是可行的，大家参考比较下
@@ -361,8 +339,6 @@
          count=[recommendArray count];  //取dataArray中的元素，并根据每个元素（数组）来判断分区中的行数。
     }
     return count;
-    
-    
 }
 //绘制Cell
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -446,17 +422,15 @@
         return cell;
 }
 //改变行的高度
-
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    
     return 50;
-    
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section==0) {
         if(indexPath.row==0){
             EnterpriseViewController *enterVc=[[EnterpriseViewController alloc]init];
+            enterVc.vcIDs=100;
             AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication] delegate];
             NSString *has_company=[NSString stringWithFormat:@"%@",[delegate.globalDic objectForKey:@"has_company"]];
             int has=[has_company intValue];
@@ -466,24 +440,19 @@
                 enterVc.webId=1;
             }
             [self.navigationController pushViewController:enterVc animated:YES];
-
         }else if(indexPath.row==1){
             ListViewController *vc=[[ListViewController alloc]init];
             vc.dataArray=cellArray;
             vc.hyArray=secretArray;
             [self.navigationController pushViewController:vc animated:YES];
-            
         }else{
             NSArray *arrayItems = @[@[@"模拟qq扫码界面",@"qqStyle"]];
             NSArray* array = arrayItems[0];
             NSString *methodName = [array lastObject];
-            
             SEL normalSelector = NSSelectorFromString(methodName);
             if ([self respondsToSelector:normalSelector]) {
-                
                 ((void (*)(id, SEL))objc_msgSend)(self, normalSelector);
             }
-
         }
     }else{
         NSDictionary *dic=secretArray[indexPath.row];
@@ -494,7 +463,6 @@
         [self.navigationController pushViewController:vc animated:YES];
     }
 }
-
 #pragma mark -模仿qq界面
 - (void)qqStyle
 {
@@ -505,13 +473,10 @@
     style.photoframeLineW = 6;
     style.photoframeAngleW = 24;
     style.photoframeAngleH = 24;
-    
     style.anmiationStyle = LBXScanViewAnimationStyle_LineMove;
-    
     //qq里面的线条图片
     UIImage *imgLine = [UIImage imageNamed:@"CodeScan.bundle/qrcode_scan_light_green"];
     style.animationImage = imgLine;
-    
     LBXScanViewController *vc = [LBXScanViewController new];
     vc.style = style;
     vc.isQQSimulator = YES;
@@ -519,9 +484,7 @@
 }
 -(void)DownFail:(id)sender
 {
-    
 }
-
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }

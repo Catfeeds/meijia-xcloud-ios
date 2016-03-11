@@ -9,8 +9,7 @@
 #import "ISLoginManager.h"
 #import "DownloadManager.h"
 #import "PageTableViewCell.h"
-#import "DetailsViewController.h"
-#import "ShareFriendViewController.h"
+#import "DetailsListViewController.h"
 #import "WXApi.h"
 #import "MineViewController.h"
 #import "QRcodeViewController.h"
@@ -27,6 +26,11 @@
 #import "WebPageViewController.h"
 #import "LeaveDetailsViewController.h"
 #import "LeaveListViewController.h"
+#import "ApplyFriendsListViewController.h"
+#import "AttendanceViewController.h"
+#import "WaterListViewController.h"
+#import "Order_DetailsViewController.h"
+#import "Water_Order_DetailsViewController.h"
 @interface ViewController (){
     NSMutableDictionary *eventsByDate;
     UILabel *timeLabel;
@@ -40,7 +44,7 @@
     UIView *OcclusionView;
     UISwipeGestureRecognizer *up;
     UISwipeGestureRecognizer *down;
-    DetailsViewController *vc;
+    DetailsListViewController *vc;
     
     
     CycleScrollView *adView;
@@ -845,7 +849,7 @@ float lastContentOffset;
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:identifier];
     }
-    UIImageView *headImageView=[[UIImageView alloc]initWithFrame:FRAME(10, 10, 40, 40)];
+    UIImageView *headImageView=[[UIImageView alloc]initWithFrame:FRAME(10, 10, 50, 50)];
     NSString *imageUrl=[NSString stringWithFormat:@"%@",[dataDic objectForKey:@"icon_url"]];
     [headImageView setImageWithURL:[NSURL URLWithString:imageUrl]placeholderImage:nil];
     headImageView.layer.cornerRadius=headImageView.frame.size.width/2;
@@ -856,26 +860,26 @@ float lastContentOffset;
     titleLabel.text=[NSString stringWithFormat:@"%@",[dataDic objectForKey:@"title"]];
     [titleLabel setNumberOfLines:1];
     [titleLabel sizeToFit];
-    titleLabel.frame=FRAME(headImageView.frame.size.width+20, 10, titleLabel.frame.size.width, 20);
+    titleLabel.frame=FRAME(headImageView.frame.size.width+20, 13, titleLabel.frame.size.width, 20);
     [cell addSubview:titleLabel];
     
     UILabel *msg_timeLab=[[UILabel alloc]init];
     msg_timeLab.text=[NSString stringWithFormat:@"%@",[dataDic objectForKey:@"msg_time"]];
-    msg_timeLab.font=[UIFont fontWithName:@"Arial" size:10];
+    msg_timeLab.font=[UIFont fontWithName:@"Arial" size:12];
     msg_timeLab.textColor=[UIColor colorWithRed:200/255.0f green:200/255.0f blue:200/255.0f alpha:1];
     [msg_timeLab setNumberOfLines:1];
     [msg_timeLab sizeToFit];
-    msg_timeLab.frame=FRAME(WIDTH-msg_timeLab.frame.size.width-10, 10, msg_timeLab.frame.size.width, 10);
+    msg_timeLab.frame=FRAME(WIDTH-msg_timeLab.frame.size.width-10, 13, msg_timeLab.frame.size.width, 13);
     [cell addSubview:msg_timeLab];
     
-    UILabel *summaryLab=[[UILabel alloc]initWithFrame:FRAME(titleLabel.frame.origin.x, 30, WIDTH-titleLabel.frame.origin.x-10, 20)];
+    UILabel *summaryLab=[[UILabel alloc]initWithFrame:FRAME(titleLabel.frame.origin.x, 37, WIDTH-titleLabel.frame.origin.x-10, 20)];
     summaryLab.font=[UIFont fontWithName:@"STHeitiSC-Light" size:14];
     summaryLab.textColor=[UIColor colorWithRed:150/255.0f green:150/255.0f blue:150/255.0f alpha:1];
     summaryLab.text=[NSString stringWithFormat:@"%@",[dataDic objectForKey:@"summary"]];
     summaryLab.lineBreakMode=NSLineBreakByTruncatingTail;
     [cell addSubview:summaryLab];
     
-    UIView *lineView=[[UIView alloc]initWithFrame:FRAME(headImageView.frame.size.width+20, 60, WIDTH-(headImageView.frame.size.width+20), 1)];
+    UIView *lineView=[[UIView alloc]initWithFrame:FRAME(headImageView.frame.size.width+20, 70        , WIDTH-(headImageView.frame.size.width+20), 1)];
     lineView.backgroundColor=[UIColor colorWithRed:232/255.0f green:232/255.0f blue:232/255.0f alpha:1];
     [cell addSubview:lineView];
     if([indexPath row] == ((NSIndexPath*)[[tableView indexPathsForVisibleRows] lastObject]).row){
@@ -894,16 +898,11 @@ float lastContentOffset;
     
 //    PageTableViewCell *cell =[[PageTableViewCell alloc]init];
 //    return cell.view.frame.size.height;
-    return 61;
+    return 71;
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
-//    if (indexPath.row==1) {
-//        WebPageViewController *webPageVC=[[WebPageViewController alloc]init];
-//        webPageVC.webURL=@"http://123.57.173.36/simi-h5/show/order-meeting.html";
-//        [self.navigationController pushViewController:webPageVC animated:YES];
-//    }
     
     NSDictionary *dataDic=numberArray[indexPath.row];
     NSString *categoryStr=[NSString stringWithFormat:@"%@",[dataDic objectForKey:@"category"]];
@@ -912,7 +911,7 @@ float lastContentOffset;
         if ([actionStr isEqualToString:@"card"]) {
             NSString *card_ID=[numberArray[indexPath.row]objectForKey:@"params"];
             NSLog(@"card_id%@",card_ID);
-            vc=[[DetailsViewController alloc]init];
+            vc=[[DetailsListViewController alloc]init];
             vc.card_ID=[card_ID intValue];
             vc.S=S;
             [self.navigationController pushViewController:vc animated:YES];
@@ -924,7 +923,16 @@ float lastContentOffset;
             [self.navigationController pushViewController:dyVC animated:YES];
 
         }else if ([actionStr isEqualToString:@"checkin"]){
-            BookingViewController *bookVC=[[BookingViewController alloc]init];
+            AttendanceViewController *bookVC=[[AttendanceViewController alloc]init];
+            AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication] delegate];
+            NSString *has_company=[NSString stringWithFormat:@"%@",[delegate.globalDic objectForKey:@"has_company"]];
+            int has=[has_company intValue];
+            if (has==0) {
+                bookVC.webID=0;
+            }else{
+                bookVC.webID=1;
+            }
+
             [self.navigationController pushViewController:bookVC animated:YES];
             
         }else if ([actionStr isEqualToString:@"im"]){
@@ -939,6 +947,30 @@ float lastContentOffset;
         }else if ([actionStr isEqualToString:@"leave"]){
             LeaveListViewController *leaveVC=[[LeaveListViewController alloc]init];
             [self.navigationController pushViewController:leaveVC animated:YES];
+        }else if ([actionStr isEqualToString:@"friends"]){
+            ApplyFriendsListViewController *friendsVC=[[ApplyFriendsListViewController alloc]init];
+            friendsVC.vcID=100;
+            [self.navigationController pushViewController:friendsVC animated:YES];
+        }else if ([actionStr isEqualToString:@"water"]){
+            Water_Order_DetailsViewController *order_vc=[[Water_Order_DetailsViewController alloc]init];
+            order_vc.order_ID=[NSString stringWithFormat:@"%@",[dataDic objectForKey:@"params"]];
+            order_vc.user_ID=[NSString stringWithFormat:@"%@",[dataDic objectForKey:@"user_id"]];
+            [self.navigationController pushViewController:order_vc animated:YES];
+        }else if ([actionStr isEqualToString:@"recycle"]){
+            Order_DetailsViewController *order_vc=[[Order_DetailsViewController alloc]init];
+            order_vc.order_ID=[NSString stringWithFormat:@"%@",[dataDic objectForKey:@"params"]];
+            order_vc.user_ID=[NSString stringWithFormat:@"%@",[dataDic objectForKey:@"user_id"]];
+            [self.navigationController pushViewController:order_vc animated:YES];
+        }else if ([actionStr isEqualToString:@"clean"]){
+            Order_DetailsViewController *order_vc=[[Order_DetailsViewController alloc]init];
+            order_vc.order_ID=[NSString stringWithFormat:@"%@",[dataDic objectForKey:@"params"]];
+            order_vc.user_ID=[NSString stringWithFormat:@"%@",[dataDic objectForKey:@"user_id"]];
+            [self.navigationController pushViewController:order_vc animated:YES];
+        }else if ([actionStr isEqualToString:@"team"]){
+            Order_DetailsViewController *order_vc=[[Order_DetailsViewController alloc]init];
+            order_vc.order_ID=[NSString stringWithFormat:@"%@",[dataDic objectForKey:@"params"]];
+            order_vc.user_ID=[NSString stringWithFormat:@"%@",[dataDic objectForKey:@"user_id"]];
+            [self.navigationController pushViewController:order_vc animated:YES];
         }
     }else{
         WebPageViewController *webPageVC=[[WebPageViewController alloc]init];

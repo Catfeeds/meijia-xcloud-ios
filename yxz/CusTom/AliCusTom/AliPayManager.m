@@ -65,6 +65,9 @@
     if (_categoryID==1) {
         order.productName = @"服务费"; //商品标题
         order.productDescription = @"服务费"; //商品描述
+    }else if(_categoryID==3){
+        order.productName = @"饮用水支付"; //商品标题
+        order.productDescription = @"饮用水支付"; //商品描述
     }else{
         order.productName = @"充值"; //商品标题
         order.productDescription = @"充值"; //商品描述

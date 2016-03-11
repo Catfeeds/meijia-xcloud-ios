@@ -60,13 +60,13 @@
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
-                                <exclude reference="z6i-fh-dAw"/>
-                                <exclude reference="ESe-R5-x4l"/>
-                                <exclude reference="3YF-Pc-fWO"/>
                                 <exclude reference="1Ix-O4-DQP"/>
+                                <exclude reference="3YF-Pc-fWO"/>
+                                <exclude reference="ESe-R5-x4l"/>
+                                <exclude reference="z6i-fh-dAw"/>
                                 <exclude reference="Pfe-tt-xyg"/>
-                                <exclude reference="k7W-xy-4pX"/>
                                 <exclude reference="WgP-L3-ZXT"/>
+                                <exclude reference="k7W-xy-4pX"/>
                                 <exclude reference="ksd-Q5-iHL"/>
                             </mask>
                         </variation>

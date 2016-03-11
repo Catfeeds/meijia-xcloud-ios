@@ -25,9 +25,9 @@ MYApprovalViewController *myApprovalViewController;
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navlabel.text=@"请假审批";
-    
+    self.backlable.backgroundColor=HEX_TO_UICOLOR(0x11cd6e, 1.0);
     mainView = [[UIView alloc]initWithFrame:CGRectMake(0, 0,SELF_VIEW_WIDTH, HEIGHT)];
-    mainView.backgroundColor=[UIColor blackColor];
+//    mainView.backgroundColor=[UIColor blackColor];
     [self.view addSubview:mainView];
     
     myLaunchViewController=[[MYLaunchViewController alloc]init];

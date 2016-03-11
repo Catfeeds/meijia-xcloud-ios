@@ -319,6 +319,9 @@
     
     
     Y=addressIamge.frame.size.height+addressIamge.frame.origin.y+5;
+    UIImageView *imageView=[[UIImageView alloc]initWithFrame:FRAME(headImageView.frame.size.width+headImageView.frame.origin.x+10, Y, 16, 16)];
+    imageView.image=[UIImage imageNamed:@"iconfont-jinengbiaoqian"];
+    [cell addSubview:imageView];
     int x=0;
     for (int i=0; i<labelArray.count; i++) {
         NSDictionary *dict=labelArray[i];
@@ -326,7 +329,7 @@
             Y=Y+21;
             x=0;
         }
-        UILabel *typeLabel=[[UILabel alloc]initWithFrame:FRAME(headImageView.frame.size.width+headImageView.frame.origin.x+10+((WIDTH-70-4)/3+2)*x, Y, (WIDTH-70-4)/3, 16)];
+        UILabel *typeLabel=[[UILabel alloc]initWithFrame:FRAME(headImageView.frame.size.width+headImageView.frame.origin.x+26+((WIDTH-70-4)/3+2)*x, Y, (WIDTH-70-4)/3, 16)];
         typeLabel.text=[NSString stringWithFormat:@"%@",[dict objectForKey:@"tag_name"]];
         typeLabel.font=[UIFont fontWithName:@"Arial" size:12];
         typeLabel.textColor=[UIColor colorWithRed:100 / 255.0 green:100 / 255.0 blue:100 / 255.0 alpha:1];
@@ -343,7 +346,7 @@
     
     textLabel.lineBreakMode=NSLineBreakByWordWrapping;
     [textLabel setNumberOfLines:0];
-    textLabel.text=[NSString stringWithFormat:@"“%@”",[dic objectForKey:@"introduction"]];
+    textLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"introduction"]];
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc]init];
     textLabel.lineBreakMode = NSLineBreakByWordWrapping;
     NSDictionary *attributes = @{NSFontAttributeName:font, NSParagraphStyleAttributeName:paragraphStyle.copy};

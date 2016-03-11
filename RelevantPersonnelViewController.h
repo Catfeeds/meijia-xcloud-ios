@@ -8,7 +8,7 @@
 
 #import "FatherViewController.h"
 
-@interface RelevantPersonnelViewController : FatherViewController<UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate>
+@interface RelevantPersonnelViewController : FatherViewController<UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate,MJRefreshBaseViewDelegate>
 @property(nonatomic ,strong)UITableView *relevantTableview;
 @property(nonatomic ,strong)NSMutableArray *mutableArray;
 @property (nonatomic, strong)NSString *selectString;

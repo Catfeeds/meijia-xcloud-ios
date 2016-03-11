@@ -29,13 +29,16 @@
     [super viewDidLoad];
     page=1;
     self.navlabel.text=@"请假审批";
-    UIButton *eyeButton=[[UIButton alloc]initWithFrame:FRAME(WIDTH-60, 22, 50, 40)];
+    self.backlable.backgroundColor=HEX_TO_UICOLOR(0x11cd6e, 1.0);
+    UIButton *eyeButton=[[UIButton alloc]initWithFrame:FRAME(14, HEIGHT-46, WIDTH-28, 41)];
+    eyeButton.backgroundColor=self.backlable.backgroundColor;
+    eyeButton.layer.cornerRadius=5;
+    eyeButton.clipsToBounds=YES;
     [eyeButton addTarget:self action:@selector(eyeButtonAction) forControlEvents:UIControlEventTouchUpInside];
     [eyeButton setTitle:@"新建" forState:UIControlStateNormal];
-    [eyeButton setTitleColor:[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1] forState:UIControlStateNormal];
     [self.view addSubview:eyeButton];
     numberArray=[[NSMutableArray alloc]init];
-    myTableView=[[UITableView alloc]initWithFrame:FRAME(0, 106, WIDTH, HEIGHT-106)];
+    myTableView=[[UITableView alloc]initWithFrame:FRAME(0, 106, WIDTH, HEIGHT-152)];
     myTableView.dataSource=self;
     myTableView.delegate=self;
     myTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -60,6 +63,7 @@
 -(void)eyeButtonAction
 {
     ApplyForLeaveViewController *applyVC=[[ApplyForLeaveViewController alloc]init];
+    applyVC.colorid=100;
     [self.navigationController pushViewController:applyVC animated:YES];
 }
 -(void)viewDidAppear:(BOOL)animated

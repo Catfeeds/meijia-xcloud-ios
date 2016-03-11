@@ -11,6 +11,7 @@
 #import "SecretFriendsViewController.h"
 #import "DynamicViewController.h"
 #import "ChatListViewController.h"
+#import "ApplyFriendsListViewController.h"
 @interface FriendViewController ()
 {
     UIView *tabBarView;
@@ -27,6 +28,7 @@
 ChatListViewController *newsViewController;
 SecretFriendsViewController *secAccessController;
 DynamicViewController *dynamicViewController;
+ApplyFriendsListViewController *friendsListViewController;
 @implementation FriendViewController
 -(void)viewWillAppear:(BOOL)animated
 {
@@ -61,11 +63,14 @@ DynamicViewController *dynamicViewController;
     secAccessController=[[SecretFriendsViewController alloc]init];
     [self addChildViewController:secAccessController];
     
+    friendsListViewController=[[ApplyFriendsListViewController alloc]init];
+    [self addChildViewController:friendsListViewController];
+    
     [mainView addSubview:dynamicViewController.view];
     currentViewController = dynamicViewController;
     
     
-    tabBarView=[[UIView alloc]initWithFrame:CGRectMake((WIDTH-180)/2, 20, 180, 44)];
+    tabBarView=[[UIView alloc]initWithFrame:CGRectMake((WIDTH-240)/2, 20, 240, 44)];
    // tabBarView.backgroundColor=[UIColor colorWithRed:231/255.0f green:231/255.0f blue:231/255.0f alpha:1];
     [self.view addSubview:tabBarView];
     lineView=[[UIView alloc]initWithFrame:FRAME(0, 42, 60, 2)];
@@ -77,7 +82,7 @@ DynamicViewController *dynamicViewController;
     //_lineLable.alpha = 0.3;
 //    [tabBarView addSubview:_lineLable];
     
-    NSArray *nameArray=@[@"动态",@"好友",@"消息"];
+    NSArray *nameArray=@[@"动态",@"好友",@"消息",@"申请"];
     for (int i=0; i<nameArray.count; i++) {
         UIButton *tabbarBut=[[UIButton alloc]initWithFrame:FRAME(60*i, 0, 60, 43)];
         [tabbarBut setTitle:nameArray[i] forState:UIControlStateNormal];
@@ -158,7 +163,7 @@ DynamicViewController *dynamicViewController;
 
 -(void)tabBarButton:(UIButton *)sender
 {
-    if ((currentViewController==dynamicViewController&&[sender tag]==1000)||(currentViewController==secAccessController&&[sender tag]==1001)||(currentViewController==newsViewController&&[sender tag]==1002)) {
+    if ((currentViewController==dynamicViewController&&[sender tag]==1000)||(currentViewController==secAccessController&&[sender tag]==1001)||(currentViewController==newsViewController&&[sender tag]==1002)||(currentViewController==friendsListViewController&&[sender tag]==1003)) {
         return;
     }
     UIViewController *oldViewController=currentViewController;
@@ -219,7 +224,22 @@ DynamicViewController *dynamicViewController;
             }];
         }
             break;
-        
+        case 1003:
+        {
+            [self transitionFromViewController:currentViewController toViewController:friendsListViewController duration:0.5 options:0 animations:^{
+            }  completion:^(BOOL finished) {
+                if(finished){
+                    currentViewController=friendsListViewController;
+                    
+                }else{
+                    currentViewController=oldViewController;
+                    
+                }
+                
+            }];
+
+        }
+            break;
         default:
             break;
     }

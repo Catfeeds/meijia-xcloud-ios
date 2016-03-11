@@ -49,7 +49,7 @@
 #import "UMCheckUpdate.h"
 
 #define IosAppVersion [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]
-@interface AppDelegate ()<WXApiDelegate,WeiboSDKDelegate>
+@interface AppDelegate ()<WXApiDelegate>//,WeiboSDKDelegate>
 {
     UIImageView *splashView;
     
@@ -78,7 +78,6 @@ NSString* const NotificationActionOneIdent = @"ACTION_ONE";
 NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
 @implementation AppDelegate
 
-//static SystemSoundID shake_sound_male_id = 1000;
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
@@ -234,10 +233,10 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
 //    // 将log输入到文件
 //    freopen([logFilePath cStringUsingEncoding:NSASCIIStringEncoding], "a+", stdout);
 //    freopen([logFilePath cStringUsingEncoding:NSASCIIStringEncoding], "a+", stderr);
-    
-    NSLog(@"我就看看你走没走--1");
-    NSLog(@"有什么：%@",launchOptions);
-    NSLog(@"%ld",(long)application.applicationState);
+//    
+//    NSLog(@"我就看看你走没走--1");
+//    NSLog(@"有什么：%@",launchOptions);
+//    NSLog(@"%ld",(long)application.applicationState);
 
     NSURL *url = [launchOptions objectForKey:UIApplicationLaunchOptionsURLKey];
     if(url)
@@ -255,7 +254,6 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     UILocalNotification * localNotify = [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
     if(localNotify)
     {
-//        [[NSNotificationCenter defaultCenter] postNotificationName:@"ALERT" object:dateDic];
         NSLog(@"Recieved Notification %@",localNotify);
         NSLog(@"哈哈:%@,%@,%@",localNotify.alertTitle,localNotify.alertBody,localNotify.fireDate);
         titleLabelStr=localNotify.alertTitle;
@@ -266,7 +264,6 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
         NSArray *array=[str componentsSeparatedByString:@" "];
         timeLabelStr=[timeStr substringToIndex:5];
         dataLabelStr=array[0];
-//        NSArray *array = [string componentsSeparatedByString:@"A"];
         NSDictionary* infoDic = localNotify.userInfo;
         NSLog(@"%@",infoDic);
         badge=100;
@@ -275,7 +272,7 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     NSDictionary * userInfo = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
     if(userInfo) 
     {
-        NSLog(@"哦案发分不开：4 ％@",launchOptions);
+//        NSLog(@"哦案发分不开：4 ％@",launchOptions);
     }
     Class cls = NSClassFromString(@"UMANUtil");
     SEL deviceIDSelector = @selector(openUDIDString);
@@ -297,7 +294,6 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
         NSLog(@"Recieved Notification %@",localNotif);
         NSDictionary* infoDic = localNotif.userInfo;
         NSLog(@"userInfo description=%@",[infoDic description]);
-//        NSString* codeStr = [infoDic objectForKey:@"someKey"];
     }
     
     
@@ -318,21 +314,9 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     }
     [self registerRemoteNotification];
     
-    //    // [2-EXT]: 获取启动时收到的APN数据
-    //
-    //    NSDictionary*message=[launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
-    //
-    //    if (message) {
-    //
-    //        NSString*payloadMsg = [message objectForKey:@"payload"];
-    //
-    //        NSString*record = [NSString stringWithFormat:@"[APN]%@,%@",[NSDate date],payloadMsg];
-    //    }
-    
-    
-    
     [UMSocialData setAppKey:YMAPPKEY];
     [UMFeedback setAppkey:YMAPPKEY];
+//    [MobClick setCrashReportEnabled:NO];
     [MobClick startWithAppkey:YMAPPKEY reportPolicy:BATCH   channelId:@"Web"];
     NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
     [MobClick setAppVersion:version];
@@ -341,7 +325,6 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     [UMSocialWechatHandler setWXAppId:@"wxf2061a4e235b730c" appSecret:@"0c779ea683619930a211cfec6328af6d" url:@"http://51xingzheng.cn/h5-app-download.html"];
     [UMSocialQQHandler setQQWithAppId:@"1104934408" appKey:@"bRW2glhUCR6aJYIZ" url:@"http://51xingzheng.cn/h5-app-download.html"];
     [UMSocialQQHandler setSupportWebView:YES];
-    //    [UMSocialSinaSSOHandler openNewSinaSSOWithRedirectURL:@"http://sns.whalecloud.com/sina2/callback"];//:@"247547429" RedirectURL:@"http://sns.whalecloud.com/sina2/callback"];
     [UMSocialSinaSSOHandler openNewSinaSSOWithAppKey:@"247547429" RedirectURL:@"http://sns.whalecloud.com"];
     //UMSocial_Sdk_Extra_Frameworks
     //打开调试日志
@@ -354,7 +337,6 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     application.applicationIconBadgeNumber = 0;
     // Add the view controller's view to the window and display.
     
-    //    myDic = [[NSDictionary alloc]initWithDictionary:launchOptions];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(baiduBangding) name:@"NO_BAIDUBANGDING" object:nil];
     
     BaiduMobStat* statTracker = [BaiduMobStat defaultStat];
@@ -374,31 +356,7 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
      statTracker.adid = adId;
      */
     [statTracker startWithAppId:@"c09edce680"];//设置您在mtj网站上添加的app的appkey,此处AppId即为应用的appKey  百度统计
-    
-    
-//    //极光推送
-//    //极光推送
-//    [APService registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge |
-//                                                   UIRemoteNotificationTypeSound |
-//                                                   UIRemoteNotificationTypeAlert)
-//                                       categories:nil];
-//    [APService setupWithOption:launchOptions];
-    
-    
-    
     [WXApi registerApp:WXAppKey withDescription:@"simi"];
-    
-    
-    //    [WXApi registerApp:@"wx1c0cdfad5f3bbc79"];
-    
-    
-    
-    //    NSURL *schemeUrl = [[NSURL alloc]initWithString:@"wx1c0cdfad5f3bbc79"];
-    
-    //    [WXApi handleOpenURL:schemeUrl delegate:self];
-    //    NSThread *thread =[[NSThread alloc]initWithTarget:self selector:@selector(getBeijingcity) object:nil];
-    //    [thread start];
-    
     [self getBeijingcity];
     
     
@@ -438,38 +396,7 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     
     //所有服务启动前，需要确保执行createUtility
     [IFlySpeechUtility createUtility:initString];
-#pragma warning 绑定百度推送之前 先调登录接口 看是否已经绑定过
-    
-    //百度推送
-    
-    // iOS8 下需要使用新的 API
-    //    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0) {
-    //        UIUserNotificationType myTypes = UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert;
-    //
-    //        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:myTypes categories:nil];
-    //        [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
-    //    }else {
-    //        UIRemoteNotificationType myTypes = UIRemoteNotificationTypeBadge|UIRemoteNotificationTypeAlert|UIRemoteNotificationTypeSound;
-    //        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:myTypes];
-    //    }
-    
-#pragma warning 上线 AppStore 时需要修改 pushMode
-//    // 在 App 启动时注册百度云推送服务，需要提供 Apikey
-//    [BPush registerChannel:launchOptions apiKey:@"Y31eOZA3t0OH8YfTQg9rKefl" pushMode:BPushModeProduction isDebug:NO];
-//    
-//    //        [BPush setupChannel:launchOptions];
-//    
-//    // 设置 BPush 的回调
-//    [BPush setDelegate:self];
-//    
-//    // App 是用户点击推送消息启动
-//    NSDictionary *userInfo = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
-//    if (userInfo) {
-//        NSLog(@"从消息启动:%@",userInfo);
-//        //[BPush handleNotification:userInfo];
-//    }
-    
-    
+
 #pragma warning 百度地图初始化
     _mapManager = [[BMKMapManager alloc]init];
     // 如果要关注网络及授权验证事件，请设定     generalDelegate参数
@@ -663,12 +590,9 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     NSArray *array = [currentDateStr componentsSeparatedByString:@" "];
     NSString *timeString=array[1];
     NSString *dataString=array[0];
-    //    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"消息通知" message:@"100" delegate:self cancelButtonTitle:@"不错哦" otherButtonTitles:nil];
-    //    [alert show];
     imageView=[[UIView alloc]initWithFrame:FRAME(0, 0, WIDTH, HEIGHT)];
     imageView.backgroundColor=[UIColor whiteColor];
     imageView.userInteractionEnabled=YES;
-    //    imageView.userinterface =YES
     [self.window addSubview:imageView];
     
     UIImageView *sceneryImage=[[UIImageView alloc]initWithFrame:FRAME(0, 0, WIDTH, HEIGHT*0.54)];
@@ -680,14 +604,12 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
         titleLabel.font=[UIFont fontWithName:@"Arial" size:20];
         [titleLabel setNumberOfLines:1];
         [titleLabel sizeToFit];
-//        titleLabel.backgroundColor=[UIColor brownColor];
         titleLabel.frame=FRAME((WIDTH-titleLabel.frame.size.width)/2, sceneryImage.frame.size.height+10, titleLabel.frame.size.width, 25);
         [imageView addSubview:titleLabel];
         
         UILabel *timeLabel=[[UILabel alloc]init];
         timeLabel.text=timeLabelStr;
         timeLabel.font=[UIFont fontWithName:@"Arial" size:50];
-//        timeLabel.backgroundColor=[UIColor brownColor];
         [timeLabel setNumberOfLines:1];
         [timeLabel sizeToFit];
         timeLabel.frame=FRAME((WIDTH-timeLabel.frame.size.width)/2, titleLabel.frame.origin.y+titleLabel.frame.size.height+15, timeLabel.frame.size.width, 50);
@@ -698,7 +620,6 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
         dataLabel.font=[UIFont fontWithName:@"Arial" size:18];
         [dataLabel setNumberOfLines:1];
         [dataLabel sizeToFit];
-//        dataLabel.backgroundColor=[UIColor brownColor];
         dataLabel.frame=FRAME((WIDTH-dataLabel.frame.size.width)/2, timeLabel.frame.origin.y+timeLabel.frame.size.height+15, dataLabel.frame.size.width, 18);
         [imageView addSubview:dataLabel];
         
@@ -709,7 +630,6 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
         textLabel.lineBreakMode = NSLineBreakByCharWrapping;
         [textLabel setNumberOfLines:2];
         [textLabel sizeToFit];
-//        textLabel.backgroundColor=[UIColor brownColor];
         NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:font,NSFontAttributeName, nil];
         
         CGSize size = [textLabel.text boundingRectWithSize:CGSizeMake(WIDTH-20, 200) options:NSStringDrawingUsesLineFragmentOrigin attributes:dict context:nil].size;
@@ -721,14 +641,12 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
         titleLabel.font=[UIFont fontWithName:@"Arial" size:20];
         [titleLabel setNumberOfLines:1];
         [titleLabel sizeToFit];
-//        titleLabel.backgroundColor=[UIColor brownColor];
         titleLabel.frame=FRAME((WIDTH-titleLabel.frame.size.width)/2, sceneryImage.frame.size.height+10, titleLabel.frame.size.width, 25);
         [imageView addSubview:titleLabel];
         
         UILabel *timeLabel=[[UILabel alloc]init];
         timeLabel.text=timeString;
         timeLabel.font=[UIFont fontWithName:@"Arial" size:50];
-//        timeLabel.backgroundColor=[UIColor brownColor];
         [timeLabel setNumberOfLines:1];
         [timeLabel sizeToFit];
         timeLabel.frame=FRAME((WIDTH-timeLabel.frame.size.width)/2, titleLabel.frame.origin.y+titleLabel.frame.size.height+15, timeLabel.frame.size.width, 50);
@@ -739,7 +657,6 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
         dataLabel.font=[UIFont fontWithName:@"Arial" size:18];
         [dataLabel setNumberOfLines:1];
         [dataLabel sizeToFit];
-//        dataLabel.backgroundColor=[UIColor brownColor];
         dataLabel.frame=FRAME((WIDTH-dataLabel.frame.size.width)/2, timeLabel.frame.origin.y+timeLabel.frame.size.height+15, dataLabel.frame.size.width, 18);
         [imageView addSubview:dataLabel];
         
@@ -750,7 +667,6 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
         textLabel.lineBreakMode = NSLineBreakByCharWrapping;
         [textLabel setNumberOfLines:2];
         [textLabel sizeToFit];
-//        textLabel.backgroundColor=[UIColor brownColor];
         NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:font,NSFontAttributeName, nil];
         
         CGSize size = [textLabel.text boundingRectWithSize:CGSizeMake(WIDTH-20, 200) options:NSStringDrawingUsesLineFragmentOrigin attributes:dict context:nil].size;
@@ -778,7 +694,6 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     UIButton *knowBut=[[UIButton alloc]initWithFrame:FRAME((WIDTH-(WIDTH*0.36*2)-24)/2+24+WIDTH*0.36, HEIGHT-58, WIDTH*0.36, 38)];
     [knowBut setTitle:@"我知道了" forState:UIControlStateNormal];
     knowBut.backgroundColor=[UIColor redColor];
-    //[knowBut setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [knowBut addTarget:self action:@selector(knowButAction) forControlEvents:UIControlEventTouchUpInside];
     [knowBut.layer setMasksToBounds:YES];//设置按钮的圆角半径不会被遮挡
     [knowBut.layer setCornerRadius:10];
@@ -821,6 +736,8 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
 -(void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
     [GeTuiSdk resume];  // 恢复个推SDK运行
+    NSError *err = nil;
+    [GeTuiSdk startSdkWithAppId:_appID appKey:_appKey appSecret:_appSecret delegate:self error:&err];
     NSLog(@"我就看看你走没走--4");
     
     completionHandler(UIBackgroundFetchResultNewData);
@@ -851,36 +768,12 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
         //加载申请通知的数据
         [[ApplyViewController shareController] loadDataSourceFromLocalDB];
         if (_mainController == nil) {
-            //            _mainController = [[MainViewController alloc] init];
-            //            [_mainController networkChanged:_connectionState];
-            //            nav = [[UINavigationController alloc] initWithRootViewController:_mainController];
         }else{
-            //            nav  = _mainController.navigationController;
         }
     }else{
-        //登陆失败加载登陆页面控制器
-    
-//        _mainController = nil;
-//        LoginViewController *loginController = [[LoginViewController alloc] init];
-//        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:loginController];
-//        loginController.title = NSLocalizedString(@"私秘", @"EaseMobDemo");
-////        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:@"IM登录失败" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-////        [alert show];
         [self.deletate LoginFailNavpush];
-//        self.window.rootViewController = nav;
     }
     
-    //设置7.0以下的导航栏
-    //    if ([UIDevice currentDevice].systemVersion.floatValue < 7.0){
-    //        nav.navigationBar.barStyle = UIBarStyleDefault;
-    //        [nav.navigationBar setBackgroundImage:[UIImage imageNamed:@"titleBar"]
-    //                                forBarMetrics:UIBarMetricsDefault];
-    //
-    //        [nav.navigationBar.layer setMasksToBounds:YES];
-    //    }
-    //
-    //    [nav setNavigationBarHidden:NO];
-    //    [nav setNavigationBarHidden:NO];
 }
 /**
  *百度推送
@@ -888,28 +781,12 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
     NSLog(@"我就看看你走没走--5");
-    // 打印到日志 textView 中
-//    badge=100;
     NSLog(@"%ld",(long)application.applicationState);
 
-//    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];//角标
     completionHandler(UIBackgroundFetchResultNewData);
     NSLog(@"userinfo:%@",userInfo);
-    
-//    
-//    NSString *jsonString=[NSString stringWithFormat:@"%@",[dic objectForKey:@"card_extra"]];
-//    
-//    NSData *jsonData = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
-//    NSError *err;
-//    dict = [NSJSONSerialization JSONObjectWithData:jsonData
-//                                           options:NSJSONReadingMutableContainers
-//                                             error:&err];
-    
     NSString *string=[NSString stringWithFormat:@"%@",[userInfo objectForKey:@"a"]];
     
-    
-    
-    //NSDictionary *dic=payloadMsg;
     NSData *jsonData = [string dataUsingEncoding:NSUTF8StringEncoding];
     NSError *err;
     NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:jsonData
@@ -920,12 +797,6 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     dateDic=dic;
     NSLog(@"%@",dateDic);
     NSLog(@"remind_time%@",timeStr);
-    NSString *card_idStr=[dic objectForKey:@"card_id"];
-//    if (pdg!=0) {
-//        badge=100;
-//    }else{
-//        badge=100;
-//    }
 
     int card_id=[[dic objectForKey:@"card_id"]intValue];
     int gTid=0;
@@ -963,41 +834,6 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     }
     
     if (gTid!=1) {
-//        UILocalNotification *notification=[[UILocalNotification alloc] init];
-//        if (notification!=nil) {
-//            
-//            //NSDate *now=[NSDate new];
-//            
-//            notification.fireDate=[detaildate dateByAddingTimeInterval:-0];//10秒后通知
-//            
-//            notification.repeatInterval=0;//循环次数，kCFCalendarUnitWeekday一周一次
-//            
-//            notification.timeZone=[NSTimeZone defaultTimeZone];
-//            
-//            notification.applicationIconBadgeNumber=1; //应用的红色数字
-//            
-//            
-//            notification.soundName=@"simivoice.caf";//声音，可以换成alarm.soundName = @"myMusic.caf"
-//            
-//            //去掉下面2行就不会弹出提示框
-//            notification.alertTitle=[dic objectForKey:@"remind_title"];
-//            notification.alertBody=[dic objectForKey:@"remind_content"];//提示信息 弹出提示框
-//            
-//            notification.alertAction = @"打开";  //提示框按钮
-//            
-//            //notification.hasAction = NO; //是否显示额外的按钮，为no时alertAction消失
-//            
-//            
-//            
-//            NSDictionary *infoDict = [NSDictionary dictionaryWithObject:card_idStr forKey:@"someKey"];
-//            
-//            notification.userInfo = infoDict; //添加额外的信息
-//            
-//            
-//            
-//            [[UIApplication sharedApplication] scheduleLocalNotification:notification];
-//        }
-        
     }else{
         
     }
@@ -1031,9 +867,6 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
 {
     
     // [4-EXT-1]: 个推SDK已注册，返回clientId
-    
-    //[_clientId release];
-    
     _clientId = clientId;
     NSLog(@"ID是什么？？%@",_clientId);
     NSLog(@"test:%@",APPLIACTION.deviceToken);
@@ -1050,7 +883,6 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     NSLog(@"我就看看你走没走--7");
     
     // [4]: 收到个推消息
-//    if (badge!=100) {
         _payloadId =payloadId;
         
         NSData *payload = [GeTuiSdk retrivePayloadById:payloadId]; //根据payloadId取回Payload
@@ -1066,7 +898,6 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
                                                 encoding:NSUTF8StringEncoding];
             
         }
-        //NSDictionary *dic=payloadMsg;
         NSData *jsonData = [payloadMsg dataUsingEncoding:NSUTF8StringEncoding];
         NSError *err;
         NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:jsonData
@@ -1081,12 +912,10 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     if ([actionStr isEqualToString:@"msg"]) {
         return;
     }
-        //    NSString *record = [NSString stringWithFormat:@"%d, %@, %@",++_lastPaylodIndex, [self formateTime:[NSDate date]], payloadMsg];
-        //NSString *todoString=[NSString stringWithFormat:@"%@",[dic objectForKey:@"todo"]];
         
         NSString *timeStr=[NSString stringWithFormat:@"%@",[dic objectForKey:@"remind_time"]];
         NSLog(@"remind_time%@",timeStr);
-        NSString *card_idStr=[dic objectForKey:@"card_id"];
+//        NSString *card_idStr=[dic objectForKey:@"card_id"];
         int card_id=[[dic objectForKey:@"card_id"]intValue];
         int gTid;
         long time=[timeStr longLongValue]/1000;//因为时差问题要加8小时 == 28800 sec
@@ -1120,100 +949,16 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
         }
         NSString *trueStr=[dic objectForKey:@"is_show"];
         if ([trueStr isEqual:@"true"]) {
-            NSDate *  senddate=[NSDate date];
-            
             NSDateFormatter  *dateformatter=[[NSDateFormatter alloc] init];
             
             [dateformatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-//            UILocalNotification *notification=[[UILocalNotification alloc] init];
-//            if (notification!=nil) {
-//                
-//                //NSDate *now=[NSDate new];
-//                
-//                notification.fireDate=[senddate dateByAddingTimeInterval:-0];//10秒后通知
-//                
-//                notification.repeatInterval=0;//循环次数，kCFCalendarUnitWeekday一周一次
-//                
-//                notification.timeZone=[NSTimeZone defaultTimeZone];
-//                
-//                notification.applicationIconBadgeNumber=1; //应用的红色数字
-//                
-//                
-//                notification.soundName=@"simivoice.caf";//声音，可以换成alarm.soundName = @"myMusic.caf"
-//                
-//                //去掉下面2行就不会弹出提示框
-//                notification.alertTitle=[dic objectForKey:@"remind_title"];
-//                notification.alertBody=[dic objectForKey:@"remind_content"];//提示信息 弹出提示框
-//                
-//                //notification.alertAction = @"打开";  //提示框按钮
-//                
-//                //notification.hasAction = NO; //是否显示额外的按钮，为no时alertAction消失
-//                
-//                
-//                
-//                NSDictionary *infoDict = [NSDictionary dictionaryWithObject:card_idStr forKey:@"someKey"];
-//                
-//                notification.userInfo = infoDict; //添加额外的信息
-//                
-//                
-//                
-//                [[UIApplication sharedApplication] scheduleLocalNotification:notification];
-//                
-//            }
         }
         
         if (gTid!=1) {
-//            UILocalNotification *notification=[[UILocalNotification alloc] init];
-//            if (notification!=nil) {
-//                
-//                //NSDate *now=[NSDate new];
-//                
-//                notification.fireDate=[detaildate dateByAddingTimeInterval:-0];//10秒后通知
-//                
-//                notification.repeatInterval=0;//循环次数，kCFCalendarUnitWeekday一周一次
-//                
-//                notification.timeZone=[NSTimeZone defaultTimeZone];
-//                
-//                notification.applicationIconBadgeNumber=1; //应用的红色数字
-//                
-//                
-//                notification.soundName=@"simivoice.caf";//声音，可以换成alarm.soundName = @"myMusic.caf"
-//                
-//                //去掉下面2行就不会弹出提示框
-//                notification.alertTitle=[dic objectForKey:@"remind_title"];
-//                notification.alertBody=[dic objectForKey:@"remind_content"];//提示信息 弹出提示框
-//                
-//                notification.alertAction = @"打开";  //提示框按钮
-//                
-//                //notification.hasAction = NO; //是否显示额外的按钮，为no时alertAction消失
-//                
-//                
-//                
-//                NSDictionary *infoDict = [NSDictionary dictionaryWithObject:card_idStr forKey:@"someKey"];
-//                
-//                notification.userInfo = infoDict; //添加额外的信息
-//                
-//                
-//                
-//                [[UIApplication sharedApplication] scheduleLocalNotification:notification];
-//            }
-            
         }else{
             
         }
 
-//    }
-
-    
-    //    if ([todoString isEqualToString:@"get_reminds"]) {
-    //        NSString *userID=[NSString stringWithFormat:@"%@",[dic objectForKey:@"user_id"]];
-    //        DownloadManager *_download = [[DownloadManager alloc]init];
-    //        NSDictionary *_dicts = @{@"user_id":userID};
-    //        [_download requestWithUrl:[NSString stringWithFormat:@"%@",LOGIN_TSNZ] dict:_dicts view:self.window delegate:self finishedSEL:@selector(NZDownloadFinish1:) isPost:NO failedSEL:@selector(NZDownload:)];
-    //    }
-    //    NSLog(@"task id : %@, messageId:%@", taskId, aMsgId);
-    
-    //[payloadMsg release];
     
 }
 -(NSString*) formateTime:(NSDate*) date {
@@ -1226,9 +971,8 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     NSLog(@"我就看看你走没走--8");
     // [4-EXT]:发送上行消息结果反馈
     
-    NSString *record = [NSString stringWithFormat:@"Received sendmessage:%@ result:%d", messageId, result];
+//    NSString *record = [NSString stringWithFormat:@"Received sendmessage:%@ result:%d", messageId, result];
     
-    // [_viewController logMsg:record];
     
     
 }
@@ -1236,10 +980,6 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
 
 {
     
-    // [EXT]:个推错误报告，集成步骤发生的任何错误都在这里通知，如果集成后，无法正常收到消息，查看这里的通知。
-    
-    //    [_viewController logMsg:[NSString
-    //                             stringWithFormat:@">>>[GexinSdk error]:%@", [error localizedDescription]]];
     
 }
 - (void)GeTuiSDkDidNotifySdkState:(SdkStatus)aStatus {
@@ -1248,15 +988,12 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     
     _sdkStatus = aStatus;
     
-    //[_viewController updateStatusView:self];
-    
 }
 
 #pragma mark--------------------APN-----------------
 #pragma mark Push Delegate
 - (void)onMethod:(NSString*)method response:(NSDictionary*)data
 {
-    //    [self.viewController addLogString:[NSString stringWithFormat:@"Method: %@\n%@",method,data]];
     NSLog(@"%@",[NSString stringWithFormat:@"Method: %@\n%@",method,data]);
     NSString *app_id = [data objectForKey:@"app_id"];
     NSString *channel_id = [data objectForKey:@"channel_id"];
@@ -1331,10 +1068,6 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
                 if (_status == 0) {
                     
                 }else{
-                    
-                    //                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:_message  delegate:nil cancelButtonTitle:@"OK"otherButtonTitles:nil];
-                    //
-                    //                [alert show];
                 }
                 
             } failure:^(AFHTTPRequestOperation *opration, NSError *error){
@@ -1363,11 +1096,9 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     if([resp isKindOfClass:[SendAuthResp class]])
     {
         if (aresp.errCode== 0) {
-            //        NSString *code = aresp.code;
-            //        NSDictionary *dic = @{@"code":code};
             NSLog(@"微信登录成功");
             [[NSNotificationCenter defaultCenter] postNotificationName:@"WEIXINDENGLU_CG" object:nil];
-            [WXgetUserInfo GetTokenWithCode:aresp.code];
+//            [WXgetUserInfo GetTokenWithCode:aresp.code];
             
             
         }
@@ -1429,20 +1160,10 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
 }
 - (void)getBeijingcity
 {
-    
-    //    [[DatabaseManager sharedDatabaseManager] chaxunTableName:@"cell" timeZiduan:@"C_OPER_TIME"];
-    
-    //    _stockDataArray = [[NSArray alloc] initWithArray:[[DatabaseManager sharedDatabaseManager] getDataRecordsByTableName:@"cell" cityid:2]];
-    //    _tianjinArray = [[NSArray alloc] initWithArray:[[DatabaseManager sharedDatabaseManager] getDataRecordsByTableName:@"cell" cityid:3]];
-    //    [[DatabaseManager sharedDatabaseManager] chaxuntableName:@"cell" cellId:@"3642"];
     _repartArray = [[NSMutableArray alloc]init];
-    
-    //    NSLog(@"stockDataArray = %@",_stockDataArray);
 }
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url
 {
-    
-    // return  [UMSocialSnsService handleOpenURL:url];
     /*
      qq登陆
      */
@@ -1485,12 +1206,8 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
      */
     //如果涉及其他应用交互,请做如下判断,例如:还可能和新浪微博进行交互
     if ([url.scheme isEqualToString:@"wx93aa45d30bf6cba3"]) {
-        //        return [UMSocialSnsService handleOpenURL:url wxApiDelegate:nil];
         return [WXApi handleOpenURL:url delegate:self];
     }
-    //    if ([url.scheme isEqualToString:@"1104763123"]){
-    //        return  [UMSocialSnsService handleOpenURL:url];
-    //    }
     
     /*
      
@@ -1510,9 +1227,6 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     if ([url.scheme isEqualToString:@"wb247547429"]) {
         return [UMSocialSnsService handleOpenURL:url wxApiDelegate:nil];
     }
-    
-    
-    //return [WXApi handleOpenURL:url delegate:self]||[TencentOAuth HandleOpenURL:url];
     
     return YES;
     
@@ -1538,7 +1252,6 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
         
     }
     if (application.applicationState == UIApplicationStateInactive) {
-        NSLog(@"houtai％@,",notification);
         timeLabelStr=notification.alertTitle;
         textLabelStr=notification.alertBody;
         NSDate *  senddate=[NSDate date];
@@ -1548,16 +1261,11 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
         NSDateFormatter *timeformatter=[[NSDateFormatter alloc]init];
         [timeformatter setDateFormat:@"HH:mm"];
         timeLabelStr=[timeformatter stringFromDate:senddate];
-//        NSString *  locationString=[dateformatter stringFromDate:senddate];
         
         badge=100;
     }
     if (notification)
     {
-//        NSLog(@"Recieved Notification %@",notification);
-//        NSDictionary* infoDic = notification.userInfo;
-//        NSLog(@"userInfo description=%@",[infoDic description]);
-//        NSString* codeStr = [infoDic objectForKey:@"someKey"];
     }
     
     application.applicationIconBadgeNumber = 0;
@@ -1578,9 +1286,6 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     dateDic=nil;
 #pragma mark--------APN  // [EXT] APP进入后台时，通知个推SDK进入后台
     [GeTuiSdk enterBackground];
-   // badge=0;
-    // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
-    // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
@@ -1588,15 +1293,14 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     NSLog(@"我就看看你走没走--12");
     [[EaseMob sharedInstance] applicationWillEnterForeground:application];
     badge=0;
-    
-    // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
     NSLog(@"badge%d",badge);
     [GeTuiSdk resume];
-    //application.applicationIconBadgeNumber = 0;
+     NSError *err = nil;
+    [GeTuiSdk startSdkWithAppId:_appID appKey:_appKey appSecret:_appSecret delegate:self error:&err];
     [[UIApplication sharedApplication]setApplicationIconBadgeNumber:0];
     if (badge==100) {
         NSLog(@"就时不走是吧");
@@ -1605,13 +1309,11 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     }
     NSLog(@"%ld",(long)application.applicationState);
     [UMSocialSnsService  applicationDidBecomeActive];
-    // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     NSLog(@"我就看看你走没走--13");
-    // Saves changes in the application's managed object context before the application terminates.
     [self saveContext];
 }
 
@@ -1621,8 +1323,6 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
     if (managedObjectContext != nil) {
         if ([managedObjectContext hasChanges] && ![managedObjectContext save:&error]) {
-            // Replace this implementation with code to handle the error appropriately.
-            // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
             NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
             abort();
         }
@@ -1672,29 +1372,6 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     NSError *error = nil;
     _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
     if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error]) {
-        /*
-         Replace this implementation with code to handle the error appropriately.
-         
-         abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-         
-         Typical reasons for an error here include:
-         * The persistent store is not accessible;
-         * The schema for the persistent store is incompatible with current managed object model.
-         Check the error message to determine what the actual problem was.
-         
-         
-         If the persistent store is not accessible, there is typically something wrong with the file path. Often, a file URL is pointing into the application's resources directory instead of a writeable directory.
-         
-         If you encounter schema incompatibility errors during development, you can reduce their frequency by:
-         * Simply deleting the existing store:
-         [[NSFileManager defaultManager] removeItemAtURL:storeURL error:nil]
-         
-         * Performing automatic lightweight migration by passing the following dictionary as the options parameter:
-         @{NSMigratePersistentStoresAutomaticallyOption:@YES, NSInferMappingModelAutomaticallyOption:@YES}
-         
-         Lightweight migration will only work for a limited set of schema changes; consult "Core Data Model Versioning and Data Migration Programming Guide" for details.
-         
-         */
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         abort();
     }    

@@ -17,4 +17,5 @@
 @property (nonatomic ,assign)int enterVcID;
 @property (nonatomic ,assign)int theNumber;
 @property (nonatomic ,strong)NSString *company_idStr;
+@property (nonatomic ,assign)int  vcIDs;
 @end
