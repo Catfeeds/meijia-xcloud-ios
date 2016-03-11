@@ -169,6 +169,7 @@ MyselfViewController *thirdViewController;
 - (void)viewDidLoad {
     NSDictionary *helpDic;
     plusArray=[[NSMutableArray alloc]init];
+    self.view.backgroundColor=[UIColor whiteColor];
     coreDic=@{@"name":@"应用中心",@"logo":@"http://img.51xingzheng.cn/437396cc0b49b04dc89a0552f7e90cae?p=0",@"action":@"asdsad",@"open_type":@"app"};
     helpDic=@{@"action":@"index"};
     [[NSNotificationCenter defaultCenter] postNotificationName:@"HELP" object:helpDic];

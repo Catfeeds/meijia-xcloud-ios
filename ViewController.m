@@ -10,7 +10,7 @@
 #import "DownloadManager.h"
 #import "PageTableViewCell.h"
 #import "DetailsListViewController.h"
-#import "WXApi.h"
+//#import "WXApi.h"
 #import "MineViewController.h"
 #import "QRcodeViewController.h"
 #import "LBXScanViewStyle.h"

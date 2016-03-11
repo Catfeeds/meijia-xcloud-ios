@@ -16,7 +16,7 @@
 #import "WeiXinPay.h"
 #import "ImgWebViewController.h"
 
-#import "WXApi.h"
+//#import "WXApi.h"
 #import "WeiboSDK.h"
 #import "MineViewController.h"
 #import "LoginViewController.h"
@@ -444,15 +444,28 @@ appDelegate
                 
                 NSLog(@"username is %@, uid is %@, token is %@ url is %@",snsAccount.userName,snsAccount.usid,snsAccount.accessToken,snsAccount.iconURL);
                 NSLog(@"数组里都有啥啊？%@",snsAccount);
-                [self ThirdPartyLogSuccessWhitOpenID:snsAccount.accessToken type:@"0" name:snsAccount.userName headImgUrl:snsAccount.iconURL];
+                [self ThirdPartyLogSuccessWhitOpenID:snsAccount.openId type:@"0" name:snsAccount.userName headImgUrl:snsAccount.iconURL];
                 
             }});
         
     }else if(sender.tag == 1)
     {
-        wxID=1;
-//        [WeiXinPay sendAuthRequest];
-//        NSLog(@"微信登陆");
+        
+        
+//        UMSocialSnsPlatform *snsPlatform = [UMSocialSnsPlatformManager getSocialPlatformWithName:UMShareToWechatSession];
+//        
+//        snsPlatform.loginClickHandler(self,[UMSocialControllerService defaultControllerService],YES,^(UMSocialResponseEntity *response){
+//            
+//            if (response.responseCode == UMSResponseCodeSuccess) {
+//                
+//                UMSocialAccountEntity *snsAccount = [[UMSocialAccountManager socialAccountDictionary]valueForKey:UMShareToWechatSession];
+//                
+//                NSLog(@"username is %@, uid is %@, token is %@ url is %@",snsAccount.userName,snsAccount.usid,snsAccount.accessToken,snsAccount.iconURL);
+//                [self ThirdPartyLogSuccessWhitOpenID:snsAccount.accessToken type:@"0" name:snsAccount.userName headImgUrl:snsAccount.iconURL];
+//            }
+//            
+//        });
+        
         UMSocialSnsPlatform *snsPlatform = [UMSocialSnsPlatformManager getSocialPlatformWithName:UMShareToWechatSession];
         
         snsPlatform.loginClickHandler(self,[UMSocialControllerService defaultControllerService],YES,^(UMSocialResponseEntity *response){
@@ -462,14 +475,14 @@ appDelegate
                 UMSocialAccountEntity *snsAccount = [[UMSocialAccountManager socialAccountDictionary]valueForKey:UMShareToWechatSession];
                 
                 NSLog(@"username is %@, uid is %@, token is %@ url is %@",snsAccount.userName,snsAccount.usid,snsAccount.accessToken,snsAccount.iconURL);
-                [self ThirdPartyLogSuccessWhitOpenID:snsAccount.accessToken type:@"0" name:snsAccount.userName headImgUrl:snsAccount.iconURL];
+                [self ThirdPartyLogSuccessWhitOpenID:snsAccount.openId type:@"0" name:snsAccount.userName headImgUrl:snsAccount.iconURL];
                 
             }
             
         });
-//        [[UMSocialDataService defaultDataService] requestSnsInformation:UMShareToWechatSession  completion:^(UMSocialResponseEntity *response){
-//            NSLog(@"SnsInformation is %@",response.data);
-//        }];
+        [[UMSocialDataService defaultDataService] requestSnsInformation:UMShareToWechatSession  completion:^(UMSocialResponseEntity *response){
+            NSLog(@"SnsInformation is %@",response.data);
+        }];
     }else
     {
         
@@ -484,7 +497,7 @@ appDelegate
                 UMSocialAccountEntity *snsAccount = [[UMSocialAccountManager socialAccountDictionary] valueForKey:UMShareToSina];
                 
                 NSLog(@"username is %@, uid is %@, token is %@ url is %@",snsAccount.userName,snsAccount.usid,snsAccount.accessToken,snsAccount.iconURL);
-                [self ThirdPartyLogSuccessWhitOpenID:snsAccount.accessToken type:@"0" name:snsAccount.userName headImgUrl:snsAccount.iconURL];
+                [self ThirdPartyLogSuccessWhitOpenID:snsAccount.usid type:@"0" name:snsAccount.userName headImgUrl:snsAccount.iconURL];
                 
             }});
         

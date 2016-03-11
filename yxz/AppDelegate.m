@@ -14,7 +14,7 @@
 //#import "APService.h"
 #import "GuideViewController.h"
 #import "BaiduMobStat.h"
-#import "WXApi.h"
+//#import "WXApi.h"
 #import <AlipaySDK/AlipaySDK.h>
 #import "DownloadManager.h"
 #import "AFHTTPRequestOperationManager.h"
@@ -322,7 +322,7 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     [MobClick setAppVersion:version];
     [MobClick setLogEnabled:YES];
     //设置微信AppId、appSecret，分享url
-    [UMSocialWechatHandler setWXAppId:@"wxf2061a4e235b730c" appSecret:@"0c779ea683619930a211cfec6328af6d" url:@"http://51xingzheng.cn/h5-app-download.html"];
+    [UMSocialWechatHandler setWXAppId:@"wx93aa45d30bf6cba3" appSecret:@"7a4ec42a0c548c6e39ce9ed25cbc6bd7" url:@"http://51xingzheng.cn/h5-app-download.html"];
     [UMSocialQQHandler setQQWithAppId:@"1104934408" appKey:@"bRW2glhUCR6aJYIZ" url:@"http://51xingzheng.cn/h5-app-download.html"];
     [UMSocialQQHandler setSupportWebView:YES];
     [UMSocialSinaSSOHandler openNewSinaSSOWithAppKey:@"247547429" RedirectURL:@"http://sns.whalecloud.com"];
@@ -356,7 +356,7 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
      statTracker.adid = adId;
      */
     [statTracker startWithAppId:@"c09edce680"];//设置您在mtj网站上添加的app的appkey,此处AppId即为应用的appKey  百度统计
-    [WXApi registerApp:WXAppKey withDescription:@"simi"];
+//    [WXApi registerApp:WXAppKey withDescription:@"simi"];
     [self getBeijingcity];
     
     
@@ -1031,80 +1031,80 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
 /*
  end
  */
-- (void) sendTextContent
-{
-    SendMessageToWXReq* req = [[SendMessageToWXReq alloc] init];
-    req.text = @"【私秘】今天终于体验了“私人秘书”的服务，大家快来试试吧！下载有礼1gj.cc/d/";
-    req.bText = YES;
-    req.scene = 1;
-    
-    [WXApi sendReq:req];
-}
+//- (void) sendTextContent
+//{
+//    SendMessageToWXReq* req = [[SendMessageToWXReq alloc] init];
+//    req.text = @"【私秘】今天终于体验了“私人秘书”的服务，大家快来试试吧！下载有礼1gj.cc/d/";
+//    req.bText = YES;
+//    req.scene = 1;
+//    
+//    [WXApi sendReq:req];
+//}
 //微信的回调
--(void) onResp:(BaseResp*)resp{
-    NSLog(@"%@",resp);
-    NSLog(@"errStr %@",[resp errStr]);
-    NSLog(@"errCode %d",[resp errCode]);
-    NSLog(@"type %d",[resp type]);
-    
-    //微信分享
-    if([resp errCode] == 0 && [resp type] == 0){
-        
-        if([resp isKindOfClass:[SendMessageToWXResp class]])
-        {
-            ISLoginManager *logmanager = [[ISLoginManager alloc]init];
-            
-            NSDictionary *_dict = @{@"user_id":logmanager.telephone,
-                                    @"share_type":@"weixin",
-                                    @"share_account":@""};
-            
-            AFHTTPRequestOperationManager *mymanager = [AFHTTPRequestOperationManager manager];
-            
-            [mymanager POST:[NSString stringWithFormat:@"%@%@",SERVER_DRESS,@"/simi/app/user/share.json"] parameters:_dict success:^(AFHTTPRequestOperation *opretion, id responseObject){
-                
-                NSInteger _status= [[responseObject objectForKey:@"status"] integerValue];
-                NSString * _message= [responseObject objectForKey:@"msg"];
-                NSLog(@"%@",_message);
-                if (_status == 0) {
-                    
-                }else{
-                }
-                
-            } failure:^(AFHTTPRequestOperation *opration, NSError *error){
-                
-            }];
-            
-        }
-    }
-    
-    //微信支付
-    if ([resp isKindOfClass:[PayResp class]]) {
-        PayResp *response = (PayResp *)resp;
-        switch (response.errCode) {
-            case WXSuccess:
-                //服务器端查询支付通知或查询API返回的结果再提示成功
-                NSLog(@"支付成功");
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"WEIXINCHAXUN" object:nil];
-                break;
-            default:
-                NSLog(@"支付失败， retcode=%d",resp.errCode);
-                break;
-        }
-    }
-    //微信登录
-    SendAuthResp *aresp = (SendAuthResp *)resp;
-    if([resp isKindOfClass:[SendAuthResp class]])
-    {
-        if (aresp.errCode== 0) {
-            NSLog(@"微信登录成功");
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"WEIXINDENGLU_CG" object:nil];
-//            [WXgetUserInfo GetTokenWithCode:aresp.code];
-            
-            
-        }
-    }
-    
-}
+//-(void) onResp:(BaseResp*)resp{
+//    NSLog(@"%@",resp);
+//    NSLog(@"errStr %@",[resp errStr]);
+//    NSLog(@"errCode %d",[resp errCode]);
+//    NSLog(@"type %d",[resp type]);
+//    
+//    //微信分享
+//    if([resp errCode] == 0 && [resp type] == 0){
+//        
+//        if([resp isKindOfClass:[SendMessageToWXResp class]])
+//        {
+//            ISLoginManager *logmanager = [[ISLoginManager alloc]init];
+//            
+//            NSDictionary *_dict = @{@"user_id":logmanager.telephone,
+//                                    @"share_type":@"weixin",
+//                                    @"share_account":@""};
+//            
+//            AFHTTPRequestOperationManager *mymanager = [AFHTTPRequestOperationManager manager];
+//            
+//            [mymanager POST:[NSString stringWithFormat:@"%@%@",SERVER_DRESS,@"/simi/app/user/share.json"] parameters:_dict success:^(AFHTTPRequestOperation *opretion, id responseObject){
+//                
+//                NSInteger _status= [[responseObject objectForKey:@"status"] integerValue];
+//                NSString * _message= [responseObject objectForKey:@"msg"];
+//                NSLog(@"%@",_message);
+//                if (_status == 0) {
+//                    
+//                }else{
+//                }
+//                
+//            } failure:^(AFHTTPRequestOperation *opration, NSError *error){
+//                
+//            }];
+//            
+//        }
+//    }
+//    
+//    //微信支付
+//    if ([resp isKindOfClass:[PayResp class]]) {
+//        PayResp *response = (PayResp *)resp;
+//        switch (response.errCode) {
+//            case WXSuccess:
+//                //服务器端查询支付通知或查询API返回的结果再提示成功
+//                NSLog(@"支付成功");
+//                [[NSNotificationCenter defaultCenter] postNotificationName:@"WEIXINCHAXUN" object:nil];
+//                break;
+//            default:
+//                NSLog(@"支付失败， retcode=%d",resp.errCode);
+//                break;
+//        }
+//    }
+//    //微信登录
+//    SendAuthResp *aresp = (SendAuthResp *)resp;
+//    if([resp isKindOfClass:[SendAuthResp class]])
+//    {
+//        if (aresp.errCode== 0) {
+//            NSLog(@"微信登录成功");
+//            [[NSNotificationCenter defaultCenter] postNotificationName:@"WEIXINDENGLU_CG" object:nil];
+////            [WXgetUserInfo GetTokenWithCode:aresp.code];
+//            
+//            
+//        }
+//    }
+//    
+//}
 
 
 
@@ -1171,7 +1171,9 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     if ([url.scheme isEqualToString:@"tencent1104934408"]) {
         return [UMSocialSnsService handleOpenURL:url];
     }
-    
+    if ([url.scheme isEqualToString:@"wx93aa45d30bf6cba3"]) {
+        return [UMSocialSnsService handleOpenURL:url];
+    }
     /*
      新浪微博登陆
      */
@@ -1206,7 +1208,8 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
      */
     //如果涉及其他应用交互,请做如下判断,例如:还可能和新浪微博进行交互
     if ([url.scheme isEqualToString:@"wx93aa45d30bf6cba3"]) {
-        return [WXApi handleOpenURL:url delegate:self];
+//        return [WXApi handleOpenURL:url delegate:self];
+        return [UMSocialSnsService handleOpenURL:url];
     }
     
     /*

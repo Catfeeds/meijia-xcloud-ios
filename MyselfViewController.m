@@ -20,7 +20,7 @@
 #import "UserInfoViewController.h"
 #import "ChatViewController.h"
 
-#import "WXApi.h"
+//#import "WXApi.h"
 #import "MineJifenViewController.h"
 #import "Order_ListViewController.h"
 #import "JifenViewController.h"

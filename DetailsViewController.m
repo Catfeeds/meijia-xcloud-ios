@@ -10,7 +10,7 @@
 #import "DownloadManager.h"
 #import "ISLoginManager.h"
 #import "DetailsTableViewCell.h"
-#import "WXApi.h"
+//#import "WXApi.h"
 
 #import "BookingViewController.h"
 #import "MeetingViewController.h"
