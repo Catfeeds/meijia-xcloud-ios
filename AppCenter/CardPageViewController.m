@@ -87,7 +87,13 @@ float lastContentOffset;
 {
     
     [super viewDidLoad];
+    self.view.userInteractionEnabled=YES;
+    self.img.hidden=YES;
+    UIImageView *img = [[UIImageView alloc]initWithFrame:FRAME(18, (40-20)/2, 20, 20)];
+    img.image = [UIImage imageNamed:@"iconfont-p-back"];
+    [_backBtn addSubview:img];
     self.navlabel.text=_navlabelName;
+    _navlabel.textColor = [UIColor whiteColor];
     UIFont *fnt = [UIFont fontWithName:@"HelveticaNeue" size:16.0f];
      CGRect tmpRect = [self.navlabel.text boundingRectWithSize:CGSizeMake(WIDTH, 44) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObjectsAndKeys:fnt,NSFontAttributeName, nil] context:nil];
     page=1;
@@ -95,23 +101,18 @@ float lastContentOffset;
     NSLog(@"%d",_vcID);
     switch (_vcID) {
         case 1001:
-            self.helpBut.tag=2;
             self.backlable.backgroundColor=HEX_TO_UICOLOR(0x11cd6e, 1.0);
             break;
         case 1002:
-            self.helpBut.tag=1;
             self.backlable.backgroundColor=HEX_TO_UICOLOR(0xf4c600, 1.0);
             break;
         case 1003:
-            self.helpBut.tag=0;
             self.backlable.backgroundColor=HEX_TO_UICOLOR(0x56abe4, 1.0);
             break;
         case 1004:
-            self.helpBut.tag=3;
             self.backlable.backgroundColor=HEX_TO_UICOLOR(0x00bb9c, 1.0);
             break;
         case 1005:
-            self.helpBut.tag=4;
             self.backlable.backgroundColor=HEX_TO_UICOLOR(0x56abe4, 1.0);
             break;
             
@@ -120,7 +121,11 @@ float lastContentOffset;
     }
     
     self.helpBut.hidden=NO;
-    self.helpBut.frame=FRAME((WIDTH-tmpRect.size.width)/2, 20, tmpRect.size.width, 44);
+    self.helpBut.frame=FRAME((WIDTH-tmpRect.size.width)/2, 20, tmpRect.size.width+20, 44);
+    
+    UIImageView *image=[[UIImageView alloc]initWithFrame:FRAME(self.helpBut.frame.size.width-20, 12, 20, 20)];
+    image.image=[UIImage imageNamed:@"iconfont_yingyongbangzhu"];
+    [self.helpBut addSubview:image];
     locationManager = [[CLLocationManager alloc] init];
     
     locationManager.delegate = self;
@@ -154,13 +159,13 @@ float lastContentOffset;
     eyeButton.clipsToBounds=YES;
     [self.view addSubview:eyeButton];
     
-    UIButton *calenderButton=[[UIButton alloc]initWithFrame:FRAME(WIDTH-50, 25, 50, 40)];
-    [calenderButton addTarget:self action:@selector(didChangeModeTouch) forControlEvents:UIControlEventTouchUpInside];
+//    UIButton *calenderButton=[[UIButton alloc]initWithFrame:FRAME(WIDTH-50, 25, 50, 40)];
+//    [calenderButton addTarget:self action:@selector(didChangeModeTouch) forControlEvents:UIControlEventTouchUpInside];
 //    [self.view addSubview:calenderButton];
     
-    UIImageView *calenderImage=[[UIImageView alloc]initWithFrame:FRAME(10, 10, 20, 20)];
-    calenderImage.image=[UIImage imageNamed:@"RL_BT"];
-    [calenderButton addSubview:calenderImage];
+//    UIImageView *calenderImage=[[UIImageView alloc]initWithFrame:FRAME(10, 10, 20, 20)];
+//    calenderImage.image=[UIImage imageNamed:@"RL_BT"];
+//    [calenderButton addSubview:calenderImage];
     AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication] delegate];
     riliArray=delegate.riliArray;
     [self tableViewLayout];

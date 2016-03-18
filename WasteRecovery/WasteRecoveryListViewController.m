@@ -20,6 +20,11 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    _navlabel.textColor = [UIColor whiteColor];
+    self.img.hidden=YES;
+    UIImageView *img = [[UIImageView alloc]initWithFrame:FRAME(18, (40-20)/2, 20, 20)];
+    img.image = [UIImage imageNamed:@"iconfont-p-back"];
+    [_backBtn addSubview:img];
     if (_listID==100) {
         self.backlable.backgroundColor=HEX_TO_UICOLOR(0x11cd6e, 1.0);
         dataSourceArray=@[@"日常办公垃圾",@"废旧电器",@"硒鼓墨盒",@"其他"];

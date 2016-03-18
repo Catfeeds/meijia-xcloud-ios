@@ -42,8 +42,13 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    _navlabel.textColor = [UIColor whiteColor];
     self.navlabel.text=@"下单";
     self.backlable.backgroundColor=HEX_TO_UICOLOR(0x11cd6e, 1.0);
+    self.img.hidden=YES;
+    UIImageView *img = [[UIImageView alloc]initWithFrame:FRAME(18, (40-20)/2, 20, 20)];
+    img.image = [UIImage imageNamed:@"iconfont-p-back"];
+    [_backBtn addSubview:img];
     [self viewLayout];
     UIButton *submitBut=[[UIButton alloc]initWithFrame:FRAME(14, HEIGHT-46, WIDTH-28, 41)];
     submitBut.backgroundColor=self.backlable.backgroundColor;

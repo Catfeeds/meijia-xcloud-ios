@@ -20,7 +20,7 @@
 @implementation ConTentViewController
 -(void)viewWillAppear:(BOOL)animated
 {
-    int   existTextNum=[_textString length];
+    int   existTextNum=(int)[_textString length];
     
     textViewNum=200-existTextNum;
     [self stringLayout];
@@ -82,7 +82,7 @@
 - (void)textViewDidChange:(UITextView *)textView
 {
     _textString=_textView.text;
-    int   existTextNum=[_textString length];
+    int   existTextNum=(int)[_textString length];
     
     textViewNum=200-existTextNum;
     [self stringLayout];

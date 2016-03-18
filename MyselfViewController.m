@@ -177,7 +177,10 @@
 //            [headeView setImageWithURL:[NSURL URLWithString:imageUrl]placeholderImage:nil];
 //            headeView.image=[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[dict objectForKey:@"head_img"]]]];
         }
-        headeView.image=[UIImage imageNamed:@"bg_person_page"];
+        headeView.backgroundColor=HEX_TO_UICOLOR(0xe8374a, 1.0);
+        NSString *imageUrl=@"http://123.57.173.36/simi-h5/img/my_bg_update.jpg";
+        NSData * data = [NSData dataWithContentsOfURL:[NSURL URLWithString:imageUrl]];
+        headeView.image=[UIImage imageWithData:data];
         [self.view addSubview:headeView];
         
         self.backBtn.hidden=NO;
@@ -199,8 +202,10 @@
 //            [headeView setImageWithURL:[NSURL URLWithString:imageUrl]placeholderImage:nil];
 //            headeView.image=[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[dict objectForKey:@"head_img"]]]];
         }
-
-        headeView.image=[UIImage imageNamed:@"bg_person_page"];
+        headeView.backgroundColor=HEX_TO_UICOLOR(0xe8374a, 1.0);
+        NSString *imageUrl=@"http://123.57.173.36/simi-h5/img/my_bg_update.jpg";
+        NSData * data = [NSData dataWithContentsOfURL:[NSURL URLWithString:imageUrl]];
+        headeView.image=[UIImage imageWithData:data];
         
         [self.view addSubview:headeView];
         self.backBtn.hidden=YES;
@@ -328,7 +333,7 @@
                 growHeadeImage.image=[UIImage imageNamed:@"Grow-up_Lcon"];
                 [view addSubview:growHeadeImage];
                 UILabel *growLabel=[[UILabel alloc]initWithFrame:FRAME(growHeadeImage.frame.size.width+growHeadeImage.frame.origin.x, 10, 80, 30)];
-                growLabel.text=@"我的成长";
+                growLabel.text=@"会员服务";
                 growLabel.font=[UIFont fontWithName:@"Arial" size:16];
                 growLabel.textColor=[UIColor colorWithRed:100/255.0f green:100/255.0f blue:100/255.0f alpha:1];
                 [view addSubview:growLabel];

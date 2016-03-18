@@ -49,6 +49,7 @@
    #import "MJRefresh.h"
 #import "EjectAlertView.h"
 #import "WebPageViewController.h"
+#import "UpLoadViewController.h"
 #endif
 
 #define NAV_COLOR 0xE8374A

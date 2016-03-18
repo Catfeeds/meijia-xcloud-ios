@@ -70,7 +70,7 @@
     _relevantTableview=[[UITableView alloc]initWithFrame:FRAME(0, 114, WIDTH, HEIGHT-114)];
     _relevantTableview.dataSource=self;
     _relevantTableview.delegate=self;
-    [_relevantTableview registerNib:[UINib nibWithNibName:@"MeetTableViewCell" bundle:nil] forCellReuseIdentifier:@"ContactCell"];
+    [_relevantTableview registerNib:[UINib nibWithNibName:@"MeetTableViewCell" bundle:nil] forCellReuseIdentifier:@"MeetTableViewCell"];
     //[self.view insertSubview:_relevantTableview belowSubview:self.view];
     
     [self.view addSubview:_relevantTableview];
@@ -353,16 +353,16 @@
     //NSString *identifier = [NSString stringWithFormat:@"（%ld,%ld)",(long)indexPath.row,(long)indexPath.section];
     
     
-    NSString *cellIdentifier = @"ContactCell";
+    NSString *cellIdentifier = @"MeetTableViewCell";
 
     
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    MeetTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     UILabel *contactNameLabel = (UILabel *)[cell viewWithTag:101];
     UIImageView *contactImage = (UIImageView *)[cell viewWithTag:103];
     UIImageView *checkboxImageView = (UIImageView *)[cell viewWithTag:104];
         if (cell == nil) {
         
-        cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+        cell = [[MeetTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
         
     }
     

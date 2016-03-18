@@ -33,7 +33,7 @@
                             </view>
                             <view alpha="0.90000000000000002" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IaV-x3-ghF" customClass="JTCalendarContentView">
                                 <rect key="frame" x="0.0" y="70" width="600" height="75"/>
-                                <color key="backgroundColor" white="0.96116879111842102" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="300" id="Kfn-Ge-jpQ"/>
                                 </constraints>

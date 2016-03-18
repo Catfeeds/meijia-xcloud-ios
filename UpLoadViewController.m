@@ -386,6 +386,8 @@
 }
 -(void)tapGestureRecognizer:(id)sender
 {
+    [titleField resignFirstResponder];
+    [descriptionView resignFirstResponder];
     UIActionSheet *sheet=[[UIActionSheet alloc] initWithTitle:@"请选取" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"拍摄" otherButtonTitles:@"相册", nil];
     NSLog(@"-=-=-=-=-=-=-=-=-=-=--=-");
     [sheet showInView:self.view];

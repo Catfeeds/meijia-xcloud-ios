@@ -61,6 +61,7 @@ appDelegate
 }
 - (void)viewWillAppear:(BOOL)animated
 {
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
 //    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(back) name:@"WEIXINDENGLU_CG" object:nil];
     if (self.loginYesOrNo == YES) {
         [[NSNotificationCenter defaultCenter] postNotificationName:@"LOGIN_SUCCESS" object:nil];
@@ -71,7 +72,7 @@ appDelegate
 - (void)viewDidLoad {
     [super viewDidLoad];
     wxID=0;
-    
+    self.navigationController.navigationBarHidden=YES;
     // 初始化定位管理器
     _locationManager = [[CLLocationManager alloc] init];
     // 设置代理
@@ -101,7 +102,20 @@ appDelegate
 //        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(back) name:@"MylogVcBack" object:nil];
 //        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pushToIM) name:@"PUSHTOCHAT" object:nil];
         
-        view = [[UIView alloc]initWithFrame:FRAME(0, NAV_HEIGHT+9, SELF_VIEW_WIDTH, 1.5+108)];
+        UIView *viewheade=[[UIView alloc]initWithFrame:FRAME(0, 20, WIDTH, HEIGHT*0.3)];
+        viewheade.backgroundColor=[UIColor whiteColor];
+        [self.view addSubview:viewheade];
+        UIImageView *headeImage=[[UIImageView alloc]initWithFrame:FRAME((WIDTH-200)/2, (HEIGHT*0.3)/3, 200, (HEIGHT*0.3)/3)];
+        headeImage.image=[UIImage imageNamed:@"login_logo"];
+        [viewheade addSubview:headeImage];
+        
+        UIImageView *headImageView=[[UIImageView alloc]initWithFrame:FRAME(0, 0, WIDTH, HEIGHT*0.3)];
+        NSString *imageUrl=@"http://123.57.173.36/simi-h5/img/login_logo_update.jpg";
+//        [headImageView setImageWithURL:[NSURL URLWithString:imageUrl]placeholderImage:nil];
+        headImageView.image=[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imageUrl]]];
+        [viewheade addSubview:headImageView];
+        
+        view = [[UIView alloc]initWithFrame:FRAME(0, 20+HEIGHT*0.3, SELF_VIEW_WIDTH, 1.5+108)];
         view.backgroundColor = HEX_TO_UICOLOR(CHOICE_BACK_VIEW_COLOR, 1.0);
         [self.view addSubview:view];
         
@@ -152,7 +166,7 @@ appDelegate
         
         // Do any additional setup after loading the view.
         UIButton *bttn = [UIButton buttonWithType:UIButtonTypeCustom];
-        bttn.frame = FRAME(14, NAV_HEIGHT+9+14+108+1.5, WIDTH-28, 41);//(WIDTH-576/2)/2, 5, 576/2, 41
+        bttn.frame = FRAME(14, view.frame.origin.y+14+108+1.5, WIDTH-28, 41);//(WIDTH-576/2)/2, 5, 576/2, 41
         [bttn setBackgroundColor:HEX_TO_UICOLOR(TEXT_COLOR, 1.0)];
         [bttn setTitle:@"登录" forState:UIControlStateNormal];
         bttn.layer.cornerRadius=5;
@@ -161,13 +175,13 @@ appDelegate
         //    [bttn.layer setCornerRadius:5.0];//设置矩形四个圆角半径
         [self.view addSubview:bttn];
         
-        UILabel *xieyiLab = [[UILabel alloc]initWithFrame:FRAME(14, bttn.bottom+8, 584/2, 20)];
+        UILabel *xieyiLab = [[UILabel alloc]initWithFrame:FRAME(14, bttn.bottom+8, WIDTH, 20)];
         //    xieyiLab.text = @"点击“登录”，即表示您同意《有个管家使用协议》";
-        xieyiLab.textAlignment = NSTextAlignmentLeft;
+        xieyiLab.textAlignment = NSTextAlignmentCenter;
         xieyiLab.font = [UIFont systemFontOfSize:12];
         
         NSMutableAttributedString *text1 = [[NSMutableAttributedString alloc] initWithString:@"点击“登录”，即表示您同意《用户使用协议》"];
-        [text1 setAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIColor blueColor],NSForegroundColorAttributeName, nil] range:NSMakeRange(13, 8)];
+        [text1 setAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIColor colorWithRed:190/255.0f green:190/255.0f blue:190/255.0f alpha:1],NSForegroundColorAttributeName, nil] range:NSMakeRange(0, 21)];
         xieyiLab.attributedText = text1;
         [self.view addSubview:xieyiLab];
         
@@ -195,7 +209,7 @@ appDelegate
         NSArray *arr = [[NSArray alloc]initWithObjects:@"qq_login_pressed",@"wx_login_pressed",@"sina_login_pressed", nil];
         for (int i = 0 ; i < 3 ; i++)
         {
-            UIButton *thirdLogin = [[UIButton alloc]initWithFrame:FRAME(25+(i*120), xieyiLab.bottom+70, 25, 25)];
+            UIButton *thirdLogin = [[UIButton alloc]initWithFrame:FRAME((WIDTH-75)/4+(50+(WIDTH-75)/4)*i, xieyiLab.bottom+70, 25, 25)];
             thirdLogin.tag = i;
             [thirdLogin setImage:[UIImage imageNamed:arr[i]] forState:UIControlStateNormal];
             thirdLogin.backgroundColor = [UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
@@ -203,7 +217,7 @@ appDelegate
             [thirdLogin setBackgroundColor:[UIColor clearColor]];
             [self.view addSubview:thirdLogin];
             
-            thirdLogin.frame = FRAME(30+(50+(WIDTH-210)/2)*i, xieyiLab.bottom+70, 50, 50);
+            thirdLogin.frame = FRAME((WIDTH-150)/4+(50+(WIDTH-150)/4)*i, xieyiLab.bottom+70, 50, 50);
             //                if (i == 1||i == 2) {
             //                    thirdLogin.hidden = YES;
             //                }else {
@@ -450,21 +464,6 @@ appDelegate
         
     }else if(sender.tag == 1)
     {
-        
-        
-//        UMSocialSnsPlatform *snsPlatform = [UMSocialSnsPlatformManager getSocialPlatformWithName:UMShareToWechatSession];
-//        
-//        snsPlatform.loginClickHandler(self,[UMSocialControllerService defaultControllerService],YES,^(UMSocialResponseEntity *response){
-//            
-//            if (response.responseCode == UMSResponseCodeSuccess) {
-//                
-//                UMSocialAccountEntity *snsAccount = [[UMSocialAccountManager socialAccountDictionary]valueForKey:UMShareToWechatSession];
-//                
-//                NSLog(@"username is %@, uid is %@, token is %@ url is %@",snsAccount.userName,snsAccount.usid,snsAccount.accessToken,snsAccount.iconURL);
-//                [self ThirdPartyLogSuccessWhitOpenID:snsAccount.accessToken type:@"0" name:snsAccount.userName headImgUrl:snsAccount.iconURL];
-//            }
-//            
-//        });
         
         UMSocialSnsPlatform *snsPlatform = [UMSocialSnsPlatformManager getSocialPlatformWithName:UMShareToWechatSession];
         
@@ -729,7 +728,9 @@ appDelegate
 //        [[NSNotificationCenter defaultCenter]postNotificationName:@"MylogVcBack" object:nil];
 //    }
     NSString *clientId=GeTuiSdk.clientId;
-    
+    if (clientId==nil||clientId==NULL) {
+        return;
+    }
     if ([cGDic objectForKey:@"client_id"]==nil||[cGDic objectForKey:@"client_id"]==NULL) {
         ISLoginManager *_manager = [ISLoginManager shareManager];
         DownloadManager *_download = [[DownloadManager alloc]init];

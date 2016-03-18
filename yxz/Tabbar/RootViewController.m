@@ -905,6 +905,7 @@ MyselfViewController *thirdViewController;
                 helpDic=@{@"action":@"alarm"};
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"HELP" object:helpDic];
                 CardPageViewController *pageViewVC=[[CardPageViewController alloc]init];
+                pageViewVC.tyPeStr=action;
                 pageViewVC.navlabelName=[NSString stringWithFormat:@"%@",[dic objectForKey:@"name"]];
 //                UIStoryboard *storys  = [UIStoryboard storyboardWithName:@"PageStoryboard" bundle:nil];
 //                pageViewVC=[storys instantiateInitialViewController];
@@ -921,6 +922,7 @@ MyselfViewController *thirdViewController;
                 helpDic=@{@"action":@"meeting"};
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"HELP" object:helpDic];
                 CardPageViewController *pageViewVC=[[CardPageViewController alloc]init];
+                pageViewVC.tyPeStr=action;
                 pageViewVC.navlabelName=[NSString stringWithFormat:@"%@",[dic objectForKey:@"name"]];
 //                UIStoryboard *storys  = [UIStoryboard storyboardWithName:@"PageStoryboard" bundle:nil];
 //                pageViewVC=[storys instantiateInitialViewController];
@@ -937,6 +939,7 @@ MyselfViewController *thirdViewController;
                 helpDic=@{@"action":@"notice"};
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"HELP" object:helpDic];
                 CardPageViewController *pageViewVC=[[CardPageViewController alloc]init];
+                pageViewVC.tyPeStr=action;
                 pageViewVC.navlabelName=[NSString stringWithFormat:@"%@",[dic objectForKey:@"name"]];
 //                UIStoryboard *storys  = [UIStoryboard storyboardWithName:@"PageStoryboard" bundle:nil];
 //                pageViewVC=[storys instantiateInitialViewController];
@@ -953,6 +956,7 @@ MyselfViewController *thirdViewController;
                 helpDic=@{@"action":@"interview"};
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"HELP" object:helpDic];
                 CardPageViewController *pageViewVC=[[CardPageViewController alloc]init];
+                pageViewVC.tyPeStr=action;
                 pageViewVC.navlabelName=[NSString stringWithFormat:@"%@",[dic objectForKey:@"name"]];
 //                UIStoryboard *storys  = [UIStoryboard storyboardWithName:@"PageStoryboard" bundle:nil];
 //                pageViewVC=[storys instantiateInitialViewController];
@@ -968,6 +972,7 @@ MyselfViewController *thirdViewController;
                 helpDic=@{@"action":@"trip"};
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"HELP" object:helpDic];
                 CardPageViewController *pageViewVC=[[CardPageViewController alloc]init];
+                pageViewVC.tyPeStr=action;
                 pageViewVC.navlabelName=[NSString stringWithFormat:@"%@",[dic objectForKey:@"name"]];
 //                UIStoryboard *storys  = [UIStoryboard storyboardWithName:@"PageStoryboard" bundle:nil];
 //                pageViewVC=[storys instantiateInitialViewController];
@@ -978,6 +983,7 @@ MyselfViewController *thirdViewController;
         }else if ([action isEqualToString:@"punch_sign"]){
             if ([params isEqualToString:@"add"]) {
                 AttendanceViewController *userVC=[[AttendanceViewController alloc]init];
+                userVC.tyPeStr=action;
                 AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication] delegate];
                 NSString *has_company=[NSString stringWithFormat:@"%@",[delegate.globalDic objectForKey:@"has_company"]];
                 int has=[has_company intValue];
@@ -992,6 +998,7 @@ MyselfViewController *thirdViewController;
                 helpDic=@{@"action":@"punch_sign"};
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"HELP" object:helpDic];
                 CardPageViewController *pageViewVC=[[CardPageViewController alloc]init];
+                pageViewVC.tyPeStr=action;
                 pageViewVC.navlabelName=[NSString stringWithFormat:@"%@",[dic objectForKey:@"name"]];
 //                UIStoryboard *storys  = [UIStoryboard storyboardWithName:@"PageStoryboard" bundle:nil];
 //                pageViewVC=[storys instantiateInitialViewController];
@@ -1002,12 +1009,14 @@ MyselfViewController *thirdViewController;
         }else if ([action isEqualToString:@"leave_pass"]){
             if ([params isEqualToString:@"add"]) {
                 ApplyForLeaveViewController *applyVC=[[ApplyForLeaveViewController alloc]init];
+                applyVC.tyPeStr=action;
                 applyVC.colorid=100;
                 [self.navigationController pushViewController:applyVC animated:YES];
             }else if ([params isEqualToString:@"list"]){
                 helpDic=@{@"action":@"leave_pass"};
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"HELP" object:helpDic];
                 LeaveListViewController *leaveListVC=[[LeaveListViewController alloc]init];
+                leaveListVC.tyPeStr=action;
                 [self.navigationController pushViewController:leaveListVC animated:YES];
             }
             
@@ -1019,6 +1028,7 @@ MyselfViewController *thirdViewController;
                 helpDic=@{@"action":@"punch_dynamic"};
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"HELP" object:helpDic];
                 CardPageViewController *pageViewVC=[[CardPageViewController alloc]init];
+                pageViewVC.tyPeStr=action;
                 pageViewVC.vcID=1008;
                 [self.navigationController pushViewController:pageViewVC animated:YES];
             }
@@ -1028,6 +1038,7 @@ MyselfViewController *thirdViewController;
                 
             }else if ([params isEqualToString:@"list"]){
                 WaterListViewController *plantsVc=[[WaterListViewController alloc]init];
+                plantsVc.tyPeStr=action;
                 [self.navigationController pushViewController:plantsVc animated:YES];
             }
         }else if([action isEqualToString:@"recycle"]){
@@ -1036,6 +1047,7 @@ MyselfViewController *thirdViewController;
             }else if ([params isEqualToString:@"list"]){
                 WasteRecoveryViewController *plantsVc=[[WasteRecoveryViewController alloc]init];
                 plantsVc.wasteID=100;
+                plantsVc.tyPeStr=action;
                 [self.navigationController pushViewController:plantsVc animated:YES];
             }
         }else if([action isEqualToString:@"clean"]){
@@ -1043,6 +1055,7 @@ MyselfViewController *thirdViewController;
                 
             }else if ([params isEqualToString:@"list"]){
                 WasteRecoveryViewController *plantsVc=[[WasteRecoveryViewController alloc]init];
+                plantsVc.tyPeStr=action;
                 plantsVc.wasteID=101;
                 [self.navigationController pushViewController:plantsVc animated:YES];
             }
@@ -1051,6 +1064,7 @@ MyselfViewController *thirdViewController;
                 
             }else if ([params isEqualToString:@"list"]){
                 WasteRecoveryViewController *plantsVc=[[WasteRecoveryViewController alloc]init];
+                plantsVc.tyPeStr=action;
                 plantsVc.wasteID=102;
                 [self.navigationController pushViewController:plantsVc animated:YES];
             }
@@ -1059,6 +1073,7 @@ MyselfViewController *thirdViewController;
                 
             }else if ([params isEqualToString:@"list"]){
                 WasteRecoveryViewController *plantsVc=[[WasteRecoveryViewController alloc]init];
+                plantsVc.tyPeStr=action;
                 plantsVc.wasteID=103;
                 [self.navigationController pushViewController:plantsVc animated:YES];
             }

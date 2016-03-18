@@ -24,6 +24,11 @@ GrowUp_or_MakeMoneyViewController *growUp_or_MakeMoneyViewController;
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.backlable.backgroundColor=HEX_TO_UICOLOR(0xbfbfbf, 1.0);
+    _navlabel.textColor = [UIColor whiteColor];
+    self.img.hidden=YES;
+    UIImageView *img = [[UIImageView alloc]initWithFrame:FRAME(18, (40-20)/2, 20, 20)];
+    img.image = [UIImage imageNamed:@"iconfont-p-back"];
+    [_backBtn addSubview:img];
     self.navlabel.text=@"应用中心";
     mainView = [[UIView alloc]initWithFrame:CGRectMake(0, 0,SELF_VIEW_WIDTH, HEIGHT)];
     mainView.backgroundColor=[UIColor whiteColor];

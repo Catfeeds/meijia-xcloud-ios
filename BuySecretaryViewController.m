@@ -173,6 +173,9 @@
     timeLabel.frame=FRAME(timeImage.frame.size.width+timeImage.frame.origin.x, timeImage.frame.origin.y, timeLabel.frame.size.width, 16);
     [buyView addSubview:timeLabel];
     Y=addressIamge.frame.size.height+addressIamge.frame.origin.y+5;
+    UIImageView *imageView=[[UIImageView alloc]initWithFrame:FRAME(headView.frame.size.width+headView.frame.origin.x+10, Y, 16, 16)];
+    imageView.image=[UIImage imageNamed:@"iconfont-jinengbiaoqian"];
+    [buyView addSubview:imageView];
     NSArray *labelArray=[detailsDic objectForKey:@"user_tags"];
     int s=0;
     for (int i=0; i<labelArray.count; i++) {
@@ -181,7 +184,7 @@
             s=0;
         }
         NSDictionary *dict=labelArray[i];
-        UILabel *typeLabel=[[UILabel alloc]initWithFrame:FRAME(headView.frame.size.width+headView.frame.origin.x+10+((WIDTH-70-4)/3+2)*s, Y, (WIDTH-70-4)/3, 16)];
+        UILabel *typeLabel=[[UILabel alloc]initWithFrame:FRAME(headView.frame.size.width+headView.frame.origin.x+26+((WIDTH-70-4)/3+2)*s, Y, (WIDTH-70-4)/3, 16)];
         typeLabel.text=[NSString stringWithFormat:@"%@",[dict objectForKey:@"tag_name"]];
         typeLabel.font=[UIFont fontWithName:@"Arial" size:12];
         typeLabel.textColor=[UIColor colorWithRed:100 / 255.0 green:100 / 255.0 blue:100 / 255.0 alpha:1];
@@ -281,7 +284,7 @@
         if (i==timelimitArray.count-1) {
             y_head=view.frame.size.height+view.frame.origin.y;
         }
-        [view addTarget:self action:@selector(buttonAction:) forControlEvents:UIControlEventTouchUpInside];
+//        [view addTarget:self action:@selector(buttonAction:) forControlEvents:UIControlEventTouchUpInside];
 //        [view addSubview:button];
         
         

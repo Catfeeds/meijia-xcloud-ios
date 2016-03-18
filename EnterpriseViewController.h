@@ -7,8 +7,8 @@
 //
 
 #import "FatherViewController.h"
-
-@interface EnterpriseViewController : FatherViewController<UITableViewDataSource,UITableViewDelegate,UIWebViewDelegate>
+#import "DropDown.h"
+@interface EnterpriseViewController : FatherViewController<UITableViewDataSource,UITableViewDelegate,UIWebViewDelegate,DropDownDelegate>
 @property (nonatomic ,assign)int webId;
 @property (nonatomic ,strong)NSArray *mutableArrat;
 @property (nonatomic ,strong)NSArray *nameArray;

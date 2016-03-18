@@ -56,6 +56,11 @@
     endString=@"请点击选择时间";
     if (_colorid==100) {
         self.backlable.backgroundColor=HEX_TO_UICOLOR(0x11cd6e, 1.0);
+        _navlabel.textColor = [UIColor whiteColor];
+        self.img.hidden=YES;
+        UIImageView *img = [[UIImageView alloc]initWithFrame:FRAME(18, (40-20)/2, 20, 20)];
+        img.image = [UIImage imageNamed:@"iconfont-p-back"];
+        [_backBtn addSubview:img];
     }
     
     NSDate *  senddate=[NSDate date];

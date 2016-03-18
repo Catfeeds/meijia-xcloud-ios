@@ -79,7 +79,10 @@ ShopViewController *shopViewController;
 //    }else{
 //        headView.image=[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[homeDic objectForKey:@"head_img"]]]];
 //    }
-    headView.image=[UIImage imageNamed:@"bg_person_page(1)"];
+    headView.backgroundColor=HEX_TO_UICOLOR(0xe8374a, 1.0);
+    NSString *imageUrl=@"http://123.57.173.36/simi-h5/img/friend_bg_update.jpg";
+    NSData * data = [NSData dataWithContentsOfURL:[NSURL URLWithString:imageUrl]];
+    headView.image=[UIImage imageWithData:data];
     [self.view addSubview:headView];
     
     fxBlurView=[FXBlurView new];
@@ -143,35 +146,39 @@ ShopViewController *shopViewController;
     
     
     //添加好友按钮
-    UIButton *addButton=[[UIButton alloc]initWithFrame:FRAME(WIDTH/2-221/2, nameLabel.frame.size.height+nameLabel.frame.origin.y+50, 204/2, 30)];
-    
+    UIButton *addButton=[[UIButton alloc]initWithFrame:FRAME(WIDTH/2-204/2, nameLabel.frame.size.height+nameLabel.frame.origin.y+50, 204/2, 30)];
+    addButton.backgroundColor=[UIColor colorWithRed:103/255.0f green:103/255.0f blue:103/255.0f alpha:1];
     UILabel *addLabel=[[UILabel alloc]init];
     addLabel.textColor=[UIColor whiteColor];
     addLabel.font=[UIFont fontWithName:@"Arial" size:15];
-    [addButton addSubview:addLabel];
     
-    for (int i=0; i<_array.count; i++) {
-        NSDictionary *dic=_array[i];
-        NSString *user_id=[NSString stringWithFormat:@"%@",[dic objectForKey:@"friend_id"]];
-        int usID=[user_id intValue];
-        int viewUserId=[_view_user_id intValue];
+//    
+//    for (int i=0; i<_array.count; i++) {
+//        NSDictionary *dic=_array[i];
+//        NSString *user_id=[NSString stringWithFormat:@"%@",[dic objectForKey:@"friend_id"]];
+//        int usID=[user_id intValue];
+        int viewUserId=[[homeDic objectForKey:@"is_friend"] intValue];
 
-        if (viewUserId==usID) {
+        if (viewUserId==1) {
             addLabel.text=@"已是好友";
             addButton.backgroundColor=[UIColor colorWithRed:220/255.0f green:220/255.0f blue:220/255.0f alpha:1];
             addButton.enabled=FALSE;
-            break;
+            addLabel.lineBreakMode=NSLineBreakByTruncatingTail;
+            [addLabel setNumberOfLines:1];
+            [addLabel sizeToFit];
+            addLabel.frame=FRAME((addButton.frame.size.width-addLabel.frame.size.width)/2, (addButton.frame.size.height-addLabel.frame.size.height)/2, addLabel.frame.size.width, addLabel.frame.size.height);
+//            break;
         }else{
             addLabel.text=@"添加好友";
             addButton.backgroundColor=[UIColor colorWithRed:231/255.0f green:55/255.0f blue:74/255.0f alpha:1];
             addButton.enabled=TRUE;
+            addLabel.lineBreakMode=NSLineBreakByTruncatingTail;
+            [addLabel setNumberOfLines:1];
+            [addLabel sizeToFit];
+            addLabel.frame=FRAME((addButton.frame.size.width-addLabel.frame.size.width)/2, (addButton.frame.size.height-addLabel.frame.size.height)/2, addLabel.frame.size.width, addLabel.frame.size.height);
         }
-    }
-    addLabel.lineBreakMode=NSLineBreakByTruncatingTail;
-    [addLabel setNumberOfLines:1];
-    [addLabel sizeToFit];
-    addLabel.frame=FRAME((addButton.frame.size.width-addLabel.frame.size.width)/2, (addButton.frame.size.height-addLabel.frame.size.height)/2, addLabel.frame.size.width, addLabel.frame.size.height);
-    
+//    }
+    [addButton addSubview:addLabel];
     addButton.layer.cornerRadius=4;
     [addButton addTarget:self action:@selector(addAction:) forControlEvents:UIControlEventTouchUpInside];
     [fxBlurView addSubview:addButton];

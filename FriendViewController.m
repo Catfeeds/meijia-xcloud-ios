@@ -21,6 +21,7 @@
     UIButton *newsButton;
     UIButton *secetFriendsButton;
     UIView *spotView;
+    UIButton *addBut;
     
 }
 
@@ -46,6 +47,8 @@ ApplyFriendsListViewController *friendsListViewController;
 //    self.backBtn.hidden=YES;
 //    self.navlabel.text=@"好友";
     [self didUnreadMessagesCountChanged];
+    
+    
 #pragma warning 把self注册为SDK的delegate
     [self registerNotifications];
    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setupUntreatedApplyCount) name:@"setupUntreatedApplyCount" object:nil];
@@ -73,9 +76,20 @@ ApplyFriendsListViewController *friendsListViewController;
     tabBarView=[[UIView alloc]initWithFrame:CGRectMake((WIDTH-240)/2, 20, 240, 44)];
    // tabBarView.backgroundColor=[UIColor colorWithRed:231/255.0f green:231/255.0f blue:231/255.0f alpha:1];
     [self.view addSubview:tabBarView];
+    
+    addBut=[[UIButton alloc]initWithFrame:FRAME(WIDTH-40, 20, 40, 44)];
+//    [addBut setTitle:@"添加" forState:UIControlStateNormal];
+    [addBut addTarget:self action:@selector(addBUtAction:) forControlEvents:UIControlEventTouchUpInside];
+//    addBut.backgroundColor=[UIColor redColor];
+    [self.view addSubview:addBut];
+    UIImageView *addImageView=[[UIImageView alloc]initWithFrame:FRAME(10, 10, 20, 20)];
+    addImageView.image=[UIImage imageNamed:@"iconfont-xinjian"];
+    [addBut addSubview:addImageView];
+    
     lineView=[[UIView alloc]initWithFrame:FRAME(0, 42, 60, 2)];
     lineView.backgroundColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
     [tabBarView addSubview:lineView];
+    
     
     UIView *_lineLable = [[UILabel alloc]initWithFrame:FRAME(0, 38, SELF_VIEW_WIDTH, 1)];
     _lineLable.backgroundColor = [UIColor colorWithRed:231/255.0f green:231/255.0f blue:231/255.0f alpha:1];
@@ -108,6 +122,11 @@ ApplyFriendsListViewController *friendsListViewController;
     
     [self setupUnreadMessageCount];
     // Do any additional setup after loading the view.
+}
+-(void)addBUtAction:(UIButton *)button
+{
+    UpLoadViewController *vcd=[[UpLoadViewController alloc]init];
+    [self.navigationController pushViewController:vcd animated:YES];
 }
 #pragma mark - private
 // 未读消息数量变化回调
@@ -180,6 +199,7 @@ ApplyFriendsListViewController *friendsListViewController;
     switch (sender.tag) {
         case 1000:
         {
+            addBut.hidden=NO;
             [self transitionFromViewController:currentViewController toViewController:dynamicViewController duration:0.5 options:0 animations:^{
             }  completion:^(BOOL finished) {
                 if(finished){
@@ -196,6 +216,7 @@ ApplyFriendsListViewController *friendsListViewController;
             break;
         case 1001:
         {
+            addBut.hidden=YES;
             [self transitionFromViewController:currentViewController toViewController:secAccessController duration:0.5 options:0 animations:^{
             }  completion:^(BOOL finished) {
                 if(finished){
@@ -211,6 +232,7 @@ ApplyFriendsListViewController *friendsListViewController;
             break;
         case 1002:
         {
+            addBut.hidden=YES;
             [self transitionFromViewController:currentViewController toViewController:newsViewController duration:0.5 options:0 animations:^{
             }  completion:^(BOOL finished) {
                 if(finished){
@@ -226,6 +248,7 @@ ApplyFriendsListViewController *friendsListViewController;
             break;
         case 1003:
         {
+            addBut.hidden=YES;
             [self transitionFromViewController:currentViewController toViewController:friendsListViewController duration:0.5 options:0 animations:^{
             }  completion:^(BOOL finished) {
                 if(finished){

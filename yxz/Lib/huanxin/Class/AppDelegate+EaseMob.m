@@ -7,7 +7,6 @@
 //
 
 #import "AppDelegate+EaseMob.h"
-//#import "BPush.h"
 /**
  *  本类中做了EaseMob初始化和推送等操作
  */

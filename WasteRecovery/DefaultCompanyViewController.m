@@ -1,82 +1,71 @@
 //
-//  EnterpriseViewController.m
+//  DefaultCompanyViewController.m
 //  yxz
 //
-//  Created by 白玉林 on 15/12/1.
-//  Copyright © 2015年 zhirunjia.com. All rights reserved.
+//  Created by 白玉林 on 16/3/14.
+//  Copyright © 2016年 zhirunjia.com. All rights reserved.
 //
 
-#import "EnterpriseViewController.h"
-#import "CompanyViewController.h"
 #import "DefaultCompanyViewController.h"
-@interface EnterpriseViewController ()
+
+@interface DefaultCompanyViewController ()
 {
-    UIActivityIndicatorView *view;
     UITableView *myTableView;
     NSArray *companyArray;
-    CompanyViewController *companyVC;
-    int djID;
-    
-    UIView *setupView;
-    int  setupID;
-    DropDown *dd1;
+    int cellID;
+    NSString *company_id;
+    UIAlertView *tsView;
 }
 @end
 
-@implementation EnterpriseViewController
+@implementation DefaultCompanyViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    if (_webId==0) {
-        self.navlabel.text=@"创建企业通讯录";
-        [self webViewLayout];
-    }else if (_webId==1){
-        self.navlabel.text=@"企业通讯录";
+    cellID=-1;
+    self.navlabel.text=@"企业通讯录";
+    ISLoginManager *_manager = [ISLoginManager shareManager];
+    NSLog(@"有值么%@",_manager.telephone);
+    DownloadManager *_download = [[DownloadManager alloc]init];
+    NSDictionary *_dict=@{@"user_id":_manager.telephone};
+    [_download requestWithUrl:USER_ENTERPRISE dict:_dict view:self.view delegate:self finishedSEL:@selector(CompanySuccess:) isPost:NO failedSEL:@selector(CompanyFailure:)];
+    [self tableViewLayout];
+    UIButton *defaultBut=[[UIButton alloc]initWithFrame:FRAME(WIDTH-60, 20, 60, 44)];
+    [defaultBut setTitle:@"保存" forState:UIControlStateNormal];
+    [defaultBut setTitleColor:[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1] forState:UIControlStateNormal];
+    [defaultBut addTarget:self action:@selector(defaultButAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:defaultBut];
+    [self tableViewLayout];
+    // Do any additional setup after loading the view.
+}
+-(void)defaultButAction:(UIButton *)button
+{
+    if (company_id==nil||company_id==NULL||[company_id isEqualToString:@""]) {
+        tsView=[[UIAlertView alloc]initWithTitle:@"提醒" message:@"您还没有设置默认企业！" delegate:self cancelButtonTitle:nil otherButtonTitles:nil, nil];
+        [tsView show];
+        [NSTimer scheduledTimerWithTimeInterval:2.0f
+                                         target:self
+                                       selector:@selector(timerFireMethod:)
+                                       userInfo:nil
+                                        repeats:NO];
+    }else{
         ISLoginManager *_manager = [ISLoginManager shareManager];
         NSLog(@"有值么%@",_manager.telephone);
         DownloadManager *_download = [[DownloadManager alloc]init];
-        NSDictionary *_dict=@{@"user_id":_manager.telephone};
-        [_download requestWithUrl:USER_ENTERPRISE dict:_dict view:self.view delegate:self finishedSEL:@selector(CompanySuccess:) isPost:NO failedSEL:@selector(CompanyFailure:)];
-        [self tableViewLayout];
-        UIButton *addBut=[[UIButton alloc]initWithFrame:FRAME(WIDTH-60, 24, 50, 40)];
-        [addBut setTitle:@"设置" forState:UIControlStateNormal];
-        [addBut setTitleColor:[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1] forState:UIControlStateNormal];
-        [addBut addTarget:self action:@selector(addButAction:) forControlEvents:UIControlEventTouchUpInside];
-        [self.view addSubview:addBut];
+        NSDictionary *_dict=@{@"user_id":_manager.telephone,@"company_id":company_id};
+        [_download requestWithUrl:USER_DEFAULTCOMPANT dict:_dict view:self.view delegate:self finishedSEL:@selector(DefaultSuccess:) isPost:NO failedSEL:@selector(CompanyFailure:)];
     }
     
-    dd1 = [[DropDown alloc] initWithFrame:CGRectMake(WIDTH-110, 54, 100, 100)];
-    dd1.delegate=self;
-    NSArray* arr=[[NSArray alloc]initWithObjects:@"创建公司",@"设置默认",nil];
-    dd1.tableArray = arr;
-    [self.view addSubview:dd1];
     
-    // Do any additional setup after loading the view.
 }
--(void)addButAction:(UIButton *)button
+- (void)timerFireMethod:(NSTimer*)theTimer
 {
-
-    [dd1 dropdown];
+    [tsView dismissWithClickedButtonIndex:[tsView cancelButtonIndex] animated:YES];
 }
--(void)viewWillAppear:(BOOL)animated
+#pragma mark用户设置默认企业成功返回
+-(void)DefaultSuccess:(id)source
 {
-    if (djID==100) {
-        _mutableArrat=companyVC.mutableArray;
-        _nameArray=companyVC.nameArray;
-        _mobileArray=companyVC.mobileArray;
-        _idArray=companyVC.idArray;
-    }
-}
--(void)pullDownAnimated:(int)open
-{
-    if (open==0) {
-        WebPageViewController *webVC=[[WebPageViewController alloc]init];
-        webVC.webURL=@"http://123.57.173.36/simi-h5/show/company-reg.html";
-        [self.navigationController pushViewController:webVC animated:YES];
-    }else{
-        DefaultCompanyViewController *defVC=[[DefaultCompanyViewController alloc]init];
-        [self.navigationController pushViewController:defVC animated:YES];
-    }
+    [self.navigationController popViewControllerAnimated:YES];
 }
 #pragma mark 用户所属企业列表成功返回
 -(void)CompanySuccess:(id)sender
@@ -88,28 +77,6 @@
 #pragma mark 用户所属企业列表失败返回
 -(void)CompanyFailure:(id)sender
 {
-}
--(void)webViewLayout
-{
-    UIWebView *meWebView= [[UIWebView alloc]initWithFrame:FRAME(0, 64, WIDTH, HEIGHT-64)];
-    meWebView.delegate=self;
-    //self.meWebView.hidden=YES;
-    meWebView.scrollView.delegate=self;
-    [self.view addSubview:meWebView];
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://123.57.173.36/simi-h5/show/company-reg.html"]];//http://123.57.173.36/simi-h5/show/company-reg.html
-    //NSLog(@"gourl  =  %@",_imgurl);
-    NSURLRequest *request = [NSURLRequest requestWithURL:url];
-    [meWebView loadRequest:request];
-}
-- (void)webViewDidStartLoad:(UIWebView *)webView {
-    view=[[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-    view.center = CGPointMake(WIDTH/2, HEIGHT/2);
-    [self.view addSubview:view];
-    [view startAnimating];
-}
-- (void)webViewDidFinishLoad:(UIWebView *)webView {
-    [view stopAnimating]; // 结束旋转
-    [view setHidesWhenStopped:YES]; //当旋转结束时隐藏
 }
 - (void)backAction
 {
@@ -164,9 +131,9 @@
     cell.textLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"company_name"]];
     cell.textLabel.font=[UIFont fontWithName:@"Arial" size:15];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    UIImageView *arrowImageView=[[UIImageView alloc]initWithFrame:FRAME(WIDTH-30, 15, 20, 20)];
-    arrowImageView.image=[UIImage imageNamed:@"JH_JT_TB_@2x"];
-    [cell addSubview:arrowImageView];
+    if (cellID==indexPath.row) {
+        [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
+    }
     return cell;
 }
 //改变行的高度
@@ -175,25 +142,17 @@
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    djID=100;
+    cellID=(int)indexPath.row;
     NSDictionary *dic=companyArray[indexPath.row];
-    _company_idStr=[NSString stringWithFormat:@"%@",[dic objectForKey:@"company_id"]];
-    companyVC=[[CompanyViewController alloc]init];
-    companyVC.vcIDs=_vcIDs;
-    companyVC.companyDic=dic;
-    companyVC.theNumber=_theNumber;
-    companyVC.companyVcId=_enterVcID;
-    companyVC.dataMutableArray=_mutableArrat;
-    companyVC.dataNameArray=_nameArray;
-    companyVC.dataMobileArray=_mobileArray;
-    companyVC.dataIdArray=_idArray;
-    companyVC.nameString=[NSString stringWithFormat:@"%@",[dic objectForKey:@"company_name"]];
-    [self.navigationController pushViewController:companyVC animated:YES];
+    company_id=[NSString stringWithFormat:@"%@",[dic objectForKey:@"company_id"]];
+    [myTableView reloadData];
 }
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
 /*
 #pragma mark - Navigation
 

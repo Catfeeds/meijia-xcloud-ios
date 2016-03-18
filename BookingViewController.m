@@ -222,7 +222,12 @@ int y,x=0,time_ID;
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.img.hidden=YES;
+    UIImageView *img = [[UIImageView alloc]initWithFrame:FRAME(18, (40-20)/2, 20, 20)];
+    img.image = [UIImage imageNamed:@"iconfont-p-back"];
+    [_backBtn addSubview:img];
     self.backlable.backgroundColor=HEX_TO_UICOLOR(0x56abe4, 1.0);
+    _navlabel.textColor = [UIColor whiteColor];
     ISLoginManager *_manager = [ISLoginManager shareManager];
     AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication] delegate];
     NSString *mobli=[NSString stringWithFormat:@"%@",[delegate.globalDic objectForKey:@"mobile"]];
@@ -1405,7 +1410,7 @@ int y,x=0,time_ID;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:infor options:NSJSONWritingPrettyPrinted error:&error];
     NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
     
-    NSMutableArray *cityArray=[[NSMutableArray alloc]init];
+//    NSMutableArray *cityArray=[[NSMutableArray alloc]init];
     NSDictionary *cityDic=@{@"ticket_type":sendString,@"ticket_from_city_id":fromString,@"ticket_to_city_id":toString};
 //    [cityArray addObject:cityDic];
 //    NSArray *cityinfor=[NSArray arrayWithArray:cityArray];

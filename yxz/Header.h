@@ -174,4 +174,6 @@
 #define EXPRESS_ORDER_LIST               @"simi/app/record/get_list_express.json"        //登记-快递登记列表接口
 #define EXPRESS_REGISTER                 @"simi/app/record/post_add_express.json"        //登记-快递登记接口
 #define EXREESS_REGISER_DETAILE          @"simi/app/record/get_detail_express.jsonn"     //登记-快递登记详情接口
+#define USER_DEFAULTCOMPANT              @"simi/app/company/set_default.json"            //企业-用户设置默认企业
+#define USER_HELP_CLICK                  @"simi/app/op/post_help.json"                   //帮助-帮助点击记录接口
 #endif

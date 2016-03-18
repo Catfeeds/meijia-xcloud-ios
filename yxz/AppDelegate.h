@@ -15,8 +15,6 @@
 #import "IChatManagerDelegate.h"
 #import "SERVICEBaseClass.h"
 #import "HuanxinBase.h"
-//#import "BPush.h"
-//#import ""
 
 #import "GeTuiSdk.h"
 @protocol appDelegate <NSObject>
@@ -67,7 +65,7 @@
 @property (retain, nonatomic) NSString *payloadId;
 @property (assign, nonatomic) int lastPayloadIndex;
 @property (assign, nonatomic) SdkStatus sdkStatus;
-
+@property (strong,nonatomic) UIImageView *adView;
 @property (nonatomic) BOOL pushBool;
 
 @property (nonatomic ,strong) NSDictionary *globalDic;
@@ -76,9 +74,6 @@
 - (void)saveContext;
 - (NSURL *)applicationDocumentsDirectory;
 - (void)ChoseRootController;
-
-- (void) sendTextContent;
-
 - (void)huanxin;
 
 @end

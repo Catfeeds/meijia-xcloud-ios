@@ -114,7 +114,7 @@
     
     //计数按钮圆角化
     self.selectedCountBtn.layer.cornerRadius=11.0f;
-    self.msgLabel.text=[NSString stringWithFormat:@"提示：您最多可选 %li 张照片！",self.maximumNumberOfSelectionPhoto];
+    self.msgLabel.text=[NSString stringWithFormat:@"提示：您最多可选 %li 张照片！",(long)self.maximumNumberOfSelectionPhoto];
     
 }
 
@@ -154,7 +154,7 @@
 }
 - (void)setupLayout
 {
-    UzysAppearanceConfig *appearanceConfig = [UzysAppearanceConfig sharedConfig];
+//    UzysAppearanceConfig *appearanceConfig = [UzysAppearanceConfig sharedConfig];
     
     UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 0.5)];
     lineView.backgroundColor = [UIColor colorWithWhite:0 alpha:0.15f];
@@ -225,7 +225,7 @@
             self.segmentedControl.hidden = YES;
             self.labelSelectedMedia.hidden = NO;
             if(_maximumNumberOfSelection >1)
-                self.noticeLabel.text = [NSString stringWithFormat:@"最多选%li张",self.maximumNumberOfSelectionPhoto];
+                self.noticeLabel.text = [NSString stringWithFormat:@"最多选%li张",(long)self.maximumNumberOfSelectionPhoto];
             else
                 self.labelSelectedMedia.text = NSLocalizedStringFromTable(@"Choose a photo", @"UzysAssetsPickerController", nil);
         }
@@ -456,7 +456,7 @@
     
     NSInteger count=indexPaths.count;
     self.btnDone.enabled=count!=0;
-    [self.selectedCountBtn setTitle:[NSString stringWithFormat:@"%li",count] forState:UIControlStateNormal];
+    [self.selectedCountBtn setTitle:[NSString stringWithFormat:@"%li",(long)count] forState:UIControlStateNormal];
 }
 
 - (void)setTitle:(NSString *)title
@@ -763,7 +763,7 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         __strong typeof(self) strongSelf = weakSelf;
         NSDictionary* info = [notification userInfo];
-        NSSet *updatedAssets = [info objectForKey:ALAssetLibraryUpdatedAssetsKey];
+//        NSSet *updatedAssets = [info objectForKey:ALAssetLibraryUpdatedAssetsKey];
         NSSet *updatedAssetGroup = [info objectForKey:ALAssetLibraryUpdatedAssetGroupsKey];
         NSSet *deletedAssetGroup = [info objectForKey:ALAssetLibraryDeletedAssetGroupsKey];
         NSSet *insertedAssetGroup = [info objectForKey:ALAssetLibraryInsertedAssetGroupsKey];

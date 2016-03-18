@@ -69,6 +69,7 @@
     EjectAlertView *ejectView;
     NSString *helpUrl_Str;
     //NSDictionary *dic;
+    NSDictionary *dataDic;
 }
 
 @end
@@ -177,48 +178,48 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
 }
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    NSString *filename = [self dataFilePath];
-    NSLog(@"%@",filename);
-    if (sqlite3_open([filename UTF8String], &yxzdb) != SQLITE_OK) {
-        sqlite3_close(yxzdb);
-        NSAssert(NO,@"数据库打开失败。");
-    } else {
-        
-        if ([self checkName:@"users"]) {
-            NSString *sqlStr = [NSString stringWithFormat: @"INSERT OR REPLACE INTO %@ (%@, %@, %@ ,%@) VALUES (?,?,?,?)",
-                                TABLE_NAME, FIELDS_NAME_SID, FIELDS_NAME_SNAME, FIELDS_NAME_SCLASS,FIELDS_NAME_MOBILE];
-            
-            sqlite3_stmt *statement;
-            //预处理过程
-            if (sqlite3_prepare_v2(yxzdb, [sqlStr UTF8String], -1, &statement, NULL) == SQLITE_OK) {
-                //绑定参数开始
-                sqlite3_bind_text(statement, 1, [@"1" UTF8String], -1, NULL);
-                sqlite3_bind_text(statement, 2, [@"白玉林" UTF8String], -1, NULL);
-                sqlite3_bind_text(statement, 3, [@"iamge" UTF8String], -1, NULL);
-                sqlite3_bind_text(statement, 4, [@"15727372986" UTF8String], -1, NULL);
-                
-                
-                //执行插入
-                if (sqlite3_step(statement) != SQLITE_DONE) {
-                    NSAssert(0, @"插入数据失败。");
-                }
-            }
-            
-            sqlite3_finalize(statement);
-            sqlite3_close(yxzdb);
-
-        }else{
-            char *err;
-            NSString *createSQL = [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@ (%@ INT PRIMARY KEY, %@ NSSTRING, %@ NSSTRING, %@ NSSTRING);" ,
-                                   TABLE_NAME,FIELDS_NAME_SID,FIELDS_NAME_SNAME,FIELDS_NAME_SCLASS,FIELDS_NAME_MOBILE];
-            if (sqlite3_exec(yxzdb,[createSQL UTF8String],NULL,NULL,&err) != SQLITE_OK) {
-                sqlite3_close(yxzdb);
-                //NSAssert1(NO, @"建表失败, %@", err);
-            }
-            sqlite3_close(yxzdb);
-        }
-        
-    }
+//    NSString *filename = [self dataFilePath];
+//    NSLog(@"%@",filename);
+//    if (sqlite3_open([filename UTF8String], &yxzdb) != SQLITE_OK) {
+//        sqlite3_close(yxzdb);
+//        NSAssert(NO,@"数据库打开失败。");
+//    } else {
+//        
+//        if ([self checkName:@"users"]) {
+//            NSString *sqlStr = [NSString stringWithFormat: @"INSERT OR REPLACE INTO %@ (%@, %@, %@ ,%@) VALUES (?,?,?,?)",
+//                                TABLE_NAME, FIELDS_NAME_SID, FIELDS_NAME_SNAME, FIELDS_NAME_SCLASS,FIELDS_NAME_MOBILE];
+//            
+//            sqlite3_stmt *statement;
+//            //预处理过程
+//            if (sqlite3_prepare_v2(yxzdb, [sqlStr UTF8String], -1, &statement, NULL) == SQLITE_OK) {
+//                //绑定参数开始
+//                sqlite3_bind_text(statement, 1, [@"1" UTF8String], -1, NULL);
+//                sqlite3_bind_text(statement, 2, [@"白玉林" UTF8String], -1, NULL);
+//                sqlite3_bind_text(statement, 3, [@"iamge" UTF8String], -1, NULL);
+//                sqlite3_bind_text(statement, 4, [@"15727372986" UTF8String], -1, NULL);
+//                
+//                
+//                //执行插入
+//                if (sqlite3_step(statement) != SQLITE_DONE) {
+//                    NSAssert(0, @"插入数据失败。");
+//                }
+//            }
+//            
+//            sqlite3_finalize(statement);
+//            sqlite3_close(yxzdb);
+//
+//        }else{
+//            char *err;
+//            NSString *createSQL = [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@ (%@ INT PRIMARY KEY, %@ NSSTRING, %@ NSSTRING, %@ NSSTRING);" ,
+//                                   TABLE_NAME,FIELDS_NAME_SID,FIELDS_NAME_SNAME,FIELDS_NAME_SCLASS,FIELDS_NAME_MOBILE];
+//            if (sqlite3_exec(yxzdb,[createSQL UTF8String],NULL,NULL,&err) != SQLITE_OK) {
+//                sqlite3_close(yxzdb);
+//                //NSAssert1(NO, @"建表失败, %@", err);
+//            }
+//            sqlite3_close(yxzdb);
+//        }
+//        
+//    }
 
     
     self.riliArray=[[NSMutableArray alloc]init];
@@ -316,7 +317,7 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     
     [UMSocialData setAppKey:YMAPPKEY];
     [UMFeedback setAppkey:YMAPPKEY];
-//    [MobClick setCrashReportEnabled:NO];
+    [MobClick setCrashReportEnabled:NO];
     [MobClick startWithAppkey:YMAPPKEY reportPolicy:BATCH   channelId:@"Web"];
     NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
     [MobClick setAppVersion:version];
@@ -416,13 +417,12 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     
     
     //    //设置默认启动页的停留时间
-    [NSThread sleepForTimeInterval:0.1];
+    [NSThread sleepForTimeInterval:0.0];
     //    //end
     //
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     //    // Override point for customization after application launch.
     self.window.backgroundColor = [UIColor whiteColor];
-    
     [self.window makeKeyAndVisible];
     
     [self ChoseRootController];
@@ -436,6 +436,7 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
 {
     NSLog(@"我就看看你走没走--2");
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(imageLayout:) name:@"ALERT" object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(viewShowcase:) name:@"ASDEDSA" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(viewLayout:) name:@"EJECT" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(helpLayout:) name:@"HELP" object:nil];
     _appID = appID;
@@ -454,7 +455,7 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
 }
 -(void)viewLayout:(NSNotification *)dataSource
 {
-    NSDictionary *dataDic=dataSource.object;
+    dataDic=dataSource.object;
     NSLog(@"%@",dataDic);
     [ejectView removeFromSuperview];
     helpUrl_Str=[NSString stringWithFormat:@"%@",[dataDic objectForKey:@"goto_url"]];
@@ -570,6 +571,19 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
         NSDictionary *dic=@{@"webUrl":helpUrl_Str};
         [[NSNotificationCenter defaultCenter] postNotificationName:@"WEBURL" object:dic];
     }
+    ISLoginManager *manager = [[ISLoginManager alloc]init];
+    DownloadManager *_download = [[DownloadManager alloc]init];
+    NSString *action=[NSString stringWithFormat:@"%@",[dataDic objectForKey:@"action"]];
+    NSDictionary *_dict=@{@"user_id":manager.telephone,@"action":action};
+    [_download requestWithUrl:USER_HELP_CLICK dict:_dict view:self.window delegate:self finishedSEL:@selector(LeaveSuccess:) isPost:YES failedSEL:@selector(LeaveFail:)];
+}
+-(void)LeaveSuccess:(id)source
+{
+    NSLog(@"%@",source);
+}
+-(void)LeaveFail:(id)source
+{
+    NSLog(@"%@",source);
 }
 -(void)imageLayout:(NSNotification *)sender
 {
@@ -747,6 +761,7 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
 //启动页
 - (void)showWord
 {
+    [[UIApplication sharedApplication]setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
     [splashView removeFromSuperview];
 }
 - (void)huanxin
@@ -904,7 +919,11 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
                                                             options:NSJSONReadingMutableContainers
                                                               error:&err];
         NSLog(@"个推消息内容%@",dic);
-    
+    NSString *string=[NSString stringWithFormat:@"%@",[dic objectForKey:@"action"]];
+    if ([string isEqualToString:@"car-msg"]) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"ASDEDSA" object:dic];
+        return;
+    }
         if (dic==nil||dic==NULL) {
             return;
         }
@@ -1132,8 +1151,14 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
             [self.window addSubview:splashView];
             
             [self.window bringSubviewToFront:splashView];
+            _adView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, WIDTH, HEIGHT-150)];
+            NSString *imageUrl=@"http://123.57.173.36/simi-h5/img/load-ad-update.jpg";
+            //        [headImageView setImageWithURL:[NSURL URLWithString:imageUrl]placeholderImage:nil];
+            _adView.image=[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imageUrl]]];
+//            _adView.backgroundColor=[UIColor redColor];
+            [splashView addSubview:_adView];
             
-            [self performSelector:@selector(showWord) withObject:nil afterDelay:2.0f];
+            [self performSelector:@selector(showWord) withObject:nil afterDelay:3.0f];
             
             UIActivityIndicatorView *acview = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
             
@@ -1149,7 +1174,7 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
         //end
         
     }else{
-        
+        [[UIApplication sharedApplication]setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
         GuideViewController *_controller = [[GuideViewController alloc]init];
         UINavigationController *root = [[UINavigationController alloc]initWithRootViewController:_controller];
         self.window.rootViewController = root;
@@ -1381,7 +1406,86 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     
     return _persistentStoreCoordinator;
 }
-
+-(void)viewShowcase:(NSNotification *)sender
+{
+    NSDictionary *dic=sender.object;
+    UIView *view=[[UIView alloc]initWithFrame:FRAME(0, 0, WIDTH, HEIGHT)];
+    view.backgroundColor=[UIColor whiteColor];
+    [self.window addSubview:view];
+    NSArray *array=@[@"识别车牌:",@"车颜色:",@"绑定用户:",@"识别时间:",@"本次缴费:",@"账户余额:",@"账户类型:"];
+    for (int i=0; i<array.count; i++) {
+        UILabel *nameLabel=[[UILabel alloc]init];
+        nameLabel.text=[NSString stringWithFormat:@"%@",array[i]];
+        nameLabel.font=[UIFont fontWithName:@"Arial" size:18];
+        [nameLabel setNumberOfLines:1];
+        [nameLabel sizeToFit];
+        nameLabel.frame=FRAME(20, 64+30*i, nameLabel.frame.size.width, 30);
+        [view addSubview:nameLabel];
+        
+        UILabel *textLabel=[[UILabel alloc]init];
+        textLabel.font=[UIFont fontWithName:@"Arial" size:18];
+        switch (i) {
+            case 0:
+            {
+                textLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"car_no"]];
+            }
+                break;
+            case 1:
+            {
+                textLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"car_color"]];
+            }
+                break;
+            case 2:
+            {
+                textLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"mobile"]];
+            }
+                break;
+            case 3:
+            {
+                textLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"ocx_time"]];
+            }
+                break;
+            case 4:
+            {
+                textLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"order_money"]];
+            }
+                break;
+            case 5:
+            {
+                textLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"rest_money"]];
+            }
+                break;
+            case 6:
+            {
+                textLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"order_type"]];
+            }
+                break;
+                
+            default:
+                break;
+        }
+        textLabel.frame=FRAME(nameLabel.frame.size.width+30, 64+30*i, (WIDTH-nameLabel.frame.size.width-50), 30);
+        textLabel.textAlignment=NSTextAlignmentLeft;
+        [view addSubview:textLabel];
+    }
+    UIImageView *image=[[UIImageView alloc]initWithFrame:FRAME(20, 64+30*7, WIDTH-40, 200)];
+    NSString *imageUrl=[NSString stringWithFormat:@"%@",[dic objectForKey:@"cap_img"]];
+    [image setImageWithURL:[NSURL URLWithString:imageUrl]placeholderImage:nil];
+    [view addSubview:image];
+    
+    UIButton *confirmBut=[[UIButton alloc]initWithFrame:FRAME(14, HEIGHT-46, WIDTH-28, 41)];
+    confirmBut.backgroundColor=HEX_TO_UICOLOR(0xe8374a, 1.0);
+    [confirmBut setTitle:@"确认缴费" forState:UIControlStateNormal];
+    confirmBut.titleLabel.font=[UIFont fontWithName:@"Arial" size:16];
+    confirmBut.layer.cornerRadius=8;
+    confirmBut.clipsToBounds=YES;
+    [confirmBut addTarget:self action:@selector(confirmBut:) forControlEvents:UIControlEventTouchUpInside];
+    [view addSubview:confirmBut];
+}
+-(void)confirmBut:(UIButton *)button
+{
+    
+}
 #pragma mark - Application's Documents directory
 
 // Returns the URL to the application's Documents directory.

@@ -26,7 +26,12 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    _navlabel.textColor = [UIColor whiteColor];
     self.backlable.backgroundColor=HEX_TO_UICOLOR(0xbfbfbf, 1.0);
+    self.img.hidden=YES;
+    UIImageView *img = [[UIImageView alloc]initWithFrame:FRAME(18, (40-20)/2, 20, 20)];
+    img.image = [UIImage imageNamed:@"iconfont-p-back"];
+    [_backBtn addSubview:img];
     self.navlabel.text=@"应用中心";
     dataArray =[[NSMutableArray alloc]init];
     page=1;

@@ -126,6 +126,11 @@ int H = 0,time_ID;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    _navlabel.textColor = [UIColor whiteColor];
+    self.img.hidden=YES;
+    UIImageView *img = [[UIImageView alloc]initWithFrame:FRAME(18, (40-20)/2, 20, 20)];
+    img.image = [UIImage imageNamed:@"iconfont-p-back"];
+    [_backBtn addSubview:img];
     switchButID=0;
     _index=-1;
     _cardsID=1;
@@ -186,7 +191,7 @@ int H = 0,time_ID;
             break;
         case 1003:
         {
-            self.navlabel.text=@"事物提醒";
+            self.navlabel.text=@"事务提醒";
             card_type_ID=3;
         }
             break;
@@ -490,7 +495,7 @@ int H = 0,time_ID;
                 break;
             case 1003:
             {
-                [sendButton setTitle:@"事物提醒" forState:UIControlStateNormal];
+                [sendButton setTitle:@"事务提醒" forState:UIControlStateNormal];
             }
                 break;
             case 1004:
@@ -1454,75 +1459,7 @@ int H = 0,time_ID;
     int theDateint = [theDate timeIntervalSince1970]*1;
     
     //----------------------------提醒时间---------
-    NSString *str=[NSString stringWithFormat:@"%@",timeString];
-    NSLog(@"时间%@",str);
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateStyle:NSDateFormatterMediumStyle];
-    [formatter setTimeStyle:NSDateFormatterShortStyle];
-    [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-    NSDate* dat = [formatter dateFromString:str];
-    int _fitstDate = [dat timeIntervalSince1970]*1;
     
-    //提醒时间第一个时间段
-    NSString *alertFirstTime1=[NSString stringWithFormat:@"%@ 11:00:00",[str substringWithRange:NSMakeRange(0,10)]];
-    NSDateFormatter *alertFirstformatte1 = [[NSDateFormatter alloc] init];
-    [alertFirstformatte1 setDateStyle:NSDateFormatterMediumStyle];
-    [alertFirstformatte1 setTimeStyle:NSDateFormatterShortStyle];
-    [alertFirstformatte1 setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-    NSDate* alertFirstdate1 = [alertFirstformatte1 dateFromString:alertFirstTime1];
-    int alertFirst1 = [alertFirstdate1 timeIntervalSince1970]*1;
-    
-    NSString *alertFirstTime2=[NSString stringWithFormat:@"%@ 19:00:00",[str substringWithRange:NSMakeRange(0,10)]];
-    NSDateFormatter *alertFirstformatte2 = [[NSDateFormatter alloc] init];
-    [alertFirstformatte2 setDateStyle:NSDateFormatterMediumStyle];
-    [alertFirstformatte2 setTimeStyle:NSDateFormatterShortStyle];
-    [alertFirstformatte2 setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-    NSDate* alertFirstdate2 = [alertFirstformatte2 dateFromString:alertFirstTime2];
-    int alertFirst2 = [alertFirstdate2 timeIntervalSince1970]*1;
-    
-    //提醒时间第二个时间段
-    NSString *alertTwoTime1=[NSString stringWithFormat:@"%@ 07:00:00",[str substringWithRange:NSMakeRange(0,10)]];
-    NSDateFormatter *alertTwoformatte1 = [[NSDateFormatter alloc] init];
-    [alertTwoformatte1 setDateStyle:NSDateFormatterMediumStyle];
-    [alertTwoformatte1 setTimeStyle:NSDateFormatterShortStyle];
-    [alertTwoformatte1 setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-    NSDate* alertTwodate1 = [alertTwoformatte1 dateFromString:alertTwoTime1];
-    int alertTwo1 = [alertTwodate1 timeIntervalSince1970]*1;
-    
-    NSString *alertTwoTime2=[NSString stringWithFormat:@"%@ 19:00:00",[str substringWithRange:NSMakeRange(0,10)]];
-    NSDateFormatter *alertTwoformatte2 = [[NSDateFormatter alloc] init];
-    [alertTwoformatte2 setDateStyle:NSDateFormatterMediumStyle];
-    [alertTwoformatte2 setTimeStyle:NSDateFormatterShortStyle];
-    [alertTwoformatte2 setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-    NSDate* alertTwodate2 = [alertTwoformatte2 dateFromString:alertTwoTime2];
-    int alertTwo2 = [alertTwodate2 timeIntervalSince1970]*1;
-    
-    //提醒时间第三个时间段
-    NSString *alertThreeTime1=[NSString stringWithFormat:@"%@ 07:00:00",[str substringWithRange:NSMakeRange(0,10)]];
-    NSDateFormatter *alertThreeformatte1 = [[NSDateFormatter alloc] init];
-    [alertThreeformatte1 setDateStyle:NSDateFormatterMediumStyle];
-    [alertThreeformatte1 setTimeStyle:NSDateFormatterShortStyle];
-    [alertThreeformatte1 setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-    NSDate* alertThreedate1 = [alertThreeformatte1 dateFromString:alertThreeTime1];
-    NSTimeInterval alertThree1 = [alertThreedate1 timeIntervalSince1970]*1;
-    
-    NSString *alertThreeTime2=[NSString stringWithFormat:@"%@ 19:00:00",[str substringWithRange:NSMakeRange(0,10)]];
-    NSDateFormatter *alertThreeformatte2 = [[NSDateFormatter alloc] init];
-    [alertThreeformatte2 setDateStyle:NSDateFormatterMediumStyle];
-    [alertThreeformatte2 setTimeStyle:NSDateFormatterShortStyle];
-    [alertThreeformatte2 setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-    NSDate* alertThreedate2 = [alertThreeformatte2 dateFromString:alertThreeTime2];
-    NSTimeInterval alertThree2 = [alertThreedate2 timeIntervalSince1970]*1;
-    
-    
-    //提醒时间的日期
-    NSString *alertDateString=[str substringWithRange:NSMakeRange(0,10)];
-    NSDateFormatter *alertDateformatte = [[NSDateFormatter alloc] init];
-    [alertDateformatte setDateStyle:NSDateFormatterMediumStyle];
-    [alertDateformatte setTimeStyle:NSDateFormatterShortStyle];
-    [alertDateformatte setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-    NSDate* alertDate = [alertDateformatte dateFromString:alertDateString];
-    int alertDateint = [alertDate timeIntervalSince1970]*1;
     
     
     
@@ -1550,6 +1487,75 @@ int H = 0,time_ID;
             
         }else if([meetingString isEqualToString:@"不提醒"]){
             if (whether_to_send==1) {
+                NSString *str=[NSString stringWithFormat:@"%@",timeString];
+                NSLog(@"时间%@",str);
+                NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+                [formatter setDateStyle:NSDateFormatterMediumStyle];
+                [formatter setTimeStyle:NSDateFormatterShortStyle];
+                [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+                NSDate* dat = [formatter dateFromString:str];
+                int _fitstDate = [dat timeIntervalSince1970]*1;
+                
+                //提醒时间第一个时间段
+                NSString *alertFirstTime1=[NSString stringWithFormat:@"%@ 11:00:00",[str substringWithRange:NSMakeRange(0,10)]];
+                NSDateFormatter *alertFirstformatte1 = [[NSDateFormatter alloc] init];
+                [alertFirstformatte1 setDateStyle:NSDateFormatterMediumStyle];
+                [alertFirstformatte1 setTimeStyle:NSDateFormatterShortStyle];
+                [alertFirstformatte1 setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+                NSDate* alertFirstdate1 = [alertFirstformatte1 dateFromString:alertFirstTime1];
+                int alertFirst1 = [alertFirstdate1 timeIntervalSince1970]*1;
+                
+                NSString *alertFirstTime2=[NSString stringWithFormat:@"%@ 19:00:00",[str substringWithRange:NSMakeRange(0,10)]];
+                NSDateFormatter *alertFirstformatte2 = [[NSDateFormatter alloc] init];
+                [alertFirstformatte2 setDateStyle:NSDateFormatterMediumStyle];
+                [alertFirstformatte2 setTimeStyle:NSDateFormatterShortStyle];
+                [alertFirstformatte2 setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+                NSDate* alertFirstdate2 = [alertFirstformatte2 dateFromString:alertFirstTime2];
+                int alertFirst2 = [alertFirstdate2 timeIntervalSince1970]*1;
+                
+                //提醒时间第二个时间段
+                NSString *alertTwoTime1=[NSString stringWithFormat:@"%@ 07:00:00",[str substringWithRange:NSMakeRange(0,10)]];
+                NSDateFormatter *alertTwoformatte1 = [[NSDateFormatter alloc] init];
+                [alertTwoformatte1 setDateStyle:NSDateFormatterMediumStyle];
+                [alertTwoformatte1 setTimeStyle:NSDateFormatterShortStyle];
+                [alertTwoformatte1 setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+                NSDate* alertTwodate1 = [alertTwoformatte1 dateFromString:alertTwoTime1];
+                int alertTwo1 = [alertTwodate1 timeIntervalSince1970]*1;
+                
+                NSString *alertTwoTime2=[NSString stringWithFormat:@"%@ 19:00:00",[str substringWithRange:NSMakeRange(0,10)]];
+                NSDateFormatter *alertTwoformatte2 = [[NSDateFormatter alloc] init];
+                [alertTwoformatte2 setDateStyle:NSDateFormatterMediumStyle];
+                [alertTwoformatte2 setTimeStyle:NSDateFormatterShortStyle];
+                [alertTwoformatte2 setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+                NSDate* alertTwodate2 = [alertTwoformatte2 dateFromString:alertTwoTime2];
+                int alertTwo2 = [alertTwodate2 timeIntervalSince1970]*1;
+                
+                //提醒时间第三个时间段
+                NSString *alertThreeTime1=[NSString stringWithFormat:@"%@ 07:00:00",[str substringWithRange:NSMakeRange(0,10)]];
+                NSDateFormatter *alertThreeformatte1 = [[NSDateFormatter alloc] init];
+                [alertThreeformatte1 setDateStyle:NSDateFormatterMediumStyle];
+                [alertThreeformatte1 setTimeStyle:NSDateFormatterShortStyle];
+                [alertThreeformatte1 setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+                NSDate* alertThreedate1 = [alertThreeformatte1 dateFromString:alertThreeTime1];
+                NSTimeInterval alertThree1 = [alertThreedate1 timeIntervalSince1970]*1;
+                
+                NSString *alertThreeTime2=[NSString stringWithFormat:@"%@ 19:00:00",[str substringWithRange:NSMakeRange(0,10)]];
+                NSDateFormatter *alertThreeformatte2 = [[NSDateFormatter alloc] init];
+                [alertThreeformatte2 setDateStyle:NSDateFormatterMediumStyle];
+                [alertThreeformatte2 setTimeStyle:NSDateFormatterShortStyle];
+                [alertThreeformatte2 setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+                NSDate* alertThreedate2 = [alertThreeformatte2 dateFromString:alertThreeTime2];
+                NSTimeInterval alertThree2 = [alertThreedate2 timeIntervalSince1970]*1;
+                
+                
+                //提醒时间的日期
+                NSString *alertDateString=[str substringWithRange:NSMakeRange(0,10)];
+                NSDateFormatter *alertDateformatte = [[NSDateFormatter alloc] init];
+                [alertDateformatte setDateStyle:NSDateFormatterMediumStyle];
+                [alertDateformatte setTimeStyle:NSDateFormatterShortStyle];
+                [alertDateformatte setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+                NSDate* alertDate = [alertDateformatte dateFromString:alertDateString];
+                int alertDateint = [alertDate timeIntervalSince1970]*1;
                 NSLog(@"当前时间1%d，当亲时间%f，当前时间2%d",theFirst1,_secondDate,theFirst2);
                 if(theFirst1<=_secondDate && _secondDate<=theFirst2 && alertFirst1<=_fitstDate && _fitstDate<=alertFirst2)
                 {
@@ -1594,6 +1600,75 @@ int H = 0,time_ID;
         }else{
             //获取当前时间
             //获取当前时间
+            NSString *str=[NSString stringWithFormat:@"%@",timeString];
+            NSLog(@"时间%@",str);
+            NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+            [formatter setDateStyle:NSDateFormatterMediumStyle];
+            [formatter setTimeStyle:NSDateFormatterShortStyle];
+            [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+            NSDate* dat = [formatter dateFromString:str];
+            int _fitstDate = [dat timeIntervalSince1970]*1;
+            
+            //提醒时间第一个时间段
+            NSString *alertFirstTime1=[NSString stringWithFormat:@"%@ 11:00:00",[str substringWithRange:NSMakeRange(0,10)]];
+            NSDateFormatter *alertFirstformatte1 = [[NSDateFormatter alloc] init];
+            [alertFirstformatte1 setDateStyle:NSDateFormatterMediumStyle];
+            [alertFirstformatte1 setTimeStyle:NSDateFormatterShortStyle];
+            [alertFirstformatte1 setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+            NSDate* alertFirstdate1 = [alertFirstformatte1 dateFromString:alertFirstTime1];
+            int alertFirst1 = [alertFirstdate1 timeIntervalSince1970]*1;
+            
+            NSString *alertFirstTime2=[NSString stringWithFormat:@"%@ 19:00:00",[str substringWithRange:NSMakeRange(0,10)]];
+            NSDateFormatter *alertFirstformatte2 = [[NSDateFormatter alloc] init];
+            [alertFirstformatte2 setDateStyle:NSDateFormatterMediumStyle];
+            [alertFirstformatte2 setTimeStyle:NSDateFormatterShortStyle];
+            [alertFirstformatte2 setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+            NSDate* alertFirstdate2 = [alertFirstformatte2 dateFromString:alertFirstTime2];
+            int alertFirst2 = [alertFirstdate2 timeIntervalSince1970]*1;
+            
+            //提醒时间第二个时间段
+            NSString *alertTwoTime1=[NSString stringWithFormat:@"%@ 07:00:00",[str substringWithRange:NSMakeRange(0,10)]];
+            NSDateFormatter *alertTwoformatte1 = [[NSDateFormatter alloc] init];
+            [alertTwoformatte1 setDateStyle:NSDateFormatterMediumStyle];
+            [alertTwoformatte1 setTimeStyle:NSDateFormatterShortStyle];
+            [alertTwoformatte1 setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+            NSDate* alertTwodate1 = [alertTwoformatte1 dateFromString:alertTwoTime1];
+            int alertTwo1 = [alertTwodate1 timeIntervalSince1970]*1;
+            
+            NSString *alertTwoTime2=[NSString stringWithFormat:@"%@ 19:00:00",[str substringWithRange:NSMakeRange(0,10)]];
+            NSDateFormatter *alertTwoformatte2 = [[NSDateFormatter alloc] init];
+            [alertTwoformatte2 setDateStyle:NSDateFormatterMediumStyle];
+            [alertTwoformatte2 setTimeStyle:NSDateFormatterShortStyle];
+            [alertTwoformatte2 setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+            NSDate* alertTwodate2 = [alertTwoformatte2 dateFromString:alertTwoTime2];
+            int alertTwo2 = [alertTwodate2 timeIntervalSince1970]*1;
+            
+            //提醒时间第三个时间段
+            NSString *alertThreeTime1=[NSString stringWithFormat:@"%@ 07:00:00",[str substringWithRange:NSMakeRange(0,10)]];
+            NSDateFormatter *alertThreeformatte1 = [[NSDateFormatter alloc] init];
+            [alertThreeformatte1 setDateStyle:NSDateFormatterMediumStyle];
+            [alertThreeformatte1 setTimeStyle:NSDateFormatterShortStyle];
+            [alertThreeformatte1 setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+            NSDate* alertThreedate1 = [alertThreeformatte1 dateFromString:alertThreeTime1];
+            NSTimeInterval alertThree1 = [alertThreedate1 timeIntervalSince1970]*1;
+            
+            NSString *alertThreeTime2=[NSString stringWithFormat:@"%@ 19:00:00",[str substringWithRange:NSMakeRange(0,10)]];
+            NSDateFormatter *alertThreeformatte2 = [[NSDateFormatter alloc] init];
+            [alertThreeformatte2 setDateStyle:NSDateFormatterMediumStyle];
+            [alertThreeformatte2 setTimeStyle:NSDateFormatterShortStyle];
+            [alertThreeformatte2 setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+            NSDate* alertThreedate2 = [alertThreeformatte2 dateFromString:alertThreeTime2];
+            NSTimeInterval alertThree2 = [alertThreedate2 timeIntervalSince1970]*1;
+            
+            
+            //提醒时间的日期
+            NSString *alertDateString=[str substringWithRange:NSMakeRange(0,10)];
+            NSDateFormatter *alertDateformatte = [[NSDateFormatter alloc] init];
+            [alertDateformatte setDateStyle:NSDateFormatterMediumStyle];
+            [alertDateformatte setTimeStyle:NSDateFormatterShortStyle];
+            [alertDateformatte setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+            NSDate* alertDate = [alertDateformatte dateFromString:alertDateString];
+            int alertDateint = [alertDate timeIntervalSince1970]*1;
             if(_secondDate-_fitstDate>0){
                 
                 UIAlertView *tsView=[[UIAlertView alloc]initWithTitle:@"提醒" message:@"您选择的日期时间无效，请选择有效时间哦！" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
@@ -1646,11 +1721,11 @@ int H = 0,time_ID;
 
     }else{
         if (selectString==nil||selectString==NULL) {
-            UIAlertView *tsView=[[UIAlertView alloc]initWithTitle:@"提醒" message:@"请选择参会人员" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            UIAlertView *tsView=[[UIAlertView alloc]initWithTitle:@"提醒" message:@"请选择人员" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
             [tsView show];
             
         }else if (timeString==nil||timeString==NULL){
-            UIAlertView *tsView=[[UIAlertView alloc]initWithTitle:@"提醒" message:@"请选择会议时间" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            UIAlertView *tsView=[[UIAlertView alloc]initWithTitle:@"提醒" message:@"请选择时间" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
             [tsView show];
             
         }else if (meetingField.text==nil||meetingField.text==NULL){
@@ -1658,12 +1733,81 @@ int H = 0,time_ID;
             [tsView show];
             
         }else if (contentString==nil||contentString==NULL){
-            UIAlertView *tsView=[[UIAlertView alloc]initWithTitle:@"提醒" message:@"请填写会议内容" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            UIAlertView *tsView=[[UIAlertView alloc]initWithTitle:@"提醒" message:@"请填写内容" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
             [tsView show];
             
         }else if([meetingString isEqualToString:@"不提醒"])
         {
             if (whether_to_send==1) {
+                NSString *str=[NSString stringWithFormat:@"%@",timeString];
+                NSLog(@"时间%@",str);
+                NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+                [formatter setDateStyle:NSDateFormatterMediumStyle];
+                [formatter setTimeStyle:NSDateFormatterShortStyle];
+                [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+                NSDate* dat = [formatter dateFromString:str];
+                int _fitstDate = [dat timeIntervalSince1970]*1;
+                
+                //提醒时间第一个时间段
+                NSString *alertFirstTime1=[NSString stringWithFormat:@"%@ 11:00:00",[str substringWithRange:NSMakeRange(0,10)]];
+                NSDateFormatter *alertFirstformatte1 = [[NSDateFormatter alloc] init];
+                [alertFirstformatte1 setDateStyle:NSDateFormatterMediumStyle];
+                [alertFirstformatte1 setTimeStyle:NSDateFormatterShortStyle];
+                [alertFirstformatte1 setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+                NSDate* alertFirstdate1 = [alertFirstformatte1 dateFromString:alertFirstTime1];
+                int alertFirst1 = [alertFirstdate1 timeIntervalSince1970]*1;
+                
+                NSString *alertFirstTime2=[NSString stringWithFormat:@"%@ 19:00:00",[str substringWithRange:NSMakeRange(0,10)]];
+                NSDateFormatter *alertFirstformatte2 = [[NSDateFormatter alloc] init];
+                [alertFirstformatte2 setDateStyle:NSDateFormatterMediumStyle];
+                [alertFirstformatte2 setTimeStyle:NSDateFormatterShortStyle];
+                [alertFirstformatte2 setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+                NSDate* alertFirstdate2 = [alertFirstformatte2 dateFromString:alertFirstTime2];
+                int alertFirst2 = [alertFirstdate2 timeIntervalSince1970]*1;
+                
+                //提醒时间第二个时间段
+                NSString *alertTwoTime1=[NSString stringWithFormat:@"%@ 07:00:00",[str substringWithRange:NSMakeRange(0,10)]];
+                NSDateFormatter *alertTwoformatte1 = [[NSDateFormatter alloc] init];
+                [alertTwoformatte1 setDateStyle:NSDateFormatterMediumStyle];
+                [alertTwoformatte1 setTimeStyle:NSDateFormatterShortStyle];
+                [alertTwoformatte1 setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+                NSDate* alertTwodate1 = [alertTwoformatte1 dateFromString:alertTwoTime1];
+                int alertTwo1 = [alertTwodate1 timeIntervalSince1970]*1;
+                
+                NSString *alertTwoTime2=[NSString stringWithFormat:@"%@ 19:00:00",[str substringWithRange:NSMakeRange(0,10)]];
+                NSDateFormatter *alertTwoformatte2 = [[NSDateFormatter alloc] init];
+                [alertTwoformatte2 setDateStyle:NSDateFormatterMediumStyle];
+                [alertTwoformatte2 setTimeStyle:NSDateFormatterShortStyle];
+                [alertTwoformatte2 setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+                NSDate* alertTwodate2 = [alertTwoformatte2 dateFromString:alertTwoTime2];
+                int alertTwo2 = [alertTwodate2 timeIntervalSince1970]*1;
+                
+                //提醒时间第三个时间段
+                NSString *alertThreeTime1=[NSString stringWithFormat:@"%@ 07:00:00",[str substringWithRange:NSMakeRange(0,10)]];
+                NSDateFormatter *alertThreeformatte1 = [[NSDateFormatter alloc] init];
+                [alertThreeformatte1 setDateStyle:NSDateFormatterMediumStyle];
+                [alertThreeformatte1 setTimeStyle:NSDateFormatterShortStyle];
+                [alertThreeformatte1 setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+                NSDate* alertThreedate1 = [alertThreeformatte1 dateFromString:alertThreeTime1];
+                NSTimeInterval alertThree1 = [alertThreedate1 timeIntervalSince1970]*1;
+                
+                NSString *alertThreeTime2=[NSString stringWithFormat:@"%@ 19:00:00",[str substringWithRange:NSMakeRange(0,10)]];
+                NSDateFormatter *alertThreeformatte2 = [[NSDateFormatter alloc] init];
+                [alertThreeformatte2 setDateStyle:NSDateFormatterMediumStyle];
+                [alertThreeformatte2 setTimeStyle:NSDateFormatterShortStyle];
+                [alertThreeformatte2 setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+                NSDate* alertThreedate2 = [alertThreeformatte2 dateFromString:alertThreeTime2];
+                NSTimeInterval alertThree2 = [alertThreedate2 timeIntervalSince1970]*1;
+                
+                
+                //提醒时间的日期
+                NSString *alertDateString=[str substringWithRange:NSMakeRange(0,10)];
+                NSDateFormatter *alertDateformatte = [[NSDateFormatter alloc] init];
+                [alertDateformatte setDateStyle:NSDateFormatterMediumStyle];
+                [alertDateformatte setTimeStyle:NSDateFormatterShortStyle];
+                [alertDateformatte setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+                NSDate* alertDate = [alertDateformatte dateFromString:alertDateString];
+                int alertDateint = [alertDate timeIntervalSince1970]*1;
                 NSLog(@"当前时间1%d，当亲时间%f，当前时间2%d",theFirst1,_secondDate,theFirst2);
                 if(theFirst1<=_secondDate && _secondDate<=theFirst2 && alertFirst1<=_fitstDate && _fitstDate<=alertFirst2)
                 {
@@ -1706,6 +1850,75 @@ int H = 0,time_ID;
             
         }else{
             //获取当前时间
+            NSString *str=[NSString stringWithFormat:@"%@",timeString];
+            NSLog(@"时间%@",str);
+            NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+            [formatter setDateStyle:NSDateFormatterMediumStyle];
+            [formatter setTimeStyle:NSDateFormatterShortStyle];
+            [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+            NSDate* dat = [formatter dateFromString:str];
+            int _fitstDate = [dat timeIntervalSince1970]*1;
+            
+            //提醒时间第一个时间段
+            NSString *alertFirstTime1=[NSString stringWithFormat:@"%@ 11:00:00",[str substringWithRange:NSMakeRange(0,10)]];
+            NSDateFormatter *alertFirstformatte1 = [[NSDateFormatter alloc] init];
+            [alertFirstformatte1 setDateStyle:NSDateFormatterMediumStyle];
+            [alertFirstformatte1 setTimeStyle:NSDateFormatterShortStyle];
+            [alertFirstformatte1 setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+            NSDate* alertFirstdate1 = [alertFirstformatte1 dateFromString:alertFirstTime1];
+            int alertFirst1 = [alertFirstdate1 timeIntervalSince1970]*1;
+            
+            NSString *alertFirstTime2=[NSString stringWithFormat:@"%@ 19:00:00",[str substringWithRange:NSMakeRange(0,10)]];
+            NSDateFormatter *alertFirstformatte2 = [[NSDateFormatter alloc] init];
+            [alertFirstformatte2 setDateStyle:NSDateFormatterMediumStyle];
+            [alertFirstformatte2 setTimeStyle:NSDateFormatterShortStyle];
+            [alertFirstformatte2 setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+            NSDate* alertFirstdate2 = [alertFirstformatte2 dateFromString:alertFirstTime2];
+            int alertFirst2 = [alertFirstdate2 timeIntervalSince1970]*1;
+            
+            //提醒时间第二个时间段
+            NSString *alertTwoTime1=[NSString stringWithFormat:@"%@ 07:00:00",[str substringWithRange:NSMakeRange(0,10)]];
+            NSDateFormatter *alertTwoformatte1 = [[NSDateFormatter alloc] init];
+            [alertTwoformatte1 setDateStyle:NSDateFormatterMediumStyle];
+            [alertTwoformatte1 setTimeStyle:NSDateFormatterShortStyle];
+            [alertTwoformatte1 setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+            NSDate* alertTwodate1 = [alertTwoformatte1 dateFromString:alertTwoTime1];
+            int alertTwo1 = [alertTwodate1 timeIntervalSince1970]*1;
+            
+            NSString *alertTwoTime2=[NSString stringWithFormat:@"%@ 19:00:00",[str substringWithRange:NSMakeRange(0,10)]];
+            NSDateFormatter *alertTwoformatte2 = [[NSDateFormatter alloc] init];
+            [alertTwoformatte2 setDateStyle:NSDateFormatterMediumStyle];
+            [alertTwoformatte2 setTimeStyle:NSDateFormatterShortStyle];
+            [alertTwoformatte2 setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+            NSDate* alertTwodate2 = [alertTwoformatte2 dateFromString:alertTwoTime2];
+            int alertTwo2 = [alertTwodate2 timeIntervalSince1970]*1;
+            
+            //提醒时间第三个时间段
+            NSString *alertThreeTime1=[NSString stringWithFormat:@"%@ 07:00:00",[str substringWithRange:NSMakeRange(0,10)]];
+            NSDateFormatter *alertThreeformatte1 = [[NSDateFormatter alloc] init];
+            [alertThreeformatte1 setDateStyle:NSDateFormatterMediumStyle];
+            [alertThreeformatte1 setTimeStyle:NSDateFormatterShortStyle];
+            [alertThreeformatte1 setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+            NSDate* alertThreedate1 = [alertThreeformatte1 dateFromString:alertThreeTime1];
+            NSTimeInterval alertThree1 = [alertThreedate1 timeIntervalSince1970]*1;
+            
+            NSString *alertThreeTime2=[NSString stringWithFormat:@"%@ 19:00:00",[str substringWithRange:NSMakeRange(0,10)]];
+            NSDateFormatter *alertThreeformatte2 = [[NSDateFormatter alloc] init];
+            [alertThreeformatte2 setDateStyle:NSDateFormatterMediumStyle];
+            [alertThreeformatte2 setTimeStyle:NSDateFormatterShortStyle];
+            [alertThreeformatte2 setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+            NSDate* alertThreedate2 = [alertThreeformatte2 dateFromString:alertThreeTime2];
+            NSTimeInterval alertThree2 = [alertThreedate2 timeIntervalSince1970]*1;
+            
+            
+            //提醒时间的日期
+            NSString *alertDateString=[str substringWithRange:NSMakeRange(0,10)];
+            NSDateFormatter *alertDateformatte = [[NSDateFormatter alloc] init];
+            [alertDateformatte setDateStyle:NSDateFormatterMediumStyle];
+            [alertDateformatte setTimeStyle:NSDateFormatterShortStyle];
+            [alertDateformatte setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+            NSDate* alertDate = [alertDateformatte dateFromString:alertDateString];
+            int alertDateint = [alertDate timeIntervalSince1970]*1;
             //获取当前时间
             if(_secondDate-_fitstDate>0){
                 

@@ -33,6 +33,9 @@
     int cellIDS;
     NSString *lngString;
     NSString *latString;
+    NSString *nsString;
+    NSArray *checkin_netArray;
+    int checkinID;
 }
 
 
@@ -109,17 +112,156 @@
     [disBtn addTarget:self action:@selector(addDress) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:disBtn];
     
+    ISLoginManager *_manager = [ISLoginManager shareManager];
     
+    NSDictionary *_dict = @{@"user_id":_manager.telephone,@"company_id":_company_id,@"setting_type":@"checkin-net"};
+    
+    DownloadManager *_download = [[DownloadManager alloc]init];
+    [_download requestWithUrl:[NSString stringWithFormat:@"%@",MEETING_ROOM] dict:_dict view:self.view delegate:self finishedSEL:@selector(ConfigureSuccess:) isPost:NO failedSEL:@selector(addDressFail:)];
     // Do any additional setup after loading the view.
+}
+#pragma mark 公司配置返回信息
+-(void)ConfigureSuccess:(id)sender
+{
+    NSLog(@"%@",sender);
+    nsString=[NSString stringWithFormat:@"%@",[sender objectForKey:@"data"]];
+    if (nsString ==nil||nsString==NULL ||[nsString isEqualToString:@""]) {
+        
+    }else{
+        checkin_netArray=[sender objectForKey:@"data"];
+    }
 }
 - (void)addDress
 {
     
-    
+    NSString *strs=[self.class wangluo];
+    int wifiID=[strs intValue];
+    if (wifiID==0) {
+        _checkin_net=@"无网络链接";
+    }else if (wifiID==1){
+        _checkin_net=@"2G";
+    }else if (wifiID==2){
+        _checkin_net=@"3G";
+    }else if (wifiID==3){
+        _checkin_net=@"4G";
+    }else{
+        _checkin_net=[self.class getWifiName];
+    }
+
     if (myTextField.text.length == 0 || _myTableView.top == myTextField.bottom) {
         [MBProgressHUD showError:@"请选择地址!" toView:self.view];
         return;
     }
+    if (nsString ==nil||nsString==NULL ||[nsString isEqualToString:@""]) {
+        [self jiekou];
+    }else{
+        for (int i=0; i<checkin_netArray.count; i++) {
+            NSDictionary *dic=checkin_netArray[i];
+            NSString *string=[NSString stringWithFormat:@"%@",[dic objectForKey:@"name"]];
+            NSString *lowerCaseString1 = [string lowercaseString];
+            NSString *lowerCaseString2 = _checkin_net.lowercaseString;
+            if([lowerCaseString2 isEqualToString:lowerCaseString1]){
+                ISLoginManager *_manager = [ISLoginManager shareManager];
+                
+                NSDictionary *_dict = @{@"user_id":_manager.telephone,
+                                        @"company_id":_company_id,
+                                        @"poi_name":myTextField.text,
+                                        @"poi_lat":latString,
+                                        @"poi_lng":lngString,
+                                        @"checkin_type":@"0",
+                                        @"checkin_net":_checkin_net,
+                                        /*@"remarks":mapModel.address,*/
+                                        };
+                
+                DownloadManager *_download = [[DownloadManager alloc]init];
+                [_download requestWithUrl:[NSString stringWithFormat:@"%@",ATTEND_CHECKIN] dict:_dict view:self.view delegate:self finishedSEL:@selector(addDressSuccess:) isPost:YES failedSEL:@selector(addDressFail:)];
+                return;
+            }else{
+                if (i==checkin_netArray.count-1) {
+                    UIAlertView *tsView=[[UIAlertView alloc]initWithTitle:@"提醒" message:@"您给秘书预留的时间过短，至少要预留出2天的时间哦！" delegate:self cancelButtonTitle:@"是" otherButtonTitles:@"否", nil];
+                    [tsView show];
+                }
+            }
+        }
+    }
+    
+    
+}
++ (NSString *)getWifiName
+{
+    NSString *wifiName = nil;
+    
+    CFArrayRef wifiInterfaces = CNCopySupportedInterfaces();
+    
+    if (!wifiInterfaces) {
+        return nil;
+    }
+    
+    NSArray *interfaces = (__bridge NSArray *)wifiInterfaces;
+    
+    for (NSString *interfaceName in interfaces) {
+        CFDictionaryRef dictRef = CNCopyCurrentNetworkInfo((__bridge CFStringRef)(interfaceName));
+        
+        if (dictRef) {
+            NSDictionary *networkInfo = (__bridge NSDictionary *)dictRef;
+            NSLog(@"network info -> %@", networkInfo);
+            wifiName = [networkInfo objectForKey:(__bridge NSString *)kCNNetworkInfoKeySSID];
+            
+            CFRelease(dictRef);
+        }
+    }
+    CFRelease(wifiInterfaces);
+    return wifiName;
+}
+
++(NSString *)wangluo
+{
+    UIApplication *application = [UIApplication sharedApplication];
+    NSArray *subviews = [[[application valueForKey:@"statusBar"] valueForKey:@"foregroundView"]subviews];
+    
+    NSNumber *dataNetWorkItemView = nil;
+    
+    for (id subView in subviews) {
+        if ([subView isKindOfClass:[NSClassFromString(@"UIStatusBarDataNetworkItemView") class]]) {
+            dataNetWorkItemView = subView;
+            break;
+        }
+    }
+    NSString *string;
+    NetWorkType networkType = NetWorkType_None;
+    switch ([[dataNetWorkItemView valueForKey:@"dataNetworkType"] integerValue]) {
+        case 0:
+            NSLog(@"No wifi or cellular");
+            networkType = NetWorkType_None;
+            string=@"0";
+            break;
+        case 1:
+            NSLog(@"2G");
+            networkType = NetWorkType_2G;
+            string=@"1";
+            break;
+        case 2:
+            NSLog(@"3G");
+            networkType = NetWorkType_3G;
+            string=@"2";
+            break;
+        case 3:
+            NSLog(@"4G");
+            networkType = NetWorkType_4G;
+            string=@"3";
+            break;
+        default:
+            NSLog(@"Wifi");
+            networkType = NetWorkType_WIFI;
+            string=@"4";
+            break;
+    }
+    
+    return string;
+}
+
+-(void)jiekou
+{
     ISLoginManager *_manager = [ISLoginManager shareManager];
     
     NSDictionary *_dict = @{@"user_id":_manager.telephone,
@@ -128,13 +270,20 @@
                             @"poi_lat":latString,
                             @"poi_lng":lngString,
                             @"checkin_type":@"0",
-                            /*@"checkin_net":mapModel.name,
-                            @"remarks":mapModel.address,*/
+                            @"checkin_net":_checkin_net,
+                            /*@"remarks":mapModel.address,*/
                             };
     
     DownloadManager *_download = [[DownloadManager alloc]init];
     [_download requestWithUrl:[NSString stringWithFormat:@"%@",ATTEND_CHECKIN] dict:_dict view:self.view delegate:self finishedSEL:@selector(addDressSuccess:) isPost:YES failedSEL:@selector(addDressFail:)];
-    
+}
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    NSLog(@"clickButtonAtIndex:%ld",(long)buttonIndex);
+    checkinID=(int)buttonIndex;
+    if (checkinID==0) {
+        [self jiekou];
+    }
 }
 -(void)todoSomething
 {

@@ -36,7 +36,20 @@
     }else if (_wasteID==103){
         self.navlabel.text=@"快递";
     }
+    UIFont *fnt = [UIFont fontWithName:@"HelveticaNeue" size:16.0f];
+    CGRect tmpRect = [self.navlabel.text boundingRectWithSize:CGSizeMake(WIDTH, 44) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObjectsAndKeys:fnt,NSFontAttributeName, nil] context:nil];
+    self.helpBut.hidden=NO;
+    self.helpBut.frame=FRAME((WIDTH-tmpRect.size.width)/2, 20, tmpRect.size.width+20, 44);
     
+    UIImageView *image=[[UIImageView alloc]initWithFrame:FRAME(self.helpBut.frame.size.width-20, 12, 20, 20)];
+    image.image=[UIImage imageNamed:@"iconfont_yingyongbangzhu"];
+    [self.helpBut addSubview:image];
+
+    _navlabel.textColor = [UIColor whiteColor];
+    self.img.hidden=YES;
+    UIImageView *img = [[UIImageView alloc]initWithFrame:FRAME(18, (40-20)/2, 20, 20)];
+    img.image = [UIImage imageNamed:@"iconfont-p-back"];
+    [_backBtn addSubview:img];
     if (_wasteID==100) {
         self.backlable.backgroundColor=HEX_TO_UICOLOR(0x11cd6e, 1.0);
     }else if (_wasteID==101){

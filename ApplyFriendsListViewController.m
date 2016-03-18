@@ -17,6 +17,7 @@
     MJRefreshFooterView *_moreFooter;
     BOOL _needRefresh;
     BOOL _hasMore;
+    NSInteger   page;
     
 }
 @end
@@ -31,7 +32,7 @@
     }else{
         self.backBtn.hidden=YES;
     }
-    
+    page=1;
     dataArray=[[NSMutableArray alloc]init];
     myTableView=[[UITableView alloc]initWithFrame:FRAME(0, 64, WIDTH, HEIGHT-101)];
     myTableView.dataSource=self;
@@ -50,16 +51,16 @@
     _moreFooter.delegate = self;
     _moreFooter.scrollView = myTableView;
     
-    [self dataLayout];
+    
     // Do any additional setup after loading the view.
 }
 -(void)viewWillAppear:(BOOL)animated{
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault animated:NO];
+    [self dataLayout];
 }
 #pragma mark - MJRefreshBaseViewDelegate
 - (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
 {
-    
     if ([refreshView isKindOfClass:[MJRefreshHeaderView class]]) {
         //头 -》 刷新
         if (_moreFooter.isRefreshing) {
@@ -67,6 +68,7 @@
             [_refreshHeader performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
             return;
         }
+        page = 1;
         //刷新
         [self loadData];
         
@@ -85,6 +87,8 @@
             //            [_tableView reloadData];
             return;
         }
+        page++;
+        
         //加载更多
         
         [self loadData];
@@ -99,7 +103,8 @@
 {
     ISLoginManager *_manager = [ISLoginManager shareManager];
     DownloadManager *_download = [[DownloadManager alloc]init];
-    NSDictionary *_dict = @{@"user_id":_manager.telephone};
+    NSString *pageStr=[NSString stringWithFormat:@"%ld",(long)page];
+    NSDictionary *_dict = @{@"user_id":_manager.telephone,@"page":pageStr};
     NSLog(@"字典数据%@",_dict);
     [_download requestWithUrl:USER_APPLYFRIENDS dict:_dict view:self.view delegate:self finishedSEL:@selector(logDowLoadFinish:) isPost:NO failedSEL:@selector(DownFail:)];
 }
@@ -172,28 +177,44 @@
     [cell addSubview:nameLabel];
     
     int statusID=[[dataDic objectForKey:@"status"]intValue];
-    
-    UIButton *addButton=[[UIButton alloc]initWithFrame:FRAME(WIDTH-70, 15, 60, 30)];
-    if (statusID==0) {
-        addButton.enabled=TRUE;
-        [addButton.layer setMasksToBounds:YES];//设置按钮的圆角半径不会被遮挡
-        [addButton.layer setCornerRadius:5];
-        [addButton.layer setBorderWidth:1];//设置边界的宽度
-        //设置按钮的边界颜色
-        CGColorSpaceRef colorSpaceRef = CGColorSpaceCreateDeviceRGB();
-        CGColorRef color = CGColorCreate(colorSpaceRef, (CGFloat[]){1,0,0,1});
-        [addButton.layer setBorderColor:color];
-        [addButton setTitle:@"添加" forState:UIControlStateNormal];
-        [addButton setTitleColor:[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1] forState:UIControlStateNormal];
+    int req_typeID=[[dataDic objectForKey:@"req_type"]intValue];
+    if (req_typeID==0) {
+        UILabel *addLabel=[[UILabel alloc]initWithFrame:FRAME(WIDTH-70, 15, 60, 30)];
+        if (statusID==0) {
+            addLabel.text=@"申请中";
+        }else if (statusID==1){
+            addLabel.text=@"已同意";
+        }else{
+            addLabel.text=@"被拒绝";
+        }
+        addLabel.textColor=[UIColor colorWithRed:232/255.0f green:232/255.0f blue:232/255.0f alpha:1];
+        addLabel.font=[UIFont fontWithName:@"Arial" size:18];
+        [cell addSubview:addLabel];
     }else{
-        [addButton setTitle:@"已添加" forState:UIControlStateNormal];
-        [addButton setTitleColor:[UIColor colorWithRed:232/255.0f green:232/255.0f blue:232/255.0f alpha:1] forState:UIControlStateNormal];
-        addButton.enabled=FALSE;
+        UIButton *addButton=[[UIButton alloc]initWithFrame:FRAME(WIDTH-70, 15, 60, 30)];
+        if (statusID==0) {
+            addButton.enabled=TRUE;
+            [addButton.layer setMasksToBounds:YES];//设置按钮的圆角半径不会被遮挡
+            [addButton.layer setCornerRadius:5];
+            [addButton.layer setBorderWidth:1];//设置边界的宽度
+            //设置按钮的边界颜色
+            CGColorSpaceRef colorSpaceRef = CGColorSpaceCreateDeviceRGB();
+            CGColorRef color = CGColorCreate(colorSpaceRef, (CGFloat[]){1,0,0,1});
+            [addButton.layer setBorderColor:color];
+            [addButton setTitle:@"添加" forState:UIControlStateNormal];
+            [addButton setTitleColor:[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1] forState:UIControlStateNormal];
+        }else{
+            [addButton setTitle:@"已添加" forState:UIControlStateNormal];
+            [addButton setTitleColor:[UIColor colorWithRed:232/255.0f green:232/255.0f blue:232/255.0f alpha:1] forState:UIControlStateNormal];
+            addButton.enabled=FALSE;
+        }
+        addButton.titleLabel.font=[UIFont fontWithName:@"Arial" size:18];
+        addButton.tag=indexPath.row;
+        [addButton addTarget:self action:@selector(addButAction:) forControlEvents:UIControlEventTouchUpInside];
+        [cell addSubview:addButton];
     }
     
-    addButton.tag=indexPath.row;
-    [addButton addTarget:self action:@selector(addButAction:) forControlEvents:UIControlEventTouchUpInside];
-    [cell addSubview:addButton];
+    
     
     return cell;
 }

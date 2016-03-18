@@ -112,7 +112,7 @@
     myTableView.dataSource=self;
     myTableView.delegate=self;
     if (_companyVcId==10) {
-        [myTableView registerNib:[UINib nibWithNibName:@"MeetTableViewCell" bundle:nil] forCellReuseIdentifier:@"ContactCell"];
+        [myTableView registerNib:[UINib nibWithNibName:@"MeetTableViewCell" bundle:nil] forCellReuseIdentifier:@"MeetTableViewCell"];
     }
     [self.view addSubview:myTableView];
     UIView *v = [[UIView alloc] initWithFrame:CGRectZero];
@@ -131,7 +131,7 @@
 {
     NSString *identifier;
     if (_companyVcId==10) {
-        identifier =@"ContactCell";
+        identifier =@"MeetTableViewCell";
     }else{
         identifier = [NSString stringWithFormat:@"（%ld,%ld)",(long)indexPath.row,(long)indexPath.section];
     }

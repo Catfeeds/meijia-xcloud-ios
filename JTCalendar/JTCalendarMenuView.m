@@ -86,7 +86,7 @@
     
     if(self.calendarManager.calendarAppearance.ratioContentMenu != 1.){
         width = self.frame.size.width / self.calendarManager.calendarAppearance.ratioContentMenu;
-        x = (self.frame.size.width - width) / 2.;
+        x = 0;
     }
     
     if(self.calendarManager.calendarAppearance.readFromRightToLeft){

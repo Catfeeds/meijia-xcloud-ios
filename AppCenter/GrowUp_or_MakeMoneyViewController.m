@@ -27,6 +27,11 @@
     [super viewDidLoad];
     self.navlabel.text=@"应用中心";
     self.backlable.backgroundColor=HEX_TO_UICOLOR(0xbfbfbf, 1.0);
+    _navlabel.textColor = [UIColor whiteColor];
+    self.img.hidden=YES;
+    UIImageView *img = [[UIImageView alloc]initWithFrame:FRAME(18, (40-20)/2, 20, 20)];
+    img.image = [UIImage imageNamed:@"iconfont-p-back"];
+    [_backBtn addSubview:img];
     dataArray =[[NSMutableArray alloc]init];
     page=1;
     myTableView=[[UITableView alloc]initWithFrame:FRAME(0, 108, WIDTH, HEIGHT-108)];

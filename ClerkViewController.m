@@ -22,6 +22,7 @@
     BOOL _needRefresh;
     BOOL _hasMore;
     NSInteger   page;
+    NSMutableDictionary *gaoIDArray;
 }
 @end
 
@@ -30,6 +31,7 @@
 @synthesize _tableView,seekArray,sec_Id,secID,is_senior,height,Y,service_type_id;
 - (void)viewDidLoad {
     [super viewDidLoad];
+    gaoIDArray=[[NSMutableDictionary alloc]init];
     page=1;
     seekArray=[[NSMutableArray alloc]init];
     meView=[[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
@@ -184,6 +186,7 @@
     }
     _tableView.dataSource=self;
     _tableView.delegate=self;
+    _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.view addSubview:_tableView];
     UIView *v = [[UIView alloc] initWithFrame:CGRectZero];
     
@@ -210,22 +213,21 @@
 {
     NSDictionary *dic=seekArray[indexPath.row];
     NSArray *labelArray=[dic objectForKey:@"user_tags"];
-    NSString *identifier = [NSString stringWithFormat:@"cell%ld,%ld",(long)indexPath.row,(long)indexPath.section];
+    NSString *identifier = [NSString stringWithFormat:@"Cell%ld,%ld",(long)indexPath.row,(long)indexPath.section];
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    
-    
     if (cell == nil) {
-        
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:identifier];
-        
     }
-    
-    
-    UIView *lineView=[[UIView alloc]init];
-    [cell addSubview:lineView];
+    UIView *lineview=[[UIView alloc]initWithFrame:FRAME(0, 0, WIDTH, 0.5)];
+    lineview.backgroundColor=[UIColor colorWithRed:232/255.0f green:232/255.0f blue:232/255.0f alpha:1];
+    [cell addSubview:lineview];
     
     UIImageView *headImageView=[[UIImageView alloc]init];
-    headImageView.frame=FRAME(10, (GAO-50)/2, 50, 50);
+    NSLog(@"%d",GAO);
+    NSString *ke=[NSString stringWithFormat:@"%ld",(long)indexPath.row];
+    NSString *he=[gaoIDArray objectForKey:ke];
+    int h=[he intValue];
+    headImageView.frame=FRAME(10, (h-50)/2, 50, 50);
     headImageView.layer.cornerRadius=headImageView.frame.size.width/2;
     headImageView.clipsToBounds = YES;
     
@@ -355,9 +357,7 @@
     textLabel.font=font;
     height=Y+31;
     
-    UIView *lineview=[[UIView alloc]initWithFrame:FRAME(0, Y+21+size.height, WIDTH, 10)];
-    lineView.backgroundColor=[UIColor colorWithRed:232/255.0f green:232/255.0f blue:232/255.0f alpha:1];
-    [cell addSubview:lineview];
+    
     NSString *labelString=[NSString stringWithFormat:@"%@",[dic objectForKey:@"weight_type"]];
     UILabel *label=[[UILabel alloc]initWithFrame:FRAME(-18, 5, 60, 15)];
     label.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"weight_type_name"]];
@@ -390,27 +390,34 @@
 {
     NSDictionary *plDic=seekArray[indexPath.row];
     NSArray *array=[plDic objectForKey:@"user_tags"];
-    UIFont *font=[UIFont fontWithName:@"Arial" size:15];
-    CGSize constraint = CGSizeMake(WIDTH-90, 200.0f);
+//    UIFont *font=[UIFont fontWithName:@"Arial" size:15];
     
-    UILabel *textLabel=[[UILabel alloc]init];
-    textLabel.lineBreakMode=NSLineBreakByWordWrapping;
-    [textLabel setNumberOfLines:0];
-    textLabel.text=[NSString stringWithFormat:@"简介:%@",[plDic objectForKey:@"introduction"]];
-    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc]init];
-    textLabel.lineBreakMode = NSLineBreakByWordWrapping;
-    NSDictionary *attributes = @{NSFontAttributeName:font, NSParagraphStyleAttributeName:paragraphStyle.copy};
-    CGSize size = [textLabel.text boundingRectWithSize:constraint options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:nil].size;
-    textLabel.frame=FRAME(70, Y+21, WIDTH-80, size.height);
-    textLabel.font=font;
+    NSString *text=[NSString stringWithFormat:@"%@",[plDic objectForKey:@"introduction"]];
+//    CGSize szEmceeName = [text sizeWithFont:[UIFont systemFontOfSize:12] constrainedToSize:CGSizeMake(320.0 - 80.0 - 15.0, 1000.0)];
+    //NSDictionary *dict =[NSDictionary dictionaryWithObjectsAndKeys:[UIFont systemFontOfSize:12],NSFontAttributeName, nil];
+    CGSize szEmceeName = [text boundingRectWithSize:CGSizeMake(320.0 - 80.0 - 15.0, 1000.0) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont systemFontOfSize:12],NSFontAttributeName, nil] context:nil].size;//:[UIFont systemFontOfSize:12] constrainedToSize:CGSizeMake(320.0 - 80.0 - 15.0, 1000.0)];
     int heit;
     if (array.count>3) {
         heit=108;
     }else{
         heit=87;
     }
-    GAO=size.height+heit;
-    return size.height+heit;
+    
+    if ([text isEqualToString:@""]) {
+        GAO=heit;
+        NSString *jian=[NSString stringWithFormat:@"%d",GAO];
+        NSString *key=[NSString stringWithFormat:@"%ld",(long)indexPath.row];
+        [gaoIDArray setObject:jian forKey:key];
+        return heit;
+    }else{
+        GAO=szEmceeName.height+heit;
+        NSString *jian=[NSString stringWithFormat:@"%d",GAO];
+        NSString *key=[NSString stringWithFormat:@"%ld",(long)indexPath.row];
+        [gaoIDArray setObject:jian forKey:key];
+        
+       return szEmceeName.height+heit;
+    }
+    
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

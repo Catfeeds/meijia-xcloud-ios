@@ -278,7 +278,7 @@
     //_user_id=strResult.strScanned;
     ISLoginManager *_manager = [ISLoginManager shareManager];
    // vc.strCodeType = strResult.strBarCodeType;
-    NSLog(@"%@ -%@ -%@",strResult.imgScanned,strResult.strBarCodeType,strResult.strScanned);
+    NSLog(@"111%@ -222%@ -333%@",strResult.imgScanned,strResult.strBarCodeType,strResult.strScanned);
     [self isPureInt:_user_id];
     DownloadManager *_download = [[DownloadManager alloc]init];
     if([strResult.strScanned rangeOfString:@"xcloud://"].location !=NSNotFound||[strResult.strScanned rangeOfString:@"xcloud-h5://"].location !=NSNotFound)
@@ -291,8 +291,14 @@
             NSDictionary *_dicts = @{@"user_id":_manager.telephone,@"friend_id":userID};
             [_download requestWithUrl:[NSString stringWithFormat:@"%@",USER_QRHY] dict:_dicts view:self.view delegate:self finishedSEL:@selector(Friend_Finish1:) isPost:NO failedSEL:@selector(FailDownload:)];
         }else{
-            NSString *urlString=[strResult.strScanned substringFromIndex:12];
-            urlStr=[NSString stringWithFormat:@"http://123.57.173.36/simi/app/o.json?%@&uid=%@",urlString,_manager.telephone];
+            NSString *urlStrs=[strResult.strScanned substringFromIndex:12];
+            NSArray *array = [urlStrs componentsSeparatedByString:@"&"];
+            NSString *string=[NSString stringWithFormat:@"%@",array[0]];
+            NSString *urlString=[string substringFromIndex:2];
+            if ([urlString isEqualToString:@""]) {
+                
+            }
+            urlStr=[NSString stringWithFormat:@"http://123.57.173.36/simi/app/o.json?%@&uid=%@",urlStrs,_manager.telephone];
             [self webLayout];
             NSLog(@"%@",urlStr);
         }
@@ -388,8 +394,6 @@
 -(void)Friend_Finish1:(id)sender
 {
     FriendsHomeViewController *vc = [FriendsHomeViewController new];
-   // vc.rootId=1;
-    //vc.=_user_id;
     vc.friendsID=100;
     vc.view_user_id=_user_id;
     [self.navigationController pushViewController:vc animated:YES];

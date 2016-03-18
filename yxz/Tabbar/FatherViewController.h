@@ -26,6 +26,8 @@
 @property (nonatomic, strong)NSString *ID;
 @property (nonatomic, strong)UILabel *lineLable;
 @property (nonatomic, strong)UIButton *helpBut;
+@property (nonatomic, strong)UIImageView *img;
+@property (nonatomic, strong)NSString *tyPeStr;
 
 - (void)showAlertViewWithTitle:(NSString *)title
                        message:(NSString *)message;

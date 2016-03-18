@@ -24,7 +24,7 @@
 @implementation FatherViewController
 @synthesize navlabel = _navlabel;
 @synthesize backBtn = _backBtn;
-@synthesize hxPassword,hxUserName,imToUserID,imToUserName,ID,backlable,helpBut;
+@synthesize hxPassword,hxUserName,imToUserID,imToUserName,ID,backlable,helpBut,img;
 - (void)viewWillAppear:(BOOL)animated
 {
     self.navigationController.navigationBarHidden = YES;
@@ -48,8 +48,9 @@
     [self.view addSubview:_navlabel];
     
     helpBut=[[UIButton alloc]init];
+//    helpBut.backgroundColor=[UIColor redColor];
     helpBut.hidden=YES;
-    [helpBut addTarget:self action:@selector(helpButAvtion:) forControlEvents:UIControlEventTouchDragInside];
+    [helpBut addTarget:self action:@selector(helpButAvtion:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:helpBut];
     
     _lineLable = [[UILabel alloc]initWithFrame:FRAME(0, 63, SELF_VIEW_WIDTH, 1)];
@@ -64,7 +65,7 @@
     [_backBtn addTarget:self action:@selector(backAction) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:_backBtn];
     
-    UIImageView *img = [[UIImageView alloc]initWithFrame:FRAME(18, (40-20)/2, 10, 20)];
+    img = [[UIImageView alloc]initWithFrame:FRAME(18, (40-20)/2, 10, 20)];
     img.image = [UIImage imageNamed:@"title_left_back"];
     [_backBtn addSubview:img];
     
@@ -73,30 +74,10 @@
 }
 -(void)helpButAvtion:(UIButton *)button
 {
-    NSArray *array=@[@"alarm",@"notice",@"meeting",@"interview",@"leave_pass",@"trip",@"",@"water",@"clean",@"",@"",@"punch_sign",@"recycle"];
-    ISLoginManager *_manager = [ISLoginManager shareManager];
-    DownloadManager *_download = [[DownloadManager alloc]init];
-    NSString *action=[NSString stringWithFormat:@"%@",array[button.tag]];
-    NSDictionary *_dic = @{@"action":action,@"user_id":_manager.telephone};
-    [_download requestWithUrl:USER_HELP dict:_dic view:self.view delegate:self finishedSEL:@selector(HelpSuccess:) isPost:NO failedSEL:@selector(HelpFailure:)];
-}
--(void)HelpSuccess:(id)dataSource
-{
-    NSDictionary *dic=[dataSource objectForKey:@"data"];
-    NSString *dataStr=[NSString stringWithFormat:@"%@",[dataSource objectForKey:@"data"]];
-    if (dataStr==nil||dataStr==NULL||[dataStr length]==0||[dataStr isEqualToString:@""]) {
-        
-    }else{
-        WebPageViewController *webVC=[[WebPageViewController alloc]init];
-        webVC.webURL=[NSString stringWithFormat:@"%@",[dic objectForKey:@"goto_url"]];
-        webVC.vcIDs=1000;
-        [[self getCurrentVC] presentViewController:webVC animated:YES completion:nil];
-    }
-    
-}
--(void)HelpFailure:(id)dataSource
-{
-    
+    WebPageViewController *webVC=[[WebPageViewController alloc]init];
+    webVC.webURL=[NSString stringWithFormat:@"http://123.57.173.36/simi-h5/show/help-%@.html",_tyPeStr];
+    webVC.vcIDs=1000;
+    [[self getCurrentVC] presentViewController:webVC animated:YES completion:nil];
 }
 //获取当前屏幕显示的viewcontroller
 - (UIViewController *)getCurrentVC

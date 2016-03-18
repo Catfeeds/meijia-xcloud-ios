@@ -68,6 +68,10 @@
     NSInteger   page;
     UIView *foldingView;
     UIImageView *foldingImage;
+    
+    int  upID;
+    int  downID;
+    UIView *viewLine;
 
 }
 
@@ -114,9 +118,7 @@ float lastContentOffset;
     numberArray=[[NSMutableArray alloc]init];
 //    self.imageView.image=[UIImage imageNamed:@"cal-bg.jpg"];
     
-    self.imageView.backgroundColor=[UIColor colorWithRed:232/255.0f green:232/255.0f blue:232/255.0f alpha:1];
-//    UIImageView *imageView=(UIImageView *)[self.view viewWithTag:100];
-//    imageView.image=[UIImage imageNamed:@"cal-bg.jpg"];
+    self.imageView.backgroundColor=[UIColor whiteColor];//colorWithRed:232/255.0f green:232/255.0f blue:232/255.0f alpha:1];
     
     locationManager = [[CLLocationManager alloc] init];
     
@@ -149,29 +151,26 @@ float lastContentOffset;
     myImage.image=[UIImage imageNamed:@"GRZX_BT"];
     [myButton addSubview:myImage];
     
-    UIButton *eyeButton=[[UIButton alloc]initWithFrame:FRAME(15, 25, 50, 40)];
+    UIButton *eyeButton=[[UIButton alloc]initWithFrame:FRAME(WIDTH-50, 25, 50, 40)];
     [eyeButton addTarget:self action:@selector(eyeButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:eyeButton];
     
-    UIImageView *eyeImage=[[UIImageView alloc]initWithFrame:FRAME(5, 10, 20, 20)];
+    UIImageView *eyeImage=[[UIImageView alloc]initWithFrame:FRAME(15, 10, 20, 20)];
     eyeImage.image=[UIImage imageNamed:@"iconfont-saoma"];//EYE_BT
     [eyeButton addSubview:eyeImage];
     
-    UIButton *calenderButton=[[UIButton alloc]initWithFrame:FRAME(WIDTH-50, 25, 50, 40)];
-    [calenderButton addTarget:self action:@selector(didChangeModeTouch) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:calenderButton];
-    
-    UIImageView *calenderImage=[[UIImageView alloc]initWithFrame:FRAME(10, 10, 20, 20)];
-    calenderImage.image=[UIImage imageNamed:@"icon_rili"];
-    [calenderButton addSubview:calenderImage];
     AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication] delegate];
     riliArray=delegate.riliArray;
+    viewLine=[[UIView alloc]initWithFrame:FRAME(0, newHeight+74.5, WIDTH, 1)];
+    viewLine.backgroundColor=[UIColor colorWithRed:232/255.0f green:232/255.0f blue:232/255.0f alpha:1];
+    [self.view addSubview:viewLine];
     foldingView=[[UIView alloc]initWithFrame:FRAME((WIDTH-40)/2, newHeight+70, 40, 10)];
     foldingView.backgroundColor=[UIColor whiteColor];
     [self.view addSubview:foldingView];
     foldingImage=[[UIImageView alloc]initWithFrame:FRAME(10, 0, 20, 10)];
     foldingImage.image=[UIImage imageNamed:@"rili_arrow_down"];
     [foldingView addSubview:foldingImage];
+    
     [self rlLayout];
    
 }
@@ -223,11 +222,6 @@ float lastContentOffset;
 
 -(void)loadData
 {
-    //    if (_service == nil) {
-    //        _service = [[zzProjectListService alloc] init];
-    //        _service.delegate = self;
-    //    }
-    
     //通过控制page控制更多 网路数据
     //    [_service reqwithPageSize:INVESTPAGESIZE page:page];
     //    [self loadImg];
@@ -297,7 +291,44 @@ float lastContentOffset;
     [self transitionExample];
    
     [self tableViewLayout];
-
+    
+    UISwipeGestureRecognizer *upGe;
+    upGe = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(handleSwipeFrom:)];
+    [upGe setDirection:(UISwipeGestureRecognizerDirectionUp)];
+    [[self calendarContentView] addGestureRecognizer:upGe];
+    
+    UISwipeGestureRecognizer *downGe;
+    downGe = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(handleSwipeFrom:)];
+    [downGe setDirection:(UISwipeGestureRecognizerDirectionDown)];
+    [[self calendarContentView] addGestureRecognizer:downGe];
+}
+-(void)handleSwipeFrom:(UISwipeGestureRecognizer *)recognizer{
+    
+    if(recognizer.direction==UISwipeGestureRecognizerDirectionDown) {
+        if (downID%2==0) {
+            if (upID==0) {
+                upID++;
+            }
+            downID++;
+            [self didChangeModeTouch];
+        }
+        
+        NSLog(@"swipe down");
+        //执行程序
+    }
+    if(recognizer.direction==UISwipeGestureRecognizerDirectionUp) {
+        if (upID==1) {
+            if (upID%2!=0) {
+                upID--;
+            }
+            if (downID!=0) {
+                downID--;
+            }
+            [self didChangeModeTouch];
+        }
+                NSLog(@"swipe up");
+        //执行程序
+    }
 }
 #pragma mark 首页右上按钮点击方法
 -(void)eyeButtonAction:(UIButton *)button
@@ -341,7 +372,7 @@ float lastContentOffset;
     self.tableView.separatorStyle=UITableViewCellSelectionStyleNone;
     self.tableView.delegate=self;
     self.tableView.dataSource=self;
-    self.tableView.backgroundColor=[UIColor colorWithRed:241/255.0f green:241/255.0f blue:241/255.0f alpha:1];
+    self.tableView.backgroundColor=[UIColor whiteColor];//colorWithRed:241/255.0f green:241/255.0f blue:241/255.0f alpha:1];
     [self.view addSubview:self.tableView];
     NSLog(@"数组个数%lu",(unsigned long)numberArray.count);
     UIView *v = [[UIView alloc] initWithFrame:CGRectZero];
@@ -368,17 +399,6 @@ float lastContentOffset;
 {
     [adView removeFromSuperview];
     NSMutableArray *viewsArray = [@[] mutableCopy];
-//    adView=[[UIScrollView alloc]initWithFrame:FRAME(0, newHeight+70, WIDTH, (WIDTH*0.42+40))];
-//    adView.bounces=NO;
-//    adView.delegate=self;
-//    adView.pagingEnabled = YES;
-//    adView.showsHorizontalScrollIndicator = NO;
-//    adView.contentSize=CGSizeMake(WIDTH*arrayImage.count, WIDTH*0.42+40);
-//    adView.autoresizingMask = 0xFF;
-//    adView.contentMode = UIViewContentModeCenter;
-//    adView.contentOffset = CGPointMake(CGRectGetWidth(adView.frame), 0);
-//    adView.pagingEnabled = YES;
-        //[self.view addSubview:adView];
     for (int i=0; i<arrayImage.count; i++) {
         NSDictionary *dic=arrayImage[i];
         UIButton *viewImage=[[UIButton alloc]initWithFrame:FRAME(WIDTH*i, 0, WIDTH, (WIDTH*0.42+40))];
@@ -434,44 +454,6 @@ float lastContentOffset;
         [self.navigationController pushViewController:fountVC animated:YES];
     }
 }
-//-(void)scrollViewDidScroll:(UIScrollView *)scrollView1
-//{
-//    pageControl.currentPage = scrollView1.contentOffset.x/WIDTH;
-//}
-//
-//-(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
-//{
-//    [self removeTimer];
-//}
-//
-//-(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
-//{
-//    [self addTimer];
-//}
-//
-//-(void)addTimer
-//{
-//    timer = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(nextPage) userInfo:nil repeats:YES];
-//}
-
-//-(void)nextPage
-//{
-//    long page = pageControl.currentPage;
-//    if (page == arrayImage.count - 1) {
-//        page =0;
-//        CGFloat offsetX = page * adView.frame.size.width;
-//        CGPoint offset = CGPointMake(offsetX, 0);
-//        [adView setContentOffset:offset animated:NO];
-//    }
-//    else {
-//        page = pageControl.currentPage + 1;
-//        CGFloat offsetX = page * adView.frame.size.width;
-//        CGPoint offset = CGPointMake(offsetX, 0);
-//        [adView setContentOffset:offset animated:YES];
-//    }
-//    
-//}
-
 -(void)removeTimer
 {
     [timer invalidate];
@@ -705,14 +687,24 @@ float lastContentOffset;
     
     if(self.calendar.calendarAppearance.isWeekMode){
         newHeight = 65;
+        [UIView beginAnimations:nil context:nil];
+        //设置动画时长
+        [UIView setAnimationDuration:0.5];
         foldingImage.image=[UIImage imageNamed:@"rili_arrow_down"];
         foldingView.frame=FRAME((WIDTH-40)/2, newHeight+70, 40, 10);
+        viewLine.frame=FRAME(0, newHeight+74.5, WIDTH, 1);
         [foldingBut setTitle:@"展开" forState:UIControlStateNormal];
+        [UIView commitAnimations];
     }else{
         newHeight = 290;
+        [UIView beginAnimations:nil context:nil];
+        //设置动画时长
+        [UIView setAnimationDuration:0.5];
         foldingImage.image=[UIImage imageNamed:@"rili_arrow_up"];
         foldingView.frame=FRAME((WIDTH-40)/2, newHeight+70, 40, 10);
+        viewLine.frame=FRAME(0, newHeight+74.5, WIDTH, 1);
         [foldingBut setTitle:@"收起" forState:UIControlStateNormal];
+        [UIView commitAnimations];
     }
     [self scrollLayout];
 }
@@ -879,7 +871,7 @@ float lastContentOffset;
     summaryLab.lineBreakMode=NSLineBreakByTruncatingTail;
     [cell addSubview:summaryLab];
     
-    UIView *lineView=[[UIView alloc]initWithFrame:FRAME(headImageView.frame.size.width+20, 70        , WIDTH-(headImageView.frame.size.width+20), 1)];
+    UIView *lineView=[[UIView alloc]initWithFrame:FRAME(headImageView.frame.size.width+20, 70 , WIDTH-(headImageView.frame.size.width+20), 1)];
     lineView.backgroundColor=[UIColor colorWithRed:232/255.0f green:232/255.0f blue:232/255.0f alpha:1];
     [cell addSubview:lineView];
     if([indexPath row] == ((NSIndexPath*)[[tableView indexPathsForVisibleRows] lastObject]).row){
@@ -966,7 +958,7 @@ float lastContentOffset;
             order_vc.order_ID=[NSString stringWithFormat:@"%@",[dataDic objectForKey:@"params"]];
             order_vc.user_ID=[NSString stringWithFormat:@"%@",[dataDic objectForKey:@"user_id"]];
             [self.navigationController pushViewController:order_vc animated:YES];
-        }else if ([actionStr isEqualToString:@"team"]){
+        }else if ([actionStr isEqualToString:@"teamwork"]){
             Order_DetailsViewController *order_vc=[[Order_DetailsViewController alloc]init];
             order_vc.order_ID=[NSString stringWithFormat:@"%@",[dataDic objectForKey:@"params"]];
             order_vc.user_ID=[NSString stringWithFormat:@"%@",[dataDic objectForKey:@"user_id"]];

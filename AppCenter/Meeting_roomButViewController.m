@@ -123,7 +123,7 @@
     AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication] delegate];
     NSString *company_id=[NSString stringWithFormat:@"%@",[delegate.globalDic objectForKey:@"company_id"]];
     //    NSString *pageStr=[NSString stringWithFormat:@"%ld",(long)page];
-    NSDictionary*_dict =@{@"user_id":_manager.telephone,@"setting_type":@"meeting-room",@"company_id":@"15"};
+    NSDictionary*_dict =@{@"user_id":_manager.telephone,@"setting_type":@"meeting-room",@"company_id":company_id};
     NSLog(@"字典数据%@",_dict);
     [_download requestWithUrl:MEETING_ROOM dict:_dict view:self.view  delegate:self finishedSEL:@selector(Meeting_roomSuccess:) isPost:NO failedSEL:@selector(Meeting_roomFail:)];
 }
