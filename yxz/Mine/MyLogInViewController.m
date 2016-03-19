@@ -275,6 +275,7 @@ appDelegate
 {
     if (self.loginYesOrNo==YES) {
         RootViewController *vc=[[RootViewController alloc]init];
+        vc.is_new_userID=[[cGDic objectForKey:@"is_new_user"]intValue];
         [self.navigationController pushViewController:vc animated:YES];
         _vCLID=0;
         [self AppdeleAction];

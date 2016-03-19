@@ -76,6 +76,7 @@
     NSMutableArray *plusArray;
     UILabel *alertLabel;
     NSDictionary *coreDic;
+    int  tabBarID;
 }
 @end
 #pragma mark - View lifecycle
@@ -166,8 +167,14 @@ MyselfViewController *thirdViewController;
     webVC.vcIDs=1000;
     [[self getCurrentVC] presentViewController:webVC animated:YES completion:nil];
 }
+-(void)urlAction:(NSNotification *)sender
+{
+    NSLog(@"我去  我去 我去 ！");
+     
+}
 - (void)viewDidLoad {
     NSDictionary *helpDic;
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(urlAction:) name:@"URLOPEN" object:nil];
     plusArray=[[NSMutableArray alloc]init];
     self.view.backgroundColor=[UIColor whiteColor];
     coreDic=@{@"name":@"应用中心",@"logo":@"http://img.51xingzheng.cn/437396cc0b49b04dc89a0552f7e90cae?p=0",@"action":@"asdsad",@"open_type":@"app"};
@@ -222,8 +229,7 @@ MyselfViewController *thirdViewController;
     
     mainView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SELF_VIEW_WIDTH, HEIGHT-49)];
     [self.view addSubview:mainView];
-    
-    /**
+        /**
      对于那些当前暂时不需要显示的subview，
      只通过addChildViewController把subViewController加进去；
      需要显示时再调用transitionFromViewController方法。
@@ -326,8 +332,23 @@ MyselfViewController *thirdViewController;
 //    myLogInViewController = [[MyLogInViewController alloc]init];
 //    [self addChildViewController:myLogInViewController];
     
-    [mainView addSubview:viewController.view];
-    currentViewController = viewController;
+    if (_is_new_userID==1) {
+        [mainView addSubview:secondViewController.view];
+        currentViewController = secondViewController;
+        [UIView beginAnimations:@"Animation" context:nil];
+        [UIView setAnimationDuration:1];
+        tab.hidden=YES;
+        [UIView commitAnimations];
+        bottomView.hidden=NO;
+        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
+        [self plusLAyout];
+    }else{
+        [mainView addSubview:viewController.view];
+        currentViewController = viewController;
+    }
+
+    
+    
 
 }
 #pragma mark未读消息书
@@ -524,6 +545,7 @@ MyselfViewController *thirdViewController;
     switch (sender.tag) {
         case 1000:
         {
+            tabBarID=0;
             helpDic=@{@"action":@"index"};
             [[NSNotificationCenter defaultCenter] postNotificationName:@"HELP" object:helpDic];
             indexesID=0;
@@ -560,6 +582,7 @@ MyselfViewController *thirdViewController;
              break;
         case 1001:
         {
+            tabBarID=1;
             helpDic=@{@"action":@"discover"};
             [[NSNotificationCenter defaultCenter] postNotificationName:@"HELP" object:helpDic];
             
@@ -632,6 +655,7 @@ MyselfViewController *thirdViewController;
             break;
         case 1003:
         {
+            tabBarID=3;
             helpDic=@{@"action":@"sns"};
             [[NSNotificationCenter defaultCenter] postNotificationName:@"HELP" object:helpDic];
             indexesID=0;
@@ -672,6 +696,7 @@ MyselfViewController *thirdViewController;
             break;
         case 1004:
         {
+            tabBarID=4;
             helpDic=@{@"action":@"mine"};
             [[NSNotificationCenter defaultCenter] postNotificationName:@"HELP" object:helpDic];
             indexesID=0;
@@ -765,21 +790,107 @@ MyselfViewController *thirdViewController;
     tab.hidden=NO;
     [UIView commitAnimations];
     bottomView.hidden=YES;
-    currentViewController=viewController;
-    pageImage.image=[UIImage imageNamed:@"common_icon_home_c@2x"];
-    pageLabel.textColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
+    if (_is_new_userID==1) {
+        currentViewController=viewController;
+        pageImage.image=[UIImage imageNamed:@"common_icon_home_c@2x"];
+        pageLabel.textColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
+        
+        foundImage.image=[UIImage imageNamed:@"common_icon_find@2x"];
+        foundLabel.textColor=[UIColor blackColor];
+        
+        friendImage.image=[UIImage imageNamed:@"common_icon_chum@2x"];
+        friendLabel.textColor=[UIColor blackColor];
+        
+        meImage.image=[UIImage imageNamed:@"common_icon_mine@2x"];
+        meLabel.textColor=[UIColor blackColor];
+        [mainView addSubview:viewController.view];
+        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+    }else{
+        switch (tabBarID) {
+            case 0:
+            {
+                currentViewController=viewController;
+                pageImage.image=[UIImage imageNamed:@"common_icon_home_c@2x"];
+                pageLabel.textColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
+                
+                foundImage.image=[UIImage imageNamed:@"common_icon_find@2x"];
+                foundLabel.textColor=[UIColor blackColor];
+                
+                friendImage.image=[UIImage imageNamed:@"common_icon_chum@2x"];
+                friendLabel.textColor=[UIColor blackColor];
+                
+                meImage.image=[UIImage imageNamed:@"common_icon_mine@2x"];
+                meLabel.textColor=[UIColor blackColor];
+                [mainView addSubview:viewController.view];
+                [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+            }
+                break;
+            case 1:
+            {
+                currentViewController=firstViewController;
+                firstViewController.vcID=0;
+                pageImage.image=[UIImage imageNamed:@"common_icon_home@2x"];
+                pageLabel.textColor=[UIColor blackColor];
+                
+                foundImage.image=[UIImage imageNamed:@"common_icon_find_c@2x"];
+                foundLabel.textColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
+                
+                friendImage.image=[UIImage imageNamed:@"common_icon_chum@2x"];
+                friendLabel.textColor=[UIColor blackColor];
+                
+                meImage.image=[UIImage imageNamed:@"common_icon_mine@2x"];
+                meLabel.textColor=[UIColor blackColor];
+                [mainView addSubview:firstViewController.view];
+                [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+            }
+                break;
+            case 3:
+            {
+                currentViewController=friendViewController;
+                
+                pageImage.image=[UIImage imageNamed:@"common_icon_home@2x"];
+                pageLabel.textColor=[UIColor blackColor];
+                
+                foundImage.image=[UIImage imageNamed:@"common_icon_find@2x"];
+                foundLabel.textColor=[UIColor blackColor];
+                
+                friendImage.image=[UIImage imageNamed:@"common_icon_chum_c@2x"];
+                friendLabel.textColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
+                
+                meImage.image=[UIImage imageNamed:@"common_icon_mine@2x"];
+                meLabel.textColor=[UIColor blackColor];
+                [mainView addSubview:friendViewController.view];
+                [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
+            }
+                break;
+            case 4:
+            {
+                currentViewController=thirdViewController;
+//                thirdViewController.rootId=0;
+                
+                pageImage.image=[UIImage imageNamed:@"common_icon_home@2x"];
+                pageLabel.textColor=[UIColor blackColor];
+                
+                foundImage.image=[UIImage imageNamed:@"common_icon_find@2x"];
+                foundLabel.textColor=[UIColor blackColor];
+                
+                friendImage.image=[UIImage imageNamed:@"common_icon_chum@2x"];
+                friendLabel.textColor=[UIColor blackColor];
+                
+                meImage.image=[UIImage imageNamed:@"common_icon_mine_c@2x"];
+                meLabel.textColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
+                [mainView addSubview:thirdViewController.view];
+                [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
+            }
+                break;
+                
+            default:
+                break;
+        }
+    }
     
-    foundImage.image=[UIImage imageNamed:@"common_icon_find@2x"];
-    foundLabel.textColor=[UIColor blackColor];
     
-    friendImage.image=[UIImage imageNamed:@"common_icon_chum@2x"];
-    friendLabel.textColor=[UIColor blackColor];
-    
-    meImage.image=[UIImage imageNamed:@"common_icon_mine@2x"];
-    meLabel.textColor=[UIColor blackColor];
-    [mainView addSubview:viewController.view];
-    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
-    [self tabBarAction];
+//    [self tabBarAction];
 }
 
 -(void)butAction:(UIButton *)sender

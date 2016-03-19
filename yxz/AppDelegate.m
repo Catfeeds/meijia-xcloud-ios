@@ -47,7 +47,7 @@
 #import "UMSocialSinaSSOHandler.h"
 #import "DetailsViewController.h"
 #import "UMCheckUpdate.h"
-
+#import "WaterListViewController.h"
 #define IosAppVersion [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]
 @interface AppDelegate ()<WXApiDelegate>//,WeiboSDKDelegate>
 {
@@ -234,10 +234,10 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
 //    // 将log输入到文件
 //    freopen([logFilePath cStringUsingEncoding:NSASCIIStringEncoding], "a+", stdout);
 //    freopen([logFilePath cStringUsingEncoding:NSASCIIStringEncoding], "a+", stderr);
-//    
-//    NSLog(@"我就看看你走没走--1");
-//    NSLog(@"有什么：%@",launchOptions);
-//    NSLog(@"%ld",(long)application.applicationState);
+    
+    NSLog(@"我就看看你走没走--1");
+    NSLog(@"有什么：%@",launchOptions);
+    NSLog(@"%ld",(long)application.applicationState);
 
     NSURL *url = [launchOptions objectForKey:UIApplicationLaunchOptionsURLKey];
     if(url)
@@ -1206,6 +1206,7 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
         return [UMSocialSnsService handleOpenURL:url wxApiDelegate:nil];
     }
     
+    
     return YES;
 }
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
@@ -1255,6 +1256,21 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     if ([url.scheme isEqualToString:@"wb247547429"]) {
         return [UMSocialSnsService handleOpenURL:url wxApiDelegate:nil];
     }
+    
+    
+    /*
+     自定义URL启动App  样本xcloud://51xingzheng.com?category=app&action=water
+     */
+    if ([url.scheme isEqualToString:@"xcloud"]) {
+        NSLog(@"Calling Application Bundle ID: %@", sourceApplication);
+        NSLog(@"URL scheme:%@", [url scheme]);
+        NSLog(@"URL query: %@", [url query]);
+//        NSURL *url=sender.object;
+        
+      // [[NSNotificationCenter defaultCenter] postNotificationName:@"URLOPEN" object:url];
+    }
+    
+    
     
     return YES;
     
@@ -1493,5 +1509,13 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
 {
     return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
 }
-
+//- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url
+//  sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
+//{
+//    NSLog(@"Calling Application Bundle ID: %@", sourceApplication);
+//    NSLog(@"URL scheme:%@", [url scheme]);
+//    NSLog(@"URL query: %@", [url query]);
+//    
+//    return YES;
+//}
 @end
