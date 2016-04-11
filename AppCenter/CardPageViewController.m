@@ -11,7 +11,7 @@
 #import "DownloadManager.h"
 #import "PageTableViewCell.h"
 #import "DetailsListViewController.h"
-//#import "WXApi.h"
+#import "WXApi.h"
 #import "MineViewController.h"
 #import "QRcodeViewController.h"
 #import "LBXScanViewStyle.h"
@@ -551,14 +551,14 @@ float lastContentOffset;
     titleLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"card_type_name"]];
     [titleLabel setNumberOfLines:0];
     titleLabel.lineBreakMode =NSLineBreakByTruncatingTail ;
-    titleLabel.font=[UIFont fontWithName:@"Arial" size:14];
+    titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:14];
     [cell addSubview:titleLabel];
     
     UILabel *timeLabels=[[UILabel alloc]initWithFrame:FRAME(headeImageView.frame.size.width+20, titleLabel.frame.size.height+titleLabel.frame.origin.y+8, (WIDTH-60)*0.5, 12)];
     timeLabels.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"card_type_name"]];
     [timeLabels setNumberOfLines:0];
     timeLabels.lineBreakMode =NSLineBreakByTruncatingTail ;
-    timeLabels.font=[UIFont fontWithName:@"Arial" size:10];
+    timeLabels.font=[UIFont fontWithName:@"Heiti SC" size:10];
     [cell addSubview:timeLabels];
     
     UILabel *_promptlabel = [[UILabel alloc] init];//后面还会重新设置其size。
@@ -579,11 +579,11 @@ float lastContentOffset;
         _promptlabel.textColor=[UIColor colorWithRed:231/255.0f green:231/255.0f blue:231/255.0f alpha:1];
     }
     _promptlabel.textAlignment = NSTextAlignmentRight;
-    _promptlabel.font=[UIFont fontWithName:@"Arial" size:14];
+    _promptlabel.font=[UIFont fontWithName:@"Heiti SC" size:14];
     [_promptlabel setNumberOfLines:1];
     [_promptlabel sizeToFit];
-    _promptlabel.textColor=[UIColor colorWithRed:103/255.0f green:103/255.0f blue:103/255.0f alpha:1];
-    _promptlabel.frame=CGRectMake(WIDTH-_promptlabel.frame.size.width-5,25,_promptlabel.frame.size.width,27);
+    _promptlabel.textAlignment=NSTextAlignmentRight;
+    _promptlabel.frame=CGRectMake(WIDTH-_promptlabel.frame.size.width-30,25,_promptlabel.frame.size.width+20,27);
     [cell addSubview:_promptlabel];
     
     UIImageView *image=[[UIImageView alloc]initWithFrame:CGRectMake(_promptlabel.frame.size.width, 0, 10, _promptlabel.frame.size.height)];
@@ -591,11 +591,12 @@ float lastContentOffset;
     [_promptlabel addSubview:image];
     UIImageView *image2=[[UIImageView alloc]initWithFrame:CGRectMake(-20, 0, _promptlabel.frame.size.width+20, _promptlabel.frame.size.height)];
     image2.image=[UIImage imageNamed:@"SYCELL_YHBY_@2x"];
-    [_promptlabel addSubview:image2];
+    _promptlabel.backgroundColor= [UIColor colorWithPatternImage:[UIImage imageNamed:@"SYCELL_YHBY_@2x"]];
+//    [_promptlabel addSubview:image2];
     
     UILabel*_contentLabel=[[UILabel alloc]init];
     _contentLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"service_content"]];
-    _contentLabel.font=[UIFont fontWithName:@"Arial" size:13];
+    _contentLabel.font=[UIFont fontWithName:@"Heiti SC" size:13];
     _contentLabel.textColor=[UIColor colorWithRed:138/255.0f green:137/255.0f blue:137/255.0f alpha:1];
     _contentLabel.numberOfLines=0;
     NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:[UIFont systemFontOfSize:13],NSFontAttributeName, nil];
@@ -613,7 +614,7 @@ float lastContentOffset;
     total_zan.lineBreakMode=NSLineBreakByTruncatingTail;
     [total_zan setNumberOfLines:1];
     [total_zan sizeToFit];
-    total_zan.font=[UIFont fontWithName:@"Arial" size:13];
+    total_zan.font=[UIFont fontWithName:@"Heiti SC" size:13];
     total_zan.textColor=[UIColor colorWithRed:103/255.0f green:103/255.0f blue:103/255.0f alpha:1];
     [cell addSubview:total_zan];
     
@@ -623,7 +624,7 @@ float lastContentOffset;
     _commentLabel.lineBreakMode=NSLineBreakByTruncatingTail;
     [_commentLabel setNumberOfLines:1];
     [_commentLabel sizeToFit];
-    _commentLabel.font=[UIFont fontWithName:@"Arial" size:13];
+    _commentLabel.font=[UIFont fontWithName:@"Heiti SC" size:13];
     _commentLabel.textColor=[UIColor colorWithRed:103/255.0f green:103/255.0f blue:103/255.0f alpha:1];
     [cell addSubview:_commentLabel];
     

@@ -10,7 +10,9 @@
 #import "NSTimer+Addition.h"
 
 @interface CycleScrollView () <UIScrollViewDelegate>
-
+{
+    UIPageControl *pageControl;
+}
 @property (nonatomic , assign) NSInteger currentPageIndex;
 @property (nonatomic , assign) NSInteger totalPageCount;
 @property (nonatomic , strong) NSMutableArray *contentViews;
@@ -29,6 +31,8 @@
     if (_totalPageCount > 0) {
         [self configContentViews];
         [self.animationTimer resumeTimerAfterTimeInterval:self.animationDuration];
+        _pageID=(int)_totalPageCount;
+        [self pageViewLayout];
     }
 }
 
@@ -57,14 +61,25 @@
         self.scrollView.contentMode = UIViewContentModeCenter;
         self.scrollView.contentSize = CGSizeMake(3 * CGRectGetWidth(self.scrollView.frame), CGRectGetHeight(self.scrollView.frame));
         self.scrollView.delegate = self;
-        self.scrollView.contentOffset = CGPointMake(CGRectGetWidth(self.scrollView.frame), 0);
+        self.scrollView.bounces=NO;
+        self.scrollView.contentOffset = CGPointMake(0, 0);
         self.scrollView.pagingEnabled = YES;
         [self addSubview:self.scrollView];
         self.currentPageIndex = 0;
     }
+   
     return self;
 }
-
+-(void)pageViewLayout
+{
+    pageControl = [[UIPageControl alloc]initWithFrame:CGRectMake((WIDTH-5*_pageID-10*(_pageID+1))/2, 150, 5*_pageID+10*(_pageID+1), 30)];
+    pageControl.numberOfPages =_pageID;
+    //    pageControl.backgroundColor=[UIColor redColor];
+    pageControl.currentPage = 0;
+    pageControl.pageIndicatorTintColor=[UIColor whiteColor];
+    pageControl.currentPageIndicatorTintColor=[UIColor redColor];
+    [self addSubview:pageControl];
+}
 #pragma mark -
 #pragma mark - 私有函数
 
@@ -132,21 +147,25 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
+    
     int contentOffsetX = scrollView.contentOffset.x;
     if(contentOffsetX >= (2 * CGRectGetWidth(scrollView.frame))) {
         self.currentPageIndex = [self getValidNextPageIndexWithPageIndex:self.currentPageIndex + 1];
-        NSLog(@"next，当前页:%ld",(long)self.currentPageIndex);
+//        NSLog(@"next，当前页:%ld",(long)self.currentPageIndex);
+        pageControl.currentPage=(int)self.currentPageIndex;
         [self configContentViews];
     }
     if(contentOffsetX <= 0) {
         self.currentPageIndex = [self getValidNextPageIndexWithPageIndex:self.currentPageIndex - 1];
-        NSLog(@"previous，当前页:%ld",(long)self.currentPageIndex);
+//        NSLog(@"previous，当前页:%ld",(long)self.currentPageIndex);
+        pageControl.currentPage=(int)self.currentPageIndex;
         [self configContentViews];
     }
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
+    
     [scrollView setContentOffset:CGPointMake(CGRectGetWidth(scrollView.frame), 0) animated:YES];
 }
 
@@ -155,10 +174,17 @@
 
 - (void)animationTimerDidFired:(NSTimer *)timer
 {
+    int page=(pageControl.currentPage+1) % _pageID;
+    pageControl.currentPage=page;
+    [self pageChanged:pageControl];
     CGPoint newOffset = CGPointMake(self.scrollView.contentOffset.x + CGRectGetWidth(self.scrollView.frame), self.scrollView.contentOffset.y);
     [self.scrollView setContentOffset:newOffset animated:YES];
 }
-
+-(void)pageChanged:(UIPageControl *)pagecontrol
+{
+    CGFloat x=(pagecontrol.currentPage)*self.scrollView.bounds.size.width;
+    [self.scrollView setContentOffset:CGPointMake(x, 0) animated:YES];
+}
 - (void)contentViewTapAction:(UITapGestureRecognizer *)tap
 {
     if (self.TapActionBlock) {

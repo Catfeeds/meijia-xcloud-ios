@@ -8,6 +8,7 @@
 
 #import "WaterListViewController.h"
 #import "WaterOrderViewController.h"
+#import "Order_DetailsViewController.h"
 @interface WaterListViewController ()
 {
     UIActivityIndicatorView *view;
@@ -158,7 +159,7 @@
     UILabel *timeLabel=[[UILabel alloc]init];
     timeLabel.text=[dateformatter stringFromDate:senddate];
     timeLabel.textAlignment=NSTextAlignmentLeft;
-    timeLabel.font=[UIFont fontWithName:@"Arial" size:18];
+    timeLabel.font=[UIFont fontWithName:@"Heiti SC" size:18];
     [timeLabel setNumberOfLines:1];
     [timeLabel sizeToFit];
     timeLabel.frame=FRAME(20, 75, timeLabel.frame.size.width, 22);
@@ -169,7 +170,7 @@
     signButton.backgroundColor=[UIColor whiteColor];
     signButton.layer.cornerRadius=5;
     [signButton setTitle:@"一键结算" forState:UIControlStateNormal];
-    signButton.titleLabel.font=[UIFont fontWithName:@"Arial" size:18];
+    signButton.titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:18];
     [signButton addTarget:self action:@selector(signBut) forControlEvents:UIControlEventTouchUpInside];
     [signButton setTitleColor:[UIColor colorWithRed:89/255.0f green:181/255.0f blue:218/255.0f alpha:1] forState:UIControlStateNormal];
     [attendanceView addSubview:signButton];
@@ -188,7 +189,7 @@
 {
     nameLabel.text=nameString;
     nameLabel.textAlignment=NSTextAlignmentLeft;
-    nameLabel.font=[UIFont fontWithName:@"Arial" size:18];
+    nameLabel.font=[UIFont fontWithName:@"Heiti SC" size:18];
     [nameLabel setNumberOfLines:1];
     [nameLabel sizeToFit];
     nameLabel.textColor=[UIColor whiteColor];
@@ -199,7 +200,7 @@
 {
     weekLabel.text=weekString;
     weekLabel.textAlignment=NSTextAlignmentLeft;
-    weekLabel.font=[UIFont fontWithName:@"Arial" size:35];
+    weekLabel.font=[UIFont fontWithName:@"Heiti SC" size:35];
     [weekLabel setNumberOfLines:1];
     [weekLabel sizeToFit];
     weekLabel.textColor=[UIColor whiteColor];
@@ -335,11 +336,12 @@
     [imageView setImageWithURL:[NSURL URLWithString:imageUrl]placeholderImage:nil];;
     [Cell addSubview:imageView];
     UILabel *moneyLabel=[[UILabel alloc]initWithFrame:FRAME(imageView.frame.size.width+30, 20, WIDTH-(imageView.frame.size.width+100), 20)];
-    moneyLabel.font=[UIFont fontWithName:@"Arial" size:15];
+    moneyLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
+    [moneyLabel setFont:[UIFont fontWithName:@"Helvetica-Bold" size:15]];
     moneyLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"service_price_name"]];
     [Cell addSubview:moneyLabel];
     UILabel *stateLabel=[[UILabel alloc]init];
-    stateLabel.font=[UIFont fontWithName:@"Arial" size:15];
+    stateLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
     int dis_price=[[dic objectForKey:@"dis_price"]intValue];
     int the_number=[[dic objectForKey:@"service_num"]intValue];
     int monetStr=dis_price*the_number;
@@ -350,12 +352,12 @@
     [Cell addSubview:stateLabel];
     
     UILabel *label=[[UILabel alloc]initWithFrame:FRAME(stateLabel.frame.origin.x+stateLabel.frame.size.width+10, 50, 30, 20)];
-    label.font=[UIFont fontWithName:@"Arial" size:15];
+    label.font=[UIFont fontWithName:@"Heiti SC" size:15];
     label.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"order_status_name"]];
     [Cell addSubview:label];
     
     UILabel *waterLabel=[[UILabel alloc]initWithFrame:FRAME(moneyLabel.frame.origin.x, 80, moneyLabel.frame.size.width, 20)];
-    waterLabel.font=[UIFont fontWithName:@"Arial" size:15];
+    waterLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
     waterLabel.text=[NSString stringWithFormat:@"下单时间:%@",[dic objectForKey:@"add_time_str"]];
     [Cell addSubview:waterLabel];
     [Cell setSelectionStyle:UITableViewCellSelectionStyleNone];
@@ -378,10 +380,18 @@
     }
 
     button.tag=indexPath.row;
-    button.titleLabel.font=[UIFont fontWithName:@"Arial" size:15];
+    button.titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
     [button addTarget:self action:@selector(butAction:) forControlEvents:UIControlEventTouchUpInside];
     [Cell addSubview:button];
     return Cell;
+}
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSDictionary *dic=dataSourceArray[indexPath.row];
+    Order_DetailsViewController *order_vc=[[Order_DetailsViewController alloc]init];
+    order_vc.order_ID=[NSString stringWithFormat:@"%@",[dic objectForKey:@"order_id"]];
+    order_vc.user_ID=[NSString stringWithFormat:@"%@",[dic objectForKey:@"user_id"]];
+    [self.navigationController pushViewController:order_vc animated:YES];
 }
 
 -(void)butAction:(UIButton *)button

@@ -69,7 +69,7 @@
         Cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:TableSampleIdentifier];
     }
     UILabel *moneyLabel=[[UILabel alloc]initWithFrame:FRAME(30, 15, WIDTH-60, 20)];
-    moneyLabel.font=[UIFont fontWithName:@"Arial" size:15];
+    moneyLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
     moneyLabel.text=[NSString stringWithFormat:@"%@",dataSourceArray[indexPath.row]];
     [Cell addSubview:moneyLabel];
     if (cellID==indexPath.row) {

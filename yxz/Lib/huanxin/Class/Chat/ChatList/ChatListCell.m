@@ -59,7 +59,7 @@
         [self.contentView addSubview:_detailLabel];
         
         self.textLabel.backgroundColor = [UIColor clearColor];
-        self.textLabel.font=[UIFont fontWithName:@"Arial" size:16];
+        self.textLabel.font=[UIFont fontWithName:@"Heiti SC" size:16];
         
         _lineView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, WIDTH, 1)];
         _lineView.backgroundColor = RGBACOLOR(207, 210, 213, 0.7);

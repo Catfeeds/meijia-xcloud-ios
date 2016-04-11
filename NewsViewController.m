@@ -250,7 +250,7 @@
     
     UILabel *nameLabel=[[UILabel alloc]initWithFrame:CGRectMake(headImage.frame.origin.x+headImage.frame.size.width+10, 15, WIDTH-130, 20)];
     nameLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"name"]];
-    nameLabel.font=[UIFont fontWithName:@"Arial" size:15];
+    nameLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
     [cell addSubview:nameLabel];
     
     double inTime=[[dic objectForKey:@"add_time"] doubleValue];
@@ -264,12 +264,12 @@
     
     UILabel *timeLabel=[[UILabel alloc]initWithFrame:CGRectMake(WIDTH-50, 25, 40, 10)];
     timeLabel.text=[NSString stringWithFormat:@"%@",inTimeString];
-    timeLabel.font=[UIFont fontWithName:@"Arial" size:10];
+    timeLabel.font=[UIFont fontWithName:@"Heiti SC" size:10];
     [cell addSubview:timeLabel];
     
     UILabel *textLabel=[[UILabel alloc]initWithFrame:CGRectMake(headImage.frame.origin.x+headImage.frame.size.width+10, cell.frame.size.height, WIDTH-90, 15)];
     textLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"im_content"]];
-    textLabel.font=[UIFont fontWithName:@"Arial" size:10];
+    textLabel.font=[UIFont fontWithName:@"Heiti SC" size:10];
     textLabel.textColor=[UIColor colorWithRed:225/255.0f green:225/255.0f blue:225/255.0f alpha:1];
     [cell addSubview:textLabel];
     

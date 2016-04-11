@@ -46,6 +46,12 @@
     _moreFooter = [[MJRefreshFooterView alloc] init];
     _moreFooter.delegate = self;
     _moreFooter.scrollView = myTableView;
+    AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication] delegate];
+    NSString *company_id=[NSString stringWithFormat:@"%@",[delegate.globalDic objectForKey:@"company_id"]];
+    if(company_id==nil||company_id==NULL||[company_id isEqualToString:@""])
+    {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
     [self PLJKLayout];
 
     // Do any additional setup after loading the view.
@@ -211,7 +217,7 @@
     }
     UILabel *nameLabel=[[UILabel alloc]init];
     nameLabel.text=[NSString stringWithFormat:@"%@",[dataDic objectForKey:@"name"]];
-    nameLabel.font=[UIFont fontWithName:@"Arial" size:16];
+    nameLabel.font=[UIFont fontWithName:@"Heiti SC" size:16];
     [nameLabel setNumberOfLines:1];
     [nameLabel sizeToFit];
     nameLabel.frame=FRAME(20, 20, nameLabel.frame.size.width, 20);
@@ -231,6 +237,7 @@
     cellID=(int)indexPath.row;
     _textFieldString=[NSString stringWithFormat:@"%@",[dic objectForKey:@"name"]];
     [myTableView reloadData];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)didReceiveMemoryWarning {

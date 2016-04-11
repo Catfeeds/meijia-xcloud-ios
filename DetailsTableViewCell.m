@@ -40,7 +40,7 @@
         CGSize size = CGSizeMake(WIDTH-40, 1000);
         CGSize labelSize = [self.contentLabel.text sizeWithFont:self.contentLabel.font constrainedToSize:size lineBreakMode:NSLineBreakByClipping];
         _contentLabel.frame=CGRectMake(20, _nameLabel.frame.size.height+_nameLabel.frame.origin.y+25/2, WIDTH-40, labelSize.height);
-        _contentLabel.font=[UIFont fontWithName:@"Arial" size:13];
+        _contentLabel.font=[UIFont fontWithName:@"Heiti SC" size:13];
         [_cellView addSubview:_contentLabel];
         
         UIView *lineView=[[UIView alloc]initWithFrame:CGRectMake(10, _contentLabel.frame.size.height+_contentLabel.frame.origin.y+5, WIDTH-20, 1)];

@@ -10,7 +10,7 @@
 #import "DownloadManager.h"
 #import "ISLoginManager.h"
 #import "DetailsTableViewCell.h"
-//#import "WXApi.h"
+#import "WXApi.h"
 
 #import "BookingViewController.h"
 #import "MeetingViewController.h"
@@ -142,7 +142,7 @@ int height,Y,processID=0;
     [self.view addSubview:processButton];
     processLabel=[[UILabel alloc]initWithFrame:FRAME(0, 0, 40, 30)];
     processLabel.text=@"修改";
-    processLabel.font=[UIFont fontWithName:@"Arial" size:14];
+    processLabel.font=[UIFont fontWithName:@"Heiti SC" size:14];
     processLabel.textAlignment=NSTextAlignmentCenter;
     [processButton addSubview:processLabel];
     //取消按钮
@@ -153,7 +153,7 @@ int height,Y,processID=0;
     
     modifyLabel=[[UILabel alloc]initWithFrame:FRAME(0, 0, 40, 30)];
     modifyLabel.text=@"取消";
-    modifyLabel.font=[UIFont fontWithName:@"Arial" size:14];
+    modifyLabel.font=[UIFont fontWithName:@"Heiti SC" size:14];
     modifyLabel.textAlignment=NSTextAlignmentCenter;
     [modifyButton addSubview:modifyLabel];
     //self.view.backgroundColor=[UIColor colorWithRed:241/255.0f green:241/255.0f blue:241/255.0f alpha:1];
@@ -399,7 +399,7 @@ int height,Y,processID=0;
     NSString* inTimeString = [inTimeformatter stringFromDate:inTimedate];
     
     timeLabel.text=inTimeString;
-    timeLabel.font=[UIFont fontWithName:@"Arial" size:14];
+    timeLabel.font=[UIFont fontWithName:@"Heiti SC" size:14];
     timeLabel.lineBreakMode =NSLineBreakByTruncatingTail ;
     [timeLabel setNumberOfLines:0];
     [timeLabel sizeToFit];
@@ -465,7 +465,7 @@ int height,Y,processID=0;
     promptLabel.lineBreakMode=NSLineBreakByTruncatingTail;
     [promptLabel setNumberOfLines:0];
     [promptLabel sizeToFit];
-    promptLabel.font=[UIFont fontWithName:@"Arial" size:14];
+    promptLabel.font=[UIFont fontWithName:@"Heiti SC" size:14];
     [selfView addSubview:promptLabel];
     
     
@@ -477,7 +477,7 @@ int height,Y,processID=0;
     [inTimeLabel setNumberOfLines:0];
     [inTimeLabel sizeToFit];
     inTimeLabel.textColor=[UIColor colorWithRed:138/255.0f green:137/255.0f blue:137/255.0f alpha:1];
-    inTimeLabel.font=[UIFont fontWithName:@"Arial" size:10];
+    inTimeLabel.font=[UIFont fontWithName:@"Heiti SC" size:10];
     [selfView addSubview:inTimeLabel];
     
     if (card_type==1)
@@ -488,7 +488,7 @@ int height,Y,processID=0;
         weatherImage.image=[UIImage imageNamed:headImageArray[card_type-1]];
         
         addressLabel.text=inTimeString1;
-        addressLabel.font=[UIFont fontWithName:@"Arial" size:11];
+        addressLabel.font=[UIFont fontWithName:@"Heiti SC" size:11];
         addressLabel.textColor=[UIColor colorWithRed:138/255.0f green:137/255.0f blue:137/255.0f alpha:1];
         [addressLabel setNumberOfLines:0];
         [addressLabel sizeToFit];
@@ -497,7 +497,7 @@ int height,Y,processID=0;
         
         shijianLabel.text=[NSString stringWithFormat:@"会议地点:%@",[dic objectForKey:@"service_addr"]];
 //        shijianLabel.backgroundColor=[UIColor redColor];
-        shijianLabel.font=[UIFont fontWithName:@"Arial" size:11];
+        shijianLabel.font=[UIFont fontWithName:@"Heiti SC" size:11];
         [shijianLabel setNumberOfLines:0];
         [shijianLabel sizeToFit];
         shijianLabel.lineBreakMode=NSLineBreakByTruncatingTail;
@@ -505,7 +505,7 @@ int height,Y,processID=0;
         shijianLabel.frame=FRAME(addressLabel.frame.origin.x, addressLabel.frame.origin.y+addressLabel.frame.size.height+10, addressLabel.frame.size.width, 13);
         
         cityLabel.text=cityString;
-        UIFont *font = [UIFont fontWithName:@"Arial" size:11];
+        UIFont *font = [UIFont fontWithName:@"Heiti SC" size:11];
         cityLabel.font=font;
         [cityLabel setNumberOfLines:0];
         [cityLabel sizeToFit];
@@ -524,7 +524,7 @@ int height,Y,processID=0;
         weatherImage.image=[UIImage imageNamed:headImageArray[card_type-1]];
         
         addressLabel.text=inTimeString1;
-        addressLabel.font=[UIFont fontWithName:@"Arial" size:11];
+        addressLabel.font=[UIFont fontWithName:@"Heiti SC" size:11];
         addressLabel.textColor=[UIColor colorWithRed:138/255.0f green:137/255.0f blue:137/255.0f alpha:1];
         [addressLabel setNumberOfLines:0];
         [addressLabel sizeToFit];
@@ -533,7 +533,7 @@ int height,Y,processID=0;
         
         shijianLabel.text=cityString;
 //        shijianLabel.backgroundColor=[UIColor redColor];
-        shijianLabel.font=[UIFont fontWithName:@"Arial" size:11];
+        shijianLabel.font=[UIFont fontWithName:@"Heiti SC" size:11];
         [shijianLabel setNumberOfLines:0];
         [shijianLabel sizeToFit];
         shijianLabel.textColor=[UIColor colorWithRed:138/255.0f green:137/255.0f blue:137/255.0f alpha:1];
@@ -550,7 +550,7 @@ int height,Y,processID=0;
         weatherImage.image=[UIImage imageNamed:headImageArray[card_type-1]];
         
         addressLabel.text=inTimeString1;
-        addressLabel.font=[UIFont fontWithName:@"Arial" size:11];
+        addressLabel.font=[UIFont fontWithName:@"Heiti SC" size:11];
         addressLabel.textColor=[UIColor colorWithRed:138/255.0f green:137/255.0f blue:137/255.0f alpha:1];
         [addressLabel setNumberOfLines:0];
         [addressLabel sizeToFit];
@@ -559,7 +559,7 @@ int height,Y,processID=0;
         
         shijianLabel.text=cityString;
 //        shijianLabel.backgroundColor=[UIColor redColor];
-        shijianLabel.font=[UIFont fontWithName:@"Arial" size:11];
+        shijianLabel.font=[UIFont fontWithName:@"Heiti SC" size:11];
         [shijianLabel setNumberOfLines:0];
         [shijianLabel sizeToFit];
         shijianLabel.textColor=[UIColor colorWithRed:138/255.0f green:137/255.0f blue:137/255.0f alpha:1];
@@ -575,7 +575,7 @@ int height,Y,processID=0;
         weatherImage.image=[UIImage imageNamed:headImageArray[card_type-1]];
         
         addressLabel.text=inTimeString1;
-        addressLabel.font=[UIFont fontWithName:@"Arial" size:11];
+        addressLabel.font=[UIFont fontWithName:@"Heiti SC" size:11];
         addressLabel.textColor=[UIColor colorWithRed:138/255.0f green:137/255.0f blue:137/255.0f alpha:1];
         [addressLabel setNumberOfLines:0];
         [addressLabel sizeToFit];
@@ -584,7 +584,7 @@ int height,Y,processID=0;
         
         shijianLabel.text=cityString;
 //        shijianLabel.backgroundColor=[UIColor redColor];
-        shijianLabel.font=[UIFont fontWithName:@"Arial" size:11];
+        shijianLabel.font=[UIFont fontWithName:@"Heiti SC" size:11];
         [shijianLabel setNumberOfLines:0];
         [shijianLabel sizeToFit];
         shijianLabel.textColor=[UIColor colorWithRed:138/255.0f green:137/255.0f blue:137/255.0f alpha:1];
@@ -597,7 +597,7 @@ int height,Y,processID=0;
         weatherImage.image=[UIImage imageNamed:headImageArray[card_type-1]];
         
         addressLabel.text=textString;
-        addressLabel.font=[UIFont fontWithName:@"Arial" size:11];
+        addressLabel.font=[UIFont fontWithName:@"Heiti SC" size:11];
         addressLabel.textColor=[UIColor colorWithRed:138/255.0f green:137/255.0f blue:137/255.0f alpha:1];
         [addressLabel setNumberOfLines:0];
         [addressLabel sizeToFit];
@@ -606,7 +606,7 @@ int height,Y,processID=0;
         
         shijianLabel.text=inTimeString1;
         //shijianLabel.backgroundColor=[UIColor redColor];
-        shijianLabel.font=[UIFont fontWithName:@"Arial" size:11];
+        shijianLabel.font=[UIFont fontWithName:@"Heiti SC" size:11];
         [shijianLabel setNumberOfLines:0];
         [shijianLabel sizeToFit];
         shijianLabel.textColor=[UIColor colorWithRed:138/255.0f green:137/255.0f blue:137/255.0f alpha:1];
@@ -614,7 +614,7 @@ int height,Y,processID=0;
         shijianLabel.frame=FRAME(addressLabel.frame.origin.x, addressLabel.frame.origin.y+addressLabel.frame.size.height+10, addressLabel.frame.size.width, 13);
         
         cityLabel.text=@"航班:";
-        cityLabel.font=[UIFont fontWithName:@"Arial" size:11];
+        cityLabel.font=[UIFont fontWithName:@"Heiti SC" size:11];
         [cityLabel setNumberOfLines:0];
         [cityLabel sizeToFit];
         cityLabel.textColor=[UIColor colorWithRed:138/255.0f green:137/255.0f blue:137/255.0f alpha:1];
@@ -674,18 +674,18 @@ int height,Y,processID=0;
         [seekView addSubview:seekImage];
         UILabel *nameLabel=[[UILabel alloc]initWithFrame:FRAME(seekImage.frame.size.width+seekImage.frame.origin.x+5, 10, WIDTH-(seekImage.frame.size.width+seekImage.frame.origin.x+80), 15)];
         nameLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"user_name"]];
-        nameLabel.font=[UIFont fontWithName:@"Arial" size:14];
+        nameLabel.font=[UIFont fontWithName:@"Heiti SC" size:14];
         [seekView addSubview:nameLabel];
         UILabel *periodLabel=[[UILabel alloc]initWithFrame:FRAME(nameLabel.frame.origin.x, 27, nameLabel.frame.size.width, 12)];
         AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication] delegate];
         
         periodLabel.text=[NSString stringWithFormat:@"%@",[delegate.globalDic objectForKey:@"senior_range"]];
-        periodLabel.font=[UIFont fontWithName:@"Arial" size:10];
+        periodLabel.font=[UIFont fontWithName:@"Heiti SC" size:10];
         [seekView addSubview:periodLabel];
         
         seekButton=[[UIButton alloc]initWithFrame:FRAME(WIDTH-65, 10, 55, 30)];
         seekButton.layer.cornerRadius=5;
-        seekButton.titleLabel.font=[UIFont fontWithName:@"Arial" size:14];
+        seekButton.titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:14];
         [seekButton addTarget:self action:@selector(seekButAction:) forControlEvents:UIControlEventTouchUpInside];
         if (clID==1) {
             [seekButton setTitle:@"接单" forState:UIControlStateNormal];
@@ -707,7 +707,7 @@ int height,Y,processID=0;
         
         UILabel *textLabel=[[UILabel alloc]initWithFrame:FRAME(nameLabel.frame.origin.x, 45, WIDTH-(seekImage.frame.size.width+seekImage.frame.origin.x+30), 15)];
         textLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"set_sec_remarks"]];
-        textLabel.font=[UIFont fontWithName:@"Arial" size:14];
+        textLabel.font=[UIFont fontWithName:@"Heiti SC" size:14];
         textLabel.textColor=[UIColor colorWithRed:138/255.0f green:137/255.0f blue:137/255.0f alpha:1];
         [textLabel setNumberOfLines:0];
         [textLabel sizeToFit];
@@ -737,7 +737,7 @@ int height,Y,processID=0;
     
     UILabel *iamgeView=[[UILabel alloc]initWithFrame:FRAME(8, frame+15, 30, 20)];
     iamgeView.text=@"点赞";
-    iamgeView.font=[UIFont fontWithName:@"Arial" size:14];
+    iamgeView.font=[UIFont fontWithName:@"Heiti SC" size:14];
     iamgeView.textColor=[UIColor colorWithRed:103/255.0f green:103/255.0f blue:103/255.0f alpha:1];
     //iamgeView.image=[UIImage imageNamed:@"common_icon_like_c@2x(1)"];
     [selfView addSubview:iamgeView];
@@ -776,7 +776,7 @@ int height,Y,processID=0;
             label.lineBreakMode=NSLineBreakByTruncatingTail;
             [label setNumberOfLines:1];
             [label sizeToFit];
-            label.font=[UIFont fontWithName:@"Arial" size:10];
+            label.font=[UIFont fontWithName:@"Heiti SC" size:10];
             label.textColor=[UIColor colorWithRed:103/255.0f green:103/255.0f blue:103/255.0f alpha:1];
             label.frame=FRAME(headeView.frame.size.width+headeView.frame.origin.x+5, headeView.frame.origin.y+5, label.frame.size.width, 20);
             [selfView addSubview:label];
@@ -814,7 +814,7 @@ int height,Y,processID=0;
     }
     //    textLabel.text=cell.promptlabel.textColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
     
-    texLabel.font=[UIFont fontWithName:@"Arial" size:14];
+    texLabel.font=[UIFont fontWithName:@"Heiti SC" size:14];
     [texLabel setNumberOfLines:0];
     [texLabel sizeToFit];
     texLabel.lineBreakMode=NSLineBreakByTruncatingTail;
@@ -908,7 +908,7 @@ int height,Y,processID=0;
     zambiaLabel=[[UILabel alloc]init];
     
     zambiaLabel.text=zambiaString;
-    zambiaLabel.font=[UIFont fontWithName:@"Arial" size:10];
+    zambiaLabel.font=[UIFont fontWithName:@"Heiti SC" size:10];
     [zambiaLabel setNumberOfLines:1];
     [zambiaLabel sizeToFit];
     zambiaLabel.lineBreakMode=NSLineBreakByTruncatingTail;
@@ -1005,7 +1005,7 @@ int height,Y,processID=0;
     textViewLabel=[[UILabel alloc]initWithFrame:FRAME(3, 8, WIDTH-39, 15)];
     textViewLabel.text=@"等你来评论...";
     textViewLabel.textColor=[UIColor colorWithRed:164/255.0f green:164/255.0f blue:164/255.0f alpha:1];
-    textViewLabel.font=[UIFont fontWithName:@"Arial" size:14];
+    textViewLabel.font=[UIFont fontWithName:@"Heiti SC" size:14];
     textViewLabel.lineBreakMode=NSLineBreakByTruncatingTail;
     [textViewLabel setNumberOfLines:1];
     [textViewLabel sizeToFit];
@@ -1015,7 +1015,7 @@ int height,Y,processID=0;
     commentButton.backgroundColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
     [commentButton setTitle:@"评论" forState:UIControlStateNormal];
     commentButton.titleLabel.textColor=[UIColor whiteColor];
-    commentButton.titleLabel.font=[UIFont fontWithName:@"Arial" size:15];
+    commentButton.titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
     commentButton.layer.cornerRadius=7;
 //    commentButton.enabled = FALSE;
     [commentButton addTarget:self action:@selector(commentButtonAN) forControlEvents:UIControlEventTouchUpInside];
@@ -1114,7 +1114,7 @@ int height,Y,processID=0;
     [label setNumberOfLines:1];
     [label sizeToFit];
     label.textColor=[UIColor colorWithRed:103/255.0f green:103/255.0f blue:103/255.0f alpha:1];
-    label.font=[UIFont fontWithName:@"Arial" size:14];
+    label.font=[UIFont fontWithName:@"Heiti SC" size:14];
     label.frame=FRAME(10, 4, label.frame.size.width, 20);
     [sectionView addSubview:label];
     UIView *view=[[UIView alloc]initWithFrame:FRAME(0, 24, WIDTH, 5)];
@@ -1157,7 +1157,7 @@ int height,Y,processID=0;
         [cell addSubview:lineView];
     }
     nameLabel.text=[NSString stringWithFormat:@"%@",[plDic objectForKey:@"name"]];
-    nameLabel.font=[UIFont fontWithName:@"Arial" size:13];
+    nameLabel.font=[UIFont fontWithName:@"Heiti SC" size:13];
     nameLabel.textColor=[UIColor colorWithRed:138/255.0f green:137/255.0f blue:137/255.0f alpha:1];
     
     
@@ -1174,7 +1174,7 @@ int height,Y,processID=0;
     timeLabel.text=inTimeString;
    // timeLabel.backgroundColor=[UIColor redColor];
     timeLabel.textColor=[UIColor colorWithRed:138/255.0f green:137/255.0f blue:137/255.0f alpha:1];
-    timeLabel.font=[UIFont fontWithName:@"Arial" size:13];
+    timeLabel.font=[UIFont fontWithName:@"Heiti SC" size:13];
     timeLabel.lineBreakMode=NSLineBreakByTruncatingTail;
     [timeLabel setNumberOfLines:1];
     [timeLabel sizeToFit];
@@ -1191,7 +1191,7 @@ int height,Y,processID=0;
     NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:[UIFont systemFontOfSize:14],NSFontAttributeName, nil];
     
     CGSize size = [textLabel.text boundingRectWithSize:CGSizeMake(WIDTH-20, 200) options:NSStringDrawingUsesLineFragmentOrigin attributes:dict context:nil].size;
-    textLabel.font=[UIFont fontWithName:@"Arial" size:14];
+    textLabel.font=[UIFont fontWithName:@"Heiti SC" size:14];
     textLabel.textColor=[UIColor colorWithRed:138/255.0f green:137/255.0f blue:137/255.0f alpha:1];
     textLabel.frame =CGRectMake(10, nameLabel.frame.size.height+nameLabel.frame.origin.y+7, WIDTH-20, size.height);
     

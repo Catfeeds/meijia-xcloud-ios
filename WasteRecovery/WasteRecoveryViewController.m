@@ -11,6 +11,7 @@
 #import "Order_CleanViewController.h"
 #import "Order_TeamworkViewController.h"
 #import "Express_RegisterViewController.h"
+#import "Order_DetailsViewController.h"
 @interface WasteRecoveryViewController ()
 {
     UITableView *myTableView;
@@ -90,11 +91,11 @@
     if (_wasteID==100) {
        [referBut setTitle:@"参考价格" forState:UIControlStateNormal];
     }else if (_wasteID==101){
-        [referBut setTitle:@"智能设置" forState:UIControlStateNormal];
+        [referBut setTitle:@"智能配置" forState:UIControlStateNormal];
     }else if (_wasteID==102){
         [referBut setTitle:@"智能设置" forState:UIControlStateNormal];
     }else if (_wasteID==103){
-        
+        [referBut setTitle:@"叫快递" forState:UIControlStateNormal];
     }
     
     referBut.tag=1002;
@@ -128,7 +129,7 @@
         }else if (_wasteID==102){
             webPageVC.webURL=@"http://123.57.173.36/simi-h5/show/teamwork-set.html";//团建智能设置跳转URL
         }else if (_wasteID==103){
-            webPageVC.webURL=@"http://123.57.173.36/simi-h5/show/express-set.html";//团建智能设置跳转URL
+            webPageVC.webURL=@"http://m.kuaidi100.com/courier/search.jsp";//团建智能设置跳转URL
         }
         
         [self.navigationController pushViewController:webPageVC animated:YES];
@@ -173,7 +174,7 @@
 #pragma mark默认班次数据成功方法
 -(void)addDressSuccess:(id)source
 {
-    NSLog(@"默认班次数据:%@",source);
+    NSLog(@"快递，保洁，团建，废品回收数据:%@",source);
     NSString *string=[NSString stringWithFormat:@"%@",[source objectForKey:@"data"]];
     if (string==nil||string==NULL||[string isEqualToString:@"(\n)"]) {
         [_refreshHeader performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
@@ -313,7 +314,8 @@
     [imageView setImageWithURL:[NSURL URLWithString:imageUrl]placeholderImage:nil];;
     [Cell addSubview:imageView];
     UILabel *moneyLabel=[[UILabel alloc]initWithFrame:FRAME(imageView.frame.size.width+30, 20, WIDTH-(imageView.frame.size.width+100), 20)];
-    moneyLabel.font=[UIFont fontWithName:@"Arial" size:15];
+    moneyLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
+    [moneyLabel setFont:[UIFont fontWithName:@"Helvetica-Bold" size:15]];
     if (_wasteID==100) {
         moneyLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"recycle_type_name"]];
     }else if (_wasteID==101){
@@ -332,7 +334,7 @@
     
     [Cell addSubview:moneyLabel];
     UILabel *stateLabel=[[UILabel alloc]initWithFrame:FRAME(moneyLabel.frame.origin.x, 50, moneyLabel.frame.size.width, 20)];
-    stateLabel.font=[UIFont fontWithName:@"Arial" size:15];
+    stateLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
     if (_wasteID==103) {
         int is_done=[[dic objectForKey:@"is_done"]intValue];
         if (is_done==0) {
@@ -346,9 +348,9 @@
     }
     
     [Cell addSubview:stateLabel];
-    UILabel *waterLabel=[[UILabel alloc]initWithFrame:FRAME(moneyLabel.frame.origin.x, 80, moneyLabel.frame.size.width, 20)];
-    waterLabel.font=[UIFont fontWithName:@"Arial" size:15];
-    waterLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"add_time_str"]];
+    UILabel *waterLabel=[[UILabel alloc]initWithFrame:FRAME(moneyLabel.frame.origin.x, 80, WIDTH-(imageView.frame.size.width+40), 20)];
+    waterLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
+    waterLabel.text=[NSString stringWithFormat:@"下单时间:%@",[dic objectForKey:@"add_time_str"]];
     [Cell addSubview:waterLabel];
     [Cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     if([indexPath row] == ((NSIndexPath*)[[tableView indexPathsForVisibleRows] lastObject]).row){
@@ -360,12 +362,21 @@
     }
     
 //    button.tag=indexPath.row;
-//    button.titleLabel.font=[UIFont fontWithName:@"Arial" size:15];
+//    button.titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
 //    [button addTarget:self action:@selector(butAction:) forControlEvents:UIControlEventTouchUpInside];
 //    [Cell addSubview:button];
     return Cell;
 }
-
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if(_wasteID!=103){
+        NSDictionary *dic=dataSourceArray[indexPath.row];
+        Order_DetailsViewController *order_vc=[[Order_DetailsViewController alloc]init];
+        order_vc.order_ID=[NSString stringWithFormat:@"%@",[dic objectForKey:@"order_id"]];
+        order_vc.user_ID=[NSString stringWithFormat:@"%@",[dic objectForKey:@"user_id"]];
+        [self.navigationController pushViewController:order_vc animated:YES];
+    }
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

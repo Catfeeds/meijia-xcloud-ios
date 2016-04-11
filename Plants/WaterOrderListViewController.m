@@ -93,7 +93,7 @@
     [Cell addSubview:imageView];
     
     UILabel *moneyLabel=[[UILabel alloc]initWithFrame:FRAME(imageView.frame.size.width+30, 30, WIDTH-(imageView.frame.size.width+50), 20)];
-    moneyLabel.font=[UIFont fontWithName:@"Arial" size:15];
+    moneyLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
     moneyLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"name"]];
     [Cell addSubview:moneyLabel];
     
@@ -103,7 +103,7 @@
     stateLabel.lineBreakMode=NSLineBreakByWordWrapping;
     NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:[UIFont systemFontOfSize:15],NSFontAttributeName, nil];
     CGSize size = [stateLabel.text boundingRectWithSize:CGSizeMake(WIDTH-20, 200) options:NSStringDrawingUsesLineFragmentOrigin attributes:dict context:nil].size;
-    stateLabel.font=[UIFont fontWithName:@"Arial" size:15];
+    stateLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
     stateLabel.textColor=[UIColor colorWithRed:138/255.0f green:137/255.0f blue:137/255.0f alpha:1];
     stateLabel.frame =FRAME(moneyLabel.frame.origin.x, 70, moneyLabel.frame.size.width, size.height);
     [Cell addSubview:stateLabel];

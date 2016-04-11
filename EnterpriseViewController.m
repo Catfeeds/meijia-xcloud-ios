@@ -162,7 +162,7 @@
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
     }
     cell.textLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"company_name"]];
-    cell.textLabel.font=[UIFont fontWithName:@"Arial" size:15];
+    cell.textLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     UIImageView *arrowImageView=[[UIImageView alloc]initWithFrame:FRAME(WIDTH-30, 15, 20, 20)];
     arrowImageView.image=[UIImage imageNamed:@"JH_JT_TB_@2x"];

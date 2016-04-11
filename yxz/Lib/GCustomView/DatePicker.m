@@ -59,8 +59,8 @@
 //        NSDate *tempDate = [dateFormatter dateFromString:[self.myDatabase getTaskDateByID:idFromCellTag]];
         
         //设置中文显示
-        NSLocale * locale = [[NSLocale alloc] initWithLocaleIdentifier:@"Chinese"];
-        [self.datePicker setLocale:locale];
+//        NSLocale * locale = [[NSLocale alloc] initWithLocaleIdentifier:@"Chinese"];
+//        [self.datePicker setLocale:locale];
         
         //显示任务的时间。
 //        [self.datePicker setDate:tempDate];

@@ -85,7 +85,7 @@ WholeViewController *wholeViewController;
     [searchButton addSubview:voiceImage];
     UILabel *searchLabel=[[UILabel alloc]initWithFrame:FRAME(45, 5, searchButton.frame.size.width-90, 15)];
     searchLabel.text=@"点击搜索相关信息";
-    searchLabel.font=[UIFont fontWithName:@"Arial" size:13];
+    searchLabel.font=[UIFont fontWithName:@"Heiti SC" size:13];
     searchLabel.textAlignment=NSTextAlignmentCenter;
     searchLabel.textColor=[UIColor colorWithRed:200/255.0f green:200/255.0f blue:200/255.0f alpha:1];
     [searchButton addSubview:searchLabel];
@@ -147,11 +147,11 @@ WholeViewController *wholeViewController;
         }
         
         [button setTag:1000+i];
-        button.titleLabel.font=[UIFont fontWithName:@"Arial" size:15];
+        button.titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
         
         UILabel *butLabel=[[UILabel alloc]init];
         butLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"name"]];
-        butLabel.font=[UIFont fontWithName:@"Arial" size:15];
+        butLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
         [butLabel setNumberOfLines:1];
         [butLabel sizeToFit];
         butLabel.frame=FRAME(10, 8, butLabel.frame.size.width, 21);
@@ -353,10 +353,10 @@ WholeViewController *wholeViewController;
     currentSelectButtonIndex=(int)sender.tag;
     UIButton *previousBtn=(UIButton *)[self.view viewWithTag:previousSelectButtonIndex];
     [previousBtn setTitleColor:[UIColor colorWithRed:120/255.0f green:120/255.0f blue:120/255.0f alpha:1] forState:UIControlStateNormal];
-    previousBtn.titleLabel.font=[UIFont fontWithName:@"Arial" size:15];
+    previousBtn.titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
     UIButton *currentBtn = (UIButton *)[self.view viewWithTag:currentSelectButtonIndex];;
     [currentBtn setTitleColor:[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1] forState:UIControlStateNormal];
-    currentBtn.titleLabel.font=[UIFont fontWithName:@"Arial" size:18];
+    currentBtn.titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:18];
     previousSelectButtonIndex=currentSelectButtonIndex;
     
     

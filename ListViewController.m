@@ -81,7 +81,7 @@
         addButton.tag=indexPath.row;
 //        [addButton setTitle:@"加好友" forState:UIControlStateNormal];
         UILabel *label=[[UILabel alloc]initWithFrame:FRAME(0, 5, 60, 20)];
-        label.font=[UIFont fontWithName:@"Arial" size:15];
+        label.font=[UIFont fontWithName:@"Heiti SC" size:15];
         label.textColor=[UIColor whiteColor];
         label.text=@"加好友";
         label.textAlignment=NSTextAlignmentCenter;

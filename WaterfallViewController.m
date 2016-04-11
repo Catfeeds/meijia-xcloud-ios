@@ -149,7 +149,7 @@
     }
     cell.lconImageView.frame=FRAME((WIDTH/4-30)/2, 20, 30, 30);
     cell.nameLabel.text=nameStr;
-    cell.nameLabel.font=[UIFont fontWithName:@"Arial" size:13];
+    cell.nameLabel.font=[UIFont fontWithName:@"Heiti SC" size:13];
     cell.nameLabel.textColor=[UIColor colorWithRed:100/255.0f green:100/255.0f blue:100/255.0f alpha:1];
     cell.nameLabel.textAlignment=NSTextAlignmentCenter;
     cell.backgroundColor=[UIColor whiteColor];
@@ -200,7 +200,7 @@
     UIView *_headerView=[[UIView alloc]initWithFrame:FRAME(0, 0, WIDTH, 40)];
     UILabel *label=[[UILabel alloc]initWithFrame:FRAME(0, 10, WIDTH, 20)];
     label.text=title;
-    label.font=[UIFont fontWithName:@"Arial" size:16];
+    label.font=[UIFont fontWithName:@"Heiti SC" size:16];
     label.textColor=[UIColor colorWithRed:100/255.0f green:100/255.0f blue:100/255.0f alpha:1];
     [_headerView addSubview:label];
     _headerView.backgroundColor=[UIColor colorWithRed:231/255.0f green:231/255.0f blue:231/255.0f alpha:1];
@@ -296,7 +296,7 @@
     
     webTitleLabel=[[UILabel alloc]initWithFrame:FRAME(60, 20, WIDTH-120, 30)];
     webTitleLabel.textAlignment=NSTextAlignmentCenter;
-    webTitleLabel.font=[UIFont fontWithName:@"Arial" size:15];
+    webTitleLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
     [layoutView addSubview:webTitleLabel];
     
     UIButton *rightButton=[[UIButton alloc]initWithFrame:FRAME(WIDTH-60, 20, 50, 30)];

@@ -16,12 +16,17 @@
 #import "WeiXinPay.h"
 #import "ImgWebViewController.h"
 
-//#import "WXApi.h"
+#import "WXApi.h"
 #import "WeiboSDK.h"
 #import "MineViewController.h"
 #import "LoginViewController.h"
 #import "ChatViewController.h"
 #import "RootViewController.h"
+#import "WaterListViewController.h"
+#import "CardPageViewController.h"
+#import "LeaveListViewController.h"
+#import "WasteRecoveryViewController.h"
+#import "FriendsHomeViewController.h"
 
 @interface MyLogInViewController ()
 <
@@ -66,10 +71,179 @@ appDelegate
     if (self.loginYesOrNo == YES) {
         [[NSNotificationCenter defaultCenter] postNotificationName:@"LOGIN_SUCCESS" object:nil];
 
+        AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication] delegate];
+        if (delegate.pushURl==nil) {
+            
+        }else{
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"URLOPEN" object:delegate.pushURl];
+        }
     }
+    
 //    self.navlabel.text = @"快速注册与登录";
 }
+-(void)urlAction:(NSNotification *)sender
+{
+    NSLog(@"我去  我去 我去 ！");
+    NSDictionary *helpDic;
+    NSURL *url=sender.object;
+    NSString *stringUrl=[NSString stringWithFormat:@"%@",url];
+    NSLog(@"%@",url.query);
+//    if([stringUrl rangeOfString:@"http://www.51xingzheng.cn/d/open.html?"].location !=NSNotFound)
+//    {
+        NSString *urlStr=[NSString stringWithFormat:@"%@",url.query];
+        NSArray *urlArray = [urlStr componentsSeparatedByString:@"&"];
+        
+        NSMutableDictionary *tempDic = [NSMutableDictionary dictionaryWithCapacity:4];
+        for (int i=0; i<urlArray.count; i++) {
+            NSArray *dicArray = [urlArray[i] componentsSeparatedByString:@"="];
+            [tempDic setObject:dicArray[1] forKey:dicArray[0]];
+        }
+
+        if ([[tempDic objectForKey:@"category"] isEqualToString:@"app"]) {
+            if ([[tempDic objectForKey:@"action"] isEqualToString:@"alarm"]) {
+                
+                helpDic=@{@"action":@"alarm"};
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"HELP" object:helpDic];
+                CardPageViewController *pageViewVC=[[CardPageViewController alloc]init];
+                pageViewVC.tyPeStr=url.query;
+                pageViewVC.navlabelName=@"事务提醒";
+                //                UIStoryboard *storys  = [UIStoryboard storyboardWithName:@"PageStoryboard" bundle:nil];
+                //                pageViewVC=[storys instantiateInitialViewController];
+                pageViewVC.vcID=1003;
+                [self.navigationController pushViewController:pageViewVC animated:YES];
+                
+            }else if ([[tempDic objectForKey:@"action"] isEqualToString:@"meeting"]){
+                
+                helpDic=@{@"action":@"meeting"};
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"HELP" object:helpDic];
+                CardPageViewController *pageViewVC=[[CardPageViewController alloc]init];
+                pageViewVC.tyPeStr=url.query;
+                pageViewVC.navlabelName=@"会议安排";
+                //                UIStoryboard *storys  = [UIStoryboard storyboardWithName:@"PageStoryboard" bundle:nil];
+                //                pageViewVC=[storys instantiateInitialViewController];
+                pageViewVC.vcID=1001;
+                [self.navigationController pushViewController:pageViewVC animated:YES];
+                
+                
+            }else if ([[tempDic objectForKey:@"action"] isEqualToString:@"notice"]){
+                
+                helpDic=@{@"action":@"notice"};
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"HELP" object:helpDic];
+                CardPageViewController *pageViewVC=[[CardPageViewController alloc]init];
+                pageViewVC.tyPeStr=url.query;
+                pageViewVC.navlabelName=@"通知公告";
+                //                UIStoryboard *storys  = [UIStoryboard storyboardWithName:@"PageStoryboard" bundle:nil];
+                //                pageViewVC=[storys instantiateInitialViewController];
+                pageViewVC.vcID=1002;
+                [self.navigationController pushViewController:pageViewVC animated:YES];
+                
+                
+            }else if ([[tempDic objectForKey:@"action"] isEqualToString:@"interview"]){
+                
+                helpDic=@{@"action":@"interview"};
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"HELP" object:helpDic];
+                CardPageViewController *pageViewVC=[[CardPageViewController alloc]init];
+                pageViewVC.tyPeStr=url.query;
+                pageViewVC.navlabelName=@"面试邀约";
+                //                UIStoryboard *storys  = [UIStoryboard storyboardWithName:@"PageStoryboard" bundle:nil];
+                //                pageViewVC=[storys instantiateInitialViewController];
+                pageViewVC.vcID=1004;
+                [self.navigationController pushViewController:pageViewVC animated:YES];
+                
+                
+            }else if ([[tempDic objectForKey:@"action"] isEqualToString:@"trip"]){
+                
+                helpDic=@{@"action":@"trip"};
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"HELP" object:helpDic];
+                CardPageViewController *pageViewVC=[[CardPageViewController alloc]init];
+                pageViewVC.tyPeStr=url.query;
+                pageViewVC.navlabelName=@"差旅规划";
+                //                UIStoryboard *storys  = [UIStoryboard storyboardWithName:@"PageStoryboard" bundle:nil];
+                //                pageViewVC=[storys instantiateInitialViewController];
+                pageViewVC.vcID=1005;
+                [self.navigationController pushViewController:pageViewVC animated:YES];
+                
+                
+            }else if ([[tempDic objectForKey:@"action"] isEqualToString:@"feed_add"]){
+                
+                helpDic=@{@"action":@"punch_sign"};
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"HELP" object:helpDic];
+                CardPageViewController *pageViewVC=[[CardPageViewController alloc]init];
+                pageViewVC.tyPeStr=url.query;
+                pageViewVC.navlabelName=@"发布动态";
+                //                UIStoryboard *storys  = [UIStoryboard storyboardWithName:@"PageStoryboard" bundle:nil];
+                //                pageViewVC=[storys instantiateInitialViewController];
+                pageViewVC.vcID=1006;
+                [self.navigationController pushViewController:pageViewVC animated:YES];
+                
+                
+            }else if ([[tempDic objectForKey:@"action"] isEqualToString:@"leave_pass"]){
+                helpDic=@{@"action":@"leave_pass"};
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"HELP" object:helpDic];
+                LeaveListViewController *leaveListVC=[[LeaveListViewController alloc]init];
+                leaveListVC.tyPeStr=url.query;
+                [self.navigationController pushViewController:leaveListVC animated:YES];
+                
+                
+            }else if ([[tempDic objectForKey:@"action"] isEqualToString:@"feed_add"]){
+                
+                helpDic=@{@"action":@"feed_add"};
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"HELP" object:helpDic];
+                CardPageViewController *pageViewVC=[[CardPageViewController alloc]init];
+                pageViewVC.tyPeStr=url.query;
+                pageViewVC.vcID=1008;
+                [self.navigationController pushViewController:pageViewVC animated:YES];
+                
+                
+            }else if([[tempDic objectForKey:@"action"] isEqualToString:@"water"]){
+                
+                WaterListViewController *plantsVc=[[WaterListViewController alloc]init];
+                plantsVc.tyPeStr=url.query;
+                [self.navigationController pushViewController:plantsVc animated:YES];
+                
+            }else if([[tempDic objectForKey:@"action"] isEqualToString:@"recycle"]){
+                WasteRecoveryViewController *plantsVc=[[WasteRecoveryViewController alloc]init];
+                plantsVc.wasteID=100;
+                plantsVc.tyPeStr=url.query;
+                [self.navigationController pushViewController:plantsVc animated:YES];
+                
+            }else if([[tempDic objectForKey:@"action"] isEqualToString:@"clean"]){
+                WasteRecoveryViewController *plantsVc=[[WasteRecoveryViewController alloc]init];
+                plantsVc.tyPeStr=url.query;
+                plantsVc.wasteID=101;
+                [self.navigationController pushViewController:plantsVc animated:YES];
+                
+            }else if([[tempDic objectForKey:@"action"] isEqualToString:@"teamwork"]){
+                
+                WasteRecoveryViewController *plantsVc=[[WasteRecoveryViewController alloc]init];
+                plantsVc.tyPeStr=url.query;
+                plantsVc.wasteID=102;
+                [self.navigationController pushViewController:plantsVc animated:YES];
+                
+            }else if([[tempDic objectForKey:@"action"] isEqualToString:@"express"]){
+                
+                WasteRecoveryViewController *plantsVc=[[WasteRecoveryViewController alloc]init];
+                plantsVc.tyPeStr=url.query;
+                plantsVc.wasteID=103;
+                [self.navigationController pushViewController:plantsVc animated:YES];
+                
+            }else if ([[tempDic objectForKey:@"action"] isEqualToString:@"add_friend"]){
+                FriendsHomeViewController *vc = [FriendsHomeViewController new];
+                vc.friendsID=100;
+                vc.view_user_id=[NSString stringWithFormat:@"%@",[tempDic objectForKey:@"params"]];
+                [self.navigationController pushViewController:vc animated:YES];
+            }
+            
+        }else{
+            WebPageViewController *webVc=[[WebPageViewController alloc]init];
+            webVc.webURL=[NSString stringWithFormat:@"%@",url];
+            [self.navigationController pushViewController:webVc animated:YES];
+        }
+//    }
+    
+}
 - (void)viewDidLoad {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(urlAction:) name:@"URLOPEN" object:nil];
     [super viewDidLoad];
     wxID=0;
     self.navigationController.navigationBarHidden=YES;
@@ -248,6 +422,54 @@ appDelegate
     }
 
 }
+#pragma mark 在沙盒路径下拷贝一份数据库  否则数据库是只读属性  不能修改
+- (NSString *)readyDatabase:(NSString *)dbName {
+    // First, test for existence.
+    BOOL success;
+    
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSError *error;
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString *writableDBPath = [documentsDirectory stringByAppendingPathComponent:dbName];
+    success = [fileManager fileExistsAtPath:writableDBPath];
+    
+    
+    // The writable database does not exist, so copy the default to the appropriate location.
+    
+    if (!success) {
+        NSString *defaultDBPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:dbName];
+        success = [fileManager copyItemAtPath:defaultDBPath toPath:writableDBPath error:&error];
+        if (!success) {
+            //            NSAssert1(0, @"Failed to create writable database file with message '%@'.", [error localizedDescription]);
+        }
+        
+    }
+    NSLog(@"%@",writableDBPath);
+    return writableDBPath;
+}
+#pragma mark判断数据库是否存在某张表
+-(BOOL)checkName:(NSString *)name{
+    
+    char *err;
+    
+    NSString *sql = [NSString stringWithFormat:@"SELECT COUNT(*) FROM simi.db where type='table' and name='%@';",name];
+    
+    const char *sql_stmt = [sql UTF8String];
+    
+    if(sqlite3_exec(simi, sql_stmt, NULL, NULL, &err) == 1){
+        
+        return YES;
+        
+    }else{
+        
+        return NO;
+        
+    }
+    
+}
+
+
 #pragma mark用户信息详情获取成功方法
 -(void)QJDowLoadFinish:(id)sender
 {
@@ -256,6 +478,68 @@ appDelegate
     AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication] delegate];
     delegate.globalDic=@{@"user_id":[dic objectForKey:@"id"],@"sec_id":[dic objectForKey:@"sec_id"],@"is_senior":[dic objectForKey:@"is_senior"],@"senior_range":[dic objectForKey:@"senior_range"],@"mobile":[dic objectForKey:@"mobile"],@"user_type":[dic objectForKey:@"user_type"],@"name":[dic objectForKey:@"name"],@"has_company":[dic objectForKey:@"has_company"],@"head_img":[dic objectForKey:@"head_img"],@"company_id":[dic objectForKey:@"company_id"],@"company_name":[dic objectForKey:@"company_name"]};
     NSLog(@"看看是什么啊%@",delegate.globalDic);
+    
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    BOOL find = [fileManager fileExistsAtPath:delegate.defaultDBPath];
+    if (find) {
+        if(sqlite3_open([delegate.defaultDBPath UTF8String], &simi) != SQLITE_OK) {
+            sqlite3_close(simi);
+            NSLog(@"open database fail");
+        }
+    }
+    sqlite3_open([delegate.defaultDBPath UTF8String], &simi);
+//    if (sqlReturns) {
+//        NSLog(@"chenggong");
+//    }else{
+//        NSLog(@"shibai ");
+//    }
+    sqlite3_stmt *dbps ;
+    if ([self checkName:@"User"]) {
+        
+    }else{
+        char *sqlCreateTable = "CREATE TABLE User (id INTEGER PRIMARY KEY AUTOINCREMENT, mobile TEXT,third_type TEXT,openid TEXT,name TEXT,id_card TEXT,sex TEXT,head_img TEXT,qr_code TEXT,rest_money REAL,score INTEGER)";
+        NSInteger sqlReturn = sqlite3_prepare_v2(simi, sqlCreateTable, -1, &dbps, nil);
+        //如果SQL语句解析出错的话程序返回
+        if(sqlReturn != SQLITE_OK) {
+            NSLog(@"Error: failed to prepare statement:create test table");
+        }
+        
+        //执行SQL语句
+        int success = sqlite3_step(dbps);
+        //释放sqlite3_stmt
+        sqlite3_finalize(dbps);
+        
+        //执行SQL语句失败
+        if ( success != SQLITE_DONE) {
+            NSLog(@"Error: failed to dehydrate:create table test");
+        }
+
+    }
+    
+    
+    NSString *insertSQL = [NSString stringWithFormat:@"INSERT INTO User(id,score,client_id,real_name,mobile,third_type,app_id,id_card,birth_day,update_time,openid,head_img,add_from,add_time ,open_id,rest_money,major,degree_id,user_type,province_name,name,channel_id,app_user_id,sex,is_approval,is_new_user)VALUES(%d,%d,'%@','%@','%@','%@','%@','%@','%@',%@,'%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@')",[[dic objectForKey:@"id"] intValue],[[dic objectForKey:@"score"]intValue],[dic objectForKey:@"client_id"],[dic objectForKey:@"real_name"],[dic objectForKey:@"mobile"],[dic objectForKey:@"third_type"],[dic objectForKey:@"app_id"],[dic objectForKey:@"id_card"],[dic objectForKey:@"birth_day"],[dic objectForKey:@"update_time"],[dic objectForKey:@"openid"],[dic objectForKey:@"head_img"],[dic objectForKey:@"add_from"],[dic objectForKey:@"add_time"],[dic objectForKey:@"open_id"],[dic objectForKey:@"rest_money"],[dic objectForKey:@"major"],[dic objectForKey:@"degree_id"],[dic objectForKey:@"user_type"],[dic objectForKey:@"province_name"],[dic objectForKey:@"name"],[dic objectForKey:@"channel_id"],[dic objectForKey:@"app_user_id"],[dic objectForKey:@"sex"],[dic objectForKey:@"is_approval"],[dic objectForKey:@"is_new_user"]];
+    //上边的update也可以这样写：
+    //NSString *insert = [NSString stringWithFormat:@"INSERT OR REPLACE INTO PERSIONINFO('%@','%@','%@','%@','%@')VALUES(?,?,?,?,?)",NAME,AGE,SEX,WEIGHT,ADDRESS];
+    
+//    NSString *insertSQL = [NSString stringWithFormat:@"INSERT INTO cell (C_ID, C_CITY_ID, C_NAME, C_ADDRESS, C_STORE_ID, C_ADDR_LNG, C_ADDR_LAT, C_OPER_TIME) VALUES (%@, %i, '%@', '%@', 17, '%@', '%@', '%@')",model.cellID,model.city_id,model.cell_name,model.cell_addr,model.addr_lng,model.addr_lat,oper_time];
+//    
+    const char *insertUTF8 = [insertSQL UTF8String];
+    
+    int result = sqlite3_prepare_v2(simi, insertUTF8, -1, &dbps, NULL);
+    
+    if(result == SQLITE_OK){
+        NSLog(@"插入成功");
+        
+        if (sqlite3_step(dbps) == SQLITE_DONE) {
+            sqlite3_finalize(dbps);
+            NSLog(@"成功");
+        }
+    }else{
+        NSLog(@"插入失败");
+    }
+
+    sqlite3_close(simi);
+    
 }
 #pragma mark用户信息详情获取失败方法
 -(void)QJDownFail:(id)sender

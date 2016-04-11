@@ -58,6 +58,41 @@
     [self.view addSubview:submitBut];
     // Do any additional setup after loading the view.
 }
+#pragma mark 联系方式判断
+- (BOOL)validateMobile:(NSString *)mobileNum
+
+{
+    
+    NSString * MOBILE = @"1[0-9]{10}";
+    
+    NSString * CM = @"^1(34[0-8]|(3[5-9]|5[017-9]|8[278])\\d)\\d{7}$";
+    
+    NSString * CU = @"^1(3[0-2]|5[256]|8[56])\\d{8}$";
+    
+    NSString * CT = @"^1((33|53|8[09])[0-9]|349)\\d{7}$";
+    
+    NSString * PHS = @"^\\d{3}-\\d{8}|\\d{4}-\\d{7,8}";
+    
+    NSPredicate *regextestmobile = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", MOBILE];
+    NSPredicate *regextestcm = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", CM];
+    NSPredicate *regextestcu = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", CU];
+    NSPredicate *regextestct = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", CT];
+    NSPredicate *regextestphs = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", PHS];
+    
+    BOOL regextestmobileBool=[regextestmobile evaluateWithObject:mobileNum];
+    BOOL regextestcmBool=[regextestcm evaluateWithObject:mobileNum];
+    BOOL regextestcuBool=[regextestct evaluateWithObject:mobileNum];
+    BOOL regextestctBool=[regextestcu evaluateWithObject:mobileNum];
+    BOOL regextestphsBool=[regextestphs evaluateWithObject:mobileNum];
+    if(regextestmobileBool==YES||regextestcmBool==YES||regextestcuBool==YES||regextestctBool==YES||regextestphsBool==YES){
+        return YES;
+    }else{
+        
+        return NO;
+        
+    }
+}
+
 -(void)submitBut:(UIButton *)button
 {
 //    AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication] delegate];
@@ -103,9 +138,21 @@
             _dict = @{@"user_id":_manager.telephone,@"city_id":addressID,@"team_type":service_price_id,@"link_man":nameString,@"link_tel":mobileString,@"remarks":remarksString};
         }
         //
+        if(mobileString!=nil){
+            BOOL mobelBool=[self validateMobile:mobileString];
+            if (mobelBool) {
+                DownloadManager *_download = [[DownloadManager alloc]init];
+                [_download requestWithUrl:[NSString stringWithFormat:@"%@",LWAGYEBUILDING_ORDER_PLACE] dict:_dict view:self.view delegate:self finishedSEL:@selector(waterOrderSuccess:) isPost:YES failedSEL:@selector(waterOrderFail:)];
+            }else{
+                UIAlertView *tsView=[[UIAlertView alloc]initWithTitle:@"提醒" message:@"请输入正确的联系方式！" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                [tsView show];
+            }
+        }else{
+            DownloadManager *_download = [[DownloadManager alloc]init];
+            [_download requestWithUrl:[NSString stringWithFormat:@"%@",LWAGYEBUILDING_ORDER_PLACE] dict:_dict view:self.view delegate:self finishedSEL:@selector(waterOrderSuccess:) isPost:YES failedSEL:@selector(waterOrderFail:)];
+        }
         //
-        DownloadManager *_download = [[DownloadManager alloc]init];
-        [_download requestWithUrl:[NSString stringWithFormat:@"%@",LWAGYEBUILDING_ORDER_PLACE] dict:_dict view:self.view delegate:self finishedSEL:@selector(waterOrderSuccess:) isPost:YES failedSEL:@selector(waterOrderFail:)];
+        
     }
 }
 #pragma mark送水订单提交成功返回接口
@@ -139,7 +186,7 @@
             lineView.frame=FRAME(10, 80, WIDTH-20, 1);
             UILabel *label=[[UILabel alloc]init];
             label.text=[NSString stringWithFormat:@"%@",array[i]];
-            label.font=[UIFont fontWithName:@"Arial" size:15];
+            label.font=[UIFont fontWithName:@"Heiti SC" size:15];
             [label setNumberOfLines:1];
             [label sizeToFit];
             label.frame=FRAME(20, 20, label.frame.size.width, 20);
@@ -165,7 +212,7 @@
                     [layoutView addSubview:button];
                     UILabel *label=[[UILabel alloc]init];
                     label.text=[NSString stringWithFormat:@"%@",array[i]];
-                    label.font=[UIFont fontWithName:@"Arial" size:15];
+                    label.font=[UIFont fontWithName:@"Heiti SC" size:15];
                     [label setNumberOfLines:1];
                     [label sizeToFit];
                     label.frame=FRAME(20, 15, label.frame.size.width, 20);
@@ -185,7 +232,7 @@
                     [layoutView addSubview:button];
                     UILabel *label=[[UILabel alloc]init];
                     label.text=[NSString stringWithFormat:@"%@",array[i]];
-                    label.font=[UIFont fontWithName:@"Arial" size:15];
+                    label.font=[UIFont fontWithName:@"Heiti SC" size:15];
                     [label setNumberOfLines:1];
                     [label sizeToFit];
                     label.frame=FRAME(20, 15, label.frame.size.width, 20);
@@ -196,7 +243,7 @@
                     nameField.textAlignment=NSTextAlignmentRight;
                     nameField.placeholder = @"请输入姓名！";
                     nameField.text=nameString;
-                    nameField.font=[UIFont fontWithName:@"Arial" size:13];
+                    nameField.font=[UIFont fontWithName:@"Heiti SC" size:13];
                     [button addSubview:nameField];
                     
                 }
@@ -208,7 +255,7 @@
                     [layoutView addSubview:button];
                     UILabel *label=[[UILabel alloc]init];
                     label.text=[NSString stringWithFormat:@"%@",array[i]];
-                    label.font=[UIFont fontWithName:@"Arial" size:15];
+                    label.font=[UIFont fontWithName:@"Heiti SC" size:15];
                     [label setNumberOfLines:1];
                     [label sizeToFit];
                     label.frame=FRAME(20, 15, label.frame.size.width, 20);
@@ -219,7 +266,7 @@
                     mobileField.placeholder = @"请输入联系方式！";
                     mobileField.tag=101;
                     mobileField.text=mobileString;
-                    mobileField.font=[UIFont fontWithName:@"Arial" size:13];
+                    mobileField.font=[UIFont fontWithName:@"Heiti SC" size:13];
                     [button addSubview:mobileField];
                     
                 }
@@ -233,7 +280,7 @@
                     [layoutView addSubview:button];
                     UILabel *label=[[UILabel alloc]init];
                     label.text=[NSString stringWithFormat:@"%@",array[i]];
-                    label.font=[UIFont fontWithName:@"Arial" size:15];
+                    label.font=[UIFont fontWithName:@"Heiti SC" size:15];
                     [label setNumberOfLines:1];
                     [label sizeToFit];
                     label.frame=FRAME(20, 15, label.frame.size.width, 20);
@@ -271,7 +318,7 @@
     
     UILabel *smartLabel=[[UILabel alloc]initWithFrame:FRAME(45, 32/2, WIDTH-125, 20)];
     smartLabel.text=@"智能贴心服务";
-    smartLabel.font=[UIFont fontWithName:@"Arial" size:15];
+    smartLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
     smartLabel.textColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
     [smartView addSubview:smartLabel];
     
@@ -372,14 +419,14 @@
 -(void)waterLayout
 {
     waterName.text=waterString;
-    waterName.font=[UIFont fontWithName:@"Arial" size:15];
+    waterName.font=[UIFont fontWithName:@"Heiti SC" size:15];
     waterName.textColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
     [waterName setNumberOfLines:1];
     [waterName sizeToFit];
     waterName.frame=FRAME(WIDTH-waterName.frame.size.width-35, 20, waterName.frame.size.width, 20);
     
     moneyLabel.text=moneyString;
-    moneyLabel.font=[UIFont fontWithName:@"Arial" size:15];
+    moneyLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
     moneyLabel.textColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
     [moneyLabel setNumberOfLines:1];
     [moneyLabel sizeToFit];
@@ -389,7 +436,7 @@
 -(void)addressLayout
 {
     addressLabel.text=addressString;
-    addressLabel.font=[UIFont fontWithName:@"Arial" size:15];
+    addressLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
     addressLabel.textColor=[UIColor colorWithRed:190/255.0f green:190/255.0f blue:190/255.0f alpha:1];
     [addressLabel setNumberOfLines:1];
     [addressLabel sizeToFit];
@@ -399,7 +446,7 @@
 {
     remarksLabel.text=remarksString;
     remarksLabel.textAlignment=NSTextAlignmentRight;
-    remarksLabel.font=[UIFont fontWithName:@"Arial" size:15];
+    remarksLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
     remarksLabel.textColor=[UIColor colorWithRed:190/255.0f green:190/255.0f blue:190/255.0f alpha:1];
     remarksLabel.lineBreakMode=NSLineBreakByTruncatingTail;
     [remarksLabel setNumberOfLines:1];

@@ -276,35 +276,18 @@
 {
     
     //_user_id=strResult.strScanned;
-    ISLoginManager *_manager = [ISLoginManager shareManager];
    // vc.strCodeType = strResult.strBarCodeType;
     NSLog(@"111%@ -222%@ -333%@",strResult.imgScanned,strResult.strBarCodeType,strResult.strScanned);
     [self isPureInt:_user_id];
-    DownloadManager *_download = [[DownloadManager alloc]init];
-    if([strResult.strScanned rangeOfString:@"xcloud://"].location !=NSNotFound||[strResult.strScanned rangeOfString:@"xcloud-h5://"].location !=NSNotFound)
+    if([strResult.strScanned rangeOfString:@"http://www.51xingzheng.cn/d/open.html?"].location !=NSNotFound)
     {
-        if ([strResult.strScanned rangeOfString:@"xcloud://"].location !=NSNotFound) {
-            NSArray*array=[strResult.strScanned componentsSeparatedByString:@"&"];
-            NSString *string=[NSString stringWithFormat:@"%@",array[1]];
-            NSString *userID=[string substringFromIndex:8];
-            _user_id=userID;
-            NSDictionary *_dicts = @{@"user_id":_manager.telephone,@"friend_id":userID};
-            [_download requestWithUrl:[NSString stringWithFormat:@"%@",USER_QRHY] dict:_dicts view:self.view delegate:self finishedSEL:@selector(Friend_Finish1:) isPost:NO failedSEL:@selector(FailDownload:)];
-        }else{
-            NSString *urlStrs=[strResult.strScanned substringFromIndex:12];
-            NSArray *array = [urlStrs componentsSeparatedByString:@"&"];
-            NSString *string=[NSString stringWithFormat:@"%@",array[0]];
-            NSString *urlString=[string substringFromIndex:2];
-            if ([urlString isEqualToString:@""]) {
-                
-            }
-            urlStr=[NSString stringWithFormat:@"http://123.57.173.36/simi/app/o.json?%@&uid=%@",urlStrs,_manager.telephone];
-            [self webLayout];
-            NSLog(@"%@",urlStr);
-        }
+        NSURL *url=[NSURL URLWithString:strResult.strScanned];
+       [[NSNotificationCenter defaultCenter] postNotificationName:@"URLOPEN" object:url];
         
     }else{
-       
+        urlStr=[NSString stringWithFormat:@"%@",strResult.strScanned];
+        [self webLayout];
+        NSLog(@"%@",urlStr);
     }
     
    
@@ -313,6 +296,7 @@
 #pragma mark －－－－－－－－－webView相关
 -(void)webLayout
 {
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
     [layoutView removeFromSuperview];
     layoutView=[[UIView alloc]initWithFrame:FRAME(0, 0, WIDTH, HEIGHT)];
     layoutView.backgroundColor=[UIColor whiteColor];
@@ -340,7 +324,7 @@
     
     webTitleLabel=[[UILabel alloc]initWithFrame:FRAME(60, 20, WIDTH-120, 30)];
     webTitleLabel.textAlignment=NSTextAlignmentCenter;
-    webTitleLabel.font=[UIFont fontWithName:@"Arial" size:15];
+    webTitleLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
     [layoutView addSubview:webTitleLabel];
     
     UIButton *rightButton=[[UIButton alloc]initWithFrame:FRAME(WIDTH-60, 20, 50, 30)];
@@ -354,6 +338,7 @@
 }
 -(void)rightButAction
 {
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     [layoutView removeFromSuperview];
     [self.navigationController popViewControllerAnimated:YES];
 }
@@ -390,17 +375,6 @@
     NSScanner* scan = [NSScanner scannerWithString:string];
     int val;
     return[scan scanInt:&val] && [scan isAtEnd];
-}
--(void)Friend_Finish1:(id)sender
-{
-    FriendsHomeViewController *vc = [FriendsHomeViewController new];
-    vc.friendsID=100;
-    vc.view_user_id=_user_id;
-    [self.navigationController pushViewController:vc animated:YES];
-}
--(void)FailDownload:(id)sender
-{
-    NSLog(@"添加好友失败%@",sender);
 }
 #pragma mark -底部功能项
 //打开相册

@@ -98,7 +98,7 @@
     monthLabel.text=[NSString stringWithFormat:@"%d月",month];
     monthLabel.textColor=[UIColor whiteColor];
     monthLabel.textAlignment = NSTextAlignmentLeft;
-    monthLabel.font=[UIFont fontWithName:@"Arial" size:30];
+    monthLabel.font=[UIFont fontWithName:@"Heiti SC" size:30];
    NSMutableAttributedString *attributedString =[[NSMutableAttributedString alloc]initWithString:monthLabel.text];
     long number = 0.1f;//间距
     CFNumberRef num = CFNumberCreate(kCFAllocatorDefault,kCFNumberSInt8Type,&number);
@@ -117,7 +117,7 @@
     yearLabel.text=[NSString stringWithFormat:@"%@年",yearString];
     yearLabel.textColor=[UIColor whiteColor];
     yearLabel.textAlignment = NSTextAlignmentLeft;
-    yearLabel.font=[UIFont fontWithName:@"Arial" size:12];
+    yearLabel.font=[UIFont fontWithName:@"Heiti SC" size:12];
     yearLabel.numberOfLines = 1;
     [yearLabel sizeToFit];
     yearLabel.frame=CGRectMake(monthLabel.frame.size.width+10, (self.frame.size.height-30)/2+15, yearLabel.frame.size.width, 15);
@@ -128,7 +128,7 @@
     weekLabel.text=[NSString stringWithFormat:@"%@",[weekdays objectAtIndex:theComponents.weekday]];
     weekLabel.textColor=[UIColor whiteColor];
     weekLabel.textAlignment = NSTextAlignmentLeft;
-    weekLabel.font=[UIFont fontWithName:@"Arial" size:12];
+    weekLabel.font=[UIFont fontWithName:@"Heiti SC" size:12];
     weekLabel.numberOfLines = 1;
     [weekLabel sizeToFit];
     weekLabel.frame=CGRectMake(monthLabel.frame.size.width+10, (self.frame.size.height-30)/2, weekLabel.frame.size.width, 15);

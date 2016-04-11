@@ -30,6 +30,7 @@ ShopViewController *shopViewController;
 @implementation FriendsHomeViewController
 
 - (void)viewDidLoad {
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
     [super viewDidLoad];
     self.navlabel.text=@"好友主页";
     self.view.backgroundColor=[UIColor colorWithRed:200/255.0f green:200/255.0f blue:200/255.0f alpha:1];
@@ -139,7 +140,7 @@ ShopViewController *shopViewController;
 //    [fxBlurView addSubview:gradeImageView];
     UILabel *gradeLabel=[[UILabel alloc]initWithFrame:FRAME(0, 0, 30, 20)];
     gradeLabel.text=@"LV1";
-    gradeLabel.font=[UIFont fontWithName:@"Arial" size:10];
+    gradeLabel.font=[UIFont fontWithName:@"Heiti SC" size:10];
     gradeLabel.textAlignment=NSTextAlignmentCenter;
     gradeLabel.textColor=[UIColor whiteColor];
     [gradeImageView addSubview:gradeLabel];
@@ -150,7 +151,7 @@ ShopViewController *shopViewController;
     addButton.backgroundColor=[UIColor colorWithRed:103/255.0f green:103/255.0f blue:103/255.0f alpha:1];
     UILabel *addLabel=[[UILabel alloc]init];
     addLabel.textColor=[UIColor whiteColor];
-    addLabel.font=[UIFont fontWithName:@"Arial" size:15];
+    addLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
     
 //    
 //    for (int i=0; i<_array.count; i++) {
@@ -195,7 +196,7 @@ ShopViewController *shopViewController;
     UILabel *whisperLabel=[[UILabel alloc]init];
     whisperLabel.text=@"私聊";
     whisperLabel.textColor=[UIColor whiteColor];
-    whisperLabel.font=[UIFont fontWithName:@"Arial" size:15];
+    whisperLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
     whisperLabel.lineBreakMode=NSLineBreakByTruncatingTail;
     [whisperLabel setNumberOfLines:1];
     [whisperLabel sizeToFit];
@@ -215,7 +216,7 @@ ShopViewController *shopViewController;
             [tabbarBut setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         }
         
-        tabbarBut.titleLabel.font=[UIFont fontWithName:@"Arial" size:15];
+        tabbarBut.titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
         [tabbarBut addTarget:self action:@selector(tabBarButton:) forControlEvents:UIControlEventTouchUpInside];
         [tabbarBut setTag:(1000+i)];
         [releaseView addSubview:tabbarBut];

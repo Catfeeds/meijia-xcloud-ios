@@ -11,7 +11,7 @@
 #import "BookingViewController.h"
 @interface CityViewController ()
 {
-    NSArray *dicArray;
+    NSMutableArray *dicArray;
     NSString *databasePath;
     int a;
 }
@@ -20,14 +20,49 @@
 @implementation CityViewController
 -(void)viewWillAppear:(BOOL)animated
 {
-    DownloadManager *_download = [[DownloadManager alloc]init];
-    
-    NSDictionary *_dict = @{@"t":@"0"};
-    NSLog(@"字典数据%@",_dict);
-    [_download requestWithUrl:CITY_JK dict:_dict view:self.view delegate:self finishedSEL:@selector(logDowLoadFinish:) isPost:NO failedSEL:@selector(DownFail:)];
+
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
+    dicArray=[[NSMutableArray alloc]init];
+    NSString *path = [[[NSBundle mainBundle] bundlePath] stringByAppendingPathComponent:@"simi.db"];
+    sqlite3_open([path UTF8String], &citydb);
+
+    sqlite3_stmt *statement;
+    NSString *sql = @"SELECT * FROM city";
+    
+    if (sqlite3_prepare_v2(citydb, [sql UTF8String], -1, &statement, nil) == SQLITE_OK) {
+
+        while (sqlite3_step(statement) == SQLITE_ROW) {
+            char *city_id = (char *)sqlite3_column_text(statement, 0);
+            NSString *city_idStr = [[NSString alloc] initWithUTF8String:city_id];
+            
+            char *name = (char *)sqlite3_column_text(statement, 1);
+            NSString *nameStr = [[NSString alloc] initWithUTF8String:name];
+            
+            char *add_time = (char *)sqlite3_column_text(statement, 2);
+            NSString *add_timeStr = [[NSString alloc] initWithUTF8String:add_time];
+            
+            char *province_id = (char *)sqlite3_column_text(statement, 3);
+            NSString *province_idStr = [[NSString alloc] initWithUTF8String:province_id];
+            
+            char *is_enable = (char *)sqlite3_column_text(statement, 4);
+            NSString *is_enableStr = [[NSString alloc] initWithUTF8String:is_enable];
+            
+            char *zip_code = (char *)sqlite3_column_text(statement, 5);
+            NSString *zip_codeStr = [[NSString alloc] initWithUTF8String:zip_code];
+            
+            NSDictionary *dic=@{@"city_id":city_idStr,@"name":nameStr,@"add_time":add_timeStr,@"province_id":province_idStr,@"is_enable":is_enableStr,@"zip_code":zip_codeStr};
+            if ([dicArray containsObject:dic]) {
+                
+            }else{
+                [dicArray addObject:dic];
+            }
+            
+        }
+        sqlite3_finalize(statement);
+    }
+
     a=0;
     [self cityLayout];
    
@@ -36,28 +71,11 @@
 }
 -(void)cityLayout
 {
-    
-}
--(void)logDowLoadFinish:(id)sender
-{
-    [self.cityTableView removeFromSuperview];
-    [dicArray reverseObjectEnumerator];
-    dicArray=[sender objectForKey:@"data"];
     _cityTableView=[[UITableView alloc]initWithFrame:FRAME(0, 64, WIDTH, HEIGHT-64)];
     _cityTableView.dataSource=self;
     _cityTableView.delegate=self;
     [self.view addSubview:_cityTableView];
-    for (int i = 0; i<dicArray.count; i++) {
-        NSLog(@"langArray[%d]=%@", i, dicArray[i]);
-    }
-    NSLog(@"字典个数 %lu",(unsigned long)dicArray.count);
-    //[self dismissViewControllerAnimated:YES completion:nil];
 }
--(void)DownFail:(id)sender
-{
-    NSLog(@"erroe is %@",sender);
-}
-
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return 1;
@@ -72,20 +90,12 @@
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     NSDictionary *dic=dicArray[indexPath.row];
-    NSLog(@"indexpath.row%ld",(long)indexPath.row);
-    NSLog(@"cell数据%d",a);
     a+=1;
     static NSString *identifier = @"cell";
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
     if (cell == nil) {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault   reuseIdentifier:identifier];
-        
-//        UILabel *cityLabel=[[UILabel alloc]initWithFrame:FRAME(0, 15, WIDTH, cell.frame.size.height-30)];
-//        cityLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"name"]];
-//        cityLabel.font=[UIFont fontWithName:@"Arial" size:20];
-//        cityLabel.textAlignment=NSTextAlignmentCenter;
-//        [cell addSubview:cityLabel];
         cell.textLabel.textColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
     }
     cell.textLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"name"]];

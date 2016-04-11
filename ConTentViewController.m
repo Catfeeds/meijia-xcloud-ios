@@ -91,7 +91,7 @@
 {
     NSString *str=[NSString stringWithFormat:@"可输入%d字",textViewNum];
     textLable.text=str;
-    textLable.font=[UIFont fontWithName:@"Arial" size:12];
+    textLable.font=[UIFont fontWithName:@"Heiti SC" size:12];
     textLable.lineBreakMode=NSLineBreakByTruncatingTail;
     [textLable setNumberOfLines:1];
     [textLable sizeToFit];

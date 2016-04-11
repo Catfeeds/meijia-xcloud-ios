@@ -7,7 +7,7 @@
 //
 
 #import "WeiXinPay.h"
-//#import "WXApi.h"
+#import "WXApi.h"
 
 #import "DownloadManager.h"
 #import "AFHTTPRequestOperationManager.h"
@@ -18,14 +18,16 @@
 +(void)sendAuthRequest
 {
     //构造SendAuthReq结构体
-//    SendAuthReq* req =[[SendAuthReq alloc ] init ];
-//    req.scope = @"snsapi_userinfo" ;
-//    req.state = @"123" ;
-//    //第三方向微信终端发送一个SendAuthReq消息结构
-//    [WXApi sendReq:req];
+    SendAuthReq* req =[[SendAuthReq alloc ] init ];
+    req.scope = @"snsapi_userinfo" ;
+    req.state = @"123" ;
+    //第三方向微信终端发送一个SendAuthReq消息结构
+    [WXApi sendReq:req];
 }
 
-
++(void)pay:(NSString *)prepayId{
+    
+}
 
 #pragma mark 微信支付
 +(void)WXPaywithOrderNo:(NSString *)orderNo orderType:(NSString *)type
@@ -51,15 +53,11 @@
              if (status == 0) {
              
                  NSLog(@"%@",responseObject);
-//                 NSString *appid = [[responseObject objectForKey:@"data"] objectForKey:@"appId"];
-//                 NSString *mobile = [[responseObject objectForKey:@"data"] objectForKey:@"mobile"];
                  NSString *nonceStr = [[responseObject objectForKey:@"data"] objectForKey:@"nonceStr"];
-//                 NSString *orderNo = [[responseObject objectForKey:@"data"] objectForKey:@"orderNo"];
                  NSString *package = [[responseObject objectForKey:@"data"] objectForKey:@"package"];
                  NSString *partnerId = [[responseObject objectForKey:@"data"] objectForKey:@"partnerId"];
                  NSString *prepayId = [[responseObject objectForKey:@"data"] objectForKey:@"prepayId"];
                  NSString *sign = [[responseObject objectForKey:@"data"] objectForKey:@"sign"];
-//                 NSString *signType = [[responseObject objectForKey:@"data"] objectForKey:@"signType"];
                  NSString *timeStamp = [[responseObject objectForKey:@"data"] objectForKey:@"timeStamp"];
                  
                 [self paywhitParttnerId:partnerId prepayId:prepayId nonceStr:nonceStr timeStamp:timeStamp sign:sign package:package];
@@ -92,11 +90,10 @@
                  
                  [[NSNotificationCenter defaultCenter]postNotificationName:@"WXPAYSUCCESS" object:nil];
                  
+             }else if([data isEqualToString:@""])
+             {
+                 [[NSNotificationCenter defaultCenter]postNotificationName:@"WXPAYSUCCESS" object:nil];
              }
-//             else if([data isEqualToString:@""])
-//             {
-//                 [[NSNotificationCenter defaultCenter]postNotificationName:@"WXPAYSUCCESS" object:nil];
-//             }
          }
             failure:^(AFHTTPRequestOperation *opration, NSError *error){
                 
@@ -137,23 +134,33 @@
 +(void)paywhitParttnerId:(NSString *)partnerId prepayId:(NSString *)prepayId nonceStr:(NSString *)nonceStr timeStamp:(NSString *)timeStamp sign:(NSString *)sign package:(NSString *)package
 {
 
-//    PayReq *request = [[PayReq alloc] init];
-//
-////    request.openID = @"wx1c0cdfad5f3bbc79";
-//    
-//    request.partnerId = partnerId;                           /** 商家向财付通申请的商家id */
-//    
-//    request.prepayId= prepayId;                              /** 预支付订单 */
-//    
-//    request.package = package;                               /** 商家根据财付通文档填写的数据和签名 */
-//    
-//    request.nonceStr= nonceStr;                              /** 随机串，防重发 */
-//    
-//    request.timeStamp= [timeStamp intValue];                 /** 时间戳，防重发 */
-//    
-//    request.sign= sign;                                      /** 商家根据微信开放平台文档对数据做的签名 */
-//    
-//    [WXApi sendReq:request];
+    PayReq *request = [[PayReq alloc] init];
+
+//    request.openID = @"wx1c0cdfad5f3bbc79";
+    
+    request.partnerId = partnerId;                           /** 商家向财付通申请的商家id */
+    
+    request.prepayId= prepayId;                              /** 预支付订单 */
+    
+    request.package = package;                               /** 商家根据财付通文档填写的数据和签名 */
+    
+    request.nonceStr= nonceStr;                              /** 随机串，防重发 */
+    
+    request.timeStamp= [timeStamp intValue];                 /** 时间戳，防重发 */
+    
+    request.sign= sign;                                      /** 商家根据微信开放平台文档对数据做的签名 */
+    
+    [WXApi sendReq:request];
+    
+    if ([WXApi isWXAppSupportApi]) {
+        NSLog(@"成功");
+    }
+    BOOL a=[WXApi sendReq:request];
+    if ([WXApi sendReq:request]) {
+        NSLog(@"成功%hhd",a);
+    }else{
+        NSLog(@"失败%hhd",a);
+    }
     
 /**
     //从服务器获取支付参数，服务端自定义处理逻辑和格式

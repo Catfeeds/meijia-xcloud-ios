@@ -33,6 +33,7 @@
 @property (nonatomic, strong)NSString *fanxian;
 @property (nonatomic, strong)NSString *selfmoney;
 @property (nonatomic, assign)BOOL ZFB;
+@property (nonatomic, assign)BOOL MODE;
 @property (nonatomic, assign)int addressID;
 @property (nonatomic, strong)NSString *addressString;
 @property (nonatomic, strong)NSString *volumeString;

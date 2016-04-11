@@ -88,7 +88,7 @@
     balanceLabel.text=@"余额(元):";
     [balanceLabel setNumberOfLines:1];
     [balanceLabel sizeToFit];
-    balanceLabel.font=[UIFont fontWithName:@"Arial" size:12];
+    balanceLabel.font=[UIFont fontWithName:@"Heiti SC" size:12];
     balanceLabel.frame=FRAME(WIDTH/2-balanceLabel.frame.size.width, 22, balanceLabel.frame.size.width, 16);
     [balanceView addSubview:balanceLabel];
     
@@ -96,7 +96,7 @@
     moneyLabel.text=[NSString stringWithFormat:@"%@",[balanceDic objectForKey:@"rest_money"]];
     [moneyLabel setNumberOfLines:1];
     [moneyLabel sizeToFit];
-    moneyLabel.font=[UIFont fontWithName:@"Arial" size:18];
+    moneyLabel.font=[UIFont fontWithName:@"Heiti SC" size:18];
     moneyLabel.textAlignment=NSTextAlignmentLeft;
     moneyLabel.frame=FRAME(WIDTH/2, 20, WIDTH/2-10, 20);
     [balanceView addSubview:moneyLabel];
@@ -104,7 +104,7 @@
     rechargeField=[[UITextField alloc]initWithFrame:FRAME(0, 80, WIDTH-75, 40)];
     rechargeField.delegate=self;
     rechargeField.placeholder=@"请输入充值金额";
-    rechargeField.font=[UIFont fontWithName:@"Arial" size:15];
+    rechargeField.font=[UIFont fontWithName:@"Heiti SC" size:15];
     rechargeField.backgroundColor=[UIColor whiteColor];
     rechargeField.keyboardType=UIKeyboardTypeNumberPad;
     

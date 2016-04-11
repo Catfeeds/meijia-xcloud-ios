@@ -12,6 +12,8 @@
 #import "WasteRecoveryListViewController.h"
 #import "OrderPayViewController.h"
 #import "DCRoundSwitch.h"
+#import "ScanningViewController.h"
+#import "ExpressCompanyViewController.h"
 @interface Express_RegisterViewController ()
 {
     UILabel *remarksLabel;
@@ -38,6 +40,15 @@
     NSString *to_addrStr;
     NSString *to_nameStr;
     NSString *to_telStr;
+    int _lastPosition;
+    UITextField *barcodeField;
+    ScanningViewController * sVC;
+    int fieldID;
+    UILabel *exPany;
+    NSString *sxPanyStr;
+    ExpressCompanyViewController *expVc;
+    int vcID;
+    
 }
 @end
 
@@ -77,12 +88,113 @@
     [self viewLayout];
     // Do any additional setup after loading the view.
 }
+
+#pragma mark 联系方式判断
+- (BOOL)validateMobile:(NSString *)mobileNum
+
+{
+    
+    NSString * MOBILE = @"1[0-9]{10}";
+    
+    NSString * CM = @"^1(34[0-8]|(3[5-9]|5[017-9]|8[278])\\d)\\d{7}$";
+    
+    NSString * CU = @"^1(3[0-2]|5[256]|8[56])\\d{8}$";
+    
+    NSString * CT = @"^1((33|53|8[09])[0-9]|349)\\d{7}$";
+    
+    NSString * PHS = @"^\\d{3}-\\d{8}|\\d{4}-\\d{7,8}";
+    
+    NSPredicate *regextestmobile = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", MOBILE];
+    NSPredicate *regextestcm = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", CM];
+    NSPredicate *regextestcu = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", CU];
+    NSPredicate *regextestct = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", CT];
+    NSPredicate *regextestphs = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", PHS];
+    
+    BOOL regextestmobileBool=[regextestmobile evaluateWithObject:mobileNum];
+    BOOL regextestcmBool=[regextestcm evaluateWithObject:mobileNum];
+    BOOL regextestcuBool=[regextestct evaluateWithObject:mobileNum];
+    BOOL regextestctBool=[regextestcu evaluateWithObject:mobileNum];
+    BOOL regextestphsBool=[regextestphs evaluateWithObject:mobileNum];
+    if(regextestmobileBool==YES||regextestcmBool==YES||regextestcuBool==YES||regextestctBool==YES||regextestphsBool==YES){
+        return YES;
+    }else{
+        
+        return NO;
+        
+    }
+    
+}
+
 -(void)submitBut:(UIButton *)button
 {
     ISLoginManager *_manager = [ISLoginManager shareManager];
-    NSDictionary *_dict=@{@"user_id":_manager.telephone,@"express_no":express_noStr,@"express_id":express_idStr,@"express_type":ex_typeStr,@"pay_type":pay_typeStr,@"from_addr":from_addrStr,@"from_name":from_nameStr,@"from_tel":from_telStr,@"to_addr":to_addrStr,@"to_name":to_nameStr,@"to_tel":to_telStr,@"remarks":remarksString};
-    DownloadManager *_download = [[DownloadManager alloc]init];
-    [_download requestWithUrl:[NSString stringWithFormat:@"%@",EXPRESS_REGISTER] dict:_dict view:self.view delegate:self finishedSEL:@selector(waterOrderSuccess:) isPost:YES failedSEL:@selector(waterOrderFail:)];
+    if(from_telStr==nil||[from_telStr isEqualToString:@""]){
+        if (to_telStr==nil||[to_telStr isEqualToString:@""]) {
+            NSDictionary *_dict=@{@"user_id":_manager.telephone,@"express_no":express_noStr,@"express_id":express_idStr,@"express_type":ex_typeStr,@"pay_type":pay_typeStr,@"from_addr":from_addrStr,@"from_name":from_nameStr,@"from_tel":from_telStr,@"to_addr":to_addrStr,@"to_name":to_nameStr,@"to_tel":to_telStr,@"remarks":remarksString};
+            DownloadManager *_download = [[DownloadManager alloc]init];
+            [_download requestWithUrl:[NSString stringWithFormat:@"%@",EXPRESS_REGISTER] dict:_dict view:self.view delegate:self finishedSEL:@selector(waterOrderSuccess:) isPost:YES failedSEL:@selector(waterOrderFail:)];
+        }else{
+            
+            BOOL mobelBool=[self validateMobile:to_telStr];
+            if (mobelBool) {
+                NSDictionary *_dict=@{@"user_id":_manager.telephone,@"express_no":express_noStr,@"express_id":express_idStr,@"express_type":ex_typeStr,@"pay_type":pay_typeStr,@"from_addr":from_addrStr,@"from_name":from_nameStr,@"from_tel":from_telStr,@"to_addr":to_addrStr,@"to_name":to_nameStr,@"to_tel":to_telStr,@"remarks":remarksString};
+                DownloadManager *_download = [[DownloadManager alloc]init];
+                [_download requestWithUrl:[NSString stringWithFormat:@"%@",EXPRESS_REGISTER] dict:_dict view:self.view delegate:self finishedSEL:@selector(waterOrderSuccess:) isPost:YES failedSEL:@selector(waterOrderFail:)];
+            }else{
+                UIAlertView *tsView=[[UIAlertView alloc]initWithTitle:@"提醒" message:@"请输入正确的联系方式！" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                [tsView show];
+            }
+            
+        }
+    }else{
+        
+        BOOL mobelBool=[self validateMobile:from_telStr];
+        if (mobelBool) {
+            if (to_telStr==nil||[to_telStr isEqualToString:@""]) {
+                NSDictionary *_dict=@{@"user_id":_manager.telephone,@"express_no":express_noStr,@"express_id":express_idStr,@"express_type":ex_typeStr,@"pay_type":pay_typeStr,@"from_addr":from_addrStr,@"from_name":from_nameStr,@"from_tel":from_telStr,@"to_addr":to_addrStr,@"to_name":to_nameStr,@"to_tel":to_telStr,@"remarks":remarksString};
+                DownloadManager *_download = [[DownloadManager alloc]init];
+                [_download requestWithUrl:[NSString stringWithFormat:@"%@",EXPRESS_REGISTER] dict:_dict view:self.view delegate:self finishedSEL:@selector(waterOrderSuccess:) isPost:YES failedSEL:@selector(waterOrderFail:)];
+            }else{
+                
+                BOOL mobelBool=[self validateMobile:to_telStr];
+                if (mobelBool) {
+                    NSDictionary *_dict=@{@"user_id":_manager.telephone,@"express_no":express_noStr,@"express_id":express_idStr,@"express_type":ex_typeStr,@"pay_type":pay_typeStr,@"from_addr":from_addrStr,@"from_name":from_nameStr,@"from_tel":from_telStr,@"to_addr":to_addrStr,@"to_name":to_nameStr,@"to_tel":to_telStr,@"remarks":remarksString};
+                    DownloadManager *_download = [[DownloadManager alloc]init];
+                    [_download requestWithUrl:[NSString stringWithFormat:@"%@",EXPRESS_REGISTER] dict:_dict view:self.view delegate:self finishedSEL:@selector(waterOrderSuccess:) isPost:YES failedSEL:@selector(waterOrderFail:)];
+                }else{
+                    UIAlertView *tsView=[[UIAlertView alloc]initWithTitle:@"提醒" message:@"请输入正确的联系方式！" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                    [tsView show];
+                }
+                
+            }
+        }else{
+            if (to_telStr==nil||[to_telStr isEqualToString:@""]) {
+                NSDictionary *_dict=@{@"user_id":_manager.telephone,@"express_no":express_noStr,@"express_id":express_idStr,@"express_type":ex_typeStr,@"pay_type":pay_typeStr,@"from_addr":from_addrStr,@"from_name":from_nameStr,@"from_tel":from_telStr,@"to_addr":to_addrStr,@"to_name":to_nameStr,@"to_tel":to_telStr,@"remarks":remarksString};
+                DownloadManager *_download = [[DownloadManager alloc]init];
+                [_download requestWithUrl:[NSString stringWithFormat:@"%@",EXPRESS_REGISTER] dict:_dict view:self.view delegate:self finishedSEL:@selector(waterOrderSuccess:) isPost:YES failedSEL:@selector(waterOrderFail:)];
+                return;
+            }else{
+                
+                BOOL mobelBool=[self validateMobile:to_telStr];
+                if (mobelBool) {
+                    NSDictionary *_dict=@{@"user_id":_manager.telephone,@"express_no":express_noStr,@"express_id":express_idStr,@"express_type":ex_typeStr,@"pay_type":pay_typeStr,@"from_addr":from_addrStr,@"from_name":from_nameStr,@"from_tel":from_telStr,@"to_addr":to_addrStr,@"to_name":to_nameStr,@"to_tel":to_telStr,@"remarks":remarksString};
+                    DownloadManager *_download = [[DownloadManager alloc]init];
+                    [_download requestWithUrl:[NSString stringWithFormat:@"%@",EXPRESS_REGISTER] dict:_dict view:self.view delegate:self finishedSEL:@selector(waterOrderSuccess:) isPost:YES failedSEL:@selector(waterOrderFail:)];
+                    return;
+                }else{
+                    UIAlertView *tsView=[[UIAlertView alloc]initWithTitle:@"提醒" message:@"请输入正确的联系方式！" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                    [tsView show];
+                    return;
+                }
+                
+            }
+            UIAlertView *tsView=[[UIAlertView alloc]initWithTitle:@"提醒" message:@"请输入正确的联系方式！" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            [tsView show];
+        }
+
+        
+    }
+   
 }
 #pragma mark送水订单提交成功返回接口
 -(void)waterOrderSuccess:(id)sourceData
@@ -110,7 +222,7 @@
         [button addTarget:self action:@selector(buttonAction:) forControlEvents:UIControlEventTouchUpInside];
         [layoutView addSubview:button];
         UILabel *label=[[UILabel alloc]init];
-        label.font=[UIFont fontWithName:@"Arial" size:15];
+        label.font=[UIFont fontWithName:@"Heiti SC" size:15];
         label.text=[NSString stringWithFormat:@"%@",array[i]];
         [label setNumberOfLines:1];
         [label sizeToFit];
@@ -149,7 +261,7 @@
         }else if (i==3){
 //            button.enabled=FALSE;
             UILabel *pay_typeLabel=[[UILabel alloc]init];
-            pay_typeLabel.text=@"寄件";
+            pay_typeLabel.text=@"公费";
             pay_typeLabel.font=[UIFont fontWithName:@"Arila" size:15];
             [pay_typeLabel setNumberOfLines:1];
             [pay_typeLabel sizeToFit];
@@ -163,7 +275,7 @@
             [button addSubview:pay_typeBut];
             
             UILabel *pay_typeLabel1=[[UILabel alloc]init];
-            pay_typeLabel1.text=@"收件";
+            pay_typeLabel1.text=@"自费";
             pay_typeLabel1.font=[UIFont fontWithName:@"Arila" size:15];
             [pay_typeLabel1 setNumberOfLines:1];
             [pay_typeLabel1 sizeToFit];
@@ -176,6 +288,29 @@
             [pay_typeBut1 setImage:[UIImage imageNamed:@"noselection@2x"] forState:UIControlStateNormal];
             [button addSubview:pay_typeBut1];
 
+        }else if (i==0){
+            barcodeField=[[UITextField alloc]initWithFrame:FRAME(label.frame.size.width+20, 15, WIDTH-label.frame.size.width-80, 20)];
+            barcodeField.delegate=self;
+            barcodeField.textAlignment=NSTextAlignmentRight;
+            barcodeField.placeholder = @"请输入订单号！";
+            barcodeField.tag=i;
+            barcodeField.font=[UIFont fontWithName:@"Heiti SC" size:13];
+            [button addSubview:barcodeField];
+            
+            UIButton *barcodeButton=[[UIButton alloc]initWithFrame:FRAME(WIDTH-50, 5, 40, 40)];
+//            barcodeButton.backgroundColor=[UIColor redColor];
+            [barcodeButton addTarget:self action:@selector(barcodeBut) forControlEvents:UIControlEventTouchUpInside];
+            [button addSubview:barcodeButton];
+            UIImageView *barCodeImage=[[UIImageView alloc]initWithFrame:FRAME(10, 10, 20, 20)];
+            barCodeImage.image=[UIImage imageNamed:@"iconfont-saotiaoma"];
+            [barcodeButton addSubview:barCodeImage];
+
+        }else if (i==1){
+            [button addTarget:self action:@selector(expanyBut) forControlEvents:UIControlEventTouchUpInside];
+            exPany=[[UILabel alloc]initWithFrame:FRAME(label.frame.size.width+20, 15, WIDTH-label.frame.size.width-40, 20)];
+            exPany.textAlignment=NSTextAlignmentRight;
+            exPany.font=[UIFont fontWithName:@"Heiti SC" size:13];
+            [button addSubview:exPany];
         }else if (i>9){
             UIImageView *imageView=[[UIImageView alloc]initWithFrame:FRAME(WIDTH-35, 15, 15, 20)];
             imageView.image=[UIImage imageNamed:@"JH_JT_TB_@2x"];
@@ -186,7 +321,7 @@
             textField.textAlignment=NSTextAlignmentRight;
             textField.placeholder = @"请输入信息！";
             textField.tag=i;
-            textField.font=[UIFont fontWithName:@"Arial" size:13];
+            textField.font=[UIFont fontWithName:@"Heiti SC" size:13];
             [button addSubview:textField];
         }
     }
@@ -209,7 +344,7 @@
     
     UILabel *smartLabel=[[UILabel alloc]initWithFrame:FRAME(45, 32/2, WIDTH-125, 20)];
     smartLabel.text=@"智能贴心服务";
-    smartLabel.font=[UIFont fontWithName:@"Arial" size:15];
+    smartLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
     smartLabel.textColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
     [smartView addSubview:smartLabel];
     
@@ -221,6 +356,14 @@
     [smartView addSubview:switchButton];
     
      myScrollView.contentSize=CGSizeMake(WIDTH, layoutView.frame.size.height+62);
+}
+#pragma mark 快递公司点击方法
+-(void)expanyBut
+{
+    [self.view endEditing:YES];
+    expVc=[[ExpressCompanyViewController alloc]init];
+    vcID=1;
+    [self.navigationController pushViewController:expVc animated:YES];
 }
 -(void)express_typeBut:(UIButton *)button
 {
@@ -314,35 +457,76 @@
         remarksString=viewController.textString;
         [self remarksLayout];
     }
+    if (sVC.stringValue==nil||sVC.stringValue==NULL||[sVC.stringValue isEqualToString:@""]) {
+        barcodeField.placeholder=@"请输入订单号!";
+        if (barcodeField.text==nil) {
+            express_noStr=barcodeField.text;
+        }else{
+            express_noStr=@"";
+        }
+    }else{
+        barcodeField.text=sVC.stringValue;
+        express_noStr=sVC.stringValue;;
+    }
+    if ((expVc.expressStr==nil&&sVC.expressNameStr==nil)||(expVc.expressStr==NULL&&sVC.expressNameStr==NULL)||([expVc.expressStr isEqualToString:@""]&&[sVC.expressNameStr isEqualToString:@""])) {
+        express_idStr=@"";
+    }else{
+        if (vcID==0) {
+            if (sVC.expressNameStr==nil||sVC.expressNameStr==NULL||[sVC.expressNameStr isEqualToString:@""]){
+                
+            }else{
+                express_idStr=sVC.express_idStr;
+                exPany.text=sVC.expressNameStr;
+            }
+
+        }else if (vcID==1){
+            if (expVc.expressStr==nil||expVc.expressStr==NULL||[expVc.expressStr isEqualToString:@""]) {
+                
+                
+            }else{
+                
+                express_idStr=expVc.express_idStr;
+                exPany.text=expVc.expressStr;
+            }
+
+        }
+        
+    }
 }
 - (void)textFieldDidBeginEditing:(UITextField *)textField
 {
+    fieldID=(int)textField.tag;
     switch (textField.tag) {
         case 0:
             [UIView beginAnimations: @"Animation" context:nil];
             [UIView setAnimationDuration:0.3];
-            layoutView.frame=FRAME(0, 0, WIDTH, 51*12);
+//            layoutView.frame=FRAME(0, 0, WIDTH, 51*12);
+            myScrollView.contentOffset=CGPointMake(0 , 0);
             [UIView commitAnimations];
+            
             
             break;
         case 1:
             [UIView beginAnimations: @"Animation" context:nil];
             [UIView setAnimationDuration:0.3];
-            layoutView.frame=FRAME(0, 0, WIDTH, 51*12);
+//            layoutView.frame=FRAME(0, 0, WIDTH, 51*12);
+            myScrollView.contentOffset=CGPointMake(0 , 0);
             [UIView commitAnimations];
             
             break;
         case 4:
             [UIView beginAnimations: @"Animation" context:nil];
             [UIView setAnimationDuration:0.3];
-            layoutView.frame=FRAME(0, -51, WIDTH, 51*12);
+//            layoutView.frame=FRAME(0, -51, WIDTH, 51*12);
+            myScrollView.contentOffset=CGPointMake(0 , 51);
             [UIView commitAnimations];
             
             break;
         case 5:
             [UIView beginAnimations: @"Animation" context:nil];
             [UIView setAnimationDuration:0.3];
-            layoutView.frame=FRAME(0, -51*2, WIDTH, 51*12);
+//            layoutView.frame=FRAME(0, -51*2, WIDTH, 51*12);
+            myScrollView.contentOffset=CGPointMake(0 , 51*2);
             [UIView commitAnimations];
             
             break;
@@ -350,26 +534,30 @@
             [UIView beginAnimations: @"Animation" context:nil];
             [UIView setAnimationDuration:0.3];
             [UIView commitAnimations];
-            layoutView.frame=FRAME(0, -51*3, WIDTH, 51*12);
+//            layoutView.frame=FRAME(0, -51*3, WIDTH, 51*12);
+            myScrollView.contentOffset=CGPointMake(0 , 51*3);
             break;
         case 7:
             [UIView beginAnimations: @"Animation" context:nil];
             [UIView setAnimationDuration:0.3];
-            layoutView.frame=FRAME(0, -51*4, WIDTH, 51*12);
+//            layoutView.frame=FRAME(0, -51*4, WIDTH, 51*12);
+            myScrollView.contentOffset=CGPointMake(0 , 51*4);
             [UIView commitAnimations];
             
             break;
         case 8:
             [UIView beginAnimations: @"Animation" context:nil];
             [UIView setAnimationDuration:0.3];
-            layoutView.frame=FRAME(0, -51*5, WIDTH, 51*12);
+//            layoutView.frame=FRAME(0, -51*5, WIDTH, 51*12);
+            myScrollView.contentOffset=CGPointMake(0 , 51*5);
             [UIView commitAnimations];
             
             break;
         case 9:
             [UIView beginAnimations: @"Animation" context:nil];
             [UIView setAnimationDuration:0.3];
-            layoutView.frame=FRAME(0, -51*6, WIDTH, 51*12);
+//            layoutView.frame=FRAME(0, -51*6, WIDTH, 51*12);
+            myScrollView.contentOffset=CGPointMake(0 , 51*6);
             [UIView commitAnimations];
             
             break;
@@ -378,15 +566,14 @@
     }
 
 }
-
 -(void)textFieldDidEndEditing:(UITextField *)textField
 {
     switch (textField.tag) {
         case 0:
-            if (textField.text==nil) {
+            if (barcodeField.text==nil) {
                 express_noStr=@"";
             }else{
-                express_noStr=textField.text;
+                express_noStr=barcodeField.text;
             }
             
             break;
@@ -469,6 +656,7 @@
     switch (button.tag) {
         case 10:
         {
+            [self.view endEditing:YES];
             viewController=[[ConTentViewController alloc]init];
             viewController.textString=remarksString;
             [self.navigationController pushViewController:viewController animated:YES];
@@ -487,15 +675,34 @@
 {
     remarksLabel.text=remarksString;
     remarksLabel.textAlignment=NSTextAlignmentRight;
-    remarksLabel.font=[UIFont fontWithName:@"Arial" size:15];
+    remarksLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
     remarksLabel.textColor=[UIColor colorWithRed:190/255.0f green:190/255.0f blue:190/255.0f alpha:1];
     remarksLabel.lineBreakMode=NSLineBreakByTruncatingTail;
     [remarksLabel setNumberOfLines:1];
     [remarksLabel sizeToFit];
     remarksLabel.frame=FRAME(80, 15, WIDTH-115, 20);
 }
-
-
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    int currentPostion = scrollView.contentOffset.y;
+    if (currentPostion - _lastPosition > 25) {
+        _lastPosition = currentPostion;
+        NSLog(@"ScrollUp now");
+    }
+    else if (_lastPosition - currentPostion > 25)
+    {
+        [self.view endEditing:YES];
+        _lastPosition = currentPostion;
+        NSLog(@"ScrollDown now");
+    }
+}
+-(void)barcodeBut
+{
+    [self.view endEditing:YES];
+    sVC = [[ScanningViewController alloc]init];
+    vcID=0;
+    sVC.hidesBottomBarWhenPushed=YES;
+    [self.navigationController pushViewController:sVC animated:YES];
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

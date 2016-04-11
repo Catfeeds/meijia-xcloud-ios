@@ -35,7 +35,12 @@
     flowView.headerReferenceSize=CGSizeMake(WIDTH, 80);
     
     //    [_collectionView removeFromSuperview];
-    _collectionView=[[UICollectionView alloc]initWithFrame:FRAME(0, 0, WIDTH, HEIGHT-115)collectionViewLayout:flowView];
+    if (_whoVCID==101) {
+        self.navlabel.text=@"服务大厅";
+        _collectionView=[[UICollectionView alloc]initWithFrame:FRAME(0, 64, WIDTH, HEIGHT-64)collectionViewLayout:flowView];
+    }else{
+        _collectionView=[[UICollectionView alloc]initWithFrame:FRAME(0, 0, WIDTH, HEIGHT-115)collectionViewLayout:flowView];
+    }
     _collectionView.delegate=self;
     _collectionView.dataSource=self;
     _collectionView.backgroundColor=[UIColor whiteColor];
@@ -116,7 +121,7 @@
     [cell.lconImageView setImageWithURL:[NSURL URLWithString:imageUrl]placeholderImage:nil];
     cell.lconImageView.frame=FRAME((WIDTH/4-30)/2, 20, 30, 30);
     cell.nameLabel.text=nameStr;
-    cell.nameLabel.font=[UIFont fontWithName:@"Arial" size:13];
+    cell.nameLabel.font=[UIFont fontWithName:@"Heiti SC" size:13];
     cell.nameLabel.textColor=[UIColor colorWithRed:100/255.0f green:100/255.0f blue:100/255.0f alpha:1];
     cell.nameLabel.textAlignment=NSTextAlignmentCenter;
     cell.backgroundColor=[UIColor whiteColor];

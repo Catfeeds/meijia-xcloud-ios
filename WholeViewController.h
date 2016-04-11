@@ -11,4 +11,5 @@
 @interface WholeViewController : FatherViewController<UICollectionViewDataSource,UICollectionViewDelegate>
 @property (nonatomic ,strong)UICollectionView *collectionView;
 @property (nonatomic ,strong)NSString *channel_id;
+@property (nonatomic ,assign)int whoVCID;
 @end

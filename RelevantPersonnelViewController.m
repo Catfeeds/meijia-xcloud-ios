@@ -216,7 +216,7 @@
     titleView.delegate=self;
     [self.view addSubview:titleView];
     
-    UIFont *font=[UIFont fontWithName:@"Arial" size:18];
+    UIFont *font=[UIFont fontWithName:@"Heiti SC" size:18];
     CGSize constraint = CGSizeMake(WIDTH-20, 200.0f);
     titleLabel=[[UILabel alloc]init];
     titleLabel.lineBreakMode=NSLineBreakByWordWrapping;
@@ -370,6 +370,7 @@
    
     contactNameLabel.frame=FRAME(70, 20, WIDTH-110, 20);
     
+    contactImage.frame=FRAME(20, 10, 40, 40);
     contactImage.clipsToBounds=YES;
     contactImage.layer.cornerRadius=20;
     
@@ -379,9 +380,9 @@
     if (indexPath.section==0) {
         [contactNameLabel setText:[NSString stringWithFormat:@"%@",[sectionArray objectAtIndex:indexPath.row]]];
         if (indexPath.row==0) {
-            contactImage.image=[UIImage imageNamed:@"iconfont-gcompany"];
+            contactImage.image=[UIImage imageNamed:@"iconfont_company_tongxunbu"];
         }else{
-            contactImage.image=[UIImage imageNamed:@"iconfont-tongxunbu"];
+            contactImage.image=[UIImage imageNamed:@"iconfont_tongxunbu"];
         }
         
         image=[UIImage imageNamed:@"JH_JT_TB_@2x"];

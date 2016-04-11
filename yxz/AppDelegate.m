@@ -14,7 +14,7 @@
 //#import "APService.h"
 #import "GuideViewController.h"
 #import "BaiduMobStat.h"
-//#import "WXApi.h"
+#import "WXApi.h"
 #import <AlipaySDK/AlipaySDK.h>
 #import "DownloadManager.h"
 #import "AFHTTPRequestOperationManager.h"
@@ -49,7 +49,7 @@
 #import "UMCheckUpdate.h"
 #import "WaterListViewController.h"
 #define IosAppVersion [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]
-@interface AppDelegate ()<WXApiDelegate>//,WeiboSDKDelegate>
+@interface AppDelegate ()<WXApiDelegate>//,WeiboSDKDelegate
 {
     UIImageView *splashView;
     
@@ -70,6 +70,9 @@
     NSString *helpUrl_Str;
     //NSDictionary *dic;
     NSDictionary *dataDic;
+    int pushIDs;
+    EjectAlertView *pushEjectView;
+    NSDictionary *pushDic;
 }
 
 @end
@@ -148,79 +151,82 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     
 }
 -(NSString *)dataFilePath {
-    NSArray * myPaths = NSSearchPathForDirectoriesInDomains (NSDocumentDirectory,
-                                                             NSUserDomainMask, YES);
-    NSString * myDocPath = [myPaths objectAtIndex:0];
-    NSString *filename = [myDocPath stringByAppendingPathComponent:@"yxz"];
-    NSLog(@"%@",filename);
-    return filename;
+    //项目中的数据库文件路径
+    NSString*resourcePath =[[[NSBundle mainBundle] bundlePath] stringByAppendingPathComponent:@"simi.db"];
+    
+    return resourcePath;
 }
-
-//判断表是否存在
--(BOOL)checkName:(NSString *)name{
+#pragma mark 在沙盒路径下拷贝一份数据库  否则数据库是只读属性  不能修改
+- (NSString *)readyDatabase:(NSString *)dbName {
+    // First, test for existence.
+    BOOL success;
     
-    char *err;
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSError *error;
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString *writableDBPath = [documentsDirectory stringByAppendingPathComponent:dbName];
+    success = [fileManager fileExistsAtPath:writableDBPath];
     
-    NSString *sql = [NSString stringWithFormat:@"SELECT COUNT(*) FROM yxzdb where type='table' and name='%@';",name];
     
-    const char *sql_stmt = [sql UTF8String];
+    // The writable database does not exist, so copy the default to the appropriate location.
     
-    if(sqlite3_exec(yxzdb, sql_stmt, NULL, NULL, &err) == 1){
-        
-        return YES;
-        
-    }else{
-        
-        return NO;
-        
-    }
-    
-}
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{
-//    NSString *filename = [self dataFilePath];
-//    NSLog(@"%@",filename);
-//    if (sqlite3_open([filename UTF8String], &yxzdb) != SQLITE_OK) {
-//        sqlite3_close(yxzdb);
-//        NSAssert(NO,@"数据库打开失败。");
-//    } else {
-//        
-//        if ([self checkName:@"users"]) {
-//            NSString *sqlStr = [NSString stringWithFormat: @"INSERT OR REPLACE INTO %@ (%@, %@, %@ ,%@) VALUES (?,?,?,?)",
-//                                TABLE_NAME, FIELDS_NAME_SID, FIELDS_NAME_SNAME, FIELDS_NAME_SCLASS,FIELDS_NAME_MOBILE];
-//            
-//            sqlite3_stmt *statement;
-//            //预处理过程
-//            if (sqlite3_prepare_v2(yxzdb, [sqlStr UTF8String], -1, &statement, NULL) == SQLITE_OK) {
-//                //绑定参数开始
-//                sqlite3_bind_text(statement, 1, [@"1" UTF8String], -1, NULL);
-//                sqlite3_bind_text(statement, 2, [@"白玉林" UTF8String], -1, NULL);
-//                sqlite3_bind_text(statement, 3, [@"iamge" UTF8String], -1, NULL);
-//                sqlite3_bind_text(statement, 4, [@"15727372986" UTF8String], -1, NULL);
-//                
-//                
-//                //执行插入
-//                if (sqlite3_step(statement) != SQLITE_DONE) {
-//                    NSAssert(0, @"插入数据失败。");
-//                }
-//            }
-//            
-//            sqlite3_finalize(statement);
-//            sqlite3_close(yxzdb);
-//
-//        }else{
-//            char *err;
-//            NSString *createSQL = [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@ (%@ INT PRIMARY KEY, %@ NSSTRING, %@ NSSTRING, %@ NSSTRING);" ,
-//                                   TABLE_NAME,FIELDS_NAME_SID,FIELDS_NAME_SNAME,FIELDS_NAME_SCLASS,FIELDS_NAME_MOBILE];
-//            if (sqlite3_exec(yxzdb,[createSQL UTF8String],NULL,NULL,&err) != SQLITE_OK) {
-//                sqlite3_close(yxzdb);
-//                //NSAssert1(NO, @"建表失败, %@", err);
-//            }
-//            sqlite3_close(yxzdb);
+//    if (!success) {
+//        NSString *defaultDBPaths = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:dbName];
+//        success = [fileManager copyItemAtPath:defaultDBPaths toPath:writableDBPath error:&error];
+//        if (!success) {
+//            //            NSAssert1(0, @"Failed to create writable database file with message '%@'.", [error localizedDescription]);
 //        }
 //        
 //    }
+    NSLog(@"%@",writableDBPath);
+    AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication] delegate];
+    delegate.defaultDBPath=writableDBPath;
+    return writableDBPath;
+}
 
+- (void)deleteFileAtPath:(NSString *)filename {
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSArray * myPaths = NSSearchPathForDirectoriesInDomains (NSDocumentDirectory,NSUserDomainMask, YES);
+    NSString * myDocPath = [myPaths objectAtIndex:0];
+    NSString *delelteFilePath = [myDocPath stringByAppendingPathComponent:filename];
+    NSError *error;
+    
+    if ([fileManager removeItemAtPath:delelteFilePath error:&error] != YES)
+        
+        NSLog(@"Unable to delete file: %@", [error localizedDescription]);
+    
+}
+-(void)execSql:(NSString *)sql
+{
+    char *err;
+    if (sqlite3_exec(simi, [sql UTF8String], NULL, NULL, &err) != SQLITE_OK) {
+        sqlite3_close(simi);
+        NSLog(@"数据库操作数据失败!");
+    }
+}
+
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
+    
+//    NSArray * fontNames=[UIFont familyNames];
+//    
+//    for(NSString * name in fontNames)
+//    {
+//        NSLog(@"font name:%@",name);
+//    }
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    
+    BOOL find = [fileManager fileExistsAtPath:[self readyDatabase:@"simi.db"]];
+    
+    if (find) {
+        if(sqlite3_open([[self readyDatabase:@"simi.db"] UTF8String], &simi) != SQLITE_OK) {
+            sqlite3_close(simi);
+            NSLog(@"open database fail");
+        }
+    }
+//    [self deleteFileAtPath:[self readyDatabase:@"simi.db"]];
+    
     
     self.riliArray=[[NSMutableArray alloc]init];
 //    NSArray *path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -357,7 +363,12 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
      statTracker.adid = adId;
      */
     [statTracker startWithAppId:@"c09edce680"];//设置您在mtj网站上添加的app的appkey,此处AppId即为应用的appKey  百度统计
-//    [WXApi registerApp:WXAppKey withDescription:@"simi"];
+    [WXApi registerApp:WXAppKey withDescription:@"simi"];
+    if ([WXApi registerApp:WXAppKey withDescription:@"simi"]) {
+        NSLog(@"成功");
+    }else{
+        NSLog(@"失败");
+    }
     [self getBeijingcity];
     
     
@@ -427,14 +438,41 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     
     [self ChoseRootController];
     
+//    UIView *view=[[UIView alloc]initWithFrame:FRAME(0, 0, WIDTH, HEIGHT)];
+//    [self.window addSubview:view];
     
-    
+//    UILabel *label=[[UILabel alloc]initWithFrame:FRAME(0, 0, WIDTH, HEIGHT/3)];
+//    label.text=@"差旅";
+//    label.font=[UIFont fontWithName:@"PingFang TC" size:100];
+//    [view addSubview:label];
+//    UILabel *label1=[[UILabel alloc]initWithFrame:FRAME(0, HEIGHT/3, WIDTH, HEIGHT/3)];
+//    label1.text=@"差旅";
+//    label1.font=[UIFont fontWithName:@"Heiti SC" size:100];
+//    [view addSubview:label1];
+//    
+//    
+//    UILabel *label2=[[UILabel alloc]initWithFrame:FRAME(0, HEIGHT/3*2, WIDTH, HEIGHT/3)];
+//    label2.text=@"差旅";
+//    label2.font=[UIFont fontWithName:@"Heiti SC" size:100];
+//    [view addSubview:label2];
+//    NSArray *familyNames = [UIFont familyNames];
+//    for( NSString *familyName in familyNames ){
+//        printf( "Family: %s \n", [familyName UTF8String] );
+//        NSArray *fontNames = [UIFont fontNamesForFamilyName:familyName];
+//        for( NSString *fontName in fontNames ){
+//            printf( "\tFont: %s \n", [fontName UTF8String] );
+//        }
+//    }
     return YES;
+}
+-(void)openUDIDString{
+    
 }
 #pragma mark----------------APN---------------------
 - (void)startSdkWith:(NSString *)appID appKey:(NSString *)appKey appSecret:(NSString *)appSecret
 {
     NSLog(@"我就看看你走没走--2");
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(noticeLayout:) name:@"NOTICEPUSH" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(imageLayout:) name:@"ALERT" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(viewShowcase:) name:@"ASDEDSA" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(viewLayout:) name:@"EJECT" object:nil];
@@ -452,6 +490,99 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     //[1-3]:设置电子围栏功能，开启LBS定位服务 和 是否允许SDK 弹出用户定位请求
     [GeTuiSdk lbsLocationEnable:NO andUserVerify:NO];
     
+}
+-(void)noticeLayout:(NSNotification *)dataSource
+{
+    NSDictionary *dic=dataSource.object;
+    NSLog(@"%@",dic);
+    pushDic=dic;
+    [pushEjectView removeFromSuperview];
+    helpUrl_Str=[NSString stringWithFormat:@"%@",[dic objectForKey:@"go"]];
+    pushEjectView = [EjectAlertView new];
+    pushEjectView.frame=FRAME(0, 0, WIDTH, HEIGHT);
+    pushEjectView.backgroundColor = [UIColor redColor];
+    [pushEjectView setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleLeftMargin];
+    [self.window addSubview:pushEjectView];
+    UIView *grayView=[[UIView alloc]initWithFrame:FRAME(0, 0, WIDTH, HEIGHT)];
+    grayView.backgroundColor=[UIColor blackColor];
+    grayView.alpha=0.4;
+    [pushEjectView addSubview:grayView];
+    
+    UIView *view=[[UIView alloc]initWithFrame:FRAME((WIDTH-WIDTH*0.72)/2, (HEIGHT-356)/2, WIDTH*0.72, WIDTH*0.72*0.70+168)];
+    view.backgroundColor=[UIColor whiteColor];
+    view.layer.cornerRadius=10;
+    view.clipsToBounds=YES;
+    [pushEjectView addSubview:view];
+    
+    UIImageView *headeImageView=[[UIImageView alloc]initWithFrame:FRAME(0, 0, WIDTH*0.72, WIDTH*0.72*0.70)];
+    headeImageView.image=[UIImage imageNamed:@"风景切图-iOS750x1334"];
+    [view addSubview:headeImageView];
+    
+    UILabel *titleLabel=[[UILabel alloc]init];
+    titleLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"rt"]];
+    titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:16];
+    [titleLabel setNumberOfLines:1];
+    [titleLabel sizeToFit];
+    titleLabel.frame=FRAME((WIDTH*0.72-titleLabel.frame.size.width)/2, WIDTH*0.72*0.70+10, titleLabel.frame.size.width, 17);
+    [view addSubview:titleLabel];
+    
+    UILabel *textLabel=[[UILabel alloc]init];
+    textLabel.text=[NSString stringWithFormat:@"    %@",[dic objectForKey:@"rc"]];
+    
+    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc]initWithString:textLabel.text];;
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc]init];
+    [paragraphStyle setLineSpacing:5];
+    [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, textLabel.text.length)];
+    textLabel.attributedText = attributedString;
+    
+    UIFont *font=[UIFont fontWithName:@"Heiti SC" size:13];
+    textLabel.textColor=[UIColor colorWithRed:150/255.0f green:150/255.0f blue:150/255.0f alpha:1];
+    textLabel.font=font;
+    [textLabel setNumberOfLines:0];
+    [textLabel sizeToFit];
+    textLabel.lineBreakMode = NSLineBreakByTruncatingTail;
+    CGSize maximumLabelSize = CGSizeMake(WIDTH*0.72-20, 90);
+    CGSize expectSize = [textLabel sizeThatFits:maximumLabelSize];
+    textLabel.frame=FRAME(10, WIDTH*0.72*0.70+37, expectSize.width, expectSize.height);
+    [view addSubview:textLabel];
+    
+    UIView *hengView=[[UIView alloc]initWithFrame:FRAME(0, WIDTH*0.72*0.70+127, WIDTH*0.72, 1)];
+    hengView.backgroundColor=[UIColor colorWithRed:232/255.0f green:232/255.0f blue:232/255.0f alpha:1];
+    [view addSubview:hengView];
+    
+    UIButton *detailsBut=[[UIButton alloc]initWithFrame:FRAME(0, WIDTH*0.72*0.70+128, (WIDTH*0.72)/2-0.5, 40)];
+    detailsBut.backgroundColor=[UIColor whiteColor];
+    detailsBut.tag=11;
+    [detailsBut addTarget:self action:@selector(ButActiobAction:) forControlEvents:UIControlEventTouchUpInside];
+    [detailsBut setTitle:@"了解更多" forState:UIControlStateNormal];
+    detailsBut.titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:16];
+    [detailsBut setTitleColor:[UIColor colorWithRed:17/255.0f green:150/255.0f blue:219/255.0f alpha:1] forState:UIControlStateNormal];
+    [view addSubview:detailsBut];
+    
+    UIView *werticalView=[[UIView alloc]initWithFrame:FRAME((WIDTH*0.72)/2-0.5, WIDTH*0.72*0.70+128, 1, 40)];
+    werticalView.backgroundColor=[UIColor colorWithRed:232/255.0f green:232/255.0f blue:232/255.0f alpha:1];
+    [view addSubview:werticalView];
+    
+    UIButton *cancelBut=[[UIButton alloc]initWithFrame:FRAME((WIDTH*0.72)/2+0.5, WIDTH*0.72*0.70+128, WIDTH*0.72/2-0.5, 40)];
+    cancelBut.backgroundColor=[UIColor whiteColor];
+    cancelBut.tag=12;
+    [cancelBut addTarget:self action:@selector(ButActiobAction:) forControlEvents:UIControlEventTouchUpInside];
+    cancelBut.titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:16];
+    [cancelBut setTitle:@"我知道了" forState:UIControlStateNormal];
+    [cancelBut setTitleColor:[UIColor colorWithRed:17/255.0f green:150/255.0f blue:219/255.0f alpha:1] forState:UIControlStateNormal];
+    [view addSubview:cancelBut];
+}
+-(void)ButActiobAction:(UIButton *)button
+{
+    if (button.tag==12) {
+        pushEjectView.hidden=YES;
+        [pushEjectView removeFromSuperview];
+    }else{
+        pushEjectView.hidden=YES;
+        [pushEjectView removeFromSuperview];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"PushJump" object:pushDic];
+    }
+
 }
 -(void)viewLayout:(NSNotification *)dataSource
 {
@@ -482,7 +613,7 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     
     UILabel *titleLabel=[[UILabel alloc]init];
     titleLabel.text=[NSString stringWithFormat:@"%@",[dataDic objectForKey:@"title"]];
-    titleLabel.font=[UIFont fontWithName:@"Arial" size:16];
+    titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:16];
     [titleLabel setNumberOfLines:1];
     [titleLabel sizeToFit];
     titleLabel.frame=FRAME((WIDTH*0.72-titleLabel.frame.size.width)/2, WIDTH*0.72*0.70+10, titleLabel.frame.size.width, 17);
@@ -497,7 +628,7 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, textLabel.text.length)];
     textLabel.attributedText = attributedString;
     
-    UIFont *font=[UIFont fontWithName:@"Arial" size:13];
+    UIFont *font=[UIFont fontWithName:@"Heiti SC" size:13];
     textLabel.textColor=[UIColor colorWithRed:150/255.0f green:150/255.0f blue:150/255.0f alpha:1];
     textLabel.font=font;
     [textLabel setNumberOfLines:0];
@@ -517,7 +648,7 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     detailsBut.tag=11;
     [detailsBut addTarget:self action:@selector(ButActiob:) forControlEvents:UIControlEventTouchUpInside];
     [detailsBut setTitle:@"了解更多" forState:UIControlStateNormal];
-    detailsBut.titleLabel.font=[UIFont fontWithName:@"Arial" size:16];
+    detailsBut.titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:16];
     [detailsBut setTitleColor:[UIColor colorWithRed:17/255.0f green:150/255.0f blue:219/255.0f alpha:1] forState:UIControlStateNormal];
     [view addSubview:detailsBut];
     
@@ -529,7 +660,7 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     cancelBut.backgroundColor=[UIColor whiteColor];
     cancelBut.tag=12;
     [cancelBut addTarget:self action:@selector(ButActiob:) forControlEvents:UIControlEventTouchUpInside];
-    cancelBut.titleLabel.font=[UIFont fontWithName:@"Arial" size:16];
+    cancelBut.titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:16];
     [cancelBut setTitle:@"我知道了" forState:UIControlStateNormal];
     [cancelBut setTitleColor:[UIColor colorWithRed:17/255.0f green:150/255.0f blue:219/255.0f alpha:1] forState:UIControlStateNormal];
     [view addSubview:cancelBut];
@@ -590,9 +721,9 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     NSLog(@"可以传递过来么:%@",sender);
     [imageView removeFromSuperview];
     NSDictionary *dic=sender.object;
-    NSString *timeStr=[NSString stringWithFormat:@"%@",[dic objectForKey:@"remind_time"]];
+    NSString *timeStr=[NSString stringWithFormat:@"%@",[dic objectForKey:@"re"]];
     NSLog(@"remind_time%@",timeStr);
-    long time=[timeStr longLongValue]/1000;//因为时差问题要加8小时 == 28800 sec
+    long long time=[timeStr longLongValue];//因为时差问题要加8小时 == 28800 sec
     NSDate *detaildate=[NSDate dateWithTimeIntervalSince1970:time];
     NSLog(@"date:%@",[detaildate description]);
     //实例化一个NSDateFormatter对象
@@ -615,7 +746,7 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     if (dic==nil||dic==NULL) {
         UILabel *titleLabel=[[UILabel alloc]init];
         titleLabel.text=titleLabelStr;
-        titleLabel.font=[UIFont fontWithName:@"Arial" size:20];
+        titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:20];
         [titleLabel setNumberOfLines:1];
         [titleLabel sizeToFit];
         titleLabel.frame=FRAME((WIDTH-titleLabel.frame.size.width)/2, sceneryImage.frame.size.height+10, titleLabel.frame.size.width, 25);
@@ -623,7 +754,7 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
         
         UILabel *timeLabel=[[UILabel alloc]init];
         timeLabel.text=timeLabelStr;
-        timeLabel.font=[UIFont fontWithName:@"Arial" size:50];
+        timeLabel.font=[UIFont fontWithName:@"Heiti SC" size:50];
         [timeLabel setNumberOfLines:1];
         [timeLabel sizeToFit];
         timeLabel.frame=FRAME((WIDTH-timeLabel.frame.size.width)/2, titleLabel.frame.origin.y+titleLabel.frame.size.height+15, timeLabel.frame.size.width, 50);
@@ -631,7 +762,7 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
         
         UILabel *dataLabel=[[UILabel alloc]init];
         dataLabel.text=dataLabelStr;
-        dataLabel.font=[UIFont fontWithName:@"Arial" size:18];
+        dataLabel.font=[UIFont fontWithName:@"Heiti SC" size:18];
         [dataLabel setNumberOfLines:1];
         [dataLabel sizeToFit];
         dataLabel.frame=FRAME((WIDTH-dataLabel.frame.size.width)/2, timeLabel.frame.origin.y+timeLabel.frame.size.height+15, dataLabel.frame.size.width, 18);
@@ -639,7 +770,7 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
         
         UILabel *textLabel=[[UILabel alloc]init];
         textLabel.text=textLabelStr;
-        UIFont *font=[UIFont fontWithName:@"Arial" size:18];
+        UIFont *font=[UIFont fontWithName:@"Heiti SC" size:18];
         textLabel.font=font;
         textLabel.lineBreakMode = NSLineBreakByCharWrapping;
         [textLabel setNumberOfLines:2];
@@ -651,8 +782,8 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
         [imageView addSubview:textLabel];
     }else{
         UILabel *titleLabel=[[UILabel alloc]init];
-        titleLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"remind_title"]];
-        titleLabel.font=[UIFont fontWithName:@"Arial" size:20];
+        titleLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"rt"]];
+        titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:20];
         [titleLabel setNumberOfLines:1];
         [titleLabel sizeToFit];
         titleLabel.frame=FRAME((WIDTH-titleLabel.frame.size.width)/2, sceneryImage.frame.size.height+10, titleLabel.frame.size.width, 25);
@@ -660,7 +791,7 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
         
         UILabel *timeLabel=[[UILabel alloc]init];
         timeLabel.text=timeString;
-        timeLabel.font=[UIFont fontWithName:@"Arial" size:50];
+        timeLabel.font=[UIFont fontWithName:@"Heiti SC" size:50];
         [timeLabel setNumberOfLines:1];
         [timeLabel sizeToFit];
         timeLabel.frame=FRAME((WIDTH-timeLabel.frame.size.width)/2, titleLabel.frame.origin.y+titleLabel.frame.size.height+15, timeLabel.frame.size.width, 50);
@@ -668,15 +799,15 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
         
         UILabel *dataLabel=[[UILabel alloc]init];
         dataLabel.text=dataString;
-        dataLabel.font=[UIFont fontWithName:@"Arial" size:18];
+        dataLabel.font=[UIFont fontWithName:@"Heiti SC" size:18];
         [dataLabel setNumberOfLines:1];
         [dataLabel sizeToFit];
         dataLabel.frame=FRAME((WIDTH-dataLabel.frame.size.width)/2, timeLabel.frame.origin.y+timeLabel.frame.size.height+15, dataLabel.frame.size.width, 18);
         [imageView addSubview:dataLabel];
         
         UILabel *textLabel=[[UILabel alloc]init];
-        textLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"remind_content"]];
-        UIFont *font=[UIFont fontWithName:@"Arial" size:18];
+        textLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"rc"]];
+        UIFont *font=[UIFont fontWithName:@"Heiti SC" size:18];
         textLabel.font=font;
         textLabel.lineBreakMode = NSLineBreakByCharWrapping;
         [textLabel setNumberOfLines:2];
@@ -721,10 +852,9 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
 -(void)seeButAction
 {
     [[UIApplication sharedApplication]setApplicationIconBadgeNumber:0];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"PushJumps" object:dateDic];
     imageView.hidden=YES;
     [imageView removeFromSuperview];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"ALERTPUSH" object:dateDic];
-    
 }
 -(void)knowButAction
 {
@@ -796,6 +926,7 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
     NSLog(@"我就看看你走没走--5");
+    pushIDs=1000;
     NSLog(@"%ld",(long)application.applicationState);
 
     completionHandler(UIBackgroundFetchResultNewData);
@@ -808,14 +939,16 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
                                                         options:NSJSONReadingMutableContainers
                                                           error:&err];
     
-    NSString *timeStr=[NSString stringWithFormat:@"%@",[dic objectForKey:@"remind_time"]];
+    NSString *timeStr=[NSString stringWithFormat:@"%@",[dic objectForKey:@"re"]];
     dateDic=dic;
     NSLog(@"%@",dateDic);
     NSLog(@"remind_time%@",timeStr);
-
-    int card_id=[[dic objectForKey:@"card_id"]intValue];
+    if ([[dic objectForKey:@"ac"] isEqualToString:@"a"]) {
+        badge=100;
+    }
+    int card_id=[[dic objectForKey:@"ci"]intValue];
     int gTid=0;
-    long time=[timeStr longLongValue]/1000;//因为时差问题要加8小时 == 28800 sec
+    long long time=[timeStr longLongValue];//因为时差问题要加8小时 == 28800 sec
     NSDate *detaildate=[NSDate dateWithTimeIntervalSince1970:time];
     NSLog(@"date:%@",[detaildate description]);
     //实例化一个NSDateFormatter对象
@@ -844,7 +977,7 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
             }
         }
     }
-    NSString *trueStr=[dic objectForKey:@"is_show"];
+    NSString *trueStr=[dic objectForKey:@"is"];
     if ([trueStr isEqual:@"true"]) {
     }
     
@@ -919,7 +1052,8 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
                                                             options:NSJSONReadingMutableContainers
                                                               error:&err];
         NSLog(@"个推消息内容%@",dic);
-    NSString *string=[NSString stringWithFormat:@"%@",[dic objectForKey:@"action"]];
+    
+    NSString *string=[NSString stringWithFormat:@"%@",[dic objectForKey:@"ac"]];
     if ([string isEqualToString:@"car-msg"]) {
         [[NSNotificationCenter defaultCenter] postNotificationName:@"ASDEDSA" object:dic];
         return;
@@ -927,17 +1061,23 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
         if (dic==nil||dic==NULL) {
             return;
         }
-    NSString *actionStr=[NSString stringWithFormat:@"%@",[dic objectForKey:@"action"]];
-    if ([actionStr isEqualToString:@"msg"]) {
+    NSString *actionStr=[NSString stringWithFormat:@"%@",[dic objectForKey:@"ac"]];
+    if ([actionStr isEqualToString:@"m"]) {
         return;
     }
+    if ([[dic objectForKey:@"ac"] isEqualToString:@"a"]) {
+        badge=100;
         
-        NSString *timeStr=[NSString stringWithFormat:@"%@",[dic objectForKey:@"remind_time"]];
+    }else{
+       
+    }
+        
+        NSString *timeStr=[NSString stringWithFormat:@"%@",[dic objectForKey:@"re"]];
         NSLog(@"remind_time%@",timeStr);
 //        NSString *card_idStr=[dic objectForKey:@"card_id"];
-        int card_id=[[dic objectForKey:@"card_id"]intValue];
+        int card_id=[[dic objectForKey:@"ci"]intValue];
         int gTid;
-        long time=[timeStr longLongValue]/1000;//因为时差问题要加8小时 == 28800 sec
+        long long time=[timeStr longLongValue];//因为时差问题要加8小时 == 28800 sec
         NSDate *detaildate=[NSDate dateWithTimeIntervalSince1970:time];
         NSLog(@"date:%@",[detaildate description]);
         //实例化一个NSDateFormatter对象
@@ -966,11 +1106,24 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
                 }
             }
         }
-        NSString *trueStr=[dic objectForKey:@"is_show"];
+        NSString *trueStr=[dic objectForKey:@"is"];
         if ([trueStr isEqual:@"true"]) {
             NSDateFormatter  *dateformatter=[[NSDateFormatter alloc] init];
             
             [dateformatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+            if ([[dic objectForKey:@"ac"] isEqualToString:@"a"]) {
+                badge=100;
+                if (pushIDs!=1000) {
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"ALERT" object:dic];
+                }
+                
+            }else{
+                if (pushIDs!=1000) {
+                    
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"NOTICEPUSH" object:dic];
+                }
+            }
+
         }
         
         if (gTid!=1) {
@@ -1050,66 +1203,66 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
 /*
  end
  */
-//- (void) sendTextContent
-//{
-//    SendMessageToWXReq* req = [[SendMessageToWXReq alloc] init];
-//    req.text = @"【私秘】今天终于体验了“私人秘书”的服务，大家快来试试吧！下载有礼1gj.cc/d/";
-//    req.bText = YES;
-//    req.scene = 1;
-//    
-//    [WXApi sendReq:req];
-//}
+- (void) sendTextContent
+{
+    SendMessageToWXReq* req = [[SendMessageToWXReq alloc] init];
+    req.text = @"【私秘】今天终于体验了“私人秘书”的服务，大家快来试试吧！下载有礼1gj.cc/d/";
+    req.bText = YES;
+    req.scene = 1;
+    
+    [WXApi sendReq:req];
+}
 //微信的回调
-//-(void) onResp:(BaseResp*)resp{
-//    NSLog(@"%@",resp);
-//    NSLog(@"errStr %@",[resp errStr]);
-//    NSLog(@"errCode %d",[resp errCode]);
-//    NSLog(@"type %d",[resp type]);
-//    
-//    //微信分享
-//    if([resp errCode] == 0 && [resp type] == 0){
-//        
-//        if([resp isKindOfClass:[SendMessageToWXResp class]])
-//        {
-//            ISLoginManager *logmanager = [[ISLoginManager alloc]init];
-//            
-//            NSDictionary *_dict = @{@"user_id":logmanager.telephone,
-//                                    @"share_type":@"weixin",
-//                                    @"share_account":@""};
-//            
-//            AFHTTPRequestOperationManager *mymanager = [AFHTTPRequestOperationManager manager];
-//            
-//            [mymanager POST:[NSString stringWithFormat:@"%@%@",SERVER_DRESS,@"/simi/app/user/share.json"] parameters:_dict success:^(AFHTTPRequestOperation *opretion, id responseObject){
-//                
-//                NSInteger _status= [[responseObject objectForKey:@"status"] integerValue];
-//                NSString * _message= [responseObject objectForKey:@"msg"];
-//                NSLog(@"%@",_message);
-//                if (_status == 0) {
-//                    
-//                }else{
-//                }
-//                
-//            } failure:^(AFHTTPRequestOperation *opration, NSError *error){
-//                
-//            }];
-//            
-//        }
-//    }
-//    
-//    //微信支付
-//    if ([resp isKindOfClass:[PayResp class]]) {
-//        PayResp *response = (PayResp *)resp;
-//        switch (response.errCode) {
-//            case WXSuccess:
-//                //服务器端查询支付通知或查询API返回的结果再提示成功
-//                NSLog(@"支付成功");
-//                [[NSNotificationCenter defaultCenter] postNotificationName:@"WEIXINCHAXUN" object:nil];
-//                break;
-//            default:
-//                NSLog(@"支付失败， retcode=%d",resp.errCode);
-//                break;
-//        }
-//    }
+-(void) onResp:(BaseResp*)resp{
+    NSLog(@"%@",resp);
+    NSLog(@"errStr %@",[resp errStr]);
+    NSLog(@"errCode %d",[resp errCode]);
+    NSLog(@"type %d",[resp type]);
+    
+    //微信分享
+    if([resp errCode] == 0 && [resp type] == 0){
+        
+        if([resp isKindOfClass:[SendMessageToWXResp class]])
+        {
+            ISLoginManager *logmanager = [[ISLoginManager alloc]init];
+            
+            NSDictionary *_dict = @{@"user_id":logmanager.telephone,
+                                    @"share_type":@"weixin",
+                                    @"share_account":@""};
+            
+            AFHTTPRequestOperationManager *mymanager = [AFHTTPRequestOperationManager manager];
+            
+            [mymanager POST:[NSString stringWithFormat:@"%@%@",SERVER_DRESS,@"/simi/app/user/share.json"] parameters:_dict success:^(AFHTTPRequestOperation *opretion, id responseObject){
+                
+                NSInteger _status= [[responseObject objectForKey:@"status"] integerValue];
+                NSString * _message= [responseObject objectForKey:@"msg"];
+                NSLog(@"%@",_message);
+                if (_status == 0) {
+                    
+                }else{
+                }
+                
+            } failure:^(AFHTTPRequestOperation *opration, NSError *error){
+                
+            }];
+            
+        }
+    }
+    
+    //微信支付
+    if ([resp isKindOfClass:[PayResp class]]) {
+        PayResp *response = (PayResp *)resp;
+        switch (response.errCode) {
+            case WXSuccess:
+                //服务器端查询支付通知或查询API返回的结果再提示成功
+                NSLog(@"支付成功");
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"WEIXINCHAXUN" object:nil];
+                break;
+            default:
+                NSLog(@"支付失败， retcode=%d",resp.errCode);
+                break;
+        }
+    }
 //    //微信登录
 //    SendAuthResp *aresp = (SendAuthResp *)resp;
 //    if([resp isKindOfClass:[SendAuthResp class]])
@@ -1122,8 +1275,8 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
 //            
 //        }
 //    }
-//    
-//}
+    
+}
 
 
 
@@ -1187,6 +1340,40 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
 {
     _repartArray = [[NSMutableArray alloc]init];
 }
+
+- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary*)options
+{
+    // 跳转支付宝钱包进行支付，需要将支付宝钱包的支付结果回传给SDK
+    if ([url.host isEqualToString:@"safepay"]) {
+        
+        [[AlipaySDK defaultService] processOrderWithPaymentResult:url standbyCallback:^(NSDictionary *resultDic) {
+            
+            NSDictionary *payDic = resultDic;
+            NSLog(@"%@",payDic);
+            NSString * status = [payDic objectForKey:@"resultStatus"];
+            
+            if ([status isEqualToString:@"9000"]) {
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"QIANBAOSUCCESS" object:nil];
+            }
+        }];
+    }
+
+    if ([url.scheme isEqualToString:@"tencent1104934408"]) {
+        return [UMSocialSnsService handleOpenURL:url];
+    }
+    if ([url.scheme isEqualToString:@"wx93aa45d30bf6cba3"]) {
+        [WXApi handleOpenURL:url delegate:self];
+        return [UMSocialSnsService handleOpenURL:url];
+    }
+    /*
+     新浪微博登陆
+     */
+    if ([url.scheme isEqualToString:@"wb247547429"]) {
+        return [UMSocialSnsService handleOpenURL:url wxApiDelegate:nil];
+    }
+
+    return YES;
+}
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url
 {
     /*
@@ -1197,6 +1384,7 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
         return [UMSocialSnsService handleOpenURL:url];
     }
     if ([url.scheme isEqualToString:@"wx93aa45d30bf6cba3"]) {
+        [WXApi handleOpenURL:url delegate:self];
         return [UMSocialSnsService handleOpenURL:url];
     }
     /*
@@ -1229,12 +1417,14 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
         }];
     }
     
+    
     /*
      微信分享
      */
     //如果涉及其他应用交互,请做如下判断,例如:还可能和新浪微博进行交互
     if ([url.scheme isEqualToString:@"wx93aa45d30bf6cba3"]) {
-//        return [WXApi handleOpenURL:url delegate:self];
+        [WXApi handleOpenURL:url delegate:self]||[TencentOAuth HandleOpenURL:url];
+        [WXApi handleOpenURL:url delegate:self];
         return [UMSocialSnsService handleOpenURL:url];
     }
     
@@ -1247,6 +1437,7 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
         return [UMSocialSnsService handleOpenURL:url];
     }
     if ([url.scheme isEqualToString:@"tencent1104934408"]) {
+        
         return [UMSocialSnsService handleOpenURL:url];//TencentOAuth
     }
     
@@ -1266,8 +1457,11 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
         NSLog(@"URL scheme:%@", [url scheme]);
         NSLog(@"URL query: %@", [url query]);
 //        NSURL *url=sender.object;
-        
-      // [[NSNotificationCenter defaultCenter] postNotificationName:@"URLOPEN" object:url];
+//        [[NSNotificationCenter defaultCenter] postNotificationName:@"URLOPEN" object:url];
+         AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication] delegate];
+         delegate.pushURl=url;
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"URLOPEN" object:delegate.pushURl];
+      // 
     }
     
     
@@ -1328,6 +1522,7 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
 {
     [[EaseMob sharedInstance] applicationDidEnterBackground:application];
     dateDic=nil;
+    pushIDs=0;
 #pragma mark--------APN  // [EXT] APP进入后台时，通知个推SDK进入后台
     [GeTuiSdk enterBackground];
 }
@@ -1432,48 +1627,48 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     for (int i=0; i<array.count; i++) {
         UILabel *nameLabel=[[UILabel alloc]init];
         nameLabel.text=[NSString stringWithFormat:@"%@",array[i]];
-        nameLabel.font=[UIFont fontWithName:@"Arial" size:18];
+        nameLabel.font=[UIFont fontWithName:@"Heiti SC" size:18];
         [nameLabel setNumberOfLines:1];
         [nameLabel sizeToFit];
         nameLabel.frame=FRAME(20, 64+30*i, nameLabel.frame.size.width, 30);
         [view addSubview:nameLabel];
         
         UILabel *textLabel=[[UILabel alloc]init];
-        textLabel.font=[UIFont fontWithName:@"Arial" size:18];
+        textLabel.font=[UIFont fontWithName:@"Heiti SC" size:18];
         switch (i) {
             case 0:
             {
-                textLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"car_no"]];
+                textLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"cn"]];
             }
                 break;
             case 1:
             {
-                textLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"car_color"]];
+                textLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"cc"]];
             }
                 break;
             case 2:
             {
-                textLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"mobile"]];
+                textLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"mo"]];
             }
                 break;
             case 3:
             {
-                textLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"ocx_time"]];
+                textLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"ot"]];
             }
                 break;
             case 4:
             {
-                textLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"order_money"]];
+                textLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"om"]];
             }
                 break;
             case 5:
             {
-                textLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"rest_money"]];
+                textLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"rm"]];
             }
                 break;
             case 6:
             {
-                textLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"order_type"]];
+                textLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"ot"]];
             }
                 break;
                 
@@ -1485,14 +1680,14 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
         [view addSubview:textLabel];
     }
     UIImageView *image=[[UIImageView alloc]initWithFrame:FRAME(20, 64+30*7, WIDTH-40, 200)];
-    NSString *imageUrl=[NSString stringWithFormat:@"%@",[dic objectForKey:@"cap_img"]];
+    NSString *imageUrl=[NSString stringWithFormat:@"%@",[dic objectForKey:@"ci"]];
     [image setImageWithURL:[NSURL URLWithString:imageUrl]placeholderImage:nil];
     [view addSubview:image];
     
     UIButton *confirmBut=[[UIButton alloc]initWithFrame:FRAME(14, HEIGHT-46, WIDTH-28, 41)];
     confirmBut.backgroundColor=HEX_TO_UICOLOR(0xe8374a, 1.0);
     [confirmBut setTitle:@"确认缴费" forState:UIControlStateNormal];
-    confirmBut.titleLabel.font=[UIFont fontWithName:@"Arial" size:16];
+    confirmBut.titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:16];
     confirmBut.layer.cornerRadius=8;
     confirmBut.clipsToBounds=YES;
     [confirmBut addTarget:self action:@selector(confirmBut:) forControlEvents:UIControlEventTouchUpInside];
@@ -1502,6 +1697,24 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
 {
     
 }
+
+//- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray * _Nullable))restorationHandler
+//{
+//    NSLog(@"continueUserActiity enter");
+//    NSLog(@"\tAction Type : %@", userActivity.activityType);
+//    NSLog(@"\tURL         : %@", userActivity.webpageURL);
+//    NSLog(@"\tuserinfo :%@",userActivity.userInfo);
+//    
+//    NSLog(@"continueUserActiity exit");
+//    restorationHandler(nil);
+//    
+//    NSHTTPCookieStorage *sharedHTTPCookieStorage = [NSHTTPCookieStorage sharedHTTPCookieStorage];
+//    NSArray *cookies = [sharedHTTPCookieStorage cookiesForURL:userActivity.webpageURL];
+//    
+//    NSLog(@"COOKIE{name: %@", cookies);
+//    return true;
+//}
+
 #pragma mark - Application's Documents directory
 
 // Returns the URL to the application's Documents directory.
@@ -1509,6 +1722,8 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
 {
     return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
 }
+
+
 //- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url
 //  sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 //{

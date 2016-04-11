@@ -10,7 +10,7 @@
 #import "DownloadManager.h"
 #import "PageTableViewCell.h"
 #import "DetailsListViewController.h"
-//#import "WXApi.h"
+#import "WXApi.h"
 #import "MineViewController.h"
 #import "QRcodeViewController.h"
 #import "LBXScanViewStyle.h"
@@ -30,7 +30,6 @@
 #import "AttendanceViewController.h"
 #import "WaterListViewController.h"
 #import "Order_DetailsViewController.h"
-#import "Water_Order_DetailsViewController.h"
 @interface ViewController (){
     NSMutableDictionary *eventsByDate;
     UILabel *timeLabel;
@@ -77,7 +76,7 @@
 
 @end
 CGFloat newHeight = 290;
-int F=0,M=0,N=0,S,eyeID=0;
+int FF=0,MM=0,NN=0,SS,eyeIDS=0;
 @implementation ViewController
 @synthesize latString,lngString;
 float lastContentOffset;
@@ -108,6 +107,9 @@ float lastContentOffset;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+//    UINavigationController *communityViewController = [UMCommunity getFeedsModalViewController];
+//    [self.navigationController pushViewController:communityViewController animated:YES];
     UIView *headeView=[[UIView alloc]initWithFrame:FRAME(0, 0, WIDTH, 20)];
     headeView.backgroundColor=[UIColor blackColor];
     [self.view addSubview:headeView];
@@ -857,7 +859,7 @@ float lastContentOffset;
     
     UILabel *msg_timeLab=[[UILabel alloc]init];
     msg_timeLab.text=[NSString stringWithFormat:@"%@",[dataDic objectForKey:@"msg_time"]];
-    msg_timeLab.font=[UIFont fontWithName:@"Arial" size:12];
+    msg_timeLab.font=[UIFont fontWithName:@"Heiti SC" size:12];
     msg_timeLab.textColor=[UIColor colorWithRed:200/255.0f green:200/255.0f blue:200/255.0f alpha:1];
     [msg_timeLab setNumberOfLines:1];
     [msg_timeLab sizeToFit];
@@ -905,7 +907,7 @@ float lastContentOffset;
             NSLog(@"card_id%@",card_ID);
             vc=[[DetailsListViewController alloc]init];
             vc.card_ID=[card_ID intValue];
-            vc.S=S;
+            vc.S=SS;
             [self.navigationController pushViewController:vc animated:YES];
         }else if ([actionStr isEqualToString:@"feed"]){
             
@@ -944,7 +946,7 @@ float lastContentOffset;
             friendsVC.vcID=100;
             [self.navigationController pushViewController:friendsVC animated:YES];
         }else if ([actionStr isEqualToString:@"water"]){
-            Water_Order_DetailsViewController *order_vc=[[Water_Order_DetailsViewController alloc]init];
+            Order_DetailsViewController *order_vc=[[Order_DetailsViewController alloc]init];
             order_vc.order_ID=[NSString stringWithFormat:@"%@",[dataDic objectForKey:@"params"]];
             order_vc.user_ID=[NSString stringWithFormat:@"%@",[dataDic objectForKey:@"user_id"]];
             [self.navigationController pushViewController:order_vc animated:YES];
@@ -963,6 +965,8 @@ float lastContentOffset;
             order_vc.order_ID=[NSString stringWithFormat:@"%@",[dataDic objectForKey:@"params"]];
             order_vc.user_ID=[NSString stringWithFormat:@"%@",[dataDic objectForKey:@"user_id"]];
             [self.navigationController pushViewController:order_vc animated:YES];
+        }else if ([actionStr isEqualToString:@"express"]){
+            
         }
     }else{
         WebPageViewController *webPageVC=[[WebPageViewController alloc]init];

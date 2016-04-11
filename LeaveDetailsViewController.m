@@ -64,7 +64,7 @@
     titleLabel=[[UILabel alloc]init];
     titleLabel.text=@"审批进度";
     titleLabel.textColor=[UIColor colorWithRed:150/255.0f green:150/255.0f blue:150/255.0f alpha:1];
-    titleLabel.font=[UIFont fontWithName:@"Arial" size:15];
+    titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
     titleLabel.textAlignment=NSTextAlignmentCenter;
     [titleLabel setNumberOfLines:1];
     [titleLabel sizeToFit];
@@ -248,13 +248,13 @@
     [headIMageView setImageWithURL:[NSURL URLWithString:imageUrl]placeholderImage:nil];
     
     nameLabel.text=[NSString stringWithFormat:@"%@",[sourceDic objectForKey:@"name"]];
-    nameLabel.font=[UIFont fontWithName:@"Arial" size:20];
+    nameLabel.font=[UIFont fontWithName:@"Heiti SC" size:20];
     [nameLabel setNumberOfLines:1];
     [nameLabel sizeToFit];
     nameLabel.frame=FRAME(90, 10, nameLabel.frame.size.width, 20);
     
     auditLabel.text=[NSString stringWithFormat:@"%@",[sourceDic objectForKey:@"status_name"]];
-    auditLabel.font=[UIFont fontWithName:@"Arial" size:15];
+    auditLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
     auditLabel.textColor=[UIColor colorWithRed:190/255.0f green:190/255.0f blue:190/255.0f alpha:1];
     [auditLabel setNumberOfLines:1];
     [auditLabel sizeToFit];
@@ -292,7 +292,7 @@
     daysLabel.frame=FRAME(25+W, days_height, daysLabel.frame.size.width, 20);
     
     contentLabel.text=[NSString stringWithFormat:@"%@",[sourceDic objectForKey:@"remarks"]];
-    UIFont *font=[UIFont fontWithName:@"Arial" size:18];
+    UIFont *font=[UIFont fontWithName:@"Heiti SC" size:18];
     contentLabel.font=font;
     [contentLabel setNumberOfLines:0];
     [contentLabel sizeToFit];
@@ -514,7 +514,7 @@
     UILabel *timeLabel=[[UILabel alloc]init];
     timeLabel.text=[NSString stringWithFormat:@"%@",[dataDic objectForKey:@"add_time_str"]];
     timeLabel.textColor=[UIColor colorWithRed:190/255.0f green:190/255.0f blue:190/255.0f alpha:1];
-    timeLabel.font=[UIFont fontWithName:@"Arial" size:15];
+    timeLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
     [timeLabel setNumberOfLines:1];
     [timeLabel sizeToFit];
     timeLabel.frame=FRAME(WIDTH-10-timeLabel.frame.size.width, 45/2, timeLabel.frame.size.width, 15);

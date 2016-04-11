@@ -50,14 +50,14 @@
     
     modifyBut=[[UIButton alloc]initWithFrame:FRAME(WIDTH-50, 25, 40, 30)];
     [modifyBut setTitle:@"修改" forState:UIControlStateNormal];
-    modifyBut.titleLabel.font=[UIFont fontWithName:@"Arial" size:14];
+    modifyBut.titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:14];
     modifyBut.layer.cornerRadius=4;
     [modifyBut addTarget:self action:@selector(modifyBut) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:modifyBut];
     
     cancelBut=[[UIButton alloc]initWithFrame:FRAME(modifyBut.frame.origin.x-50, 25, 40, 30)];
     [cancelBut setTitle:@"修改" forState:UIControlStateNormal];
-    cancelBut.titleLabel.font=[UIFont fontWithName:@"Arial" size:14];
+    cancelBut.titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:14];
     cancelBut.layer.cornerRadius=4;
     [cancelBut addTarget:self action:@selector(cancelBut) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:cancelBut];
@@ -291,7 +291,7 @@
     NSDate* inTimedate = [NSDate dateWithTimeIntervalSince1970:inTime];
     NSString* inTimeString = [inTimeformatter stringFromDate:inTimedate];
     headeTime.text=inTimeString;
-    headeTime.font=[UIFont fontWithName:@"Arial" size:14];
+    headeTime.font=[UIFont fontWithName:@"Heiti SC" size:14];
     headeTime.lineBreakMode =NSLineBreakByTruncatingTail ;
     [headeTime setNumberOfLines:0];
     [headeTime sizeToFit];
@@ -313,7 +313,7 @@
         stateLabel.text=@"已取消";
         stateLabel.textColor=[UIColor colorWithRed:231/255.0f green:231/255.0f blue:231/255.0f alpha:1];
     }
-    stateLabel.font=[UIFont fontWithName:@"Arial" size:14];
+    stateLabel.font=[UIFont fontWithName:@"Heiti SC" size:14];
     [stateLabel setNumberOfLines:0];
     [stateLabel sizeToFit];
     stateLabel.lineBreakMode=NSLineBreakByTruncatingTail;
@@ -340,7 +340,7 @@
     NSDate* inTimedate1 = [NSDate dateWithTimeIntervalSince1970:inTime];
     NSString* inTimeString1 = [inTimeformatter1 stringFromDate:inTimedate1];
     timeLabel.text=inTimeString1;
-    timeLabel.font=[UIFont fontWithName:@"Arial" size:13];
+    timeLabel.font=[UIFont fontWithName:@"Heiti SC" size:13];
     timeLabel.textColor=[UIColor colorWithRed:138/255.0f green:137/255.0f blue:137/255.0f alpha:1];
     [layoutView addSubview:timeLabel];
     
@@ -354,7 +354,7 @@
     UILabel *remindLabel=[[UILabel alloc]init];
     remindLabel.text=[NSString stringWithFormat:@"提醒人:%@",personnel];
     remindLabel.backgroundColor=[UIColor redColor];
-    UIFont *font = [UIFont fontWithName:@"Arial" size:13];
+    UIFont *font = [UIFont fontWithName:@"Heiti SC" size:13];
     remindLabel.font=font;
     [remindLabel setNumberOfLines:0];
     [remindLabel sizeToFit];
@@ -381,7 +381,7 @@
     NSString *toCityString=[cityDic objectForKey:@"ticket_to_city_name"];
     NSString *textString=[NSString stringWithFormat:@"从 %@ 到 %@",fromCityString,toCityString];
     addressLabel.text=textString;
-    addressLabel.font=[UIFont fontWithName:@"Arial" size:13];
+    addressLabel.font=[UIFont fontWithName:@"Heiti SC" size:13];
     addressLabel.textColor=[UIColor colorWithRed:138/255.0f green:137/255.0f blue:137/255.0f alpha:1];
     [addressLabel setNumberOfLines:0];
     [addressLabel sizeToFit];
@@ -390,7 +390,7 @@
     
     UILabel *flightLabel=[[UILabel alloc]initWithFrame:FRAME(20, addressLabel.frame.size.height+addressLabel.frame.origin.y+15, WIDTH-40, 13)];
     flightLabel.text=@"航班";
-    flightLabel.font=[UIFont fontWithName:@"Arial" size:13];
+    flightLabel.font=[UIFont fontWithName:@"Heiti SC" size:13];
     flightLabel.textColor=[UIColor colorWithRed:138/255.0f green:137/255.0f blue:137/255.0f alpha:1];
     [layoutView addSubview:flightLabel];
     

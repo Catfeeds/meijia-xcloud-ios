@@ -43,7 +43,7 @@
     _veriFicationButton=[[UIButton alloc]initWithFrame:FRAME(WIDTH-100, 10, 80, 40)];
     _veriFicationButton.backgroundColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
     [_veriFicationButton setTitle:@"获取验证码" forState:UIControlStateNormal];
-    _veriFicationButton.titleLabel.font=[UIFont fontWithName:@"Arial" size:15];
+    _veriFicationButton.titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
     _veriFicationButton.layer.cornerRadius=10;
     _veriFicationButton.clipsToBounds=YES;
     [_veriFicationButton addTarget:self action:@selector(veriButAction:) forControlEvents:UIControlEventTouchUpInside];

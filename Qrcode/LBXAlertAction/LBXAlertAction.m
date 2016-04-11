@@ -190,7 +190,7 @@
         return;
     }
     
-    if (! [[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0)
+    if (! ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0))
     {
         UIAlertController* alertController = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleActionSheet];
         for (int i = 0; i < [argsArray count]; i++)

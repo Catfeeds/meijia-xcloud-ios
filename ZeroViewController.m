@@ -28,13 +28,13 @@
     titleLabel.text=@"服务内容:";
     [titleLabel setNumberOfLines:1];
     [titleLabel sizeToFit];
-    titleLabel.font=[UIFont fontWithName:@"Arial" size:16];
+    titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:16];
     titleLabel.frame=FRAME(20, 15, titleLabel.frame.size.width, 20);
     [zeroView addSubview:titleLabel];
     
     UILabel *textLabel=[[UILabel alloc]initWithFrame:FRAME(titleLabel.frame.size.width+20, 15, WIDTH-titleLabel.frame.size.width-40, 20)];
     textLabel.text=_textString;
-    textLabel.font=[UIFont fontWithName:@"Arial" size:16];
+    textLabel.font=[UIFont fontWithName:@"Heiti SC" size:16];
     textLabel.textAlignment=NSTextAlignmentLeft;
     textLabel.textColor=[UIColor colorWithRed:180/255.0f green:180/255.0f blue:180/255.0f alpha:1];
     [zeroView addSubview:textLabel];
@@ -47,13 +47,13 @@
     payLabel.text=@"支付金额:";
     [payLabel setNumberOfLines:1];
     [payLabel sizeToFit];
-    payLabel.font=[UIFont fontWithName:@"Arial" size:16];
+    payLabel.font=[UIFont fontWithName:@"Heiti SC" size:16];
     payLabel.frame=FRAME(20, 66, titleLabel.frame.size.width, 20);
     [zeroView addSubview:payLabel];
     
     UILabel *moneyLabel=[[UILabel alloc]initWithFrame:FRAME(payLabel.frame.size.width+20, 66, WIDTH-payLabel.frame.size.width-40, 20)];
     moneyLabel.text=[NSString stringWithFormat:@"%@.00元",[_zeroDic objectForKey:@"dis_price"]];
-    moneyLabel.font=[UIFont fontWithName:@"Arial" size:16];
+    moneyLabel.font=[UIFont fontWithName:@"Heiti SC" size:16];
     moneyLabel.textAlignment=NSTextAlignmentLeft;
     moneyLabel.textColor=[UIColor colorWithRed:180/255.0f green:180/255.0f blue:180/255.0f alpha:1];
     [zeroView addSubview:moneyLabel];

@@ -63,8 +63,8 @@
         //NSDate *tempDate = [dateFormatter dateFromString:[self.myDatabase getTaskDateByID:idFromCellTag]];
         
         //设置中文显示
-        NSLocale * locale = [[NSLocale alloc] initWithLocaleIdentifier:@"Chinese"];
-        [self.meetingDatePicker setLocale:locale];
+//        NSLocale * locale = [[NSLocale alloc] initWithLocaleIdentifier:@"Chinese"];
+//        [self.meetingDatePicker setLocale:locale];
         
         //显示任务的时间。
         //        [self.datePicker setDate:tempDate];
@@ -85,7 +85,7 @@
         
         [meetingDatePicker setDatePickerMode:UIDatePickerModeDateAndTime];
         
-        [meetingDatePicker addTarget:self action:@selector(datePickerValueChanged:) forControlEvents:UIControlEventValueChanged];
+        [meetingDatePicker addTarget:self action:@selector(datePickerValueChanged:) forControlEvents:UIControlEventTouchCancel];
         
         [self addSubview:meetingDatePicker];
         

@@ -127,6 +127,8 @@
 {
     NSLog(@"获取优惠劵数据%@",responsobject);
     array=[responsobject objectForKey:@"data"];
+    
+    //        [_listArray insertObject:_mydata atIndex:0];
     _baseclass = [[YOUHUIBaseClass alloc]initWithDictionary:responsobject];
 //    [_listArray removeAllObjects];
 //    for (int i = 0; i < _baseclass.data.count; i ++) {
@@ -237,7 +239,9 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    YOUHUIData *_mydata = [_listArray objectAtIndex:indexPath.row];
+    YOUHUIData *_mydata = [[YOUHUIData alloc]initWithDictionary:[_listArray objectAtIndex:indexPath.row]];
+//    mydata = [_listArray objectAtIndex:indexPath.row];
+    NSLog(@"%@",_mydata.dataDescription);
     CGSize _dessize = [self returnMysizeWithCgsize:CGSizeMake(_WIDTH-60, WIDTH) text:_mydata.dataDescription font:MYFONT(10)];
 
     return 65+10+_dessize.height + 16 + 20;
@@ -253,7 +257,7 @@
         cell = [[YouhuijuanCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
     }
     
-    cell.mydata = [_listArray objectAtIndex:indexPath.row];
+    cell.mydata = [[YOUHUIData alloc]initWithDictionary:[_listArray objectAtIndex:indexPath.row]];
     if (array.count==0) {
         
     }else{
@@ -275,7 +279,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
-    YOUHUIData *data=[_listArray objectAtIndex:indexPath.row];
+    YOUHUIData *data=[[YOUHUIData alloc]initWithDictionary:[_listArray objectAtIndex:indexPath.row]];
 //    NSLog(@"优惠劵数据 查看%f,%@,%@,%f,%f,%@,%f,%f,%f,%f,%f,%@,%f,%f,%f,%@,%f",data.dataIdentifier,data.serviceType,data.dataDescription,data.rangFrom,data.expTime,data.introduction,data.rangeType,data.userId,data.couponId,data.value,data.isUsed,data.cardPasswd,data.usedTime,data.addTime,data.addTime,data.orderNo,data.updateTime);
 
     int vale=(int)data.value;

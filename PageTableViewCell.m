@@ -40,12 +40,12 @@
        // _titleLabel.backgroundColor=[UIColor redColor];
         [_titleLabel setNumberOfLines:0];
         _titleLabel.lineBreakMode =NSLineBreakByTruncatingTail ;
-        _titleLabel.font=[UIFont fontWithName:@"Arial" size:14];
+        _titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:14];
 //        _titleLabel.textColor=[UIColor colorWithHue:103/255.0f saturation:103/255.0f brightness:103/255.0f alpha:1];
         [headView addSubview:_titleLabel];
         
         _timeLabel=[[UILabel alloc]initWithFrame:CGRectMake(60, _titleLabel.frame.size.height+_titleLabel.frame.origin.y+8, (WIDTH-58)*0.5, 12)];
-        _timeLabel.font=[UIFont fontWithName:@"Arial" size:10];
+        _timeLabel.font=[UIFont fontWithName:@"Heiti SC" size:10];
         [_timeLabel setNumberOfLines:0];
         _timeLabel.textColor=[UIColor colorWithRed:103/255.0f green:103/255.0f blue:103/255.0f alpha:1];
         [headView addSubview:_timeLabel];
@@ -53,7 +53,7 @@
         _promptlabel = [[UILabel alloc] initWithFrame:CGRectMake(WIDTH-_promptlabel.frame.size.width-5,14,_promptlabel.frame.size.width,headView.frame.size.height-26)];//后面还会重新设置其size。
         [_promptlabel setNumberOfLines:0];
         _promptlabel.textAlignment = NSTextAlignmentRight;
-        _promptlabel.font=[UIFont fontWithName:@"Arial" size:14];
+        _promptlabel.font=[UIFont fontWithName:@"Heiti SC" size:14];
         _promptlabel.textColor=[UIColor colorWithRed:103/255.0f green:103/255.0f blue:103/255.0f alpha:1];
         [headView addSubview:_promptlabel];
         
@@ -72,14 +72,14 @@
         sjLabel=[[UILabel alloc]initWithFrame:CGRectMake(129, 13, sjLabel.frame.size.width, 14)];
         sjLabel.text=@"时间:";
         sjLabel.textColor=[UIColor colorWithRed:138/255.0f green:137/255.0f blue:137/255.0f alpha:1];
-        sjLabel.font=[UIFont fontWithName:@"Arial" size:13];
+        sjLabel.font=[UIFont fontWithName:@"Heiti SC" size:13];
         [layoutView addSubview:sjLabel];
         
         _inTimeLabel=[[UILabel alloc]initWithFrame:CGRectMake(sjLabel.frame.size.width+sjLabel.frame.origin.x, 16, WIDTH-148-sjLabel.frame.size.width, 14)];
         [_inTimeLabel setNumberOfLines:1];
         [_inTimeLabel sizeToFit];
         _inTimeLabel.lineBreakMode=NSLineBreakByTruncatingTail;
-        _inTimeLabel.font=[UIFont fontWithName:@"Arial" size:13];
+        _inTimeLabel.font=[UIFont fontWithName:@"Heiti SC" size:13];
         _inTimeLabel.text=@"2015年8月5日 11:54";
         _inTimeLabel.textColor=[UIColor colorWithRed:138/255.0f green:137/255.0f blue:137/255.0f alpha:1];
         [layoutView addSubview:_inTimeLabel];
@@ -87,11 +87,11 @@
         moneyLabel=[[UILabel alloc]initWithFrame:CGRectMake(129, 36, moneyLabel.frame.size.width, 14)];
         moneyLabel.text=@"费用:";
         moneyLabel.textColor=[UIColor colorWithRed:138/255.0f green:137/255.0f blue:137/255.0f alpha:1];
-        moneyLabel.font=[UIFont fontWithName:@"Arial" size:13];
+        moneyLabel.font=[UIFont fontWithName:@"Heiti SC" size:13];
         [layoutView addSubview:moneyLabel];
         
         _costLabel=[[UILabel alloc]initWithFrame:CGRectMake(moneyLabel.frame.size.width+moneyLabel.frame.origin.x, 36, WIDTH-148-moneyLabel.frame.size.width, 14)];
-        _costLabel.font=[UIFont fontWithName:@"Arial" size:13];
+        _costLabel.font=[UIFont fontWithName:@"Heiti SC" size:13];
         _costLabel.text=@"以支付200元团购";
         _costLabel.textColor=[UIColor colorWithRed:138/255.0f green:137/255.0f blue:137/255.0f alpha:1];
         [layoutView addSubview:_costLabel];
@@ -99,14 +99,14 @@
         address=[[UILabel alloc]init];
         address.text=@"地址:";
         address.textColor=[UIColor colorWithRed:138/255.0f green:137/255.0f blue:137/255.0f alpha:1];
-        address.font=[UIFont fontWithName:@"Arial" size:13];
+        address.font=[UIFont fontWithName:@"Heiti SC" size:13];
         address.frame=CGRectMake(129, 59, address.frame.size.width, 14);
         [layoutView addSubview:address];
         
         _addressLabel=[[UILabel alloc]initWithFrame:CGRectMake(address.frame.size.width+address.frame.origin.x, 59, WIDTH-148-address.frame.size.width, 14)];
         //[_addressLabel setNumberOfLines:0];
         _addressLabel.text=@"案发啊会计法解放军卡规范啊发放噶咖啡馆哈军工分";
-        _addressLabel.font=[UIFont fontWithName:@"Arial" size:13];
+        _addressLabel.font=[UIFont fontWithName:@"Heiti SC" size:13];
         _addressLabel.textColor=[UIColor colorWithRed:138/255.0f green:137/255.0f blue:137/255.0f alpha:1];
         //_addressLabel.lineBreakMode = NSLineBreakByCharWrapping;
         _addressLabel.numberOfLines = 2;
@@ -116,7 +116,7 @@
         
         _contentLabel=[[UILabel alloc]initWithFrame:CGRectMake(18, 21+_descriptionView.frame.origin.y+_descriptionView.frame.size.height, WIDTH-36, 14)];
         _contentLabel.text=@"哈高发发觉国际考古界啊航空股份回家啊风格咖啡感觉啊个风格啊可是鼓风机哈根噶款设计风格啊就算分开";
-        _contentLabel.font=[UIFont fontWithName:@"Arial" size:13];
+        _contentLabel.font=[UIFont fontWithName:@"Heiti SC" size:13];
         _contentLabel.textColor=[UIColor colorWithRed:138/255.0f green:137/255.0f blue:137/255.0f alpha:1];
         _contentLabel.numberOfLines=2;
         CGSize siZe=[_contentLabel sizeThatFits:CGSizeMake(_contentLabel.frame.size.width, MAXFLOAT)];
@@ -150,7 +150,7 @@
                 _praiseLabel.lineBreakMode=NSLineBreakByTruncatingTail;
                 [_praiseLabel setNumberOfLines:1];
                 [_praiseLabel sizeToFit];
-                _praiseLabel.font=[UIFont fontWithName:@"Arial" size:13];
+                _praiseLabel.font=[UIFont fontWithName:@"Heiti SC" size:13];
                 _praiseLabel.textColor=[UIColor colorWithRed:103/255.0f green:103/255.0f blue:103/255.0f alpha:1];
                 [layoutView addSubview:_praiseLabel];
 
@@ -168,7 +168,7 @@
                 _commentLabel.lineBreakMode=NSLineBreakByTruncatingTail;
                 [_commentLabel setNumberOfLines:1];
                 [_commentLabel sizeToFit];
-                _commentLabel.font=[UIFont fontWithName:@"Arial" size:13];
+                _commentLabel.font=[UIFont fontWithName:@"Heiti SC" size:13];
                 _commentLabel.textColor=[UIColor colorWithRed:103/255.0f green:103/255.0f blue:103/255.0f alpha:1];
                 [layoutView addSubview:_commentLabel];
             }

@@ -8,6 +8,6 @@
 
 #import "FatherViewController.h"
 
-@interface FriendViewController : UIViewController
-
+@interface FriendViewController : FatherViewController<EMChatManagerDelegate>
+@property (nonatomic ,assign)int friendVcID;
 @end

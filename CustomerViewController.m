@@ -103,7 +103,7 @@
         cellLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"name"]];
     }
     
-    cellLabel.font=[UIFont fontWithName:@"Arial" size:14];
+    cellLabel.font=[UIFont fontWithName:@"Heiti SC" size:14];
     if (indexPath.row==_index) {
         cell.accessoryType=UITableViewCellAccessoryCheckmark;
     }

@@ -9,5 +9,4 @@
 #import "FatherViewController.h"
 
 @interface Express_RegisterViewController : FatherViewController<UITextFieldDelegate,UIScrollViewDelegate>
-
 @end

@@ -20,7 +20,7 @@
 #import "UserInfoViewController.h"
 #import "ChatViewController.h"
 
-//#import "WXApi.h"
+#import "WXApi.h"
 #import "MineJifenViewController.h"
 #import "Order_ListViewController.h"
 #import "JifenViewController.h"
@@ -31,6 +31,10 @@
 #import "MoreViewController.h"
 
 #import "WaterfallViewController.h"
+#import "UsedDressViewController.h"
+
+#import "FriendViewController.h"
+#import "IntegralListViewController.h"
 @interface MyselfViewController ()
 {
     FXBlurView *blurView;
@@ -90,6 +94,8 @@
     UIActivityIndicatorView *webActivityView;
     UIActivityIndicatorView *indView;
     UILabel *webTitleLabel;
+    
+    UsedDressViewController *userdressVC;
 }
 @end
 
@@ -249,8 +255,8 @@
     tableScrollView.contentSize=CGSizeMake(WIDTH, 131*3+80);
     tableScrollView.delegate=self;
     [self.view addSubview:tableScrollView];
-    NSArray *toolArray=@[@"Wallet_Lcon",@"Coupon_Lcon",@"Order_Lcon",@"Integral_Lcon"];
-    NSArray *growArray=@[@"Knowledge_Lcon",@"Examination_Lcon",@"Train_Lcon",@"Part-time-job_Lcon"];
+    NSArray *toolArray=@[@"Wallet_Lcon",@"Coupon_Lcon",@"Order_Lcon",@"iconfont-changyongdizhi"];
+    NSArray *growArray=@[@"Knowledge_Lcon",@"iconfont-gongzuotuijian",@"Integral_Lcon",@"Part-time-job_Lcon"];
     for (int i=0; i<4; i++) {
         UIView *view=[[UIView alloc]init];
         if (i!=3) {
@@ -276,7 +282,7 @@
                 [view addSubview:toolHeadeImage];
                 UILabel *toolLabel=[[UILabel alloc]initWithFrame:FRAME(toolHeadeImage.frame.size.width+toolHeadeImage.frame.origin.x, 10, 80, 30)];
                 toolLabel.text=@"工具箱";
-                toolLabel.font=[UIFont fontWithName:@"Arial" size:16];
+                toolLabel.font=[UIFont fontWithName:@"Heiti SC" size:16];
                 toolLabel.textColor=[UIColor colorWithRed:100/255.0f green:100/255.0f blue:100/255.0f alpha:1];
                 [view addSubview:toolLabel];
                 
@@ -294,7 +300,7 @@
                 UILabel *toolViceLabel=[[UILabel alloc]initWithFrame:FRAME(0, 5, 40, 20)];
                 toolViceLabel.text=@"更多";
                 toolViceLabel.textAlignment=NSTextAlignmentRight;
-                toolViceLabel.font=[UIFont fontWithName:@"Arial" size:13];
+                toolViceLabel.font=[UIFont fontWithName:@"Heiti SC" size:13];
                 toolViceLabel.textColor=[UIColor colorWithRed:190/255.0f green:190/255.0f blue:190/255.0f alpha:1];
 //                [toolMoreBut addSubview:toolViceLabel];
                 
@@ -302,7 +308,7 @@
                 toolMoreImage.image=[UIImage imageNamed:@"JH_JT_TB_@2x"];
 //                [toolMoreBut addSubview:toolMoreImage];
                 
-                NSArray *array=@[@"钱包",@"优惠劵",@"订单",@"积分商城"];
+                NSArray *array=@[@"钱包",@"优惠劵",@"订单",@"常用地址"];
                 for (int j=0; j<array.count; j++) {
                     UIButton *toolButton=[[UIButton alloc]initWithFrame:FRAME(WIDTH/4*j, 51, WIDTH/4, 70)];
                     toolButton.tag=100+j;
@@ -315,7 +321,7 @@
                     
                     UILabel *lconLabel=[[UILabel alloc]initWithFrame:FRAME(0, 45, WIDTH/4, 15)];
                     lconLabel.text=[NSString stringWithFormat:@"%@",array[j]];
-                    lconLabel.font=[UIFont fontWithName:@"Arial" size:13];
+                    lconLabel.font=[UIFont fontWithName:@"Heiti SC" size:13];
                     lconLabel.textAlignment=NSTextAlignmentCenter;
                     lconLabel.textColor=[UIColor colorWithRed:100/255.0f green:100/255.0f blue:100/255.0f alpha:1];
                     [toolButton addSubview:lconLabel];
@@ -334,7 +340,7 @@
                 [view addSubview:growHeadeImage];
                 UILabel *growLabel=[[UILabel alloc]initWithFrame:FRAME(growHeadeImage.frame.size.width+growHeadeImage.frame.origin.x, 10, 80, 30)];
                 growLabel.text=@"会员服务";
-                growLabel.font=[UIFont fontWithName:@"Arial" size:16];
+                growLabel.font=[UIFont fontWithName:@"Heiti SC" size:16];
                 growLabel.textColor=[UIColor colorWithRed:100/255.0f green:100/255.0f blue:100/255.0f alpha:1];
                 [view addSubview:growLabel];
                 
@@ -345,7 +351,7 @@
                 UILabel *growViceLabel=[[UILabel alloc]initWithFrame:FRAME(0, 5, 40, 20)];
                 growViceLabel.text=@"LV3";
                 growViceLabel.textAlignment=NSTextAlignmentRight;
-                growViceLabel.font=[UIFont fontWithName:@"Arial" size:13];
+                growViceLabel.font=[UIFont fontWithName:@"Heiti SC" size:13];
                 growViceLabel.textColor=[UIColor colorWithRed:190/255.0f green:190/255.0f blue:190/255.0f alpha:1];
                 //[growMoreBut addSubview:growViceLabel];
                 
@@ -354,7 +360,7 @@
                 //[growMoreBut addSubview:growMoreImage];
 
                 
-                NSArray *array=@[@"知识库",@"认证考试",@"培训",@"开店"];
+                NSArray *array=@[@"知识库",@"工作推荐",@"积分商城",@"开店"];
                 for (int k=0; k<array.count; k++) {
                     UIButton *growButton=[[UIButton alloc]initWithFrame:FRAME(WIDTH/4*k, 51, WIDTH/4, 70)];
                     growButton.tag=1000+k;
@@ -367,7 +373,7 @@
                     
                     UILabel *lconLabel=[[UILabel alloc]initWithFrame:FRAME(0, 45, WIDTH/4, 15)];
                     lconLabel.text=[NSString stringWithFormat:@"%@",array[k]];
-                    lconLabel.font=[UIFont fontWithName:@"Arial" size:13];
+                    lconLabel.font=[UIFont fontWithName:@"Heiti SC" size:13];
                     lconLabel.textAlignment=NSTextAlignmentCenter;
                     lconLabel.textColor=[UIColor colorWithRed:100/255.0f green:100/255.0f blue:100/255.0f alpha:1];
                     [growButton addSubview:lconLabel];
@@ -395,7 +401,7 @@
                     
                     UILabel *otherLabel=[[UILabel alloc]initWithFrame:FRAME(otherHeadeImage.frame.size.width+otherHeadeImage.frame.origin.x, 15, 90, 30)];
                     otherLabel.text=[NSString stringWithFormat:@"%@",otherArray[s]];
-                    otherLabel.font=[UIFont fontWithName:@"Arial" size:16];
+                    otherLabel.font=[UIFont fontWithName:@"Heiti SC" size:16];
                     otherLabel.textColor=[UIColor colorWithRed:100/255.0f green:100/255.0f blue:100/255.0f alpha:1];
                     [otherButton addSubview:otherLabel];
                     
@@ -422,7 +428,7 @@
                 
                 UILabel *merchantLabel=[[UILabel alloc]initWithFrame:FRAME(merchantHeadeImage.frame.size.width+merchantHeadeImage.frame.origin.x, 15, 90, 30)];
                 merchantLabel.text=@"我是商家";
-                merchantLabel.font=[UIFont fontWithName:@"Arial" size:16];
+                merchantLabel.font=[UIFont fontWithName:@"Heiti SC" size:16];
                 merchantLabel.textColor=[UIColor colorWithRed:100/255.0f green:100/255.0f blue:100/255.0f alpha:1];
                 [merchantButton addSubview:merchantLabel];
                 
@@ -433,7 +439,7 @@
                 UILabel *mobileLabel=[[UILabel alloc]init];
                 mobileLabel.text=@"400-169-1615";
                 mobileLabel.textColor=[UIColor colorWithRed:100/255.0f green:100/255.0f blue:100/255.0f alpha:1];
-                mobileLabel.font=[UIFont fontWithName:@"Arial" size:13];
+                mobileLabel.font=[UIFont fontWithName:@"Heiti SC" size:13];
                 [mobileLabel setNumberOfLines:1];
                 [mobileLabel sizeToFit];
                 mobileLabel.frame=FRAME(WIDTH-30-mobileLabel.frame.size.width, 20, mobileLabel.frame.size.width, 20);
@@ -476,7 +482,7 @@
 {
     NSInteger tag=sender.tag;
     int tg=(int)tag;
-    NSArray *array=@[@"钱包",@"优惠劵",@"订单",@"积分商城"];
+    NSArray *array=@[@"钱包",@"优惠劵",@"订单",@"常用地址"];
     NSLog(@"%@--被点击了",array[tg-100]);
     switch (tg) {
         case 100:
@@ -499,11 +505,8 @@
             break;
         case 103:
         {
-            ISLoginManager *_manager = [ISLoginManager shareManager];
-            NSString *url=[NSString stringWithFormat:@"http://123.57.173.36/simi/app/user/score_shop.json?user_id=%@",_manager.telephone];
-            CreditWebViewController *web=[[CreditWebViewController alloc]initWithUrl:url];//实际中需要改为带签名的地址
-            //如果已经有UINavigationContoller了，就 创建出一个 CreditWebViewController 然后 push 进去
-            [self.navigationController pushViewController:web animated:YES];
+            userdressVC=[[UsedDressViewController alloc]init];
+            [self.navigationController pushViewController:userdressVC animated:YES];
         }
             break;
         default:
@@ -515,26 +518,29 @@
 {
     NSInteger tag=sender.tag;
     int tg=(int)tag;
-    NSArray *array=@[@"知识库",@"认证考试",@"培训",@"兼职赚钱"];
+    NSArray *array=@[@"知识库",@"工作推荐",@"积分商城",@"开店"];
     NSLog(@"%@--被点击了",array[tg-1000]);
     switch (tg) {
         case 1000:
         {
-            webURL=@"http://mishuzhuli.com/category/xingzhengbaike";
+            webURL=@"http://51xingzheng.cn/";
             [self webViewLayout];
         }
             break;
         case 1001:
         {
-           webURL=@"http://mishuzhuli.com/category/renzhengkaoshi";
+           webURL=@"http://m.58.com/bj/renli/?PGTID=0d303652-0000-171b-6d46-e307e18a1ae0&ClickID=3";
             [self webViewLayout];
             
         }
             break;
         case 1002:
         {
-            webURL=@"http://mishuzhuli.com/category/wendangfanwen";
-            [self webViewLayout];
+            ISLoginManager *_manager = [ISLoginManager shareManager];
+            NSString *url=[NSString stringWithFormat:@"http://123.57.173.36/simi/app/user/score_shop.json?user_id=%@",_manager.telephone];
+            CreditWebViewController *web=[[CreditWebViewController alloc]initWithUrl:url];//实际中需要改为带签名的地址
+            //如果已经有UINavigationContoller了，就 创建出一个 CreditWebViewController 然后 push 进去
+            [self.navigationController pushViewController:web animated:YES];
                     }
             break;
         case 1003:
@@ -578,7 +584,7 @@
     
     webTitleLabel=[[UILabel alloc]initWithFrame:FRAME(60, 20, WIDTH-120, 30)];
     webTitleLabel.textAlignment=NSTextAlignmentCenter;
-    webTitleLabel.font=[UIFont fontWithName:@"Arial" size:15];
+    webTitleLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
     [layoutView addSubview:webTitleLabel];
     
     UIButton *rightButton=[[UIButton alloc]initWithFrame:FRAME(WIDTH-60, 20, 50, 30)];
@@ -688,7 +694,7 @@
     //gradeButton.backgroundColor=[UIColor blackColor];
     UILabel *label=[[UILabel alloc]initWithFrame:FRAME(0, 0, 30, 20)];
     label.text=@"LV1";
-    label.font=[UIFont fontWithName:@"Arial" size:10];
+    label.font=[UIFont fontWithName:@"Heiti SC" size:10];
     label.textAlignment=NSTextAlignmentCenter;
     label.textColor=[UIColor whiteColor];
     [gradeButton addSubview:label];
@@ -728,7 +734,7 @@
     UILabel *addLabel=[[UILabel alloc]init];
     addLabel.text=@"添加好友";
     addLabel.textColor=[UIColor whiteColor];
-    addLabel.font=[UIFont fontWithName:@"Arial" size:15];
+    addLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
     addLabel.lineBreakMode=NSLineBreakByTruncatingTail;
     [addLabel setNumberOfLines:1];
     [addLabel sizeToFit];
@@ -749,7 +755,7 @@
     UILabel *whisperLabel=[[UILabel alloc]init];
     whisperLabel.text=@"私聊";
     whisperLabel.textColor=[UIColor whiteColor];
-    whisperLabel.font=[UIFont fontWithName:@"Arial" size:15];
+    whisperLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
     whisperLabel.lineBreakMode=NSLineBreakByTruncatingTail;
     [whisperLabel setNumberOfLines:1];
     [whisperLabel sizeToFit];
@@ -757,6 +763,7 @@
     [whisperButton addSubview:whisperLabel];
     
     tmtView=[[UIImageView  alloc]initWithFrame:FRAME(0, blurView.frame.size.height-HEIGHT*0.09, WIDTH, HEIGHT*0.09)];
+    tmtView.userInteractionEnabled=YES;
     tmtView.image=[UIImage imageNamed:@"TMT(2)(4)"];
     if (_rootId==1) {
         tmtView.hidden=YES;
@@ -794,16 +801,18 @@
     qrCodeIamge.image=[UIImage imageNamed:@"QRcode"];
     [qrCode addSubview:qrCodeIamge];
 
-    NSArray *array=@[@"钱包",@"优惠券",@"积分"];
+    NSArray *array=@[@"好友",@"动态",@"积分"];
     for (int i=0; i<array.count; i++) {
         UILabel *label=[[UILabel alloc]initWithFrame:FRAME(WIDTH/3*i+0.5, tmtView.frame.size.height-19/2-11, WIDTH/3-0.5, 11)];
         label.text=array[i];
         label.textAlignment=NSTextAlignmentCenter;
         label.textColor=[UIColor whiteColor];
-        label.font=[UIFont fontWithName:@"Arial" size:11];
+        label.font=[UIFont fontWithName:@"Heiti SC" size:11];
         [tmtView addSubview:label];
         
         UIButton *button=[[UIButton alloc]initWithFrame:FRAME(WIDTH/3*i+0.5, 0, WIDTH/3-0.5, tmtView.frame.size.height)];
+        button.tag=i;
+        [button addTarget:self action:@selector(headeBut:) forControlEvents:UIControlEventTouchUpInside];
         [tmtView addSubview:button];
         if (i!=2) {
             UIView *lineView=[[UIView alloc]initWithFrame:FRAME(WIDTH/3-0.5+WIDTH/3*i, (HEIGHT*0.09-HEIGHT*0.037)/2, 1, HEIGHT*0.037)];
@@ -850,7 +859,7 @@
     UILabel *textLabel=[[UILabel alloc]initWithFrame:FRAME(10, (qrCodeView.frame.size.height-(WIDTH-60))/2-28, WIDTH-20, 18)];
     textLabel.text=@"我的二维码名片";
     textLabel.textAlignment=NSTextAlignmentCenter;
-    textLabel.font=[UIFont fontWithName:@"Arial" size:16];
+    textLabel.font=[UIFont fontWithName:@"Heiti SC" size:16];
     [qrCodeView addSubview:textLabel];
     UIImageView *qrImageView=[[UIImageView alloc]initWithFrame:FRAME(30, (qrCodeView.frame.size.height-(WIDTH-60))/2, WIDTH-60, WIDTH-60)];
     NSString *imageUrl=[NSString stringWithFormat:@"%@",[sender objectForKey:@"data"]];
@@ -860,7 +869,7 @@
     UILabel *explainLabel=[[UILabel alloc]initWithFrame:FRAME(10, qrImageView.frame.size.height+qrImageView.frame.origin.y+30, WIDTH-20, 20)];
     explainLabel.text=@"点击任意处可退出";
     explainLabel.textAlignment=NSTextAlignmentCenter;
-    explainLabel.font=[UIFont fontWithName:@"Arial" size:18];
+    explainLabel.font=[UIFont fontWithName:@"Heiti SC" size:18];
     explainLabel.textColor=[UIColor colorWithRed:240/255.0f green:240/255.0f blue:240/255.0f alpha:1];
     [qrCodeView addSubview:explainLabel];
     [self.view addSubview:qrCodeView];
@@ -872,12 +881,12 @@
 #pragma mark卡片文字显示方法
 -(void)cradLabelLayout
 {
-    NSString *moneyString=[NSString stringWithFormat:@"%@",[dict objectForKey:@"rest_money"]];
+    NSString *moneyString=[NSString stringWithFormat:@"%@",[dict objectForKey:@"total_friends"]];
     NSLog(@"%@",moneyString);
     if (moneyString==NULL||moneyString==nil||[moneyString length]==0) {
-        cradString=@"￥0";
+        cradString=@"0";
     }else{
-        cradString=[NSString stringWithFormat:@"￥%@",moneyString];
+        cradString=[NSString stringWithFormat:@"%@",moneyString];
     }
 
     cradLabel.text=cradString;
@@ -887,7 +896,7 @@
     [cradLabel sizeToFit];
     cradLabel.frame=FRAME(0, HEIGHT*0.09*0.2, WIDTH/3-0.5, 32/2);
     cradLabel.textColor=[UIColor whiteColor];
-    cradLabel.font=[UIFont fontWithName:@"Arial" size:16];
+    cradLabel.font=[UIFont fontWithName:@"Heiti SC" size:16];
     [tmtView addSubview:cradLabel];
     
 }
@@ -895,7 +904,7 @@
 -(void)orderLabelLayout
 {
     
-    orderString=[NSString stringWithFormat:@"%@",[dict objectForKey:@"total_coupon"]];
+    orderString=[NSString stringWithFormat:@"%@",[dict objectForKey:@"total_feed"]];
     orderLabel.text=orderString;
     orderLabel.textAlignment=NSTextAlignmentCenter;
     orderLabel.lineBreakMode=NSLineBreakByTruncatingTail;
@@ -903,13 +912,13 @@
     [orderLabel sizeToFit];
     orderLabel.frame=FRAME(WIDTH/3+0.5, HEIGHT*0.09*0.2, WIDTH/3-1, 32/2);
     orderLabel.textColor=[UIColor whiteColor];
-    orderLabel.font=[UIFont fontWithName:@"Arial" size:16];
+    orderLabel.font=[UIFont fontWithName:@"Heiti SC" size:16];
     [tmtView addSubview:orderLabel];
 }
 #pragma mark关注文字显示方法
 -(void)concernLabelLayout
 {
-    concernString=[NSString stringWithFormat:@"%@",[dict objectForKey:@"total_friends"]];
+    concernString=[NSString stringWithFormat:@"%@",[dict objectForKey:@"score"]];
     concernLabel.text=concernString;
     concernLabel.textAlignment=NSTextAlignmentCenter;
     concernLabel.lineBreakMode=NSLineBreakByTruncatingTail;
@@ -917,7 +926,7 @@
     [concernLabel sizeToFit];
     concernLabel.frame=FRAME(WIDTH/3*2+0.5, HEIGHT*0.09*0.2, WIDTH/3-0.5, 32/2);
     concernLabel.textColor=[UIColor whiteColor];
-    concernLabel.font=[UIFont fontWithName:@"Arial" size:16];
+    concernLabel.font=[UIFont fontWithName:@"Heiti SC" size:16];
     [tmtView addSubview:concernLabel];
 }
 -(void)nameLabelLayout
@@ -955,7 +964,7 @@
     [distanceLabel setNumberOfLines:1];
     [distanceLabel sizeToFit];
     distanceLabel.frame=FRAME((WIDTH-distanceLabel.frame.size.width)/2/*-distanceLabel.frame.size.width/2-5*/, nameLabel.frame.size.height+nameLabel.frame.origin.y+HEIGHT*0.02, distanceLabel.frame.size.width, 10);
-    distanceLabel.font=[UIFont fontWithName:@"Arial" size:10];
+    distanceLabel.font=[UIFont fontWithName:@"Heiti SC" size:10];
     distanceLabel.textColor=[UIColor whiteColor];
     [blurView addSubview:distanceLabel];
     
@@ -964,7 +973,7 @@
     [positionLabel setNumberOfLines:1];
     [positionLabel sizeToFit];
     positionLabel.adjustsFontSizeToFitWidth=YES;
-    positionLabel.font=[UIFont fontWithName:@"Arial" size:9];
+    positionLabel.font=[UIFont fontWithName:@"Heiti SC" size:9];
     positionLabel.textColor=[UIColor whiteColor];
     positionLabel.frame=FRAME(WIDTH/2+5, distanceLabel.frame.origin.y+1, positionLabel.frame.size.width, 9);
     [blurView addSubview:positionLabel];
@@ -1013,7 +1022,36 @@
     MineViewController *vc=[[MineViewController alloc]init];
     [self.navigationController pushViewController:vc animated:YES];
 }
-
+#pragma mark 头部三个按钮点击事件
+-(void)headeBut:(UIButton *)button
+{
+    switch (button.tag) {
+        case 0:
+        {
+            FriendViewController *foundVC=[[FriendViewController alloc]init];
+            foundVC.friendVcID=101;
+            [self.navigationController pushViewController:foundVC animated:YES];
+        }
+            break;
+        case 1:
+        {
+            FriendViewController *foundVC=[[FriendViewController alloc]init];
+            foundVC.friendVcID=100;
+            [self.navigationController pushViewController:foundVC animated:YES];
+        }
+            break;
+        case 2:
+        {
+            IntegralListViewController *integraVC=[[IntegralListViewController alloc]init];
+            integraVC.productFractionStr=concernString;
+            [self.navigationController pushViewController:integraVC animated:YES];
+        }
+            break;
+            
+        default:
+            break;
+    }
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

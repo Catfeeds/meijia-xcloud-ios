@@ -18,6 +18,7 @@
 #import "LBXScanViewController.h"
 #import <objc/message.h>
 #import "EnterpriseViewController.h"
+#import "ApplyFriendsListViewController.h"
 @interface SecretFriendsViewController ()
 {
     NSMutableArray *secretArray;
@@ -43,13 +44,14 @@
 @synthesize _tableView;
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.view.backgroundColor=[UIColor colorWithRed:231/255.0f green:231/255.0f blue:231/255.0f alpha:1];
     page=1;
     secretArray=[[NSMutableArray alloc]init];
     if ([self respondsToSelector:@selector(setEdgesForExtendedLayout:)]) {
         
         self.edgesForExtendedLayout = UIRectEdgeNone;
     }
-    self.backBtn.hidden=YES;
+//    self.backBtn.hidden=YES;
 //    self.navlabel.text=@"好友";
     titleArray=@[@"",@"我的好友"];
     cellArray=[[NSMutableArray alloc]init];
@@ -61,8 +63,8 @@
         }
     });
     
-    recommendArray=@[@"企业通讯录",@"添加通讯录好友",@"扫一扫加好友"];//,
-    _tableView=[[UITableView alloc]initWithFrame:FRAME(0, 64, WIDTH, HEIGHT-101)];
+    recommendArray=@[@"企业通讯录",@"添加通讯录好友",@"扫一扫加好友",@"好友申请"];//,
+    _tableView=[[UITableView alloc]initWithFrame:FRAME(0, 110, WIDTH, HEIGHT-110)];
     _tableView.dataSource=self;
     _tableView.delegate=self;
     [self.view addSubview:_tableView];
@@ -357,10 +359,10 @@
         NSDictionary *dic=[secretArray objectAtIndex:indexPath.row];
         UILabel *textLabel=[[UILabel alloc]init];
         textLabel.frame=FRAME(60, 15, WIDTH-80, 20);
-        textLabel.font=[UIFont fontWithName:@"Arial" size:17];
+        textLabel.font=[UIFont fontWithName:@"Heiti SC" size:17];
         [cell addSubview:textLabel];
         [textLabel setText:[dic objectForKey:@"name"]];
-        textLabel.font=[UIFont fontWithName:@"Arial" size:15];
+        textLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
         NSString *imageString=[NSString stringWithFormat:@"%@",[dic objectForKey:@"head_img"]];
         NSLog(@"1%@2",imageString);
         UIImageView *headImage=[[UIImageView alloc]init];
@@ -379,10 +381,10 @@
     }else{
         UILabel *textLabel=[[UILabel alloc]init];
         textLabel.frame=FRAME(60, 15, WIDTH-80, 20);
-        textLabel.font=[UIFont fontWithName:@"Arial" size:17];
+        textLabel.font=[UIFont fontWithName:@"Heiti SC" size:17];
         [cell addSubview:textLabel];
         [textLabel setText:[recommendArray objectAtIndex:indexPath.row]];
-        textLabel.font=[UIFont fontWithName:@"Arial" size:15];
+        textLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
         UIImageView *headImage=[[UIImageView alloc]init];
         headImage.frame=FRAME(10, 5, 40, 40);
         headImage.layer.cornerRadius=headImage.frame.size.width/2;
@@ -395,7 +397,7 @@
             int has=[has_company intValue];
             UILabel *label=[[UILabel alloc]initWithFrame:FRAME(WIDTH-70, 15, 50, 20)];
             label.text=@"立即创建";
-            label.font=[UIFont fontWithName:@"Arial" size:12];
+            label.font=[UIFont fontWithName:@"Heiti SC" size:12];
             label.textColor=[UIColor colorWithRed:190/255.0f green:190/255.0f blue:190/255.0f alpha:1];
             label.textAlignment=NSTextAlignmentRight;
             if (has==0) {
@@ -404,11 +406,13 @@
                 label.hidden=YES;
             }
             [cell addSubview:label];
-            headImage.image=[UIImage imageNamed:@"iconfont-gcompany"];
+            headImage.image=[UIImage imageNamed:@"iconfont_company_tongxunbu"];
         }else if(indexPath.row==1){
-            headImage.image=[UIImage imageNamed:@"iconfont-tongxunbu"];
+            headImage.image=[UIImage imageNamed:@"iconfont_tongxunbu"];
+        }else if(indexPath.row==2){
+            headImage.image=[UIImage imageNamed:@"iconfont_rq_code"];
         }else{
-            headImage.image=[UIImage imageNamed:@"iconfont-iconsmt (1)"];
+            headImage.image=[UIImage imageNamed:@"iconfont-haoyoushenqing"];
         }
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -445,7 +449,7 @@
             vc.dataArray=cellArray;
             vc.hyArray=secretArray;
             [self.navigationController pushViewController:vc animated:YES];
-        }else{
+        }else if(indexPath.row==2){
             NSArray *arrayItems = @[@[@"模拟qq扫码界面",@"qqStyle"]];
             NSArray* array = arrayItems[0];
             NSString *methodName = [array lastObject];
@@ -453,6 +457,9 @@
             if ([self respondsToSelector:normalSelector]) {
                 ((void (*)(id, SEL))objc_msgSend)(self, normalSelector);
             }
+        }else{
+            ApplyFriendsListViewController *applyVC=[[ApplyFriendsListViewController alloc]init];
+            [self.navigationController pushViewController:applyVC animated:YES];
         }
     }else{
         NSDictionary *dic=secretArray[indexPath.row];

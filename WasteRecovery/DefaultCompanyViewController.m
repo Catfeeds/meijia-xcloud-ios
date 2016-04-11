@@ -129,7 +129,7 @@
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
     }
     cell.textLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"company_name"]];
-    cell.textLabel.font=[UIFont fontWithName:@"Arial" size:15];
+    cell.textLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     if (cellID==indexPath.row) {
         [cell setAccessoryType:UITableViewCellAccessoryCheckmark];

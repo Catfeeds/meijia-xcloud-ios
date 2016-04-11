@@ -11,7 +11,7 @@
 #import "DownloadManager.h"
 #import "PageTableViewCell.h"
 #import "DetailsViewController.h"
-//#import "WXApi.h"
+#import "WXApi.h"
 #import "MineViewController.h"
 #import "QRcodeViewController.h"
 #import "LBXScanViewStyle.h"
@@ -1110,7 +1110,7 @@ float lastContentOffset;
         
         UILabel *label=[[UILabel alloc]init];
         label.text=[NSString stringWithFormat:@"实时温度:%@",[dict objectForKey:@"real_temp"]];
-        label.font=[UIFont fontWithName:@"Arial" size:13];
+        label.font=[UIFont fontWithName:@"Heiti SC" size:13];
         //        label.backgroundColor=[UIColor redColor];
         [label setNumberOfLines:1];
         [label sizeToFit];
@@ -1189,7 +1189,7 @@ float lastContentOffset;
             [dateLabel sizeToFit];
             dateLabel.textColor=[UIColor colorWithRed:138/255.0f green:137/255.0f blue:137/255.0f alpha:1];
             dateLabel.textAlignment=NSTextAlignmentRight;
-            dateLabel.font=[UIFont fontWithName:@"Arial" size:12];
+            dateLabel.font=[UIFont fontWithName:@"Heiti SC" size:12];
             dateLabel.frame=FRAME(0, 27/2, dateLabel.frame.size.width, 13);
             [view addSubview:dateLabel];
             UIImageView *weathImage=[[UIImageView alloc]initWithFrame:FRAME(dateLabel.frame.size.width, 15, 10, 10)];
@@ -1207,7 +1207,7 @@ float lastContentOffset;
             [celsiusLabel setNumberOfLines:1];
             [celsiusLabel sizeToFit];
             celsiusLabel.textAlignment=NSTextAlignmentLeft;
-            celsiusLabel.font=[UIFont fontWithName:@"Arial" size:12];
+            celsiusLabel.font=[UIFont fontWithName:@"Heiti SC" size:12];
             celsiusLabel.frame=FRAME(dateLabel.frame.size.width+10, 27/2, celsiusLabel.frame.size.width, 13);
             [view addSubview:celsiusLabel];
             

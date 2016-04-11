@@ -244,7 +244,7 @@
     
     UILabel *nameLabel=[[UILabel alloc]init];
     nameLabel.frame=FRAME(headImageView.frame.origin.x+headImageView.frame.size.width+10, 12, 60, 18);
-    nameLabel.font=[UIFont fontWithName:@"Arial" size:16];
+    nameLabel.font=[UIFont fontWithName:@"Heiti SC" size:16];
     nameLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"name"]];
     nameLabel.textAlignment=NSTextAlignmentLeft;
     nameLabel.lineBreakMode=NSLineBreakByTruncatingTail;
@@ -256,19 +256,19 @@
     UILabel *occupationLabel=[[UILabel alloc]init];
     occupationLabel.frame=FRAME(nameLabel.frame.size.width+nameLabel.frame.origin.x+10, nameLabel.frame.origin.y+2, WIDTH-210, 16);
     occupationLabel.textColor=[UIColor colorWithRed:100 / 255.0 green:100 / 255.0 blue:100 / 255.0 alpha:1];
-    occupationLabel.font=[UIFont fontWithName:@"Arial" size:12];
+    occupationLabel.font=[UIFont fontWithName:@"Heiti SC" size:12];
     occupationLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"service_type_name"]];
     occupationLabel.textColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
     [cell addSubview:occupationLabel];
     
     UILabel *textLabel=[[UILabel alloc]init];
-    textLabel.font=[UIFont fontWithName:@"Arial" size:12];
+    textLabel.font=[UIFont fontWithName:@"Heiti SC" size:12];
     textLabel.textColor=[UIColor colorWithRed:100 / 255.0 green:100 / 255.0 blue:100 / 255.0 alpha:1];
     [cell  addSubview:textLabel];
     
     UILabel *buyLabel=[[UILabel alloc]init];
     buyLabel.frame=FRAME(WIDTH-70, 12, 60, 18);
-    buyLabel.font=[UIFont fontWithName:@"Arial" size:12];
+    buyLabel.font=[UIFont fontWithName:@"Heiti SC" size:12];
     buyLabel.textColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
     buyLabel.hidden=YES;
     buyLabel.text=@"以购买";
@@ -295,7 +295,7 @@
     [cell addSubview:addressIamge];
     
     UILabel *addresslabel=[[UILabel alloc]init];
-    addresslabel.font=[UIFont fontWithName:@"Arial" size:12];
+    addresslabel.font=[UIFont fontWithName:@"Heiti SC" size:12];
     addresslabel.textColor=[UIColor colorWithRed:100 / 255.0 green:100 / 255.0 blue:100 / 255.0 alpha:1];
     addresslabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"city_and_region"]];
     addresslabel.lineBreakMode=NSLineBreakByTruncatingTail;
@@ -310,7 +310,7 @@
     [cell addSubview:timeImage];
     
     UILabel *timeLabel=[[UILabel alloc]init];
-    timeLabel.font=[UIFont fontWithName:@"Arial" size:12];
+    timeLabel.font=[UIFont fontWithName:@"Heiti SC" size:12];
     timeLabel.textColor=[UIColor colorWithRed:100 / 255.0 green:100 / 255.0 blue:100 / 255.0 alpha:1];
     timeLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"response_time_name"]];
     timeLabel.lineBreakMode=NSLineBreakByTruncatingTail;
@@ -333,7 +333,7 @@
         }
         UILabel *typeLabel=[[UILabel alloc]initWithFrame:FRAME(headImageView.frame.size.width+headImageView.frame.origin.x+26+((WIDTH-70-4)/3+2)*x, Y, (WIDTH-70-4)/3, 16)];
         typeLabel.text=[NSString stringWithFormat:@"%@",[dict objectForKey:@"tag_name"]];
-        typeLabel.font=[UIFont fontWithName:@"Arial" size:12];
+        typeLabel.font=[UIFont fontWithName:@"Heiti SC" size:12];
         typeLabel.textColor=[UIColor colorWithRed:100 / 255.0 green:100 / 255.0 blue:100 / 255.0 alpha:1];
         typeLabel.layer.cornerRadius=8;
         typeLabel.clipsToBounds=YES;
@@ -343,7 +343,7 @@
         x++;
     }
     
-    UIFont *font=[UIFont fontWithName:@"Arial" size:12];
+    UIFont *font=[UIFont fontWithName:@"Heiti SC" size:12];
     CGSize constraint = CGSizeMake(WIDTH-90, 200.0f);
     
     textLabel.lineBreakMode=NSLineBreakByWordWrapping;
@@ -362,7 +362,7 @@
     UILabel *label=[[UILabel alloc]initWithFrame:FRAME(-18, 5, 60, 15)];
     label.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"weight_type_name"]];
     label.textAlignment=NSTextAlignmentCenter;
-    label.font=[UIFont fontWithName:@"Arial" size:8];
+    label.font=[UIFont fontWithName:@"Heiti SC" size:8];
     label.textColor=[UIColor whiteColor];
     label.backgroundColor=[UIColor redColor];
     label.transform=CGAffineTransformMakeRotation(-M_PI/4);
@@ -390,7 +390,7 @@
 {
     NSDictionary *plDic=seekArray[indexPath.row];
     NSArray *array=[plDic objectForKey:@"user_tags"];
-//    UIFont *font=[UIFont fontWithName:@"Arial" size:15];
+//    UIFont *font=[UIFont fontWithName:@"Heiti SC" size:15];
     
     NSString *text=[NSString stringWithFormat:@"%@",[plDic objectForKey:@"introduction"]];
 //    CGSize szEmceeName = [text sizeWithFont:[UIFont systemFontOfSize:12] constrainedToSize:CGSizeMake(320.0 - 80.0 - 15.0, 1000.0)];

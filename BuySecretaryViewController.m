@@ -15,6 +15,8 @@
 #import "ImageViewController.h"
 #import "WebViewController.h"
 #import "ZeroViewController.h"
+#import "HomePageTableViewCell.h"
+#import "foundWebViewController.h"
 @interface BuySecretaryViewController ()
 {
     VIPLISTBaseClass *_base;
@@ -31,6 +33,7 @@
     NSString *_sec_ID;
     NSDictionary *detailsDic;
     int y_head;
+    UITableView *myTableView;
     
 }
 
@@ -44,6 +47,7 @@
     actiView.center=CGPointMake(WIDTH/2,HEIGHT/2);
     [self.view addSubview:actiView];
     [actiView startAnimating];
+    
 }
 -(void) viewDidAppear:(BOOL)animated
 {
@@ -64,9 +68,17 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navlabel.text=@"详情";
+    myTableView =[[UITableView alloc]init];
+    myTableView.delegate=self;
+    myTableView.dataSource=self;
+    myTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    UIView *v = [[UIView alloc] initWithFrame:CGRectZero];
+    [myTableView setTableFooterView:v];
+    [self.view addSubview:myTableView];
 //    _myview.nameString=_nameString;
 //    _myview.textString=_textString;
     NSLog(@"%@",_dic);
+    
     _sec_ID=[NSString stringWithFormat:@"%@",[_dic objectForKey:@"user_id"]];
     _service_type_id=[NSString stringWithFormat:@"%@",[_dic objectForKey:@"service_type_id"]];
     NSLog(@"%@",_service_type_id);
@@ -139,11 +151,11 @@
     [nameLabel setNumberOfLines:1];
     [nameLabel sizeToFit];
     nameLabel.frame=FRAME(headView.frame.size.width+headView.frame.origin.x+10, 12, 60, 18);
-    nameLabel.font=[UIFont fontWithName:@"Arial" size:16];
+    nameLabel.font=[UIFont fontWithName:@"Heiti SC" size:16];
     [buyView addSubview:nameLabel];
     
     UILabel *occupationLabel=[[UILabel alloc]initWithFrame:FRAME(nameLabel.frame.size.width+nameLabel.frame.origin.x, nameLabel.frame.origin.y+2, WIDTH-210, 16)];
-    occupationLabel.font=[UIFont fontWithName:@"Arial" size:12];
+    occupationLabel.font=[UIFont fontWithName:@"Heiti SC" size:12];
     occupationLabel.textColor=[UIColor colorWithRed:232 / 255.0 green:55 / 255.0 blue:74 / 255.0 alpha:1];
     occupationLabel.text=[NSString stringWithFormat:@"%@",[detailsDic objectForKey:@"service_type_name"]];
     [buyView addSubview:occupationLabel];
@@ -152,7 +164,7 @@
     addressIamge.image=[UIImage imageNamed:@"icon_sec_addr"];
     [buyView addSubview:addressIamge];
     UILabel *addresslabel=[[UILabel alloc]init];
-    addresslabel.font=[UIFont fontWithName:@"Arial" size:12];
+    addresslabel.font=[UIFont fontWithName:@"Heiti SC" size:12];
     addresslabel.textColor=[UIColor colorWithRed:100 / 255.0 green:100 / 255.0 blue:100 / 255.0 alpha:1];
     addresslabel.text=[NSString stringWithFormat:@"%@",[detailsDic objectForKey:@"city_and_region"]];
     addresslabel.lineBreakMode=NSLineBreakByTruncatingTail;
@@ -164,7 +176,7 @@
     timeImage.image=[UIImage imageNamed:@"icon_sec_time"];
     [buyView addSubview:timeImage];
     UILabel *timeLabel=[[UILabel alloc]init];
-    timeLabel.font=[UIFont fontWithName:@"Arial" size:12];
+    timeLabel.font=[UIFont fontWithName:@"Heiti SC" size:12];
     timeLabel.textColor=[UIColor colorWithRed:100 / 255.0 green:100 / 255.0 blue:100 / 255.0 alpha:1];
     timeLabel.text=[NSString stringWithFormat:@"%@",[_dic objectForKey:@"response_time_name"]];
     timeLabel.lineBreakMode=NSLineBreakByTruncatingTail;
@@ -186,7 +198,7 @@
         NSDictionary *dict=labelArray[i];
         UILabel *typeLabel=[[UILabel alloc]initWithFrame:FRAME(headView.frame.size.width+headView.frame.origin.x+26+((WIDTH-70-4)/3+2)*s, Y, (WIDTH-70-4)/3, 16)];
         typeLabel.text=[NSString stringWithFormat:@"%@",[dict objectForKey:@"tag_name"]];
-        typeLabel.font=[UIFont fontWithName:@"Arial" size:12];
+        typeLabel.font=[UIFont fontWithName:@"Heiti SC" size:12];
         typeLabel.textColor=[UIColor colorWithRed:100 / 255.0 green:100 / 255.0 blue:100 / 255.0 alpha:1];
         typeLabel.layer.cornerRadius=8;
         typeLabel.clipsToBounds=YES;
@@ -204,7 +216,7 @@
     [textLabel setNumberOfLines:0];
     textLabel.textColor=[UIColor colorWithRed:100 / 255.0 green:100 / 255.0 blue:100 / 255.0 alpha:1];
 //    [textLabel sizeToFit];
-    UIFont *font=[UIFont fontWithName:@"Arial" size:12];
+    UIFont *font=[UIFont fontWithName:@"Heiti SC" size:12];
     CGSize constraint = CGSizeMake(WIDTH-headView.frame.size.width-headView.frame.origin.x-10, 200);
     
     //CGSize size = [_textString sizeWithFont:font constrainedToSize:constraint lineBreakMode:NSLineBreakByWordWrapping];
@@ -225,8 +237,9 @@
     scrollView=[[UIScrollView alloc]initWithFrame:CGRectMake(0, buyView.frame.size.height+buyView.frame.origin.y, WIDTH, (WIDTH-10)/3)];
     scrollView.contentSize=CGSizeMake(WIDTH/3*imageArray.count, (WIDTH-10)/3);
     scrollView.delegate=self;
-    y_head=scrollView.frame.origin.y+scrollView.frame.size.height;
+    y_head=scrollView.frame.origin.y;
     if (imageArray.count!=0) {
+        y_head=scrollView.frame.origin.y+scrollView.frame.size.height;
         [payView addSubview:scrollView];
     }
     
@@ -244,52 +257,54 @@
 //        imgView.image=[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[dict objectForKey:@"img_trumb"]]]];
         [imageButton addSubview:imgView];
     }
-
-    for (int i=0; i<timelimitArray.count; i++) {
-        NSDictionary *dic=timelimitArray[i];
-        NSString *dayString=[NSString stringWithFormat:@"%@",[dic objectForKey:@"name"]];
-        int H;
-        if (imageArray.count==0) {
-            H=0;
-        }else{
-            H=(WIDTH-5)/3;
-        }
-        UIButton *view=[[UIButton alloc]initWithFrame:FRAME(0, buyView.frame.size.height+buyView.frame.origin.y+10+H+51*i, WIDTH, 50)];
-        view.backgroundColor=[UIColor whiteColor];
-        [payView addSubview:view];
-        UILabel *timeLabel=[[UILabel alloc]init];
-        timeLabel.text=[NSString stringWithFormat:@"%@:%@.0元",dayString,[dic objectForKey:@"dis_price"]];
-        timeLabel.lineBreakMode=NSLineBreakByTruncatingTail;
-        [timeLabel setNumberOfLines:1];
-        [timeLabel sizeToFit];
-        //timeLabel.backgroundColor=[UIColor redColor];
-        timeLabel.frame=FRAME(10, 15, timeLabel.frame.size.width, 20);
-        timeLabel.font=[UIFont fontWithName:@"Arial" size:15];
-        //timeLabel.backgroundColor=[UIColor brownColor];
-        [view addSubview:timeLabel];
-        
-        UIButton *buyButton=[[UIButton alloc]init];
-        buyButton.frame=FRAME(WIDTH-70, 10, 60, 30);
-        [buyButton setTitle:@"购买" forState:UIControlStateNormal];
-        buyButton.tag=i;
-        buyButton.layer.cornerRadius=6;
-        [buyButton addTarget:self action:@selector(buyAction:) forControlEvents:UIControlEventTouchUpInside];
-        [buyButton setTitleColor:[UIColor colorWithRed:232 / 255.0 green:55 / 255.0 blue:74 / 255.0 alpha:1] forState:UIControlStateNormal];
-        buyButton.layer.masksToBounds=YES;
-        buyButton.layer.borderColor = [[UIColor colorWithRed:232 / 255.0 green:55 / 255.0 blue:74 / 255.0 alpha:1] CGColor];
-        buyButton.layer.borderWidth= 1.0f;
-        [view addSubview:buyButton];
-        
-        view.tag=10+i;
-        if (i==timelimitArray.count-1) {
-            y_head=view.frame.size.height+view.frame.origin.y;
-        }
-//        [view addTarget:self action:@selector(buttonAction:) forControlEvents:UIControlEventTouchUpInside];
-//        [view addSubview:button];
-        
-        
-    }
+//
+//    for (int i=0; i<timelimitArray.count; i++) {
+//        NSDictionary *dic=timelimitArray[i];
+//        NSString *dayString=[NSString stringWithFormat:@"%@",[dic objectForKey:@"name"]];
+//        int H;
+//        if (imageArray.count==0) {
+//            H=0;
+//        }else{
+//            H=(WIDTH-5)/3;
+//        }
+//        UIButton *view=[[UIButton alloc]initWithFrame:FRAME(0, buyView.frame.size.height+buyView.frame.origin.y+10+H+51*i, WIDTH, 50)];
+//        view.backgroundColor=[UIColor whiteColor];
+//        [payView addSubview:view];
+//        UILabel *timeLabel=[[UILabel alloc]init];
+//        timeLabel.text=[NSString stringWithFormat:@"%@:%@.0元",dayString,[dic objectForKey:@"dis_price"]];
+//        timeLabel.lineBreakMode=NSLineBreakByTruncatingTail;
+//        [timeLabel setNumberOfLines:1];
+//        [timeLabel sizeToFit];
+//        //timeLabel.backgroundColor=[UIColor redColor];
+//        timeLabel.frame=FRAME(10, 15, timeLabel.frame.size.width, 20);
+//        timeLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
+//        //timeLabel.backgroundColor=[UIColor brownColor];
+//        [view addSubview:timeLabel];
+//        
+//        UIButton *buyButton=[[UIButton alloc]init];
+//        buyButton.frame=FRAME(WIDTH-70, 10, 60, 30);
+//        [buyButton setTitle:@"购买" forState:UIControlStateNormal];
+//        buyButton.tag=i;
+//        buyButton.layer.cornerRadius=6;
+//        [buyButton addTarget:self action:@selector(buyAction:) forControlEvents:UIControlEventTouchUpInside];
+//        [buyButton setTitleColor:[UIColor colorWithRed:232 / 255.0 green:55 / 255.0 blue:74 / 255.0 alpha:1] forState:UIControlStateNormal];
+//        buyButton.layer.masksToBounds=YES;
+//        buyButton.layer.borderColor = [[UIColor colorWithRed:232 / 255.0 green:55 / 255.0 blue:74 / 255.0 alpha:1] CGColor];
+//        buyButton.layer.borderWidth= 1.0f;
+//        [view addSubview:buyButton];
+//        
+//        view.tag=10+i;
+//        if (i==timelimitArray.count-1) {
+//            y_head=view.frame.size.height+view.frame.origin.y;
+//        }
+////        [view addTarget:self action:@selector(buttonAction:) forControlEvents:UIControlEventTouchUpInside];
+////        [view addSubview:button];
+//        
+//        
+//    }
     payView.frame=FRAME(0, 64, _WIDTH, y_head);
+    myTableView.frame=FRAME(0, payView.frame.origin.y+payView.frame.size.height+10, WIDTH, HEIGHT-(payView.frame.origin.y+payView.frame.size.height+10));
+    [myTableView reloadData];
 }
 -(void)buttonAction:(UIButton *)sender
 {
@@ -346,7 +361,90 @@
     }
     
 }
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 1;
+}
 
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return timelimitArray.count;
+}
+
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSDictionary *dic=timelimitArray[indexPath.row];
+    NSString *TableSampleIdentifier = [NSString stringWithFormat:@"cell%ld",(long)indexPath.row];
+    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:TableSampleIdentifier];
+    }
+    UIImageView *_headeImageVIew=[[UIImageView alloc]initWithFrame:FRAME(WIDTH-105, 15, 95, 70)];
+    NSString *imageUrl=[NSString stringWithFormat:@"%@",[dic objectForKey:@"img_url"]];
+    [_headeImageVIew setImageWithURL:[NSURL URLWithString:imageUrl]placeholderImage:nil];
+    [cell addSubview:_headeImageVIew];
+    _headeImageVIew.layer.shadowColor = [UIColor blackColor].CGColor;
+    _headeImageVIew.layer.shadowOffset = CGSizeMake(0, 0);
+    _headeImageVIew.layer.shadowOpacity = 0.3;
+    //        _headeImageVIew.layer.shadowRadius = 10.0;
+     NSString *dayString=[NSString stringWithFormat:@"%@",[dic objectForKey:@"name"]];
+    UILabel*_titleLabel=[[UILabel alloc]initWithFrame:FRAME(10, 10, WIDTH-(_headeImageVIew.frame.size.width+25), 16)];
+    _titleLabel.text=[NSString stringWithFormat:@"%@",dayString];
+    _titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:16];
+    [cell addSubview:_titleLabel];
+    
+    UILabel *_fTitleLabel=[[UILabel alloc]initWithFrame:FRAME(10, 30, WIDTH-(_headeImageVIew.frame.size.width+25), 30)];
+    _fTitleLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"service_title"]];
+    _fTitleLabel.font=[UIFont fontWithName:@"Heiti SC" size:13];
+    _fTitleLabel.textColor=[UIColor colorWithRed:200/255.0f green:200/255.0f blue:200/255.0f alpha:1];
+    [cell addSubview:_fTitleLabel];
+    
+    UILabel *_subTitleLabel=[[UILabel alloc]initWithFrame:FRAME(10, 70, WIDTH-(_headeImageVIew.frame.size.width+25), 20)];
+    _subTitleLabel.text=[NSString stringWithFormat:@"￥%@",[dic objectForKey:@"dis_price"]];
+    _subTitleLabel.font=[UIFont fontWithName:@"Heiti SC" size:20];
+    _subTitleLabel.textColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
+    [cell addSubview:_subTitleLabel];
+    UIView *lineView=[[UIView alloc]initWithFrame:FRAME(0, 99, WIDTH, 1)];
+    lineView.backgroundColor=[UIColor colorWithRed:215/255.0f green:215/255.0f blue:215/255.0f alpha:1];
+    [cell addSubview:lineView];
+    
+    return cell;
+}
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 100;
+}
+#pragma mark 列表点击事件
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [myTableView deselectRowAtIndexPath:indexPath animated:NO];
+    int cardTypeId;
+    NSString *typeID=[NSString stringWithFormat:@"%ld",(long)indexPath.row];
+    int cardId=[typeID intValue];
+    cardTypeId=cardId+1;
+    foundWebViewController *_controller = [[foundWebViewController alloc]init];
+    _controller.moneystring = @"0";
+    NSDictionary *dic=timelimitArray[indexPath.row];
+    NSString *dayString=[NSString stringWithFormat:@"%@",[dic objectForKey:@"name"]];
+    _controller.buyString=dayString;
+    _controller.moneyStr=[NSString stringWithFormat:@"%@",[dic objectForKey:@"dis_price"]];
+    _controller.cardTypeID=cardTypeId;
+    _controller.service_type_id=_service_type_id;
+    _controller.service_price_id=[NSString stringWithFormat:@"%@",[dic objectForKey:@"service_price_id"]];
+    _controller.sec_ID=_sec_ID;
+    _controller.addssID=[NSString stringWithFormat:@"%@",[dic objectForKey:@"is_addr"]];
+    _controller.zeroDic=dic;
+    _controller.imgurl=[NSString stringWithFormat:@"%@",[dic objectForKey:@"detail_url"]];
+    _controller.goto_type=@"h5+list";
+    _controller.titleName=[NSString stringWithFormat:@"%@",[dic objectForKey:@"name"]];
+    NSString  *str=[NSString stringWithFormat:@"%@",[dic objectForKey:@"detail_url"]];
+    if (str==nil||str==NULL||[str isEqualToString:@""]) {
+        
+    }else{
+        [self.navigationController pushViewController:_controller animated:YES];
+
+    }
+    
+
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

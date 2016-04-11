@@ -68,7 +68,7 @@
     UILabel *textLabel=[[UILabel alloc]initWithFrame:FRAME(10, (qrCodeView.frame.size.height-(WIDTH-60))/2-28, WIDTH-20, 18)];
     textLabel.text=@"企业二维码名片";
     textLabel.textAlignment=NSTextAlignmentCenter;
-    textLabel.font=[UIFont fontWithName:@"Arial" size:16];
+    textLabel.font=[UIFont fontWithName:@"Heiti SC" size:16];
     [qrCodeView addSubview:textLabel];
     UIImageView *qrImageView=[[UIImageView alloc]initWithFrame:FRAME(30, (qrCodeView.frame.size.height-(WIDTH-60))/2, WIDTH-60, WIDTH-60)];
     NSString *imageUrl=[NSString stringWithFormat:@"%@",[[sender objectForKey:@"data"] objectForKey:@"qrCode"]];
@@ -77,7 +77,7 @@
     UILabel *explainLabel=[[UILabel alloc]initWithFrame:FRAME(10, qrImageView.frame.size.height+qrImageView.frame.origin.y+30, WIDTH-20, 20)];
     explainLabel.text=@"点击任意处可退出";
     explainLabel.textAlignment=NSTextAlignmentCenter;
-    explainLabel.font=[UIFont fontWithName:@"Arial" size:18];
+    explainLabel.font=[UIFont fontWithName:@"Heiti SC" size:18];
     explainLabel.textColor=[UIColor colorWithRed:240/255.0f green:240/255.0f blue:240/255.0f alpha:1];
     [qrCodeView addSubview:explainLabel];
     [self.view addSubview:qrCodeView];
@@ -183,11 +183,11 @@
             headImage.clipsToBounds = YES;
             [cell addSubview:headImage];
             textLabel.frame=FRAME(60, 20, WIDTH-80, 20);
-            textLabel.font=[UIFont fontWithName:@"Arial" size:17];
+            textLabel.font=[UIFont fontWithName:@"Heiti SC" size:17];
             [cell addSubview:textLabel];
         }
         [textLabel setText:[dic objectForKey:@"name"]];
-        textLabel.font=[UIFont fontWithName:@"Arial" size:15];
+        textLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
         NSString *imageString=[NSString stringWithFormat:@"%@",[dic objectForKey:@"head_img"]];
         NSLog(@"1%@2",imageString);
         if ([imageString length]==0||[imageString length]==1) {

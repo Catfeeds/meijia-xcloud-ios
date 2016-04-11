@@ -12,7 +12,7 @@
 {
     int Y;
 }
-@synthesize delegate = _delegate,ZFB;
+@synthesize delegate = _delegate,ZFB,MODE;
 - (id)initWithFrame:(CGRect)frame num:(int)num
 {
     self = [super initWithFrame:frame];
@@ -20,6 +20,7 @@
         
         isAli = YES;
         ZFB = YES;
+        MODE=NO;
         
         UILabel *_titlelabel = [[UILabel alloc]initWithFrame:FRAME(18, 0, _CELL_WIDTH, 31)];
         _titlelabel.text = @"支付信息";
@@ -193,6 +194,33 @@
         _weixinLab.text = @"使用微信绑定的支付方式";
         [self addSubview:_weixinLab];
         
+        UILabel *lab1 = [[UILabel alloc]initWithFrame:FRAME(0, _backlabel2.bottom, self_Width, 0.5)];
+        lab1.backgroundColor = COLOR_VAULE(209.0);
+        [self addSubview:lab1];
+        
+        UIView *_backlabel3 = [[UIView alloc]initWithFrame:FRAME(0, _backlabel2.bottom+0.5, _CELL_WIDTH, 54)];
+        _backlabel3.backgroundColor = COLOR_VAULE(255.0);
+        _backlabel3.tag = 13;
+        [self addSubview:_backlabel3];
+        
+        UIImageView *balanceImage = [[UIImageView alloc]initWithFrame:FRAME(18, _backlabel3.top+8, 39, 39)];
+        [balanceImage setImage:[UIImage imageNamed:@"Wallet_Lcon"]];
+        [self addSubview:balanceImage];
+        
+        UILabel *_balance = [[UILabel alloc]initWithFrame:FRAME(18+39+14, _backlabel3.top+8, 120, 14)];
+        _balance.font = MYFONT(13.5);
+        _balance.textColor = [self getColor:@"E8374A"];
+        _balance.backgroundColor = DEFAULT_COLOR;
+        _balance.text = @"余额支付";
+        [self addSubview:_balance];
+        
+        UILabel *_balanceLab = [[UILabel alloc]initWithFrame:FRAME(18+39+14, _backlabel3.bottom-23, 200, 14)];
+        _balanceLab.font = MYFONT(10);
+        _balanceLab.textColor = [self getColor:@"b1b1b1"];
+        _balanceLab.backgroundColor = DEFAULT_COLOR;
+        _balanceLab.text = @"使用余额支付方式";
+        [self addSubview:_balanceLab];
+        
         UIImageView *image1 = [[UIImageView alloc]initWithFrame:FRAME(self_Width-40, _backlabel1.top+15, 47/2, 47/2)];
         image1.image = [UIImage imageNamed:@"selection-checked"];
         image1.tag = 33;
@@ -203,72 +231,24 @@
         image2.tag = 44;
         [self addSubview:image2];
         
+        UIImageView *image3 = [[UIImageView alloc]initWithFrame:FRAME(self_Width-40, _backlabel3.top+15, 47/2, 47/2)];
+        image3.image = [UIImage imageNamed:@"selection"];
+        image3.tag = 55;
+        [self addSubview:image3];
+        
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(ZfbPaySelect)];
         UITapGestureRecognizer *tap2 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(WxPaySelect)];
+        UITapGestureRecognizer *tap3 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(balancePaySelect)];
         
         [_backlabel1 addGestureRecognizer:tap];
         [_backlabel2 addGestureRecognizer:tap2];
+        [_backlabel3 addGestureRecognizer:tap3];
         
-        if (num == 2) {
-            
-            
-            UILabel *_backlabel1 = [[UILabel alloc]initWithFrame:FRAME(0, 31+54*3+46, _CELL_WIDTH, 54)];
-            _backlabel1.backgroundColor = COLOR_VAULE(255.0);
-            [self addSubview:_backlabel1];
-            
-            UIImageView *_leftimageview = [[UIImageView alloc]initWithFrame:FRAME(18, 31+54*3+46+7.5, 39, 39)];
-            [_leftimageview setImage:[UIImage imageNamed:@"pay_balance_icon"]];
-            [self addSubview:_leftimageview];
-            
-            UILabel *_zhifulabel1 = [[UILabel alloc]initWithFrame:FRAME(18+39+14, 31+54*3+46+10, 120, 14)];
-            _zhifulabel1.font = MYFONT(13.5);
-            _zhifulabel1.textColor = [self getColor:@"E8374A"];
-            _zhifulabel1.backgroundColor = DEFAULT_COLOR;
-            _zhifulabel1.text = @"余额支付";
-            [self addSubview:_zhifulabel1];
-            
-            UILabel *_zhifulabel2 = [[UILabel alloc]initWithFrame:FRAME(18+39+14, 31+54*3+46+10+21, 200, 14)];
-            _zhifulabel2.font = MYFONT(10);
-            _zhifulabel2.textColor = [self getColor:@"b1b1b1"];
-            _zhifulabel2.backgroundColor = DEFAULT_COLOR;
-            _zhifulabel2.text = @"私秘账户余额支付";
-            [self addSubview:_zhifulabel2];
-            
-            UIImageView *_lineview = [[UIImageView alloc]initWithFrame:FRAME(0, 31+54*3+46, _CELL_WIDTH, 0.5)];
-            _lineview.backgroundColor = COLOR_VAULE(209.0);
-            [self addSubview:_lineview];
-            
-            UILabel *_yuelabel = [[UILabel alloc]initWithFrame:FRAME(_CELL_WIDTH-18-23-100, 31+54*3+46, 90, 54)];
-            _yuelabel.font = MYFONT(10);
-            _yuelabel.textColor = COLOR_VAULE(144.0);
-            [_yuelabel setTag:190];
-            //            _yuelabel.text = @"100元";
-            _yuelabel.textAlignment = NSTextAlignmentRight;
-            [self addSubview:_yuelabel];
-            
-            for (int i = 0; i < 3; i ++) {
-                UIButton *_selectBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-                _selectBtn.height=YES;
-                _selectBtn.frame = FRAME(_CELL_WIDTH-18-23, 36+54*num+54*i, 23, 23);
-                if (i == 0) {
-                    [_selectBtn setImage:[UIImage imageNamed:@"selection_checked"] forState:UIControlStateNormal];
-                    
-                }else{
-                    [_selectBtn setImage:[UIImage imageNamed:@"noselection"] forState:UIControlStateNormal];
-                    
-                }
-                [_selectBtn setTag:(3000+i)];
-                [_selectBtn addTarget:self action:@selector(SelectOrNo:) forControlEvents:UIControlEventTouchUpInside];
-                [self addSubview:_selectBtn];
-                
-            }
-            
-        }
+       
         
         UIButton *_button = [UIButton buttonWithType:UIButtonTypeCustom];
-        _button.frame = FRAME(14, Y+31+40*3+46+70, WIDTH-28, 41);
+        _button.frame = FRAME(14, _backlabel3.bottom+10, WIDTH-28, 41);
         _button.layer.cornerRadius=5;
-        //        [_button setBackgroundImage:[[UIImage imageNamed:@"circle_@2x"] stretchableImageWithLeftCapWidth:10 topCapHeight:10] forState:UIControlStateNormal];
         [_button setBackgroundColor:HEX_TO_UICOLOR(TEXT_COLOR, 1.0)];
         _button.titleLabel.font = MYFONT(14);
         [_button setTag:222];
@@ -286,38 +266,20 @@
 {
     [self.delegate buyBtnAddRess:sender];
 }
-//- (void)ZfbPaySelect
-//{
-//    NSLog(@"支付宝支付");
-//    UIImageView *view = (UIImageView *)[self viewWithTag:33];
-//    UIImageView *view2 = (UIImageView *)[self viewWithTag:44];
-//
-//    view.image = [UIImage imageNamed:@"selection-checked"];
-//    view2.image = [UIImage imageNamed:@"selection"];
-//    ZFB = YES;
-//
-//
-//}
-//- (void)WxPaySelect
-//{
-//    NSLog(@"微信支付");
-//    UIImageView *view = (UIImageView *)[self viewWithTag:33];
-//    UIImageView *view2 = (UIImageView *)[self viewWithTag:44];
-//
-//    view.image = [UIImage imageNamed:@"selection"];
-//    view2.image = [UIImage imageNamed:@"selection-checked"];
-//    ZFB = NO;
-//}
+
 - (void)ZfbPaySelect
 {
     NSLog(@"支付宝支付");
     UIImageView *view = (UIImageView *)[self viewWithTag:33];
     UIImageView *view2 = (UIImageView *)[self viewWithTag:44];
+    UIImageView *view3 = (UIImageView *)[self viewWithTag:55];
     
     view.image = [UIImage imageNamed:@"selection-checked"];
     view2.image = [UIImage imageNamed:@"selection"];
+    view3.image = [UIImage imageNamed:@"selection"];
     ZFB = YES;
-    
+    MODE=NO;
+    isAli=YES;
     
 }
 - (void)WxPaySelect
@@ -325,10 +287,29 @@
     NSLog(@"微信支付");
     UIImageView *view = (UIImageView *)[self viewWithTag:33];
     UIImageView *view2 = (UIImageView *)[self viewWithTag:44];
+    UIImageView *view3 = (UIImageView *)[self viewWithTag:55];
     
     view.image = [UIImage imageNamed:@"selection"];
     view2.image = [UIImage imageNamed:@"selection-checked"];
+    view3.image = [UIImage imageNamed:@"selection"];
     ZFB = NO;
+    MODE=NO;
+    isAli=YES;
+}
+
+-(void)balancePaySelect
+{
+    NSLog(@"余额支付");
+    UIImageView *view = (UIImageView *)[self viewWithTag:33];
+    UIImageView *view2 = (UIImageView *)[self viewWithTag:44];
+    UIImageView *view3 = (UIImageView *)[self viewWithTag:55];
+    
+    view.image = [UIImage imageNamed:@"selection"];
+    view2.image = [UIImage imageNamed:@"selection"];
+    view3.image = [UIImage imageNamed:@"selection-checked"];
+    ZFB = NO;
+    MODE=YES;
+    isAli=NO;
 }
 -(void)volumeButAction:(UIButton *)sender
 {

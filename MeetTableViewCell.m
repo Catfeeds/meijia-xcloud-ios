@@ -11,6 +11,7 @@
 @implementation MeetTableViewCell
 
 - (void)awakeFromNib {
+    
     // Initialization code
 }
 

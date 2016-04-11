@@ -11,6 +11,7 @@
 #import "BuySecretaryViewController.h"
 #import "Order_ListViewController.h"
 #import "WaterOrderViewController.h"
+#import "RootViewController.h"
 @interface Order_DetailsViewController ()
 {
     UIView *detailsView;
@@ -89,7 +90,7 @@
             view.backgroundColor=[UIColor colorWithRed:231/255.0f green:231/255.0f blue:231/255.0f alpha:1];
             UILabel *selfLabel=[[UILabel alloc]initWithFrame:FRAME(10, 15/2, 60, 15)];
             selfLabel.text=@"订单号:";
-            selfLabel.font=[UIFont fontWithName:@"Arial" size:14];
+            selfLabel.font=[UIFont fontWithName:@"Heiti SC" size:14];
             [view addSubview:selfLabel];
             
             UILabel *label=[[UILabel alloc]initWithFrame:FRAME(selfLabel.frame.size.width+selfLabel.frame.origin.x, 15/2, WIDTH-80, 14)];
@@ -113,7 +114,7 @@
                 NSString *service_type_name=[NSString stringWithFormat:@"%@",[orderDic objectForKey:@"service_type_name"]];
                 NSString *order_money=[NSString stringWithFormat:@"%@",[orderDic objectForKey:@"order_pay"]];
                 cateGroyLabel.text=[NSString stringWithFormat:@"%@:%@元",service_type_name,order_money];
-                cateGroyLabel.font=[UIFont fontWithName:@"Arial" size:16];
+                cateGroyLabel.font=[UIFont fontWithName:@"Heiti SC" size:16];
 
                 [view addSubview:cateGroyLabel];
                 
@@ -148,13 +149,13 @@
                     stateButton.backgroundColor=[UIColor colorWithRed:200/255.0f green:200/255.0f blue:200/255.0f alpha:1];
                 }
 
-                stateLabel.font=[UIFont fontWithName:@"Arial" size:14];
+                stateLabel.font=[UIFont fontWithName:@"Heiti SC" size:14];
                 stateLabel.textAlignment=NSTextAlignmentCenter;
                 [stateButton addSubview:stateLabel];
             }else if(i==2){
                 UILabel*label=[[UILabel alloc]init];
                 label.text=@"下单时间:";
-                label.font=[UIFont fontWithName:@"Arial" size:12];
+                label.font=[UIFont fontWithName:@"Heiti SC" size:12];
                 [label setNumberOfLines:1];
                 [label sizeToFit];
                 label.frame=FRAME(10, 35/2, label.frame.size.width, 15);
@@ -164,12 +165,12 @@
                 [ordreLabel setNumberOfLines:1];
                 [ordreLabel sizeToFit];
                 ordreLabel.frame=FRAME(WIDTH-10-ordreLabel.frame.size.width, 35/2, ordreLabel.frame.size.width, 15);
-                ordreLabel.font=[UIFont fontWithName:@"Arial" size:12];
+                ordreLabel.font=[UIFont fontWithName:@"Heiti SC" size:12];
                 ordreLabel.textAlignment=NSTextAlignmentRight;
                 [view addSubview:ordreLabel];
             }else if(i==3){
                 UILabel*label=[[UILabel alloc]init];
-                label.font=[UIFont fontWithName:@"Arial" size:12];
+                label.font=[UIFont fontWithName:@"Heiti SC" size:12];
                 label.text=@"所在城市:";
                 [label setNumberOfLines:1];
                 [label sizeToFit];
@@ -180,12 +181,12 @@
                 [ordreLabel setNumberOfLines:1];
                 [ordreLabel sizeToFit];
                 ordreLabel.frame=FRAME(WIDTH-10-ordreLabel.frame.size.width, 35/2, ordreLabel.frame.size.width, 15);
-                ordreLabel.font=[UIFont fontWithName:@"Arial" size:12];
+                ordreLabel.font=[UIFont fontWithName:@"Heiti SC" size:12];
                 ordreLabel.textAlignment=NSTextAlignmentRight;
                 [view addSubview:ordreLabel];
             }else if(i==4){
                 UILabel*label=[[UILabel alloc]init];
-                label.font=[UIFont fontWithName:@"Arial" size:12];
+                label.font=[UIFont fontWithName:@"Heiti SC" size:12];
                 label.text=@"内容:";
                 [label setNumberOfLines:1];
                 [label sizeToFit];
@@ -196,12 +197,12 @@
                 [ordreLabel setNumberOfLines:1];
                 [ordreLabel sizeToFit];
                 ordreLabel.frame=FRAME(WIDTH-10-ordreLabel.frame.size.width, 35/2, ordreLabel.frame.size.width, 15);
-                ordreLabel.font=[UIFont fontWithName:@"Arial" size:12];
+                ordreLabel.font=[UIFont fontWithName:@"Heiti SC" size:12];
                 ordreLabel.textAlignment=NSTextAlignmentRight;
                 [view addSubview:ordreLabel];
             }else if(i==5){
                 UILabel*label=[[UILabel alloc]init];
-                label.font=[UIFont fontWithName:@"Arial" size:12];
+                label.font=[UIFont fontWithName:@"Heiti SC" size:12];
                 label.text=@"金额:";
                 [label setNumberOfLines:1];
                 [label sizeToFit];
@@ -212,12 +213,12 @@
                 [ordreLabel setNumberOfLines:1];
                 [ordreLabel sizeToFit];
                 ordreLabel.frame=FRAME(WIDTH-10-ordreLabel.frame.size.width, 35/2, ordreLabel.frame.size.width, 15);
-                ordreLabel.font=[UIFont fontWithName:@"Arial" size:12];
+                ordreLabel.font=[UIFont fontWithName:@"Heiti SC" size:12];
                 ordreLabel.textAlignment=NSTextAlignmentRight;
                 [view addSubview:ordreLabel];
             }else if(i==6){
                 UILabel*label=[[UILabel alloc]init];
-                label.font=[UIFont fontWithName:@"Arial" size:12];
+                label.font=[UIFont fontWithName:@"Heiti SC" size:12];
                 label.text=@"支付方式:";
                 [label setNumberOfLines:1];
                 [label sizeToFit];
@@ -228,12 +229,12 @@
                 [ordreLabel setNumberOfLines:1];
                 [ordreLabel sizeToFit];
                 ordreLabel.frame=FRAME(WIDTH-10-ordreLabel.frame.size.width, 35/2, ordreLabel.frame.size.width, 15);
-                ordreLabel.font=[UIFont fontWithName:@"Arial" size:12];
+                ordreLabel.font=[UIFont fontWithName:@"Heiti SC" size:12];
                 ordreLabel.textAlignment=NSTextAlignmentRight;
                 [view addSubview:ordreLabel];
             }else if(i==7){
                 UILabel*label=[[UILabel alloc]init];
-                label.font=[UIFont fontWithName:@"Arial" size:12];
+                label.font=[UIFont fontWithName:@"Heiti SC" size:12];
                 label.text=@"进度跟踪:";
                 [label setNumberOfLines:1];
                 [label sizeToFit];
@@ -244,7 +245,7 @@
                 [ordreLabel setNumberOfLines:1];
                 [ordreLabel sizeToFit];
                 ordreLabel.frame=FRAME(WIDTH-10-ordreLabel.frame.size.width, 35/2, ordreLabel.frame.size.width, 15);
-                ordreLabel.font=[UIFont fontWithName:@"Arial" size:12];
+                ordreLabel.font=[UIFont fontWithName:@"Heiti SC" size:12];
                 ordreLabel.textAlignment=NSTextAlignmentRight;
                 [view addSubview:ordreLabel];
             }
@@ -275,13 +276,13 @@
 {
     if (_details_ID==3||_details_ID==4) {
         for (UIViewController *controller in self.navigationController.viewControllers) {
-            if ([controller isKindOfClass:[BuySecretaryViewController class]]) {
+            if ([controller isKindOfClass:[RootViewController class]]) {
                 [self.navigationController popToViewController:controller animated:YES];
-            }
+            } 
         }
     }else if(_details_ID==5){
         for (UIViewController *controller in self.navigationController.viewControllers) {
-            if ([controller isKindOfClass:[WaterOrderViewController class]]) {
+            if ([controller isKindOfClass:[RootViewController class]]) {
                 [self.navigationController popToViewController:controller animated:YES];
             }
         }

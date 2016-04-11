@@ -25,7 +25,7 @@
         
         _titleLabel=[[UILabel alloc]init];
         _titleLabel.text=@"";
-        _titleLabel.font=[UIFont fontWithName:@"Arial" size:15];
+        _titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
         [_titleLabel setNumberOfLines:1];
         [_titleLabel sizeToFit];
         _titleLabel.textAlignment=NSTextAlignmentLeft;
@@ -34,7 +34,7 @@
         
         _timeLabel=[[UILabel alloc]init];
         _timeLabel.text=@"";
-        _timeLabel.font=[UIFont fontWithName:@"Arial" size:15];
+        _timeLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
         _timeLabel.textColor=[UIColor colorWithRed:240/255.0f green:240/255.0f blue:240/255.0f alpha:1];
         _timeLabel.textAlignment=NSTextAlignmentLeft;
         _timeLabel.frame=FRAME(_titleLabel.frame.origin.x, _titleLabel.frame.size.height+_titleLabel.frame.origin.y, _timeLabel.frame.size.width, 20);
@@ -49,7 +49,7 @@
         [_textLabels setNumberOfLines:0];
         _textLabels.lineBreakMode=NSLineBreakByWordWrapping;
         [_textLabels sizeToFit];
-        UIFont *font=[UIFont fontWithName:@"Arial" size:18];
+        UIFont *font=[UIFont fontWithName:@"Heiti SC" size:17];
         NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:font,NSFontAttributeName, nil];
         CGSize size = [_textLabels.text boundingRectWithSize:CGSizeMake(WIDTH-40, 200) options:NSStringDrawingUsesLineFragmentOrigin attributes:dict context:nil].size;
         _textLabels.frame=FRAME(20, lineView.frame.size.height+lineView.frame.origin.y+10, WIDTH-40, size.height);

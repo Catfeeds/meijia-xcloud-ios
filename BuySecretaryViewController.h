@@ -8,7 +8,7 @@
 
 #import "FatherViewController.h"
 
-@interface BuySecretaryViewController : FatherViewController<UIScrollViewDelegate>
+@interface BuySecretaryViewController : FatherViewController<UIScrollViewDelegate,UITableViewDataSource,UITableViewDelegate>
 @property(nonatomic ,strong)NSDictionary *dic;
 @property(nonatomic ,strong)NSString *service_type_id;
 

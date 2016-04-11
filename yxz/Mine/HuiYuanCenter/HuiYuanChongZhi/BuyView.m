@@ -241,9 +241,11 @@
     NSLog(@"支付宝支付");
     UIImageView *view = (UIImageView *)[self viewWithTag:33];
     UIImageView *view2 = (UIImageView *)[self viewWithTag:44];
+    
 
     view.image = [UIImage imageNamed:@"selection-checked"];
     view2.image = [UIImage imageNamed:@"selection"];
+    
     ZFB = YES;
 
 
@@ -253,11 +255,13 @@
     NSLog(@"微信支付");
     UIImageView *view = (UIImageView *)[self viewWithTag:33];
     UIImageView *view2 = (UIImageView *)[self viewWithTag:44];
+    
 
     view.image = [UIImage imageNamed:@"selection"];
     view2.image = [UIImage imageNamed:@"selection-checked"];
     ZFB = NO;
 }
+
 
 - (void)setSelfmoney:(NSString *)selfmoney
 {

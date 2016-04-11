@@ -136,7 +136,7 @@
         DownloadManager *download = [[DownloadManager alloc]init];
         NSDictionary *dict=@{@"user_id":_manager.telephone,@"year":yearStr,@"month":monthStr};
         UIView *view=[[UIView alloc]init];
-        [download requestWithUrl:@"simi/app/card/total_by_month.json"  dict:dict view:view delegate:self finishedSEL:@selector(RiLiSuccess:) isPost:NO failedSEL:@selector(RiLiFailure:)];
+        [download requestWithUrl:@"simi/app/user/msg/total_by_month.json"  dict:dict view:view delegate:self finishedSEL:@selector(RiLiSuccess:) isPost:NO failedSEL:@selector(RiLiFailure:)];
         [monthView setCurrentDate:monthDate];
     }
     

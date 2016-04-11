@@ -71,6 +71,21 @@
     UITapGestureRecognizer *tapSelf=[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapAction:)];
     tapSelf.delegate=self;
     [self.view addGestureRecognizer:tapSelf];
+    [myTableView removeFromSuperview];
+    myTableView =[[UITableView alloc]initWithFrame:FRAME(0, hotView.frame.size.height+74, WIDTH, HEIGHT-hotView.frame.size.height-74)];
+    myTableView.dataSource=self;
+    myTableView.delegate=self;
+    [self.view addSubview:myTableView];
+    UIView *v = [[UIView alloc] initWithFrame:CGRectZero];
+    
+    [myTableView setTableFooterView:v];
+    _refreshHeader = [[MJRefreshHeaderView alloc] init];
+    _refreshHeader.delegate = self;
+    _refreshHeader.scrollView = myTableView;
+    
+    _moreFooter = [[MJRefreshFooterView alloc] init];
+    _moreFooter.delegate = self;
+    _moreFooter.scrollView = myTableView;
     
     // Do any additional setup after loading the view.
 }
@@ -198,7 +213,7 @@
         [button setTitle:arr[i] forState:UIControlStateNormal];
         //设置button的frame
         button.frame = CGRectMake(10 + w, h, length + 15 , 30);
-        button.titleLabel.font=[UIFont fontWithName:@"Arial" size:13];
+        button.titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:13];
         [button setTitleColor:[UIColor colorWithRed:150/255.0f green:150/255.0f blue:150/255.0f alpha:1] forState:UIControlStateNormal];
         //当button的位置超出屏幕边缘时换行 320 只是button所在父视图的宽度
         if(10 + w + length + 15 > 320){
@@ -212,21 +227,7 @@
     
     hotView.frame=FRAME(0, 64, WIDTH, h+50);
     [self.view addSubview:hotView];
-    [myTableView removeFromSuperview];
-    myTableView =[[UITableView alloc]initWithFrame:FRAME(0, hotView.frame.size.height+74, WIDTH, HEIGHT-hotView.frame.size.height-74)];
-    myTableView.dataSource=self;
-    myTableView.delegate=self;
-    [self.view addSubview:myTableView];
-    UIView *v = [[UIView alloc] initWithFrame:CGRectZero];
-    
-    [myTableView setTableFooterView:v];
-    _refreshHeader = [[MJRefreshHeaderView alloc] init];
-    _refreshHeader.delegate = self;
-    _refreshHeader.scrollView = myTableView;
-    
-    _moreFooter = [[MJRefreshFooterView alloc] init];
-    _moreFooter.delegate = self;
-    _moreFooter.scrollView = myTableView;
+    myTableView.frame =FRAME(0, hotView.frame.size.height+74, WIDTH, HEIGHT-hotView.frame.size.height-74);
 
 }
 #pragma mark 热搜关键词列表失败返回
@@ -336,8 +337,8 @@
     
     NSDictionary *dic=seekArray[indexPath.row];
     NSArray *labelArray=[dic objectForKey:@"user_tags"];
-    NSString *identifier = [NSString stringWithFormat:@"（%ld,%ld)",(long)indexPath.row,(long)indexPath.section];
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
+    NSString *identifier = [NSString stringWithFormat:@"cell%ld,%ld",(long)indexPath.row,(long)indexPath.section];
+    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     UIImageView *headImageView=[[UIImageView alloc]init];
     UILabel *nameLabel=[[UILabel alloc]init];
     UILabel *textLabel=[[UILabel alloc]init];
@@ -354,69 +355,69 @@
         
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:identifier];
         //cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        [cell addSubview:lineView];
-        
-        headImageView.frame=FRAME(10, 10, 50, 50);
-        headImageView.layer.cornerRadius=headImageView.frame.size.width/2;
-        headImageView.clipsToBounds = YES;
-        [cell addSubview:headImageView];
-        
-        nameLabel.frame=FRAME(headImageView.frame.origin.x+headImageView.frame.size.width+10, 12, 60, 18);
-        //nameLabel.backgroundColor=[UIColor redColor];
-        nameLabel.font=[UIFont fontWithName:@"Arial" size:16];
-        [cell  addSubview:nameLabel];
-        
-        occupationLabel.frame=FRAME(nameLabel.frame.size.width+nameLabel.frame.origin.x, nameLabel.frame.origin.y+2, WIDTH-210, 16);
-        occupationLabel.textColor=[UIColor colorWithRed:100 / 255.0 green:100 / 255.0 blue:100 / 255.0 alpha:1];
-        occupationLabel.font=[UIFont fontWithName:@"Arial" size:12];
-        [cell addSubview:occupationLabel];
-        
-        
-        textLabel.font=[UIFont fontWithName:@"Arial" size:12];
-        textLabel.textColor=[UIColor colorWithRed:100 / 255.0 green:100 / 255.0 blue:100 / 255.0 alpha:1];
-        [cell  addSubview:textLabel];
-        
-        buyLabel.frame=FRAME(WIDTH-70, 12, 60, 18);
-        buyLabel.font=[UIFont fontWithName:@"Arial" size:12];
-        buyLabel.textColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
-        buyLabel.hidden=YES;
-        [cell addSubview:buyLabel];
-        
-        addressIamge.frame=FRAME(headImageView.frame.size.width+headImageView.frame.origin.x+10, nameLabel.frame.size.height+nameLabel.frame.origin.y+5, 16, 16);
-        addressIamge.image=[UIImage imageNamed:@"icon_sec_addr"];
-        [cell addSubview:addressIamge];
-        addresslabel.font=[UIFont fontWithName:@"Arial" size:12];
-        addresslabel.textColor=[UIColor colorWithRed:100 / 255.0 green:100 / 255.0 blue:100 / 255.0 alpha:1];
-        [cell addSubview:addresslabel];
-        
-        timeImage.image=[UIImage imageNamed:@"icon_sec_time"];
-        [cell addSubview:timeImage];
-        
-        timeLabel.font=[UIFont fontWithName:@"Arial" size:12];
-        timeLabel.textColor=[UIColor colorWithRed:100 / 255.0 green:100 / 255.0 blue:100 / 255.0 alpha:1];
-        [cell addSubview:timeLabel];
-        Y=addressIamge.frame.size.height+addressIamge.frame.origin.y+5;
-        int x=0;
-        for (int i=0; i<labelArray.count; i++) {
-            NSDictionary *dict=labelArray[i];
-            if (i%3==0&&i!=0) {
-                Y=Y+21;
-                x=0;
-            }
-            UILabel *typeLabel=[[UILabel alloc]initWithFrame:FRAME(headImageView.frame.size.width+headImageView.frame.origin.x+10+((WIDTH-70-4)/3+2)*x, Y, (WIDTH-70-4)/3, 16)];
-            typeLabel.text=[NSString stringWithFormat:@"%@",[dict objectForKey:@"tag_name"]];
-            typeLabel.font=[UIFont fontWithName:@"Arial" size:12];
-            typeLabel.textColor=[UIColor colorWithRed:100 / 255.0 green:100 / 255.0 blue:100 / 255.0 alpha:1];
-            typeLabel.layer.cornerRadius=8;
-            typeLabel.clipsToBounds=YES;
-            typeLabel.textAlignment=NSTextAlignmentCenter;
-            typeLabel.backgroundColor=[UIColor colorWithRed:240/255.0f green:240/255.0f blue:240/255.0f alpha:1];
-            [cell addSubview:typeLabel];
-            x++;
-        }
         
     }
+    [cell addSubview:lineView];
     
+    headImageView.frame=FRAME(10, 10, 50, 50);
+    headImageView.layer.cornerRadius=headImageView.frame.size.width/2;
+    headImageView.clipsToBounds = YES;
+    [cell addSubview:headImageView];
+    
+    nameLabel.frame=FRAME(headImageView.frame.origin.x+headImageView.frame.size.width+10, 12, 60, 18);
+    //nameLabel.backgroundColor=[UIColor redColor];
+    nameLabel.font=[UIFont fontWithName:@"Heiti SC" size:16];
+    [cell  addSubview:nameLabel];
+    
+    occupationLabel.frame=FRAME(nameLabel.frame.size.width+nameLabel.frame.origin.x, nameLabel.frame.origin.y+2, WIDTH-210, 16);
+    occupationLabel.textColor=[UIColor colorWithRed:100 / 255.0 green:100 / 255.0 blue:100 / 255.0 alpha:1];
+    occupationLabel.font=[UIFont fontWithName:@"Heiti SC" size:12];
+    [cell addSubview:occupationLabel];
+    
+    
+    textLabel.font=[UIFont fontWithName:@"Heiti SC" size:12];
+    textLabel.textColor=[UIColor colorWithRed:100 / 255.0 green:100 / 255.0 blue:100 / 255.0 alpha:1];
+    [cell  addSubview:textLabel];
+    
+    buyLabel.frame=FRAME(WIDTH-70, 12, 60, 18);
+    buyLabel.font=[UIFont fontWithName:@"Heiti SC" size:12];
+    buyLabel.textColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
+    buyLabel.hidden=YES;
+    [cell addSubview:buyLabel];
+    
+    addressIamge.frame=FRAME(headImageView.frame.size.width+headImageView.frame.origin.x+10, nameLabel.frame.size.height+nameLabel.frame.origin.y+5, 16, 16);
+    addressIamge.image=[UIImage imageNamed:@"icon_sec_addr"];
+    [cell addSubview:addressIamge];
+    addresslabel.font=[UIFont fontWithName:@"Heiti SC" size:12];
+    addresslabel.textColor=[UIColor colorWithRed:100 / 255.0 green:100 / 255.0 blue:100 / 255.0 alpha:1];
+    [cell addSubview:addresslabel];
+    
+    timeImage.image=[UIImage imageNamed:@"icon_sec_time"];
+    [cell addSubview:timeImage];
+    
+    timeLabel.font=[UIFont fontWithName:@"Heiti SC" size:12];
+    timeLabel.textColor=[UIColor colorWithRed:100 / 255.0 green:100 / 255.0 blue:100 / 255.0 alpha:1];
+    [cell addSubview:timeLabel];
+    Y=addressIamge.frame.size.height+addressIamge.frame.origin.y+5;
+    int x=0;
+    for (int i=0; i<labelArray.count; i++) {
+        NSDictionary *dict=labelArray[i];
+        if (i%3==0&&i!=0) {
+            Y=Y+21;
+            x=0;
+        }
+        UILabel *typeLabel=[[UILabel alloc]initWithFrame:FRAME(headImageView.frame.size.width+headImageView.frame.origin.x+10+((WIDTH-70-4)/3+2)*x, Y, (WIDTH-70-4)/3, 16)];
+        typeLabel.text=[NSString stringWithFormat:@"%@",[dict objectForKey:@"tag_name"]];
+        typeLabel.font=[UIFont fontWithName:@"Heiti SC" size:12];
+        typeLabel.textColor=[UIColor colorWithRed:100 / 255.0 green:100 / 255.0 blue:100 / 255.0 alpha:1];
+        typeLabel.layer.cornerRadius=8;
+        typeLabel.clipsToBounds=YES;
+        typeLabel.textAlignment=NSTextAlignmentCenter;
+        typeLabel.backgroundColor=[UIColor colorWithRed:240/255.0f green:240/255.0f blue:240/255.0f alpha:1];
+        [cell addSubview:typeLabel];
+        x++;
+    }
+
     occupationLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"service_type_name"]];
 //    buyLabel.text=@"以购买";
 //    if ([service_type_id isEqualToString:@"75,180"]) {
@@ -462,7 +463,7 @@
     timeLabel.frame=FRAME(timeImage.frame.size.width+timeImage.frame.origin.x, timeImage.frame.origin.y, timeLabel.frame.size.width, 16);
     
     
-    UIFont *font=[UIFont fontWithName:@"Arial" size:12];
+    UIFont *font=[UIFont fontWithName:@"Heiti SC" size:12];
     CGSize constraint = CGSizeMake(WIDTH-90, 200.0f);
     
     textLabel.lineBreakMode=NSLineBreakByWordWrapping;
@@ -490,7 +491,7 @@
     //    CGSize size = CGSizeMake(WIDTH-20,2000);
     //    CGSize labelsize = [inforStr sizeWithFont:font constrainedToSize:size lineBreakMode:NSLineBreakByCharWrapping];
     //    //height=labelsize.height+height;
-    UIFont *font=[UIFont fontWithName:@"Arial" size:15];
+    UIFont *font=[UIFont fontWithName:@"Heiti SC" size:15];
     CGSize constraint = CGSizeMake(WIDTH-90, 200.0f);
     
     UILabel *textLabel=[[UILabel alloc]init];

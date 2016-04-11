@@ -26,8 +26,7 @@
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate,IChatManagerDelegate,GeTuiSdkDelegate,WCSessionDelegate>
 {
-    sqlite3 *yxzdb;
-    sqlite3 *database;
+    sqlite3 *simi;
     NSArray *_stockDataArray;
     NSArray *_tianjinArray;
     
@@ -67,7 +66,8 @@
 @property (assign, nonatomic) SdkStatus sdkStatus;
 @property (strong,nonatomic) UIImageView *adView;
 @property (nonatomic) BOOL pushBool;
-
+@property (strong,nonatomic) NSURL *pushURl;
+@property (strong,nonatomic)NSString *defaultDBPath;
 @property (nonatomic ,strong) NSDictionary *globalDic;
 @property (nonatomic ,strong) NSMutableArray *riliArray;
 - (void)startSdkWith:(NSString *)appID appKey:(NSString *)appKey appSecret:(NSString *)appSecret;

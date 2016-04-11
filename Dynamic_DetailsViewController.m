@@ -113,7 +113,7 @@
     
     UILabel *nameLabe=[[UILabel alloc]init];
     nameLabe.text=[NSString stringWithFormat:@"%@",[dataDic objectForKey:@"name"]];
-    nameLabe.font=[UIFont fontWithName:@"Arial" size:17];
+    nameLabe.font=[UIFont fontWithName:@"Heiti SC" size:17];
     [nameLabe setNumberOfLines:1];
     [nameLabe sizeToFit];
     nameLabe.frame=FRAME(headeImageView.frame.size.width+headeImageView.frame.origin.x+10, headeImageView.frame.origin.y, nameLabe.frame.size.width, 20);
@@ -121,7 +121,7 @@
     
     UILabel *timeLabel=[[UILabel alloc]init];
     timeLabel.text=[NSString stringWithFormat:@"%@",[dataDic objectForKey:@"add_time_str"]];
-    timeLabel.font=[UIFont fontWithName:@"Arial" size:15];
+    timeLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
     [timeLabel setNumberOfLines:1];
     [timeLabel sizeToFit];
     timeLabel.frame=FRAME(nameLabe.frame.origin.x, nameLabe.frame.size.height+nameLabe.frame.origin.y, timeLabel.frame.size.width, 20);
@@ -133,7 +133,7 @@
     
     UILabel *textLabel=[[UILabel alloc]init];
     textLabel.text=[NSString stringWithFormat:@"%@",[dataDic objectForKey:@"title"]];
-    UIFont *font=[UIFont fontWithName:@"Arial" size:18];
+    UIFont *font=[UIFont fontWithName:@"Heiti SC" size:18];
     textLabel.font=font;
     [textLabel setNumberOfLines:0];
     [textLabel sizeToFit];
@@ -217,7 +217,7 @@
     
     UILabel *praiseLabel=[[UILabel alloc]init];
     praiseLabel.text=[NSString stringWithFormat:@"%@",[dataDic objectForKey:@"total_zan"]];
-    praiseLabel.font=[UIFont fontWithName:@"Arial" size:12];
+    praiseLabel.font=[UIFont fontWithName:@"Heiti SC" size:12];
     [praiseLabel setNumberOfLines:1];
     [praiseLabel sizeToFit];
     praiseLabel.frame=FRAME(30, (30-15)/2, praiseLabel.frame.size.width, 15);
@@ -235,7 +235,7 @@
     
     UILabel *zanLabel=[[UILabel alloc]initWithFrame:FRAME(8, zanLineView.frame.origin.y+16, 30, 20)];
     zanLabel.text=@"点赞";
-    zanLabel.font=[UIFont fontWithName:@"Arial" size:14];
+    zanLabel.font=[UIFont fontWithName:@"Heiti SC" size:14];
     zanLabel.textColor=[UIColor colorWithRed:103/255.0f green:103/255.0f blue:103/255.0f alpha:1];
     [layoutVied addSubview:zanLabel];
     
@@ -273,7 +273,7 @@
             label.lineBreakMode=NSLineBreakByTruncatingTail;
             [label setNumberOfLines:1];
             [label sizeToFit];
-            label.font=[UIFont fontWithName:@"Arial" size:10];
+            label.font=[UIFont fontWithName:@"Heiti SC" size:10];
             label.textColor=[UIColor colorWithRed:103/255.0f green:103/255.0f blue:103/255.0f alpha:1];
             label.frame=FRAME(headeView.frame.size.width+headeView.frame.origin.x+5, headeView.frame.origin.y+5, label.frame.size.width, 20);
             [layoutVied addSubview:label];
@@ -345,7 +345,7 @@
     textViewLabel=[[UILabel alloc]initWithFrame:FRAME(3, 8, WIDTH-39, 15)];
     textViewLabel.text=@"等你来评论...";
     textViewLabel.textColor=[UIColor colorWithRed:164/255.0f green:164/255.0f blue:164/255.0f alpha:1];
-    textViewLabel.font=[UIFont fontWithName:@"Arial" size:14];
+    textViewLabel.font=[UIFont fontWithName:@"Heiti SC" size:14];
     textViewLabel.lineBreakMode=NSLineBreakByTruncatingTail;
     [textViewLabel setNumberOfLines:1];
     [textViewLabel sizeToFit];
@@ -355,7 +355,7 @@
     commentButton.backgroundColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
     [commentButton setTitle:@"评论" forState:UIControlStateNormal];
     commentButton.titleLabel.textColor=[UIColor whiteColor];
-    commentButton.titleLabel.font=[UIFont fontWithName:@"Arial" size:15];
+    commentButton.titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
     commentButton.layer.cornerRadius=7;
     //    commentButton.enabled = FALSE;
     [commentButton addTarget:self action:@selector(commentButtonAN) forControlEvents:UIControlEventTouchUpInside];
@@ -460,7 +460,7 @@
     [label setNumberOfLines:1];
     [label sizeToFit];
     label.textColor=[UIColor colorWithRed:103/255.0f green:103/255.0f blue:103/255.0f alpha:1];
-    label.font=[UIFont fontWithName:@"Arial" size:14];
+    label.font=[UIFont fontWithName:@"Heiti SC" size:14];
     label.frame=FRAME(10, 4, label.frame.size.width, 20);
     [sectionView addSubview:label];
     UIView *view=[[UIView alloc]initWithFrame:FRAME(0, 24, WIDTH, 5)];
@@ -495,7 +495,7 @@
     nameLabel.frame=FRAME(10, 10, 200, 13);
     [cell addSubview:nameLabel];
     nameLabel.text=[NSString stringWithFormat:@"%@",[plDic objectForKey:@"name"]];
-    nameLabel.font=[UIFont fontWithName:@"Arial" size:13];
+    nameLabel.font=[UIFont fontWithName:@"Heiti SC" size:13];
     nameLabel.textColor=[UIColor colorWithRed:138/255.0f green:137/255.0f blue:137/255.0f alpha:1];
     
     double inTime=[[plDic objectForKey:@"add_time"] doubleValue];
@@ -510,7 +510,7 @@
     UILabel *timeLabel=[[UILabel alloc]init];
     timeLabel.text=inTimeString;
     timeLabel.textColor=[UIColor colorWithRed:138/255.0f green:137/255.0f blue:137/255.0f alpha:1];
-    timeLabel.font=[UIFont fontWithName:@"Arial" size:13];
+    timeLabel.font=[UIFont fontWithName:@"Heiti SC" size:13];
     timeLabel.lineBreakMode=NSLineBreakByTruncatingTail;
     [timeLabel setNumberOfLines:1];
     [timeLabel sizeToFit];
@@ -524,7 +524,7 @@
     textLabel.lineBreakMode=NSLineBreakByWordWrapping;
     NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:[UIFont systemFontOfSize:14],NSFontAttributeName, nil];
     CGSize size = [textLabel.text boundingRectWithSize:CGSizeMake(WIDTH-20, 200) options:NSStringDrawingUsesLineFragmentOrigin attributes:dict context:nil].size;
-    textLabel.font=[UIFont fontWithName:@"Arial" size:14];
+    textLabel.font=[UIFont fontWithName:@"Heiti SC" size:14];
     textLabel.textColor=[UIColor colorWithRed:138/255.0f green:137/255.0f blue:137/255.0f alpha:1];
     textLabel.frame =CGRectMake(10, nameLabel.frame.size.height+nameLabel.frame.origin.y+7, WIDTH-20, size.height);
     [cell addSubview:textLabel];

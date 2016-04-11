@@ -39,7 +39,7 @@
     
     UILabel *balanceLabel=[[UILabel alloc]initWithFrame:FRAME(10, 55/2, 60, 15)];
     balanceLabel.text=@"余额(元):";
-    balanceLabel.font=[UIFont fontWithName:@"Arial" size:13];
+    balanceLabel.font=[UIFont fontWithName:@"Heiti SC" size:13];
     balanceLabel.textColor=[UIColor whiteColor];
     balanceLabel.textAlignment=NSTextAlignmentRight;
     [balanceView addSubview:balanceLabel];
@@ -97,6 +97,7 @@
         [_refreshHeader beginRefreshing];
         _needRefresh = NO;
     }
+    [self PLJKLayout];
 }
 #pragma mark 表格刷新相关
 #pragma mark 刷新
@@ -167,15 +168,20 @@
 -(void)PLJKLayout
 {
     ISLoginManager *_manager = [ISLoginManager shareManager];
-    
-    DownloadManager *money = [[DownloadManager alloc]init];
-    NSDictionary *dic=@{@"user_id":_manager.telephone,@"view_user_id":_manager.telephone};
-    [money requestWithUrl:USER_GRZY dict:dic view:self.view delegate:self finishedSEL:@selector(DetailsSuccessDown:) isPost:NO failedSEL:@selector(DetailsFailureDown:)];
-    
+    [self viewUSER_GRZY];
     DownloadManager *_download = [[DownloadManager alloc]init];
     NSString *pageStr=[NSString stringWithFormat:@"%ld",(long)page];
     NSDictionary *_dicts = @{@"user_id":_manager.telephone,@"page":pageStr};
     [_download requestWithUrl:[NSString stringWithFormat:@"%@",USER_WALLET] dict:_dicts view:self.view delegate:self finishedSEL:@selector(DownloadFinish:) isPost:NO failedSEL:@selector(FailDownload:)];
+
+}
+-(void)viewUSER_GRZY
+{
+    ISLoginManager *_manager = [ISLoginManager shareManager];
+    
+    DownloadManager *money = [[DownloadManager alloc]init];
+    NSDictionary *dic=@{@"user_id":_manager.telephone,@"view_user_id":_manager.telephone};
+    [money requestWithUrl:USER_GRZY dict:dic view:self.view delegate:self finishedSEL:@selector(DetailsSuccessDown:) isPost:NO failedSEL:@selector(DetailsFailureDown:)];
 
 }
 #pragma mark 我的钱包积口访问成功返回方法
@@ -243,7 +249,7 @@
     moneyLabel.text=[NSString stringWithFormat:@"%@",[balanceDic objectForKey:@"rest_money"]];
     moneyLabel.textAlignment=NSTextAlignmentLeft;
     moneyLabel.textColor=[UIColor whiteColor];
-    moneyLabel.font=[UIFont fontWithName:@"Arial" size:13];
+    moneyLabel.font=[UIFont fontWithName:@"Heiti SC" size:13];
     [balanceView addSubview:moneyLabel];
 }
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -284,14 +290,14 @@
     textLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"order_type_name"]];
     [textLabel setNumberOfLines:1];
     [textLabel sizeToFit];
-    textLabel.font=[UIFont fontWithName:@"Arial" size:15];
+    textLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
     textLabel.textAlignment=NSTextAlignmentLeft;
     textLabel.frame=FRAME(10, 5, textLabel.frame.size.width, 22);
     
     timeLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"add_time_str"]];
     [timeLabel setNumberOfLines:1];
     [timeLabel sizeToFit];
-    timeLabel.font=[UIFont fontWithName:@"Arial" size:12];
+    timeLabel.font=[UIFont fontWithName:@"Heiti SC" size:12];
     timeLabel.textAlignment=NSTextAlignmentLeft;
     timeLabel.frame=FRAME(10, 32, timeLabel.frame.size.width, 15);
     
@@ -300,7 +306,7 @@
     moneyLab.lineBreakMode=NSLineBreakByTruncatingTail;
     [moneyLab setNumberOfLines:1];
     [moneyLab sizeToFit];
-    UIFont *font = [UIFont fontWithName:@"Arial" size:20];
+    UIFont *font = [UIFont fontWithName:@"Heiti SC" size:20];
     moneyLab.font=font;
     moneyLab.textAlignment=NSTextAlignmentRight;
    // moneyLab.backgroundColor=[UIColor redColor];
@@ -312,7 +318,7 @@
     mobileLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"mobile"]];
     [mobileLabel setNumberOfLines:1];
     [mobileLabel sizeToFit];
-    mobileLabel.font=[UIFont fontWithName:@"Arial" size:12];
+    mobileLabel.font=[UIFont fontWithName:@"Heiti SC" size:12];
     mobileLabel.textAlignment=NSTextAlignmentRight;
     mobileLabel.frame=FRAME(WIDTH-mobileLabel.frame.size.width-10, 32, mobileLabel.frame.size.width, 15);
     cell.selectionStyle = UITableViewCellSelectionStyleNone;

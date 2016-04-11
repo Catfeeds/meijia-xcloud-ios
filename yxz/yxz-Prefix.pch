@@ -10,7 +10,7 @@
 #import "UIViewExt.h"
 
 #import "UMSocial.h"
-
+#import <sqlite3.h>
 #ifndef __IPHONE_3_0
 #warning "This project uses features only available in iOS SDK 3.0 and later."
 #endif
@@ -50,6 +50,10 @@
 #import "EjectAlertView.h"
 #import "WebPageViewController.h"
 #import "UpLoadViewController.h"
+
+
+#import <objc/message.h>
+
 #endif
 
 #define NAV_COLOR 0xE8374A
@@ -61,7 +65,7 @@
 
 #define NAV_HEIGHT 64
 
-#define TABLE_NAME @"users"
+#define TABLE_NAME @"bylUser"
 #define FIELDS_NAME_SID @"user_id"
 #define FIELDS_NAME_SNAME @"name"
 #define FIELDS_NAME_SCLASS @"head_img"

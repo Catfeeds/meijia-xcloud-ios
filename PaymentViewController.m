@@ -11,18 +11,13 @@
 #import "AliPayManager.h"
 #import "DownloadManager.h"
 #import "ISLoginManager.h"
-//#import "MyLogInViewController.h"
 #import "USERINFODataModels.h"
 #import "UserInfoViewController.h"
 #import "WeiXinPay.h"
-
 #import "BuySecretaryViewController.h"
 #import "Order_ListViewController.h"
-
 #import "Order_DetailsViewController.h"
-
 #import "BindMobileViewController.h"
-
 #import "ZeroViewController.h"
 #import "UsedDressViewController.h"
 #import "MineJifenViewController.h"
@@ -113,7 +108,6 @@
 }
 - (void)WxPaySuccess
 {
-    //[self.navigationController popViewControllerAnimated:YES];
     Order_DetailsViewController *orderVC=[[Order_DetailsViewController alloc]init];
     orderVC.details_ID=3;
     orderVC.user_ID=[NSString stringWithFormat:@"%@",[detailsDIC objectForKey:@"user_id"]];
@@ -122,35 +116,17 @@
     [self showAlertViewWithTitle:@"提示" message:@"购买成功"];
     
 }
-//-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-//{
-//    //[self.navigationController popViewControllerAnimated:YES];
-//    Order_DetailsViewController *orderVC=[[Order_DetailsViewController alloc]init];
-//    orderVC.details_ID=3;
-//    orderVC.user_ID=[NSString stringWithFormat:@"%@",[detailsDIC objectForKey:@"user_id"]];
-//    orderVC.order_ID=[NSString stringWithFormat:@"%@",[detailsDIC objectForKey:@"order_id"]];
-//    [self.navigationController pushViewController:orderVC animated:YES];
-//    [self showAlertViewWithTitle:@"提示" message:@"购买成功"];
-//    NSLog(@"clickButtonAtIndex:%d",1);
-//}
 - (void)Qianbao{
-//    UserInfoViewController *user = [[UserInfoViewController alloc]init];
-//    [self.navigationController presentViewController:user animated:YES completion:nil];
     Order_DetailsViewController *orderVC=[[Order_DetailsViewController alloc]init];
     orderVC.details_ID=3;
     orderVC.user_ID=[NSString stringWithFormat:@"%@",[detailsDIC objectForKey:@"user_id"]];
     orderVC.order_ID=[NSString stringWithFormat:@"%@",[detailsDIC objectForKey:@"order_id"]];
     [self.navigationController pushViewController:orderVC animated:YES];
-
-   // [self.navigationController popViewControllerAnimated:YES];
-
 }
 #pragma mark 订单—服务下单成功返回接口
 -(void)ORder_GetUserInfo:(id)sender
 {
     NSLog(@"下单成功%@",sender);
-//    Order_ListViewController *orderListVC=[[Order_ListViewController alloc]init];
-//    [self.navigationController pushViewController:orderListVC animated:YES];
 }
 #pragma mark 订单—服务下单失败返回接口
 -(void)ORder_FailDownload:(id)sender
@@ -201,7 +177,11 @@
                 if (_buyview.ZFB==YES) {
                     pay_type=@"1";
                 }else{
-                    pay_type=@"2";
+                    if (_buyview.MODE==YES) {
+                        pay_type=@"0";
+                    }else{
+                        pay_type=@"2";
+                    }
                 }
                 AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication] delegate];
                 NSString *moile=[delegate.globalDic objectForKey:@"mobile"];
@@ -277,7 +257,12 @@
                     if (_buyview.ZFB==YES) {
                         pay_type=@"1";
                     }else{
-                        pay_type=@"2";
+                        if (_buyview.MODE==YES) {
+                            pay_type=@"0";
+                        }else{
+                            pay_type=@"2";
+                        }
+
                     }
                     AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication] delegate];
                     NSString *moile=[delegate.globalDic objectForKey:@"mobile"];
@@ -352,7 +337,12 @@
             if (_buyview.ZFB==YES) {
                 pay_type=@"1";
             }else{
-                pay_type=@"2";
+                if (_buyview.MODE==YES) {
+                    pay_type=@"0";
+                }else{
+                    pay_type=@"2";
+                }
+
             }
             AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication] delegate];
             NSString *moile=[delegate.globalDic objectForKey:@"mobile"];
@@ -453,8 +443,17 @@
         [self GotoZhifuBaoWithData:_payd noty:ORDEL_NOTYURL];
                 
         }else{
-        NSLog(@"wx");
-        [WeiXinPay WXPaywithOrderNo:_payd.ordernumber orderType:@"0"];
+            if (_buyview.MODE==YES) {
+                Order_DetailsViewController *orderVC=[[Order_DetailsViewController alloc]init];
+                orderVC.details_ID=3;
+                orderVC.user_ID=[NSString stringWithFormat:@"%@",[detailsDIC objectForKey:@"user_id"]];
+                orderVC.order_ID=[NSString stringWithFormat:@"%@",[detailsDIC objectForKey:@"order_id"]];
+                [self.navigationController pushViewController:orderVC animated:YES];
+            }else{
+                NSLog(@"wx");
+                [WeiXinPay WXPaywithOrderNo:_payd.ordernumber orderType:@"0"];            }
+
+        
         }
         //NSLog(@"%@,%@",_cardmoney,_payd.ordernumber);
         

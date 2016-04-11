@@ -26,12 +26,12 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    if (_vcID==100) {
+//    if (_vcID==100) {
         self.backBtn.hidden=NO;
         self.navlabel.text=@"好友申请";
-    }else{
-        self.backBtn.hidden=YES;
-    }
+//    }else{
+//        self.backBtn.hidden=YES;
+//    }
     page=1;
     dataArray=[[NSMutableArray alloc]init];
     myTableView=[[UITableView alloc]initWithFrame:FRAME(0, 64, WIDTH, HEIGHT-101)];
@@ -170,7 +170,7 @@
     [cell addSubview:headeImageView];
     UILabel *nameLabel=[[UILabel alloc]init];
     nameLabel.text=[NSString stringWithFormat:@"%@",[dataDic objectForKey:@"name"]];
-    nameLabel.font=[UIFont fontWithName:@"Arial" size:16];
+    nameLabel.font=[UIFont fontWithName:@"Heiti SC" size:16];
     [nameLabel setNumberOfLines:1];
     [nameLabel sizeToFit];
     nameLabel.frame=FRAME(headeImageView.frame.size.width+20, 20, nameLabel.frame.size.width, 20);
@@ -188,7 +188,7 @@
             addLabel.text=@"被拒绝";
         }
         addLabel.textColor=[UIColor colorWithRed:232/255.0f green:232/255.0f blue:232/255.0f alpha:1];
-        addLabel.font=[UIFont fontWithName:@"Arial" size:18];
+        addLabel.font=[UIFont fontWithName:@"Heiti SC" size:18];
         [cell addSubview:addLabel];
     }else{
         UIButton *addButton=[[UIButton alloc]initWithFrame:FRAME(WIDTH-70, 15, 60, 30)];
@@ -208,7 +208,7 @@
             [addButton setTitleColor:[UIColor colorWithRed:232/255.0f green:232/255.0f blue:232/255.0f alpha:1] forState:UIControlStateNormal];
             addButton.enabled=FALSE;
         }
-        addButton.titleLabel.font=[UIFont fontWithName:@"Arial" size:18];
+        addButton.titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:18];
         addButton.tag=indexPath.row;
         [addButton addTarget:self action:@selector(addButAction:) forControlEvents:UIControlEventTouchUpInside];
         [cell addSubview:addButton];

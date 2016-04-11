@@ -27,15 +27,16 @@
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.view.backgroundColor=[UIColor colorWithRed:231/255.0f green:231/255.0f blue:231/255.0f alpha:1];
     page=1;
     dataSourceArray=[[NSMutableArray alloc]init];
     self.view.frame=FRAME(0, 0, WIDTH, HEIGHT-50);
-    self.backBtn.hidden=YES;
+//    self.backBtn.hidden=YES;
 //    self.navlabel.text=@"动态";
     if (_vcLayoutID==100) {
         _tableView=[[UITableView alloc]initWithFrame:FRAME(0, 0, WIDTH, HEIGHT-HEIGHT*0.43-106)];
     }else{
-        _tableView=[[UITableView alloc]initWithFrame:FRAME(0, 64, WIDTH, HEIGHT-111)];
+        _tableView=[[UITableView alloc]initWithFrame:FRAME(0, 110, WIDTH, HEIGHT-110)];
     }
     
     [self.view addSubview:_tableView];
@@ -225,7 +226,7 @@
     cell.textLabels.lineBreakMode=NSLineBreakByTruncatingTail;
     [cell.textLabels setNumberOfLines:2];
     [cell.textLabels sizeToFit];
-    UIFont *font=[UIFont fontWithName:@"Arial" size:18];
+    UIFont *font=[UIFont fontWithName:@"Heiti SC" size:17];
     NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:font,NSFontAttributeName, nil];
     CGSize size = [cell.textLabels.text boundingRectWithSize:CGSizeMake(WIDTH-40, 200) options:NSStringDrawingUsesLineFragmentOrigin attributes:dict context:nil].size;
     
@@ -304,7 +305,7 @@
     [cell addSubview:zaButton];
     UILabel *zaLabel=[[UILabel alloc]init];
     zaLabel.text=[NSString stringWithFormat:@"%@",[dataDic objectForKey:@"total_zan"]];
-    zaLabel.font=[UIFont fontWithName:@"Arial" size:13];
+    zaLabel.font=[UIFont fontWithName:@"Heiti SC" size:13];
     [zaLabel setNumberOfLines:1];
     [zaLabel sizeToFit];
     zaLabel.frame=FRAME(zaImageView.frame.size.width+zaImageView.frame.origin.x, zaImageView.frame.origin.y, zaLabel.frame.size.width, 20);
@@ -319,7 +320,7 @@
     [cell addSubview:plButton];
     UILabel *plLabel=[[UILabel alloc]init];
     plLabel.text=[NSString stringWithFormat:@"%@",[dataDic objectForKey:@"total_comment"]];
-    plLabel.font=[UIFont fontWithName:@"Arial" size:13];
+    plLabel.font=[UIFont fontWithName:@"Heiti SC" size:13];
     [plLabel setNumberOfLines:1];
     [plLabel sizeToFit];
     plLabel.frame=FRAME(plImageView.frame.size.width+plImageView.frame.origin.x, plImageView.frame.origin.y, plLabel.frame.size.width, 20);
@@ -363,7 +364,7 @@
     }
     NSString *string=[NSString stringWithFormat:@"%@",[dataDic objectForKey:@"title"]];
     DynamicTableViewCell *cell =[[DynamicTableViewCell alloc]init];
-    UIFont *font=[UIFont fontWithName:@"Arial" size:18];
+    UIFont *font=[UIFont fontWithName:@"Heiti SC" size:18];
     NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:font,NSFontAttributeName, nil];
     CGSize size = [string boundingRectWithSize:CGSizeMake(WIDTH-40, 200) options:NSStringDrawingUsesLineFragmentOrigin attributes:dict context:nil].size;
     return cell.layoutView.frame.size.height+size.height+H;

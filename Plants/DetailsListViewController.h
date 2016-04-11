@@ -13,6 +13,7 @@
 @property(nonatomic ,assign)int card_ID;
 @property(nonatomic ,assign)int S;
 @property(nonatomic ,assign)int L;
+@property(nonatomic ,assign)int vcIDS;
 
 
 @end

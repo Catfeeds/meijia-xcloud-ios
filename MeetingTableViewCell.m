@@ -24,10 +24,10 @@
         [_view addSubview:_heideImage];
         _nameLabel=[[UILabel alloc]init];
         _nameLabel.frame=FRAME(_heideImage.frame.origin.x+_heideImage.frame.size.width+10, 12, _nameLabel.frame.size.width, 21);
-        _nameLabel.font=[UIFont fontWithName:@"Arial" size:20];
+        _nameLabel.font=[UIFont fontWithName:@"Heiti SC" size:20];
         [_view addSubview:_nameLabel];
         _telephoneLabel=[[UILabel alloc]initWithFrame:FRAME(_heideImage.frame.origin.x+_heideImage.frame.size.width+10, 35, 132, 21)];
-        _telephoneLabel.font=[UIFont fontWithName:@"Arial" size:20];
+        _telephoneLabel.font=[UIFont fontWithName:@"Heiti SC" size:20];
         [_view addSubview:_telephoneLabel];
         _view.frame=FRAME(0, 0, WIDTH, _heideImage.frame.size.height+24);
     }

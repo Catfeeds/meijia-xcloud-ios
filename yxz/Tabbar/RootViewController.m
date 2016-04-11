@@ -46,6 +46,10 @@
 #import "ApplyForLeaveViewController.h"
 #import "WaterListViewController.h"
 #import "WasteRecoveryViewController.h"
+#import "DetailsListViewController.h"
+#import "AssetsAdministrationViewController.h"
+
+#import "HomePageTableViewController.h"
 @interface RootViewController ()<UIAlertViewDelegate, IChatManagerDelegate,UIAlertViewDelegate>
 {
     UIView *mainView;
@@ -80,11 +84,12 @@
 }
 @end
 #pragma mark - View lifecycle
+HomePageTableViewController *homePageVIewController;
 CardPageViewController *pageViewVC;
 ViewController * viewController;
 FoundViewController * firstViewController;
 ViewController *secondViewController;
-FriendViewController * friendViewController;
+//FriendViewController * friendViewController;
 MyselfViewController *thirdViewController;
 //MyLogInViewController *myLogInViewController;
 @implementation RootViewController
@@ -92,6 +97,8 @@ MyselfViewController *thirdViewController;
 
 -(void)viewWillAppear:(BOOL)animated
 {
+   
+
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
     self.navigationController.navigationBarHidden=YES;
     if (indexesID==1) {
@@ -167,20 +174,33 @@ MyselfViewController *thirdViewController;
     webVC.vcIDs=1000;
     [[self getCurrentVC] presentViewController:webVC animated:YES completion:nil];
 }
--(void)urlAction:(NSNotification *)sender
+-(void)pushJumpLayout:(NSNotification *)dataSource
 {
-    NSLog(@"我去  我去 我去 ！");
-     
+    NSDictionary *dic=dataSource.object;
+    DetailsListViewController *vc=[[DetailsListViewController alloc]init];
+    vc.card_ID=[[dic objectForKey:@"ci"]intValue];
+    vc.vcIDS=1000;
+    [[self getCurrentVC] presentViewController:vc animated:YES completion:nil];
+}
+-(void)pushJumpsLayout:(NSNotification *)dataSource
+{
+    NSDictionary *dic=dataSource.object;
+    DetailsListViewController *vc=[[DetailsListViewController alloc]init];
+    vc.card_ID=[[dic objectForKey:@"ci"]intValue];
+    vc.vcIDS=1000;
+    [[self getCurrentVC] presentViewController:vc animated:YES completion:nil];
 }
 - (void)viewDidLoad {
     NSDictionary *helpDic;
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(urlAction:) name:@"URLOPEN" object:nil];
+    
     plusArray=[[NSMutableArray alloc]init];
     self.view.backgroundColor=[UIColor whiteColor];
     coreDic=@{@"name":@"应用中心",@"logo":@"http://img.51xingzheng.cn/437396cc0b49b04dc89a0552f7e90cae?p=0",@"action":@"asdsad",@"open_type":@"app"};
     helpDic=@{@"action":@"index"};
     [[NSNotificationCenter defaultCenter] postNotificationName:@"HELP" object:helpDic];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(helpLayout:) name:@"WEBURL" object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(pushJumpLayout:) name:@"PushJump" object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(pushJumpsLayout:) name:@"PushJumps" object:nil];
     [super viewDidLoad];
     meView=[[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     meView.center = CGPointMake(WIDTH/2, HEIGHT/2);
@@ -248,7 +268,7 @@ MyselfViewController *thirdViewController;
     
     DownloadManager *download = [[DownloadManager alloc]init];
     NSDictionary *dict=@{@"user_id":_manager.telephone,@"year":yearStr,@"month":monthStr};
-    [download requestWithUrl:@"simi/app/card/total_by_month.json"  dict:dict view:self.view delegate:self finishedSEL:@selector(RiLiSuccess:) isPost:NO failedSEL:@selector(RiLiFailure:)];
+    [download requestWithUrl:@"simi/app/user/msg/total_by_month.json"  dict:dict view:self.view delegate:self finishedSEL:@selector(RiLiSuccess:) isPost:NO failedSEL:@selector(RiLiFailure:)];
     [self setupUntreatedApplyCount];
     [self makeTabbarView];
     [self bottomViewLayout];
@@ -322,12 +342,15 @@ MyselfViewController *thirdViewController;
     secondViewController = [[ViewController alloc]init];
     [self addChildViewController:secondViewController];
     
-    friendViewController=[[FriendViewController alloc]init];
-//    friendViewController.backBtn.hidden=YES;
-    [self addChildViewController:friendViewController];
+//    friendViewController=[[FriendViewController alloc]init];
+////    friendViewController.backBtn.hidden=YES;
+//    [self addChildViewController:friendViewController];
     
     thirdViewController = [[MyselfViewController alloc]init];
     [self addChildViewController:thirdViewController];
+    
+    homePageVIewController=[[HomePageTableViewController alloc]init];
+    [self addChildViewController:homePageVIewController];
     
 //    myLogInViewController = [[MyLogInViewController alloc]init];
 //    [self addChildViewController:myLogInViewController];
@@ -343,8 +366,8 @@ MyselfViewController *thirdViewController;
         [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
         [self plusLAyout];
     }else{
-        [mainView addSubview:viewController.view];
-        currentViewController = viewController;
+        [mainView addSubview:homePageVIewController.view];
+        currentViewController = homePageVIewController;
     }
 
     
@@ -409,7 +432,7 @@ MyselfViewController *thirdViewController;
     
     UILabel *secrearyLabel=[[UILabel alloc]init];
     secrearyLabel.text=@"直接找秘书";
-    secrearyLabel.font=[UIFont fontWithName:@"Arial" size:15];
+    secrearyLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
     secrearyLabel.lineBreakMode=NSLineBreakByTruncatingTail;
     [secrearyLabel setNumberOfLines:0];
     [secrearyLabel sizeToFit];
@@ -439,8 +462,8 @@ MyselfViewController *thirdViewController;
 -(void)tabBarAction
 {
     [tab removeFromSuperview];
-    NSArray *barArr = @[@"首页",@"发现",@"工作",@"圈子",@"我的"];
-    NSArray *imagesArray =@[@"common_icon_home@2x",@"common_icon_find@2x",@"icon_plus_add",@"common_icon_chum@2x",@"common_icon_mine@2x"];
+    NSArray *barArr = @[@"首页",@"发现",@"工作",@"日程",@"我的"];
+    NSArray *imagesArray =@[@"common_icon_chum@2x",@"common_icon_find@2x",@"icon_plus_add",@"common_icon_home@2x",@"common_icon_mine@2x"];
     float _btnwidth = self.view.frame.size.width/5;
     tab=[[UIImageView alloc]initWithFrame:CGRectMake(0, SELF_VIEW_HEIGHT-49, SELF_VIEW_WIDTH, 49)];
     tab.image=[UIImage imageNamed:@"bg_menu_bottom副本"];
@@ -450,18 +473,19 @@ MyselfViewController *thirdViewController;
     for (int i=0; i<barArr.count; i++) {
         if (i!=2) {
             UIButton *tabBarBut=[UIButton buttonWithType:UIButtonTypeCustom];
+            [tabBarBut setAdjustsImageWhenHighlighted:NO];
             tabBarBut.frame=CGRectMake(_btnwidth*i, 0, _btnwidth, 49);
             [tabBarBut addTarget:self action:@selector(SelectBarbtnWithtag:) forControlEvents:UIControlEventTouchUpInside];
             [tabBarBut setTag:(1000+i)];
             [tab addSubview:tabBarBut];
             if (i==0) {
                 pageImage.frame=CGRectMake((_btnwidth-23)/2, 7, 23, 23);
-                pageImage.image=[UIImage imageNamed:@"common_icon_home_c@2x"];
+                pageImage.image=[UIImage imageNamed:@"common_icon_chum_c@2x"];
                 [tabBarBut addSubview:pageImage];
                 pageLabel.frame=CGRectMake((_btnwidth-23)/2, 36, 23, 10);
                 pageLabel.text=[barArr objectAtIndex:i];
                 pageLabel.textAlignment=NSTextAlignmentCenter;
-                pageLabel.font=[UIFont fontWithName:@"Arial" size:10];
+                pageLabel.font=[UIFont fontWithName:@"Heiti SC" size:10];
                 pageLabel.textColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
                 [tabBarBut addSubview:pageLabel];
                 
@@ -474,16 +498,17 @@ MyselfViewController *thirdViewController;
                 foundLabel.frame=CGRectMake((_btnwidth-23)/2, 36, 23, 10);
                 foundLabel.text=[barArr objectAtIndex:i];
                 foundLabel.textAlignment=NSTextAlignmentCenter;
-                foundLabel.font=[UIFont fontWithName:@"Arial" size:10];
+                foundLabel.font=[UIFont fontWithName:@"Heiti SC" size:10];
                 [tabBarBut addSubview:foundLabel];
             }else if (i==3){
+                [tabBarBut setAdjustsImageWhenHighlighted:NO];
                 friendImage.frame=CGRectMake((_btnwidth-23)/2,7, 23, 23);
                 friendImage.image=[UIImage imageNamed:imagesArray[i]];
                 [tabBarBut addSubview:friendImage];
                 friendLabel.frame=CGRectMake((_btnwidth-23)/2, 36, 23, 10);
                 friendLabel.text=[barArr objectAtIndex:i];
                 friendLabel.textAlignment=NSTextAlignmentCenter;
-                friendLabel.font=[UIFont fontWithName:@"Arial" size:10];
+                friendLabel.font=[UIFont fontWithName:@"Heiti SC" size:10];
                 [tabBarBut addSubview:friendLabel];
                 
                 spotView=[[UIView alloc]initWithFrame:FRAME((_btnwidth-23)/2+19, 2, 10, 10)];
@@ -498,13 +523,14 @@ MyselfViewController *thirdViewController;
                 [tabBarBut addSubview:meImage];
                 meLabel.frame=CGRectMake((_btnwidth-23)/2, 36, 23, 10);
                 meLabel.text=[barArr objectAtIndex:i];
-                meLabel.font=[UIFont fontWithName:@"Arial" size:10];
+                meLabel.font=[UIFont fontWithName:@"Heiti SC" size:10];
                 meLabel.textAlignment=NSTextAlignmentCenter;
                 [tabBarBut addSubview:meLabel];
             }
         }else
         {
             UIButton *tabBarBut=[UIButton buttonWithType:UIButtonTypeCustom];
+            [tabBarBut setAdjustsImageWhenHighlighted:NO];
             tabBarBut.frame=CGRectMake(_btnwidth*i+_btnwidth/2-55/2, -17.5, 55, 55);
 //            tabBarBut.backgroundColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
             
@@ -517,7 +543,7 @@ MyselfViewController *thirdViewController;
 //            [tabBarBut addSubview:imageView];
             releaseLabel=[[UILabel alloc]init];
             releaseLabel.text=[barArr objectAtIndex:i];
-            releaseLabel.font=[UIFont fontWithName:@"Arial" size:10];
+            releaseLabel.font=[UIFont fontWithName:@"Heiti SC" size:10];
             releaseLabel.textAlignment=NSTextAlignmentCenter;
             [releaseLabel setNumberOfLines:1];
             [releaseLabel sizeToFit];
@@ -538,7 +564,7 @@ MyselfViewController *thirdViewController;
     NSDictionary *helpDic;
     
     NSLog(@"按钮的tag值%ld",(long)sender.tag);
-    if ((currentViewController==viewController&&[sender tag]==1000)||(currentViewController==firstViewController&&[sender tag]==1001)||(currentViewController==secondViewController&&[sender tag]==1002) ||(currentViewController==friendViewController&&[sender tag]==1003)||(currentViewController==thirdViewController&&[sender tag]==1004) ) {
+    if ((currentViewController==homePageVIewController&&[sender tag]==1000)||(currentViewController==firstViewController&&[sender tag]==1001)||(currentViewController==secondViewController&&[sender tag]==1002) ||(currentViewController==viewController&&[sender tag]==1003)||(currentViewController==thirdViewController&&[sender tag]==1004) ) {
         return;
     }
     UIViewController *oldViewController=currentViewController;
@@ -549,28 +575,28 @@ MyselfViewController *thirdViewController;
             helpDic=@{@"action":@"index"};
             [[NSNotificationCenter defaultCenter] postNotificationName:@"HELP" object:helpDic];
             indexesID=0;
-            [self transitionFromViewController:currentViewController toViewController:viewController duration:0.5 options:0 animations:^{
+            [self transitionFromViewController:currentViewController toViewController:homePageVIewController duration:0.5 options:0 animations:^{
             }  completion:^(BOOL finished) {
                 if(finished){
-                    currentViewController=viewController;
-                    pageImage.image=[UIImage imageNamed:@"common_icon_home_c@2x"];
+                    currentViewController=homePageVIewController;
+                    pageImage.image=[UIImage imageNamed:@"common_icon_chum_c@2x"];
                     pageLabel.textColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
                     foundImage.image=[UIImage imageNamed:@"common_icon_find@2x"];
                     foundLabel.textColor=[UIColor blackColor];
                     
-                    friendImage.image=[UIImage imageNamed:@"common_icon_chum@2x"];
+                    friendImage.image=[UIImage imageNamed:@"common_icon_home@2x"];
                     friendLabel.textColor=[UIColor blackColor];
                     
                     meImage.image=[UIImage imageNamed:@"common_icon_mine@2x"];
                     meLabel.textColor=[UIColor blackColor];
                 }else{
-                    currentViewController=viewController;
-                    pageImage.image=[UIImage imageNamed:@"common_icon_home_c@2x"];
+                    currentViewController=homePageVIewController;
+                    pageImage.image=[UIImage imageNamed:@"common_icon_chum_c@2x"];
                     pageLabel.textColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
                     foundImage.image=[UIImage imageNamed:@"common_icon_find@2x"];
                     foundLabel.textColor=[UIColor blackColor];
                     
-                    friendImage.image=[UIImage imageNamed:@"common_icon_chum@2x"];
+                    friendImage.image=[UIImage imageNamed:@"common_icon_home@2x"];
                     friendLabel.textColor=[UIColor blackColor];
                     
                     meImage.image=[UIImage imageNamed:@"common_icon_mine@2x"];
@@ -595,13 +621,13 @@ MyselfViewController *thirdViewController;
                     
                     currentViewController=firstViewController;
                     firstViewController.vcID=0;
-                    pageImage.image=[UIImage imageNamed:@"common_icon_home@2x"];
+                    pageImage.image=[UIImage imageNamed:@"common_icon_chum@2x"];
                     pageLabel.textColor=[UIColor blackColor];
                     
                     foundImage.image=[UIImage imageNamed:@"common_icon_find_c@2x"];
                     foundLabel.textColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
                     
-                    friendImage.image=[UIImage imageNamed:@"common_icon_chum@2x"];
+                    friendImage.image=[UIImage imageNamed:@"common_icon_home@2x"];
                     friendLabel.textColor=[UIColor blackColor];
                     
                     meImage.image=[UIImage imageNamed:@"common_icon_mine@2x"];
@@ -609,13 +635,13 @@ MyselfViewController *thirdViewController;
                 }else{
                     currentViewController=oldViewController;
                     
-                    pageImage.image=[UIImage imageNamed:@"common_icon_home@2x"];
+                    pageImage.image=[UIImage imageNamed:@"common_icon_chum@2x"];
                     pageLabel.textColor=[UIColor blackColor];
                     
                     foundImage.image=[UIImage imageNamed:@"common_icon_find_c@2x"];
                     foundLabel.textColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
                     
-                    friendImage.image=[UIImage imageNamed:@"common_icon_chum@2x"];
+                    friendImage.image=[UIImage imageNamed:@"common_icon_home@2x"];
                     friendLabel.textColor=[UIColor blackColor];
                     
                     meImage.image=[UIImage imageNamed:@"common_icon_mine@2x"];
@@ -659,31 +685,31 @@ MyselfViewController *thirdViewController;
             helpDic=@{@"action":@"sns"};
             [[NSNotificationCenter defaultCenter] postNotificationName:@"HELP" object:helpDic];
             indexesID=0;
-            [self transitionFromViewController:currentViewController toViewController:friendViewController duration:0.5 options:0 animations:^{
+            [self transitionFromViewController:currentViewController toViewController:viewController duration:0.5 options:0 animations:^{
             }  completion:^(BOOL finished) {
                 if(finished){
-                    currentViewController=friendViewController;
+                    currentViewController=viewController;
                     
-                    pageImage.image=[UIImage imageNamed:@"common_icon_home@2x"];
+                    pageImage.image=[UIImage imageNamed:@"common_icon_chum@2x"];
                     pageLabel.textColor=[UIColor blackColor];
                     
                     foundImage.image=[UIImage imageNamed:@"common_icon_find@2x"];
                     foundLabel.textColor=[UIColor blackColor];
                     
-                    friendImage.image=[UIImage imageNamed:@"common_icon_chum_c@2x"];
+                    friendImage.image=[UIImage imageNamed:@"common_icon_home_c@2x"];
                     friendLabel.textColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
                     
                     meImage.image=[UIImage imageNamed:@"common_icon_mine@2x"];
                     meLabel.textColor=[UIColor blackColor];
                 }else{
                     currentViewController=oldViewController;
-                    pageImage.image=[UIImage imageNamed:@"common_icon_home@2x"];
+                    pageImage.image=[UIImage imageNamed:@"common_icon_chum@2x"];
                     pageLabel.textColor=[UIColor blackColor];
                     
                     foundImage.image=[UIImage imageNamed:@"common_icon_find@2x"];
                     foundLabel.textColor=[UIColor blackColor];
                     
-                    friendImage.image=[UIImage imageNamed:@"common_icon_chum_c@2x"];
+                    friendImage.image=[UIImage imageNamed:@"common_icon_home_c@2x"];
                     friendLabel.textColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
                     
                     meImage.image=[UIImage imageNamed:@"common_icon_mine@2x"];
@@ -710,25 +736,25 @@ MyselfViewController *thirdViewController;
                         thirdViewController.rootId=0;
                         thirdViewController.userID=userID;
                         thirdViewController.view_userID=userID;
-                        pageImage.image=[UIImage imageNamed:@"common_icon_home@2x"];
+                        pageImage.image=[UIImage imageNamed:@"common_icon_chum@2x"];
                         pageLabel.textColor=[UIColor blackColor];
                         
                         foundImage.image=[UIImage imageNamed:@"common_icon_find@2x"];
                         foundLabel.textColor=[UIColor blackColor];
                         
-                        friendImage.image=[UIImage imageNamed:@"common_icon_chum@2x"];
+                        friendImage.image=[UIImage imageNamed:@"common_icon_home@2x"];
                         friendLabel.textColor=[UIColor blackColor];
                         
                         meImage.image=[UIImage imageNamed:@"common_icon_mine_c@2x"];
                         meLabel.textColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
                     }else{
-                        pageImage.image=[UIImage imageNamed:@"common_icon_home@2x"];
+                        pageImage.image=[UIImage imageNamed:@"common_icon_chum@2x"];
                         pageLabel.textColor=[UIColor blackColor];
                         
                         foundImage.image=[UIImage imageNamed:@"common_icon_find@2x"];
                         foundLabel.textColor=[UIColor blackColor];
                         
-                        friendImage.image=[UIImage imageNamed:@"common_icon_chum@2x"];
+                        friendImage.image=[UIImage imageNamed:@"common_icon_home@2x"];
                         friendLabel.textColor=[UIColor blackColor];
                         
                         meImage.image=[UIImage imageNamed:@"common_icon_mine_c@2x"];
@@ -750,14 +776,14 @@ MyselfViewController *thirdViewController;
 
 - (void)LoginReturn:(NSNotification *)noti
 {
-    currentViewController=viewController;
-    pageImage.image=[UIImage imageNamed:@"common_icon_home_c@2x"];
+    currentViewController=homePageVIewController;
+    pageImage.image=[UIImage imageNamed:@"common_icon_chum_c@2x"];
     pageLabel.textColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
     
     foundImage.image=[UIImage imageNamed:@"common_icon_find@2x"];
     foundLabel.textColor=[UIColor blackColor];
     
-    friendImage.image=[UIImage imageNamed:@"common_icon_chum@2x"];
+    friendImage.image=[UIImage imageNamed:@"common_icon_home@2x"];
     friendLabel.textColor=[UIColor blackColor];
     
     meImage.image=[UIImage imageNamed:@"common_icon_mine@2x"];
@@ -791,37 +817,37 @@ MyselfViewController *thirdViewController;
     [UIView commitAnimations];
     bottomView.hidden=YES;
     if (_is_new_userID==1) {
-        currentViewController=viewController;
-        pageImage.image=[UIImage imageNamed:@"common_icon_home_c@2x"];
+        currentViewController=homePageVIewController;
+        pageImage.image=[UIImage imageNamed:@"common_icon_chum_c@2x"];
         pageLabel.textColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
         
         foundImage.image=[UIImage imageNamed:@"common_icon_find@2x"];
         foundLabel.textColor=[UIColor blackColor];
         
-        friendImage.image=[UIImage imageNamed:@"common_icon_chum@2x"];
+        friendImage.image=[UIImage imageNamed:@"common_icon_home@2x"];
         friendLabel.textColor=[UIColor blackColor];
         
         meImage.image=[UIImage imageNamed:@"common_icon_mine@2x"];
         meLabel.textColor=[UIColor blackColor];
-        [mainView addSubview:viewController.view];
+        [mainView addSubview:homePageVIewController.view];
         [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     }else{
         switch (tabBarID) {
             case 0:
             {
-                currentViewController=viewController;
-                pageImage.image=[UIImage imageNamed:@"common_icon_home_c@2x"];
+                currentViewController=homePageVIewController;
+                pageImage.image=[UIImage imageNamed:@"common_icon_chum_c@2x"];
                 pageLabel.textColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
                 
                 foundImage.image=[UIImage imageNamed:@"common_icon_find@2x"];
                 foundLabel.textColor=[UIColor blackColor];
                 
-                friendImage.image=[UIImage imageNamed:@"common_icon_chum@2x"];
+                friendImage.image=[UIImage imageNamed:@"common_icon_home@2x"];
                 friendLabel.textColor=[UIColor blackColor];
                 
                 meImage.image=[UIImage imageNamed:@"common_icon_mine@2x"];
                 meLabel.textColor=[UIColor blackColor];
-                [mainView addSubview:viewController.view];
+                [mainView addSubview:homePageVIewController.view];
                 [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
             }
                 break;
@@ -829,13 +855,13 @@ MyselfViewController *thirdViewController;
             {
                 currentViewController=firstViewController;
                 firstViewController.vcID=0;
-                pageImage.image=[UIImage imageNamed:@"common_icon_home@2x"];
+                pageImage.image=[UIImage imageNamed:@"common_icon_chum@2x"];
                 pageLabel.textColor=[UIColor blackColor];
                 
                 foundImage.image=[UIImage imageNamed:@"common_icon_find_c@2x"];
                 foundLabel.textColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
                 
-                friendImage.image=[UIImage imageNamed:@"common_icon_chum@2x"];
+                friendImage.image=[UIImage imageNamed:@"common_icon_home@2x"];
                 friendLabel.textColor=[UIColor blackColor];
                 
                 meImage.image=[UIImage imageNamed:@"common_icon_mine@2x"];
@@ -846,20 +872,20 @@ MyselfViewController *thirdViewController;
                 break;
             case 3:
             {
-                currentViewController=friendViewController;
+                currentViewController=viewController;
                 
-                pageImage.image=[UIImage imageNamed:@"common_icon_home@2x"];
+                pageImage.image=[UIImage imageNamed:@"common_icon_chum@2x"];
                 pageLabel.textColor=[UIColor blackColor];
                 
                 foundImage.image=[UIImage imageNamed:@"common_icon_find@2x"];
                 foundLabel.textColor=[UIColor blackColor];
                 
-                friendImage.image=[UIImage imageNamed:@"common_icon_chum_c@2x"];
+                friendImage.image=[UIImage imageNamed:@"common_icon_home_c@2x"];
                 friendLabel.textColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
                 
                 meImage.image=[UIImage imageNamed:@"common_icon_mine@2x"];
                 meLabel.textColor=[UIColor blackColor];
-                [mainView addSubview:friendViewController.view];
+                [mainView addSubview:viewController.view];
                 [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
             }
                 break;
@@ -868,13 +894,13 @@ MyselfViewController *thirdViewController;
                 currentViewController=thirdViewController;
 //                thirdViewController.rootId=0;
                 
-                pageImage.image=[UIImage imageNamed:@"common_icon_home@2x"];
+                pageImage.image=[UIImage imageNamed:@"common_icon_chum@2x"];
                 pageLabel.textColor=[UIColor blackColor];
                 
                 foundImage.image=[UIImage imageNamed:@"common_icon_find@2x"];
                 foundLabel.textColor=[UIColor blackColor];
                 
-                friendImage.image=[UIImage imageNamed:@"common_icon_chum@2x"];
+                friendImage.image=[UIImage imageNamed:@"common_icon_home@2x"];
                 friendLabel.textColor=[UIColor blackColor];
                 
                 meImage.image=[UIImage imageNamed:@"common_icon_mine_c@2x"];
@@ -957,7 +983,7 @@ MyselfViewController *thirdViewController;
     cell.lconImageView.layer.cornerRadius=cell.lconImageView.frame.size.width/2;
     cell.lconImageView.clipsToBounds=YES;
     cell.nameLabel.text=nameStr;
-    cell.nameLabel.font=[UIFont fontWithName:@"Arial" size:13];
+    cell.nameLabel.font=[UIFont fontWithName:@"Heiti SC" size:13];
     cell.nameLabel.textColor=[UIColor colorWithRed:100/255.0f green:100/255.0f blue:100/255.0f alpha:1];
     cell.nameLabel.textAlignment=NSTextAlignmentCenter;
     cell.backgroundColor=[UIColor whiteColor];
@@ -1091,7 +1117,7 @@ MyselfViewController *thirdViewController;
                 [self.navigationController pushViewController:pageViewVC animated:YES];
             }
             
-        }else if ([action isEqualToString:@"punch_sign"]){
+        }else if ([action isEqualToString:@"checkin"]){
             if ([params isEqualToString:@"add"]) {
                 AttendanceViewController *userVC=[[AttendanceViewController alloc]init];
                 userVC.tyPeStr=action;
@@ -1117,7 +1143,7 @@ MyselfViewController *thirdViewController;
                 [self.navigationController pushViewController:pageViewVC animated:YES];
             }
             
-        }else if ([action isEqualToString:@"leave_pass"]){
+        }else if ([action isEqualToString:@"leave"]){
             if ([params isEqualToString:@"add"]) {
                 ApplyForLeaveViewController *applyVC=[[ApplyForLeaveViewController alloc]init];
                 applyVC.tyPeStr=action;
@@ -1131,12 +1157,12 @@ MyselfViewController *thirdViewController;
                 [self.navigationController pushViewController:leaveListVC animated:YES];
             }
             
-        }else if ([action isEqualToString:@"punch_dynamic"]){
+        }else if ([action isEqualToString:@"feed_add"]){
             if ([params isEqualToString:@"add"]) {
                 UpLoadViewController *vcd=[[UpLoadViewController alloc]init];
                 [self.navigationController pushViewController:vcd animated:YES];
             }else if ([params isEqualToString:@"list"]){
-                helpDic=@{@"action":@"punch_dynamic"};
+                helpDic=@{@"action":@"feed_add"};
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"HELP" object:helpDic];
                 CardPageViewController *pageViewVC=[[CardPageViewController alloc]init];
                 pageViewVC.tyPeStr=action;
@@ -1188,6 +1214,11 @@ MyselfViewController *thirdViewController;
                 plantsVc.wasteID=103;
                 [self.navigationController pushViewController:plantsVc animated:YES];
             }
+        }else if([action isEqualToString:@"asset"]){
+            AssetsAdministrationViewController *plantsVc=[[AssetsAdministrationViewController alloc]init];
+            plantsVc.tyPeStr=action;
+            [self.navigationController pushViewController:plantsVc animated:YES];
+            
         }else{
             AppCenterViewController *appCenterVC=[[AppCenterViewController alloc]init];
             [self.navigationController pushViewController:appCenterVC animated:YES];

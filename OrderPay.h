@@ -36,7 +36,7 @@
 @property (nonatomic, strong)NSString *addressString;
 @property (nonatomic, strong)NSString *volumeString;
 @property (nonatomic, strong)NSString *actualString;
-
+@property (nonatomic, assign)BOOL MODE;
 @property (nonatomic, weak) __weak id <BUYDELEGATE> delegate;
 
 

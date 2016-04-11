@@ -224,14 +224,14 @@
     [cell addSubview:headeImageView];
     UILabel *nameLabel=[[UILabel alloc]init];
     nameLabel.text=[NSString stringWithFormat:@"%@",[dataDic objectForKey:@"name"]];
-    nameLabel.font=[UIFont fontWithName:@"Arial" size:15];
+    nameLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
     [nameLabel setNumberOfLines:1];
     [nameLabel sizeToFit];
     nameLabel.frame=FRAME(headeImageView.frame.size.width+20, 14, nameLabel.frame.size.width, 16);
     [cell addSubview:nameLabel];
     UILabel *app_describeLab=[[UILabel alloc]initWithFrame:FRAME(headeImageView.frame.size.width+20, nameLabel.frame.size.height+nameLabel.frame.origin.y+5, WIDTH-headeImageView.frame.size.width-75, 13)];
     app_describeLab.text=[NSString stringWithFormat:@"%@",[dataDic objectForKey:@"app_describe"]];
-    app_describeLab.font=[UIFont fontWithName:@"Arial" size:12];
+    app_describeLab.font=[UIFont fontWithName:@"Heiti SC" size:12];
     app_describeLab.textColor=[UIColor colorWithRed:190/255.0f green:190/255.0f blue:190/255.0f alpha:1];
     //    [app_describeLab setNumberOfLines:1];
     //    [app_describeLab sizeToFit];
@@ -239,7 +239,7 @@
     
     UILabel *app_providerLab=[[UILabel alloc]initWithFrame:FRAME(headeImageView.frame.size.width+20, app_describeLab.frame.size.height+app_describeLab.frame.origin.y+5, app_describeLab.frame.size.width, 13)];
     app_providerLab.text=[NSString stringWithFormat:@"提供者:%@",[dataDic objectForKey:@"app_provider"]];
-    app_providerLab.font=[UIFont fontWithName:@"Arial" size:12];
+    app_providerLab.font=[UIFont fontWithName:@"Heiti SC" size:12];
     app_providerLab.textColor=[UIColor colorWithRed:190/255.0f green:190/255.0f blue:190/255.0f alpha:1];
     //    [app_providerLab setNumberOfLines:1];
     //    [app_providerLab sizeToFit];
@@ -317,7 +317,7 @@
         }
     }
     
-    addButton.titleLabel.font=[UIFont fontWithName:@"Arial" size:13];
+    addButton.titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:13];
     addButton.tag=indexPath.row;
     [addButton addTarget:self action:@selector(addButAction:) forControlEvents:UIControlEventTouchUpInside];
     [cell addSubview:addButton];

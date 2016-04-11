@@ -287,13 +287,13 @@
     NSString *service_type_name=[NSString stringWithFormat:@"%@",[orderDic objectForKey:@"service_type_name"]];
     NSString *order_money=[NSString stringWithFormat:@"%@",[orderDic objectForKey:@"order_pay"]];
     cateGroyLabel.text=[NSString stringWithFormat:@"%@:%@",service_type_name,order_money];
-    cateGroyLabel.font=[UIFont fontWithName:@"Arial" size:16];
+    cateGroyLabel.font=[UIFont fontWithName:@"Heiti SC" size:16];
     
     timeLabel.text=[NSString stringWithFormat:@"%@",[orderDic objectForKey:@"add_time_str"]];
-    timeLabel.font=[UIFont fontWithName:@"Arial" size:12];
+    timeLabel.font=[UIFont fontWithName:@"Heiti SC" size:12];
     
     addressLabel.text=[NSString stringWithFormat:@"%@",[orderDic objectForKey:@"addr_name"]];
-    addressLabel.font=[UIFont fontWithName:@"Arial" size:12];
+    addressLabel.font=[UIFont fontWithName:@"Heiti SC" size:12];
     
 //    [stateButton setTitle:[NSString stringWithFormat:@"%@",[orderDic objectForKey:@"order_status_name"]] forState:UIControlStateNormal];
     UILabel *stateLabel=[[UILabel alloc]initWithFrame:FRAME(5, 5, 50, 15)];
@@ -315,7 +315,7 @@
 
         stateButton.backgroundColor=[UIColor colorWithRed:200/255.0f green:200/255.0f blue:200/255.0f alpha:1];
     }
-    stateLabel.font=[UIFont fontWithName:@"Arial" size:14];
+    stateLabel.font=[UIFont fontWithName:@"Heiti SC" size:14];
     stateLabel.textAlignment=NSTextAlignmentCenter;
     [stateButton addSubview:stateLabel];
     if([indexPath row] == ((NSIndexPath*)[[tableView indexPathsForVisibleRows] lastObject]).row){

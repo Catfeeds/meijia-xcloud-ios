@@ -11,7 +11,7 @@
 #import "SecretFriendsViewController.h"
 #import "DynamicViewController.h"
 #import "ChatListViewController.h"
-#import "ApplyFriendsListViewController.h"
+
 @interface FriendViewController ()
 {
     UIView *tabBarView;
@@ -22,6 +22,8 @@
     UIButton *secetFriendsButton;
     UIView *spotView;
     UIButton *addBut;
+    int currentSelectButtonIndex;
+    int previousSelectButtonIndex;
     
 }
 
@@ -29,7 +31,6 @@
 ChatListViewController *newsViewController;
 SecretFriendsViewController *secAccessController;
 DynamicViewController *dynamicViewController;
-ApplyFriendsListViewController *friendsListViewController;
 @implementation FriendViewController
 -(void)viewWillAppear:(BOOL)animated
 {
@@ -44,8 +45,15 @@ ApplyFriendsListViewController *friendsListViewController;
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
-//    self.backBtn.hidden=YES;
-//    self.navlabel.text=@"好友";
+    if (_friendVcID==101) {
+        currentSelectButtonIndex = 0;
+        previousSelectButtonIndex=1001;
+    }else{
+        currentSelectButtonIndex = 0;
+        previousSelectButtonIndex=1000;
+    }
+    self.backBtn.hidden=NO;
+    self.view.backgroundColor=[UIColor colorWithRed:231/255.0f green:231/255.0f blue:231/255.0f alpha:1];
     [self didUnreadMessagesCountChanged];
     
     
@@ -65,16 +73,18 @@ ApplyFriendsListViewController *friendsListViewController;
     
     secAccessController=[[SecretFriendsViewController alloc]init];
     [self addChildViewController:secAccessController];
+    if (_friendVcID==100) {
+        [mainView addSubview:dynamicViewController.view];
+        currentViewController = dynamicViewController;
+    }else{
+        [mainView addSubview:secAccessController.view];
+        currentViewController = secAccessController;
+    }
     
-    friendsListViewController=[[ApplyFriendsListViewController alloc]init];
-    [self addChildViewController:friendsListViewController];
-    
-    [mainView addSubview:dynamicViewController.view];
-    currentViewController = dynamicViewController;
     
     
-    tabBarView=[[UIView alloc]initWithFrame:CGRectMake((WIDTH-240)/2, 20, 240, 44)];
-   // tabBarView.backgroundColor=[UIColor colorWithRed:231/255.0f green:231/255.0f blue:231/255.0f alpha:1];
+    tabBarView=[[UIView alloc]initWithFrame:CGRectMake((WIDTH-180)/2, 64, 180, 44)];
+    tabBarView.backgroundColor=[UIColor colorWithRed:231/255.0f green:231/255.0f blue:231/255.0f alpha:1];
     [self.view addSubview:tabBarView];
     
     addBut=[[UIButton alloc]initWithFrame:FRAME(WIDTH-40, 20, 40, 44)];
@@ -86,7 +96,12 @@ ApplyFriendsListViewController *friendsListViewController;
     addImageView.image=[UIImage imageNamed:@"iconfont-xinjian"];
     [addBut addSubview:addImageView];
     
-    lineView=[[UIView alloc]initWithFrame:FRAME(0, 42, 60, 2)];
+    lineView=[[UIView alloc]init];
+    if (_friendVcID==100) {
+        lineView.frame=FRAME(0, 42, 60, 2);
+    }else{
+        lineView.frame=FRAME(60, 42, 60, 2);
+    }
     lineView.backgroundColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
     [tabBarView addSubview:lineView];
     
@@ -96,14 +111,27 @@ ApplyFriendsListViewController *friendsListViewController;
     //_lineLable.alpha = 0.3;
 //    [tabBarView addSubview:_lineLable];
     
-    NSArray *nameArray=@[@"动态",@"好友",@"消息",@"申请"];
+    NSArray *nameArray=@[@"动态",@"好友",@"消息"/*,@"申请"*/];
     for (int i=0; i<nameArray.count; i++) {
         UIButton *tabbarBut=[[UIButton alloc]initWithFrame:FRAME(60*i, 0, 60, 43)];
         [tabbarBut setTitle:nameArray[i] forState:UIControlStateNormal];
         if(i==0){
-            [tabbarBut setTitleColor:[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1] forState:UIControlStateNormal];
+            if (_friendVcID==100) {
+               [tabbarBut setTitleColor:[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1] forState:UIControlStateNormal];
+            }else{
+                [tabbarBut setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+            }
+            
         }else{
-            [tabbarBut setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+            if (i==1) {
+                if (_friendVcID==101) {
+                    [tabbarBut setTitleColor:[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1] forState:UIControlStateNormal];
+                }else{
+                    [tabbarBut setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+                }
+            }else{
+                [tabbarBut setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+            }
         }
         if (i==2) {
             spotView=[[UIView alloc]initWithFrame:FRAME(43, 8, 10, 10)];
@@ -113,7 +141,7 @@ ApplyFriendsListViewController *friendsListViewController;
             spotView.hidden=YES;
             [tabbarBut addSubview:spotView];
         }
-        tabbarBut.titleLabel.font=[UIFont fontWithName:@"Arial" size:15];
+        tabbarBut.titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
         [tabbarBut addTarget:self action:@selector(tabBarButton:) forControlEvents:UIControlEventTouchUpInside];
         [tabbarBut setTag:(1000+i)];
         [tabBarView addSubview:tabbarBut];
@@ -182,20 +210,32 @@ ApplyFriendsListViewController *friendsListViewController;
 
 -(void)tabBarButton:(UIButton *)sender
 {
-    if ((currentViewController==dynamicViewController&&[sender tag]==1000)||(currentViewController==secAccessController&&[sender tag]==1001)||(currentViewController==newsViewController&&[sender tag]==1002)||(currentViewController==friendsListViewController&&[sender tag]==1003)) {
+    if ((currentViewController==dynamicViewController&&[sender tag]==1000)||(currentViewController==secAccessController&&[sender tag]==1001)||(currentViewController==newsViewController&&[sender tag]==1002)) {
         return;
     }
     UIViewController *oldViewController=currentViewController;
-    static int currentSelectButtonIndex = 0;
-    static int previousSelectButtonIndex=1000;
-    currentSelectButtonIndex=(int)sender.tag;
-    UIButton *previousBtn=(UIButton *)[self.view viewWithTag:previousSelectButtonIndex];
-    [previousBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    previousBtn.titleLabel.font=[UIFont fontWithName:@"Arial" size:15];
-    UIButton *currentBtn = (UIButton *)[self.view viewWithTag:currentSelectButtonIndex];;
-    [currentBtn setTitleColor:[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1] forState:UIControlStateNormal];
-    currentBtn.titleLabel.font=[UIFont fontWithName:@"Arial" size:18];
-    previousSelectButtonIndex=currentSelectButtonIndex;
+//    if (_friendVcID==101) {
+//        
+//        currentSelectButtonIndex=(int)sender.tag;
+//        UIButton *previousBtn=(UIButton *)[self.view viewWithTag:previousSelectButtonIndex];
+//        [previousBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+//        previousBtn.titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
+//        UIButton *currentBtn = (UIButton *)[self.view viewWithTag:currentSelectButtonIndex];;
+//        [currentBtn setTitleColor:[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1] forState:UIControlStateNormal];
+//        currentBtn.titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:18];
+//        previousSelectButtonIndex=currentSelectButtonIndex;
+//    }else{
+    
+        currentSelectButtonIndex=(int)sender.tag;
+        UIButton *previousBtn=(UIButton *)[self.view viewWithTag:previousSelectButtonIndex];
+        [previousBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        previousBtn.titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
+        UIButton *currentBtn = (UIButton *)[self.view viewWithTag:currentSelectButtonIndex];;
+        [currentBtn setTitleColor:[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1] forState:UIControlStateNormal];
+        currentBtn.titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:18];
+        previousSelectButtonIndex=currentSelectButtonIndex;
+//    }
+    
     switch (sender.tag) {
         case 1000:
         {
@@ -244,23 +284,6 @@ ApplyFriendsListViewController *friendsListViewController;
                 }
                 
             }];
-        }
-            break;
-        case 1003:
-        {
-            addBut.hidden=YES;
-            [self transitionFromViewController:currentViewController toViewController:friendsListViewController duration:0.5 options:0 animations:^{
-            }  completion:^(BOOL finished) {
-                if(finished){
-                    currentViewController=friendsListViewController;
-                    
-                }else{
-                    currentViewController=oldViewController;
-                    
-                }
-                
-            }];
-
         }
             break;
         default:

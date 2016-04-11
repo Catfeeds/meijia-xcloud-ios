@@ -33,5 +33,6 @@
  当点击的时候，执行的block
  **/
 @property (nonatomic , copy) void (^TapActionBlock)(NSInteger pageIndex);
+@property (nonatomic , assign)int pageID;
 
 @end

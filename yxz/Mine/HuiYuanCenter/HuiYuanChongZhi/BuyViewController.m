@@ -15,6 +15,8 @@
 #import "USERINFODataModels.h"
 #import "UserInfoViewController.h"
 #import "WeiXinPay.h"
+#import "Order_DetailsViewController.h"
+#import "MyWalletViewController.h"
 @interface BuyViewController ()
 <BUYDELEGATE>
 {
@@ -89,12 +91,35 @@
 }
 - (void)WxPaySuccess
 {
-    [self.navigationController popViewControllerAnimated:YES];
+//    [self.navigationController popViewControllerAnimated:YES];
+    for (UIViewController *controller in self.navigationController.viewControllers) {
+        if ([controller isKindOfClass:[MyWalletViewController class]]) {
+            [self.navigationController popToViewController:controller animated:YES];
+        }
+    }
+
     [self showAlertViewWithTitle:@"提示" message:@"购买成功"];
 }
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    
+    for (UIViewController *controller in self.navigationController.viewControllers) {
+        if ([controller isKindOfClass:[MyWalletViewController class]]) {
+            [self.navigationController popToViewController:controller animated:YES];
+        }
+    }
+
+    [self showAlertViewWithTitle:@"提示" message:@"购买成功"];
+    NSLog(@"clickButtonAtIndex:%d",1);
+}
+
 - (void)Qianbao{
-    UserInfoViewController *user = [[UserInfoViewController alloc]init];
-    [self.navigationController presentViewController:user animated:YES completion:nil];
+    for (UIViewController *controller in self.navigationController.viewControllers) {
+        if ([controller isKindOfClass:[MyWalletViewController class]]) {
+            [self.navigationController popToViewController:controller animated:YES];
+        }
+    }
+    [self showAlertViewWithTitle:@"提示" message:@"购买成功"];
 }
 #pragma mark 获得余额
 - (void)getMyYue
@@ -208,7 +233,8 @@
     
     NSLog(@"responsobject is %@",responsobject);
 
-    
+    _user_ID=[[responsobject objectForKey:@"data"]objectForKey:@"user_id"];
+    _order_ID=[[responsobject objectForKey:@"data"]objectForKey:@"card_order_no"];
     NSInteger _status = [[responsobject objectForKey:@"status"] integerValue];
 
     if (_status == 0) {

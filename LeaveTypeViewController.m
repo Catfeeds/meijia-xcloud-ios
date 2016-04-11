@@ -80,6 +80,7 @@
     cellID=(int)indexPath.row;
     _typeStr=[NSString stringWithFormat:@"%@",dataArray[indexPath.row]];
     [myTableView reloadData];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)didReceiveMemoryWarning {

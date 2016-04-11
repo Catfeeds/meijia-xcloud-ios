@@ -7,12 +7,15 @@
 //
 
 #import "FatherViewController.h"
+
 #import <TencentOpenAPI/TencentOAuth.h>
 #import <CoreLocation/CoreLocation.h>
 #import <MapKit/MapKit.h>
 
 @interface MyLogInViewController : FatherViewController<CLLocationManagerDelegate>
-
+{
+    sqlite3 *simi;
+}
 @property (nonatomic, copy) NSString *leiMing;
 
 @property (nonatomic, assign)int vCLID;

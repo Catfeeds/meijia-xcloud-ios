@@ -212,7 +212,7 @@ int H = 0,time_ID;
     textViewLabel=[[UILabel alloc]initWithFrame:FRAME(39/2, 5, WIDTH-39, 15)];
     textViewLabel.text=@"您可以给秘书捎句话...";
     textViewLabel.textColor=[UIColor colorWithRed:164/255.0f green:164/255.0f blue:164/255.0f alpha:1];
-    textViewLabel.font=[UIFont fontWithName:@"Arial" size:14];
+    textViewLabel.font=[UIFont fontWithName:@"Heiti SC" size:14];
     textViewLabel.lineBreakMode=NSLineBreakByTruncatingTail;
     [textViewLabel setNumberOfLines:1];
     [textViewLabel sizeToFit];
@@ -415,7 +415,7 @@ int H = 0,time_ID;
     UILabel *label=[[UILabel alloc]init];
     label.frame=CGRectMake(msImageView.frame.origin.x+msImageView.frame.size.width+10, 25/2, label.frame.size.width, 32/2);
     label.text=@"交给秘书处理";
-    label.font=[UIFont fontWithName:@"Arial" size:14];
+    label.font=[UIFont fontWithName:@"Heiti SC" size:14];
     label.textColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
     label.lineBreakMode=NSLineBreakByTruncatingTail;
     [label setNumberOfLines:0];
@@ -425,7 +425,7 @@ int H = 0,time_ID;
     label1=[[UILabel alloc]init];
     label1.frame=CGRectMake(20, secretaryView.frame.size.height+secretaryView.frame.origin.y+74, WIDTH-40, 32/2);
     label1.text=@"提示：秘书工作时间为7:00～19:00，请在此时间内设置秘书提醒时间";
-    label1.font=[UIFont fontWithName:@"Arial" size:14];
+    label1.font=[UIFont fontWithName:@"Heiti SC" size:14];
     label1.textColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
     label1.lineBreakMode=NSLineBreakByTruncatingTail;
     label1.hidden=YES;
@@ -658,12 +658,12 @@ int H = 0,time_ID;
             [titleLabel setNumberOfLines:0];
             [titleLabel sizeToFit];
             titleLabel.frame=FRAME(6/2, 20, titleLabel.frame.size.width, 14);
-            titleLabel.font=[UIFont fontWithName:@"Arial" size:14];
+            titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:14];
             [labelView addSubview:titleLabel];
             UILabel *chooseLabel=[[UILabel alloc]init];
             chooseLabel.frame=FRAME(6/2,34+17/2, 40, 11);
             chooseLabel.text=@"已选择:";
-            chooseLabel.font=[UIFont fontWithName:@"Arial" size:11];
+            chooseLabel.font=[UIFont fontWithName:@"Heiti SC" size:11];
             chooseLabel.textColor=[UIColor colorWithRed:164/255.0f green:164/255.0f blue:164/255.0f alpha:1];
             [labelView addSubview:chooseLabel];
             selectLabel=[[UILabel alloc]init];
@@ -741,7 +741,7 @@ int H = 0,time_ID;
             inTimeLabel.lineBreakMode=NSLineBreakByTruncatingTail;
             [inTimeLabel setNumberOfLines:0];
             [inTimeLabel sizeToFit];
-            inTimeLabel.font=[UIFont fontWithName:@"Arial" size:13];
+            inTimeLabel.font=[UIFont fontWithName:@"Heiti SC" size:13];
             inTimeLabel.frame=FRAME(10, 10, inTimeLabel.frame.size.width, timeButton.frame.size.height-20);
             [timeButton addSubview:inTimeLabel];
             UIImageView *timeImg=[[UIImageView alloc]initWithFrame:FRAME(timeButton.frame.size.width-20, (33-15)/2, 15, 15)];
@@ -794,7 +794,7 @@ int H = 0,time_ID;
             [plaLabel setNumberOfLines:0];
             [plaLabel sizeToFit];
             plaLabel.frame=FRAME(10, 10, plaLabel.frame.size.width, placeButton.frame.size.height-20);
-            plaLabel.font=[UIFont fontWithName:@"Arial" size:13];
+            plaLabel.font=[UIFont fontWithName:@"Heiti SC" size:13];
             [placeButton addSubview:plaLabel];
             meetingField=[[UITextField alloc]initWithFrame:FRAME(65, 1.5, placeButton.frame.size.width-145, 30)];
             meetingField.delegate=self;
@@ -812,7 +812,7 @@ int H = 0,time_ID;
             meeting_roomBut.layer.borderWidth= 1.0f;
             [meeting_roomBut setTitle:@"会议室" forState:UIControlStateNormal];
             [meeting_roomBut setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-            meeting_roomBut.titleLabel.font=[UIFont fontWithName:@"Arial" size:13];
+            meeting_roomBut.titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:13];
             [meeting_roomBut addTarget:self action:@selector(meeting_roomBut) forControlEvents:UIControlEventTouchUpInside];
             [placeButton addSubview:meeting_roomBut];
             if (textFieldString==nil||textFieldString==NULL) {
@@ -821,7 +821,7 @@ int H = 0,time_ID;
                 meetingField.text=textFieldString;
             }
             
-            meetingField.font=[UIFont fontWithName:@"Arial" size:13];
+            meetingField.font=[UIFont fontWithName:@"Heiti SC" size:13];
             [placeButton addSubview:meetingField];
             [self timeLabelLayout];
             
@@ -845,7 +845,7 @@ int H = 0,time_ID;
             label.text=array[a];
             label.lineBreakMode=NSLineBreakByTruncatingTail;
             [label sizeToFit];
-            label.font=[UIFont fontWithName:@"Arial" size:14];
+            label.font=[UIFont fontWithName:@"Heiti SC" size:14];
             [labelView addSubview:label];
             if (i==2) {
                 contentLabel=[[UILabel alloc]initWithFrame:FRAME(label.frame.size.width+label.frame.origin.x+5,23/2, labelView.frame.size.width-(label.frame.size.width+label.frame.origin.x+5), labelView.frame.size.height-22)];
@@ -941,7 +941,7 @@ int H = 0,time_ID;
     [selectLabel setNumberOfLines:1];
     [selectLabel sizeToFit];
     selectLabel.frame=FRAME(41/2+40,34+17/2,WIDTH-41/2-50,11);
-    selectLabel.font=[UIFont fontWithName:@"Arial" size:11];
+    selectLabel.font=[UIFont fontWithName:@"Heiti SC" size:11];
     selectLabel.textColor=[UIColor colorWithRed:164/255.0f green:164/255.0f blue:164/255.0f alpha:1];
     [backgroundView addSubview:selectLabel];
     
@@ -950,7 +950,7 @@ int H = 0,time_ID;
     numberLabel.lineBreakMode=NSLineBreakByTruncatingTail;
     [numberLabel setNumberOfLines:0];
     [numberLabel sizeToFit];
-    numberLabel.font=[UIFont fontWithName:@"Arial" size:14];
+    numberLabel.font=[UIFont fontWithName:@"Heiti SC" size:14];
     numberLabel.textColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
     numberLabel.frame=FRAME(WIDTH-99/2-numberLabel.frame.size.width, 20, numberLabel.frame.size.width, 14);
     [backgroundView addSubview:numberLabel];
@@ -963,10 +963,10 @@ int H = 0,time_ID;
     timeLabel.lineBreakMode=NSLineBreakByTruncatingTail;
     [timeLabel setNumberOfLines:1];
     [timeLabel sizeToFit];
-    timeLabel.font=[UIFont fontWithName:@"Arial" size:14];
+    timeLabel.font=[UIFont fontWithName:@"Heiti SC" size:14];
     timeLabel.textColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
     timeLabel.frame=FRAME(65, 10, timeLabel.frame.size.width, 14);
-    timeLabel.font=[UIFont fontWithName:@"Arial" size:13];
+    timeLabel.font=[UIFont fontWithName:@"Heiti SC" size:13];
     [timeButton addSubview:timeLabel];
 }
 #pragma mark会议地点文本显示
@@ -977,10 +977,10 @@ int H = 0,time_ID;
     placeLabel.lineBreakMode=NSLineBreakByTruncatingTail;
     [placeLabel setNumberOfLines:0];
     [placeLabel sizeToFit];
-    placeLabel.font=[UIFont fontWithName:@"Arial" size:14];
+    placeLabel.font=[UIFont fontWithName:@"Heiti SC" size:14];
     placeLabel.textColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
     placeLabel.frame=FRAME(65, 10, placeLabel.frame.size.width, 14);
-    placeLabel.font=[UIFont fontWithName:@"Arial" size:13];
+    placeLabel.font=[UIFont fontWithName:@"Heiti SC" size:13];
     [placeButton addSubview:placeLabel];
 
 }
@@ -989,7 +989,7 @@ int H = 0,time_ID;
 {
     
     contentLabel.text=contentString;
-    contentLabel.font=[UIFont fontWithName:@"Arial" size:14];
+    contentLabel.font=[UIFont fontWithName:@"Heiti SC" size:14];
     
 }
 #pragma mark提醒设置label显示
@@ -1001,7 +1001,7 @@ int H = 0,time_ID;
     [meetingLabel sizeToFit];
     //meetingLabel.backgroundColor=[UIColor redColor];
     meetingLabel.frame=FRAME(WIDTH-35/2-meetingLabel.frame.size.width, H+84/2+23/2, meetingLabel.frame.size.width, 32/2);
-    meetingLabel.font=[UIFont fontWithName:@"Arial" size:13];
+    meetingLabel.font=[UIFont fontWithName:@"Heiti SC" size:13];
     [backgroundView addSubview:meetingLabel];
 }
 
@@ -2117,11 +2117,11 @@ int H = 0,time_ID;
     [clientButton addSubview:view];
     UILabel *clienLabel=[[UILabel alloc]initWithFrame:FRAME(35/2, 13/2, 60, 20)];
     clienLabel.text=@"给谁创建:";
-    clienLabel.font=[UIFont fontWithName:@"Arial" size:14];
+    clienLabel.font=[UIFont fontWithName:@"Heiti SC" size:14];
     [clientButton addSubview:clienLabel];
     whoLabel =[[UILabel alloc]init];
     whoLabel.text=nameString;
-    whoLabel.font=[UIFont fontWithName:@"Arial" size:14];
+    whoLabel.font=[UIFont fontWithName:@"Heiti SC" size:14];
     whoLabel.lineBreakMode=NSLineBreakByTruncatingTail;
     [whoLabel setNumberOfLines:1];
     [whoLabel sizeToFit];

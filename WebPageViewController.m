@@ -55,7 +55,7 @@
     
     webTitleLabel=[[UILabel alloc]initWithFrame:FRAME(60, 26, WIDTH-120, 30)];
     webTitleLabel.textAlignment=NSTextAlignmentCenter;
-    webTitleLabel.font=[UIFont fontWithName:@"Arial" size:15];
+    webTitleLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
     [self.view addSubview:webTitleLabel];
     
     UIButton *rightButton=[[UIButton alloc]initWithFrame:FRAME(WIDTH-60, 20, 50, 40)];

@@ -83,7 +83,7 @@
         
         //        UILabel *cityLabel=[[UILabel alloc]initWithFrame:FRAME(0, 15, WIDTH, cell.frame.size.height-30)];
         //        cityLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"name"]];
-        //        cityLabel.font=[UIFont fontWithName:@"Arial" size:20];
+        //        cityLabel.font=[UIFont fontWithName:@"Heiti SC" size:20];
         //        cityLabel.textAlignment=NSTextAlignmentCenter;
         //        [cell addSubview:cityLabel];
         cell.textLabel.textColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];

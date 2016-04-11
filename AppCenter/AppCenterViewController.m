@@ -68,7 +68,7 @@ GrowUp_or_MakeMoneyViewController *growUp_or_MakeMoneyViewController;
         }else{
             [tabbarBut setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         }
-        tabbarBut.titleLabel.font=[UIFont fontWithName:@"Arial" size:15];
+        tabbarBut.titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
         [tabbarBut addTarget:self action:@selector(tabBarButton:) forControlEvents:UIControlEventTouchUpInside];
         [tabbarBut setTag:(1000+i)];
         [tabBarView addSubview:tabbarBut];
@@ -92,10 +92,10 @@ GrowUp_or_MakeMoneyViewController *growUp_or_MakeMoneyViewController;
     currentSelectButtonIndex=(int)sender.tag;
     UIButton *previousBtn=(UIButton *)[self.view viewWithTag:previousSelectButtonIndex];
     [previousBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    previousBtn.titleLabel.font=[UIFont fontWithName:@"Arial" size:15];
+    previousBtn.titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
     UIButton *currentBtn = (UIButton *)[self.view viewWithTag:currentSelectButtonIndex];;
     [currentBtn setTitleColor:[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1] forState:UIControlStateNormal];
-    currentBtn.titleLabel.font=[UIFont fontWithName:@"Arial" size:18];
+    currentBtn.titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:18];
     previousSelectButtonIndex=currentSelectButtonIndex;
     switch (sender.tag) {
         case 1000:

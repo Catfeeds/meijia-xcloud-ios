@@ -160,7 +160,7 @@
     UILabel *timeLabel=[[UILabel alloc]init];
     timeLabel.text=[dateformatter stringFromDate:senddate];
     timeLabel.textAlignment=NSTextAlignmentLeft;
-    timeLabel.font=[UIFont fontWithName:@"Arial" size:18];
+    timeLabel.font=[UIFont fontWithName:@"Heiti SC" size:18];
     [timeLabel setNumberOfLines:1];
     [timeLabel sizeToFit];
     timeLabel.frame=FRAME(20, 75, timeLabel.frame.size.width, 22);
@@ -171,7 +171,7 @@
     signButton.backgroundColor=[UIColor whiteColor];
     signButton.layer.cornerRadius=5;
     [signButton setTitle:@"签到记录" forState:UIControlStateNormal];
-    signButton.titleLabel.font=[UIFont fontWithName:@"Arial" size:18];
+    signButton.titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:18];
     [signButton addTarget:self action:@selector(signBut) forControlEvents:UIControlEventTouchUpInside];
     [signButton setTitleColor:self.backlable.backgroundColor forState:UIControlStateNormal];
     [attendanceView addSubview:signButton];
@@ -198,7 +198,7 @@
 {
     nameLabel.text=nameString;
     nameLabel.textAlignment=NSTextAlignmentLeft;
-    nameLabel.font=[UIFont fontWithName:@"Arial" size:18];
+    nameLabel.font=[UIFont fontWithName:@"Heiti SC" size:18];
     [nameLabel setNumberOfLines:1];
     [nameLabel sizeToFit];
     nameLabel.textColor=[UIColor whiteColor];
@@ -209,7 +209,7 @@
 {
     weekLabel.text=weekString;
     weekLabel.textAlignment=NSTextAlignmentLeft;
-    weekLabel.font=[UIFont fontWithName:@"Arial" size:35];
+    weekLabel.font=[UIFont fontWithName:@"Heiti SC" size:35];
     [weekLabel setNumberOfLines:1];
     [weekLabel sizeToFit];
     weekLabel.textColor=[UIColor whiteColor];
@@ -224,7 +224,7 @@
         [promptLabel removeFromSuperview];
         promptLabel =[[UILabel alloc]initWithFrame:FRAME(0, HEIGHT-WIDTH/4-30, WIDTH, 30)];
         promptLabel.text=@"请选择所要签到的公司！！";
-        promptLabel.font=[UIFont fontWithName:@"Arial" size:18];
+        promptLabel.font=[UIFont fontWithName:@"Heiti SC" size:18];
         promptLabel.alpha=0.7;
         promptLabel.backgroundColor=[UIColor colorWithRed:232/255.0f green:232/255.0f blue:232/255.0f alpha:1];
         promptLabel.textAlignment=NSTextAlignmentCenter;
@@ -298,7 +298,7 @@
     [Cell addSubview:timeImageView];
     UILabel *timeLabel=[[UILabel alloc]init];
     timeLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"checkinTime"]];
-    timeLabel.font=[UIFont fontWithName:@"Arial" size:20];
+    timeLabel.font=[UIFont fontWithName:@"Heiti SC" size:20];
     [timeLabel setNumberOfLines:1];
     [timeLabel sizeToFit];
     timeLabel.textColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
@@ -310,7 +310,7 @@
     [Cell addSubview:addimageView];
     UILabel *addLabel=[[UILabel alloc]init];
     addLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"poiName"]];
-    addLabel.font=[UIFont fontWithName:@"Arial" size:18];
+    addLabel.font=[UIFont fontWithName:@"Heiti SC" size:18];
     [addLabel setNumberOfLines:1];
     [addLabel sizeToFit];
     addLabel.frame=FRAME(addimageView.frame.size.width+addimageView.frame.origin.x+5, addimageView.frame.origin.y, addLabel.frame.size.width, 20);
@@ -347,7 +347,7 @@
     
     webTitleLabel=[[UILabel alloc]initWithFrame:FRAME(60, 20, WIDTH-120, 30)];
     webTitleLabel.textAlignment=NSTextAlignmentCenter;
-    webTitleLabel.font=[UIFont fontWithName:@"Arial" size:15];
+    webTitleLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
     [layoutView addSubview:webTitleLabel];
     
     UIButton *rightButton=[[UIButton alloc]initWithFrame:FRAME(WIDTH-60, 20, 50, 30)];

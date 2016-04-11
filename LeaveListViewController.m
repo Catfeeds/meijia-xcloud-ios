@@ -54,7 +54,7 @@ MYApprovalViewController *myApprovalViewController;
     crossView.backgroundColor=[UIColor colorWithRed:232/255.0f green:232/255.0f blue:232/255.0f alpha:1];
     [tabBarButView addSubview:crossView];
     
-    NSArray *nameArray=@[@"我发起的",@"待我审批的"];
+    NSArray *nameArray=@[@"我发起的",@"待我审批"];
     for (int i=0; i<nameArray.count; i++) {
         UIButton *tabbarBut=[[UIButton alloc]initWithFrame:FRAME((WIDTH/2+0.5)*i, 0, WIDTH/2-0.5, 40)];
         [tabbarBut setTitle:nameArray[i] forState:UIControlStateNormal];
@@ -64,7 +64,7 @@ MYApprovalViewController *myApprovalViewController;
             [tabbarBut setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         }
         
-        tabbarBut.titleLabel.font=[UIFont fontWithName:@"Arial" size:15];
+        tabbarBut.titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
         [tabbarBut addTarget:self action:@selector(tabBarButton:) forControlEvents:UIControlEventTouchUpInside];
         [tabbarBut setTag:(1000+i)];
         [tabBarButView addSubview:tabbarBut];
@@ -92,10 +92,10 @@ MYApprovalViewController *myApprovalViewController;
     currentSelectButtonIndex=(int)sender.tag;
     UIButton *previousBtn=(UIButton *)[self.view viewWithTag:previousSelectButtonIndex];
     [previousBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    previousBtn.titleLabel.font=[UIFont fontWithName:@"Arial" size:15];
+    previousBtn.titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
     UIButton *currentBtn = (UIButton *)[self.view viewWithTag:currentSelectButtonIndex];;
     [currentBtn setTitleColor:[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1] forState:UIControlStateNormal];
-    currentBtn.titleLabel.font=[UIFont fontWithName:@"Arial" size:18];
+    currentBtn.titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:18];
     previousSelectButtonIndex=currentSelectButtonIndex;
     switch (sender.tag) {
         case 1000:

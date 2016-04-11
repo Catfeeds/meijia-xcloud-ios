@@ -87,7 +87,7 @@
     [timeLabel setNumberOfLines:1];
     [timeLabel sizeToFit];
     timeLabel.frame=FRAME((WIDTH-timeLabel.frame.size.width)/2, 41, timeLabel.frame.size.width, 20);
-    timeLabel.font=[UIFont fontWithName:@"Arial" size:15];
+    timeLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
     [self.view addSubview:timeLabel];
 }
 - (void)viewDidLayoutSubviews

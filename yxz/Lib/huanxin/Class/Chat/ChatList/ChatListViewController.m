@@ -52,6 +52,22 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.view.backgroundColor=[UIColor colorWithRed:231/255.0f green:231/255.0f blue:231/255.0f alpha:1];
+    
+    UIView *view=[[UIView alloc]initWithFrame:FRAME(0, 0, WIDTH, 64)];
+    view.backgroundColor=[UIColor whiteColor];
+    [self.view addSubview:view];
+    UIButton *_backBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    _backBtn.frame = FRAME(0, 20, 60, 40);
+    _backBtn.tag=33;
+    _backBtn.titleLabel.font = [UIFont systemFontOfSize:12];
+    [_backBtn addTarget:self action:@selector(backAction) forControlEvents:UIControlEventTouchUpInside];
+    [view addSubview:_backBtn];
+    
+    UIImageView *img = [[UIImageView alloc]initWithFrame:FRAME(18, (40-20)/2, 10, 20)];
+    img.image = [UIImage imageNamed:@"title_left_back"];
+    [_backBtn addSubview:img];
+    
     self.navigationController.navigationBarHidden=YES;
     [[self navigationController] setNavigationBarHidden:YES animated:NO];
     if (_listVcID==100) {
@@ -69,7 +85,6 @@
     }
     dataID=1;
     dataArray=[[NSMutableArray alloc]init];
-    self.view.backgroundColor=[UIColor whiteColor];
     UILabel *_lineLable = [[UILabel alloc]initWithFrame:FRAME(0, 63, SELF_VIEW_WIDTH, 1)];
     _lineLable.backgroundColor = [UIColor grayColor];
     _lineLable.alpha = 0.3;
@@ -153,7 +168,7 @@
 - (UITableView *)tableView
 {
     if (_tableView == nil) {
-        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 64, self.view.frame.size.width, self.view.frame.size.height - self.searchBar.frame.size.height) style:UITableViewStylePlain];
+        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 110, self.view.frame.size.width, HEIGHT - 110) style:UITableViewStylePlain];
         _tableView.backgroundColor = [UIColor whiteColor];
         _tableView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
         _tableView.delegate = self;

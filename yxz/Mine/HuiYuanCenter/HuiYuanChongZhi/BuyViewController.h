@@ -18,5 +18,7 @@
 @property (nonatomic, strong)VIPLISTData *vipdata;
 @property (nonatomic, assign)int card_type;
 @property (nonatomic, strong)NSString *card_money;
+@property(nonatomic ,strong)NSString *user_ID;
+@property(nonatomic ,strong)NSString *order_ID;
 
 @end

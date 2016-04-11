@@ -250,7 +250,7 @@
     UILabel *timeLabel=[[UILabel alloc]init];
     timeLabel.text=[NSString stringWithFormat:@"%@",[dataDic objectForKey:@"add_time_str"]];
     timeLabel.textColor=[UIColor colorWithRed:190/255.0f green:190/255.0f blue:190/255.0f alpha:1];
-    timeLabel.font=[UIFont fontWithName:@"Arial" size:15];
+    timeLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
     [timeLabel setNumberOfLines:1];
     [timeLabel sizeToFit];
     timeLabel.frame=FRAME(WIDTH-10-timeLabel.frame.size.width, 15, timeLabel.frame.size.width, 15);
@@ -259,7 +259,7 @@
     UILabel *textLabel=[[UILabel alloc]init];
     textLabel.textColor=[UIColor colorWithRed:190/255.0f green:190/255.0f blue:190/255.0f alpha:1];
     textLabel.text=[NSString stringWithFormat:@"%@",[dataDic objectForKey:@"status_name"]];
-    textLabel.font=[UIFont fontWithName:@"Arial" size:15];
+    textLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
     [textLabel setNumberOfLines:1];
     [textLabel sizeToFit];
     textLabel.frame=FRAME(60, 50, textLabel.frame.size.width, 15);

@@ -104,7 +104,7 @@
                     
                     UILabel *label=[[UILabel alloc]init];
                     label.text=@"请假类型";
-                    label.font=[UIFont fontWithName:@"Arial" size:14];
+                    label.font=[UIFont fontWithName:@"Heiti SC" size:14];
                     [label setNumberOfLines:1];
                     [label sizeToFit];
                     label.frame=FRAME(lconImageView.frame.size.width+lconImageView.frame.origin.x+10, (70-20)/2, label.frame.size.width, 20);
@@ -134,7 +134,7 @@
                     
                     UILabel *timeLabel=[[UILabel alloc]init];
                     timeLabel.text=@"结束时间";
-                    timeLabel.font=[UIFont fontWithName:@"Arial" size:14];
+                    timeLabel.font=[UIFont fontWithName:@"Heiti SC" size:14];
                     [timeLabel setNumberOfLines:1];
                     [timeLabel sizeToFit];
                     timeLabel.frame=FRAME(10, 10, timeLabel.frame.size.width, 20);
@@ -160,7 +160,7 @@
                     
                     UILabel *label=[[UILabel alloc]init];
                     label.text=@"请假天数";
-                    label.font=[UIFont fontWithName:@"Arial" size:14];
+                    label.font=[UIFont fontWithName:@"Heiti SC" size:14];
                     [label setNumberOfLines:1];
                     [label sizeToFit];
                     label.frame=FRAME(lconImageView.frame.size.width+lconImageView.frame.origin.x+10, (50-20)/2, label.frame.size.width, 20);
@@ -184,7 +184,7 @@
                     
                     UILabel *label=[[UILabel alloc]init];
                     label.text=@"请假内容";
-                    label.font=[UIFont fontWithName:@"Arial" size:14];
+                    label.font=[UIFont fontWithName:@"Heiti SC" size:14];
                     [label setNumberOfLines:1];
                     [label sizeToFit];
                     label.frame=FRAME(lconImageView.frame.size.width+lconImageView.frame.origin.x+10, (50-20)/2, label.frame.size.width, 20);
@@ -214,7 +214,7 @@
             
             UILabel *timeLabel=[[UILabel alloc]init];
             timeLabel.text=@"开始时间";
-            timeLabel.font=[UIFont fontWithName:@"Arial" size:14];
+            timeLabel.font=[UIFont fontWithName:@"Heiti SC" size:14];
             [timeLabel setNumberOfLines:1];
             [timeLabel sizeToFit];
             timeLabel.frame=FRAME(10, 10, timeLabel.frame.size.width, 20);
@@ -237,7 +237,7 @@
     
     UILabel *popleLabel=[[UILabel alloc]init];
     popleLabel.text=@"审批人";
-    popleLabel.font=[UIFont fontWithName:@"Arial" size:14];
+    popleLabel.font=[UIFont fontWithName:@"Heiti SC" size:14];
     [popleLabel setNumberOfLines:1];
     [popleLabel sizeToFit];
     popleLabel.frame=FRAME(10, 15, popleLabel.frame.size.width, 20);
@@ -245,7 +245,7 @@
     
     UILabel *choiceLabel=[[UILabel alloc]init];
     choiceLabel.text=@"已选择:";
-    choiceLabel.font=[UIFont fontWithName:@"Arial" size:12];
+    choiceLabel.font=[UIFont fontWithName:@"Heiti SC" size:12];
     choiceLabel.textColor=[UIColor colorWithRed:164/255.0f green:164/255.0f blue:164/255.0f alpha:1];
     [choiceLabel setNumberOfLines:1];
     [choiceLabel sizeToFit];
@@ -357,7 +357,7 @@
 -(void)typeLayout
 {
     typeLabel.text=typeString;
-    typeLabel.font=[UIFont fontWithName:@"Arial" size:14];
+    typeLabel.font=[UIFont fontWithName:@"Heiti SC" size:14];
     [typeLabel setNumberOfLines:1];
     [typeLabel sizeToFit];
     typeLabel.frame=FRAME(WIDTH-25-typeLabel.frame.size.width, (70-15)/2, typeLabel.frame.size.width, 15);
@@ -365,7 +365,7 @@
 -(void)startLayout
 {
     startLabel.text=startString;
-    startLabel.font=[UIFont fontWithName:@"Arial" size:14];
+    startLabel.font=[UIFont fontWithName:@"Heiti SC" size:14];
     [startLabel setNumberOfLines:1];
     [startLabel sizeToFit];
     startLabel.textColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
@@ -374,7 +374,7 @@
 -(void)endLayout
 {
     endLabel.text=endString;
-    endLabel.font=[UIFont fontWithName:@"Arial" size:14];
+    endLabel.font=[UIFont fontWithName:@"Heiti SC" size:14];
     [endLabel setNumberOfLines:1];
     [endLabel sizeToFit];
     endLabel.textColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
@@ -434,7 +434,7 @@
 -(void)contentLayout
 {
     contentLabel.text=contentString;
-    contentLabel.font=[UIFont fontWithName:@"Arial" size:14];
+    contentLabel.font=[UIFont fontWithName:@"Heiti SC" size:14];
     contentLabel.lineBreakMode=NSLineBreakByTruncatingTail;
     [contentLabel setNumberOfLines:1];
     [contentLabel sizeToFit];
@@ -443,7 +443,7 @@
 -(void)daysLayout
 {
     daysLabel.text=daysString;
-    daysLabel.font=[UIFont fontWithName:@"Arial" size:14];
+    daysLabel.font=[UIFont fontWithName:@"Heiti SC" size:14];
     [daysLabel setNumberOfLines:1];
     [daysLabel sizeToFit];
     daysLabel.frame=FRAME(WIDTH-30-daysLabel.frame.size.width, 35/2, daysLabel.frame.size.width, 15);
@@ -475,7 +475,7 @@
 -(void)poepleLayout
 {
     poepleLabel.text=poepleString;
-    poepleLabel.font=[UIFont fontWithName:@"Arial" size:12];
+    poepleLabel.font=[UIFont fontWithName:@"Heiti SC" size:12];
     poepleLabel.textColor=[UIColor colorWithRed:164/255.0f green:164/255.0f blue:164/255.0f alpha:1];
     poepleLabel.lineBreakMode=NSLineBreakByTruncatingTail;
     [poepleLabel setNumberOfLines:1];
@@ -483,7 +483,7 @@
     poepleLabel.frame=FRAME(K+5, 35, WIDTH-K-25, 20);
     
     poepleNumberLabel.text=poepleNumberString;
-    poepleNumberLabel.font=[UIFont fontWithName:@"Arial" size:14];
+    poepleNumberLabel.font=[UIFont fontWithName:@"Heiti SC" size:14];
     poepleNumberLabel.textColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
     [poepleNumberLabel setNumberOfLines:1];
     [poepleNumberLabel sizeToFit];
