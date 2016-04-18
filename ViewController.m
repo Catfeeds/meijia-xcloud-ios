@@ -30,6 +30,8 @@
 #import "AttendanceViewController.h"
 #import "WaterListViewController.h"
 #import "Order_DetailsViewController.h"
+
+#import "UMCommunityViewController.h"
 @interface ViewController (){
     NSMutableDictionary *eventsByDate;
     UILabel *timeLabel;
@@ -108,8 +110,20 @@ float lastContentOffset;
 {
     [super viewDidLoad];
     
-//    UINavigationController *communityViewController = [UMCommunity getFeedsModalViewController];
-//    [self.navigationController pushViewController:communityViewController animated:YES];
+
+    NSDate *  senddates=[NSDate date];
+   ISLoginManager *_manager = [ISLoginManager shareManager];
+    NSDateFormatter  *yerformatter=[[NSDateFormatter alloc] init];
+    [yerformatter setDateFormat:@"yyyy"];
+    NSString *  yearStr=[yerformatter stringFromDate:senddates];
+    
+    NSDateFormatter  *monthformatter=[[NSDateFormatter alloc] init];
+    [monthformatter setDateFormat:@"MM"];
+    NSString *  monthStr=[monthformatter stringFromDate:senddates];
+    DownloadManager *download = [[DownloadManager alloc]init];
+    NSDictionary *dict=@{@"user_id":_manager.telephone,@"year":yearStr,@"month":monthStr};
+    [download requestWithUrl:@"simi/app/user/msg/total_by_month.json"  dict:dict view:self.view delegate:self finishedSEL:@selector(RiLiSuccess:) isPost:NO failedSEL:@selector(RiLiFailure:)];
+    
     UIView *headeView=[[UIView alloc]initWithFrame:FRAME(0, 0, WIDTH, 20)];
     headeView.backgroundColor=[UIColor blackColor];
     [self.view addSubview:headeView];
@@ -175,6 +189,39 @@ float lastContentOffset;
     
     [self rlLayout];
    
+}
+
+
+-(void)RiLiSuccess:(id)sender
+{
+    NSArray *array=[sender objectForKey:@"data"];
+    AppDelegate *delegates=(AppDelegate*)[[UIApplication sharedApplication] delegate];
+    for (int i=0; i<array.count; i++) {
+        if([delegates.riliArray containsObject:array[i]])
+        {
+            
+        }else{
+            [delegates.riliArray addObject:array[i]];
+        }
+    }
+    
+}
+-(void)RiLiFailure:(id)sender
+{
+    NSLog(@"日历布局失败返回:是啥%@",sender);
+    alertLabel=[[UILabel alloc]initWithFrame:FRAME((WIDTH-260)/2, (HEIGHT-40)/2, 260, 40)];
+    alertLabel.backgroundColor=[UIColor blackColor];
+    alertLabel.alpha=0.4;
+    alertLabel.text=@"还没有输入评论内容哦～";
+    alertLabel.textColor=[UIColor whiteColor];
+    alertLabel.textAlignment=NSTextAlignmentCenter;
+    //    [self.view addSubview:alertLabel];
+    
+    [NSTimer scheduledTimerWithTimeInterval:2.0f
+                                     target:self
+                                   selector:@selector(viewLayout:)
+                                   userInfo:alertLabel
+                                    repeats:NO];
 }
 #pragma mark 表格刷新相关
 #pragma mark 刷新
@@ -970,6 +1017,7 @@ float lastContentOffset;
         }
     }else{
         WebPageViewController *webPageVC=[[WebPageViewController alloc]init];
+        webPageVC.barIDS=100;
         webPageVC.webURL=[NSString stringWithFormat:@"%@",[dataDic objectForKey:@"goto_url"]];
         [self.navigationController pushViewController:webPageVC animated:YES];
     }

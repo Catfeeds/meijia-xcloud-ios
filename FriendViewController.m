@@ -45,13 +45,13 @@ DynamicViewController *dynamicViewController;
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
-    if (_friendVcID==101) {
-        currentSelectButtonIndex = 0;
-        previousSelectButtonIndex=1001;
-    }else{
+//    if (_friendVcID==101) {
+//        currentSelectButtonIndex = 0;
+//        previousSelectButtonIndex=1001;
+//    }else{
         currentSelectButtonIndex = 0;
         previousSelectButtonIndex=1000;
-    }
+//    }
     self.backBtn.hidden=NO;
     self.view.backgroundColor=[UIColor colorWithRed:231/255.0f green:231/255.0f blue:231/255.0f alpha:1];
     [self didUnreadMessagesCountChanged];
@@ -83,25 +83,25 @@ DynamicViewController *dynamicViewController;
     
     
     
-    tabBarView=[[UIView alloc]initWithFrame:CGRectMake((WIDTH-180)/2, 64, 180, 44)];
-    tabBarView.backgroundColor=[UIColor colorWithRed:231/255.0f green:231/255.0f blue:231/255.0f alpha:1];
+    tabBarView=[[UIView alloc]initWithFrame:CGRectMake((WIDTH-120)/2, 20, 120, 44)];
     [self.view addSubview:tabBarView];
     
-    addBut=[[UIButton alloc]initWithFrame:FRAME(WIDTH-40, 20, 40, 44)];
+/*   好友页面右上角的发布动态入口按钮  被注释掉了
+     addBut=[[UIButton alloc]initWithFrame:FRAME(WIDTH-40, 20, 40, 44)];
 //    [addBut setTitle:@"添加" forState:UIControlStateNormal];
     [addBut addTarget:self action:@selector(addBUtAction:) forControlEvents:UIControlEventTouchUpInside];
 //    addBut.backgroundColor=[UIColor redColor];
     [self.view addSubview:addBut];
     UIImageView *addImageView=[[UIImageView alloc]initWithFrame:FRAME(10, 10, 20, 20)];
     addImageView.image=[UIImage imageNamed:@"iconfont-xinjian"];
-    [addBut addSubview:addImageView];
+    [addBut addSubview:addImageView]; */
     
     lineView=[[UIView alloc]init];
-    if (_friendVcID==100) {
+//    if (_friendVcID==100) {
         lineView.frame=FRAME(0, 42, 60, 2);
-    }else{
-        lineView.frame=FRAME(60, 42, 60, 2);
-    }
+//    }else{
+//        lineView.frame=FRAME(60, 42, 60, 2);
+//    }
     lineView.backgroundColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
     [tabBarView addSubview:lineView];
     
@@ -111,27 +111,27 @@ DynamicViewController *dynamicViewController;
     //_lineLable.alpha = 0.3;
 //    [tabBarView addSubview:_lineLable];
     
-    NSArray *nameArray=@[@"动态",@"好友",@"消息"/*,@"申请"*/];
+    NSArray *nameArray=@[/*@"动态",*/@"好友",@"消息"/*,@"申请"*/];
     for (int i=0; i<nameArray.count; i++) {
         UIButton *tabbarBut=[[UIButton alloc]initWithFrame:FRAME(60*i, 0, 60, 43)];
         [tabbarBut setTitle:nameArray[i] forState:UIControlStateNormal];
         if(i==0){
-            if (_friendVcID==100) {
+//            if (_friendVcID==100) {
                [tabbarBut setTitleColor:[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1] forState:UIControlStateNormal];
-            }else{
-                [tabbarBut setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-            }
+//            }else{
+//                [tabbarBut setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+//            }
             
         }else{
-            if (i==1) {
-                if (_friendVcID==101) {
-                    [tabbarBut setTitleColor:[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1] forState:UIControlStateNormal];
-                }else{
-                    [tabbarBut setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-                }
-            }else{
+//            if (i==1) {
+//                if (_friendVcID==101) {
+//                    [tabbarBut setTitleColor:[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1] forState:UIControlStateNormal];
+//                }else{
+//                    [tabbarBut setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+//                }
+//            }else{
                 [tabbarBut setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-            }
+//            }
         }
         if (i==2) {
             spotView=[[UIView alloc]initWithFrame:FRAME(43, 8, 10, 10)];
@@ -210,7 +210,7 @@ DynamicViewController *dynamicViewController;
 
 -(void)tabBarButton:(UIButton *)sender
 {
-    if ((currentViewController==dynamicViewController&&[sender tag]==1000)||(currentViewController==secAccessController&&[sender tag]==1001)||(currentViewController==newsViewController&&[sender tag]==1002)) {
+    if (/*(currentViewController==dynamicViewController&&[sender tag]==1000)||*/(currentViewController==secAccessController&&[sender tag]==1000)||(currentViewController==newsViewController&&[sender tag]==1001)) {
         return;
     }
     UIViewController *oldViewController=currentViewController;
@@ -237,24 +237,24 @@ DynamicViewController *dynamicViewController;
 //    }
     
     switch (sender.tag) {
+//        case 1000:
+//        {
+//            addBut.hidden=NO;
+//            [self transitionFromViewController:currentViewController toViewController:dynamicViewController duration:0.5 options:0 animations:^{
+//            }  completion:^(BOOL finished) {
+//                if(finished){
+//                    
+//                    currentViewController=dynamicViewController;
+//                    
+//                }else{
+//                    currentViewController=oldViewController;
+//                   
+//                }
+//                
+//            }];
+//        }
+//            break;
         case 1000:
-        {
-            addBut.hidden=NO;
-            [self transitionFromViewController:currentViewController toViewController:dynamicViewController duration:0.5 options:0 animations:^{
-            }  completion:^(BOOL finished) {
-                if(finished){
-                    
-                    currentViewController=dynamicViewController;
-                    
-                }else{
-                    currentViewController=oldViewController;
-                   
-                }
-                
-            }];
-        }
-            break;
-        case 1001:
         {
             addBut.hidden=YES;
             [self transitionFromViewController:currentViewController toViewController:secAccessController duration:0.5 options:0 animations:^{
@@ -270,7 +270,7 @@ DynamicViewController *dynamicViewController;
             }];
         }
             break;
-        case 1002:
+        case 1001:
         {
             addBut.hidden=YES;
             [self transitionFromViewController:currentViewController toViewController:newsViewController duration:0.5 options:0 animations:^{

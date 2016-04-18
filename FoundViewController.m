@@ -43,6 +43,8 @@ WholeViewController *wholeViewController;
     
     [MobClick beginLogPageView:@"发现"];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+    DownloadManager *_download = [[DownloadManager alloc]init];
+    [_download requestWithUrl:FOUND_CHANNEL dict:nil view:self.view delegate:self finishedSEL:@selector(ChannelSuccess:) isPost:NO failedSEL:@selector(ChannelFailure:)];
     
     
 }
@@ -98,8 +100,7 @@ WholeViewController *wholeViewController;
     [oneViewController removeFromParentViewController];
     oneViewController=[[HairViewController alloc]init];
     [self addChildViewController:oneViewController];
-    DownloadManager *_download = [[DownloadManager alloc]init];
-    [_download requestWithUrl:FOUND_CHANNEL dict:nil view:self.view delegate:self finishedSEL:@selector(ChannelSuccess:) isPost:NO failedSEL:@selector(ChannelFailure:)];
+   
 }
 #pragma mark 获取频道列表成功返回方法
 -(void)ChannelSuccess:(id)sender
@@ -121,6 +122,7 @@ WholeViewController *wholeViewController;
 -(void)rootViewLayout
 {
     [rootView removeFromSuperview];
+    [W removeAllObjects];
     rootView=[[UIScrollView alloc]initWithFrame:CGRectMake(0, 64, WIDTH, 37)];
     rootView.backgroundColor=[UIColor whiteColor];
 //    rootView.contentSize=CGSizeMake(WIDTH/4*array.count, 37);
@@ -133,7 +135,20 @@ WholeViewController *wholeViewController;
     lineImageView=[[UIImageView alloc]init];
     lineImageView.backgroundColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
     [rootView addSubview:lineImageView];
-    
+    int K=0;
+    int Ks=0;
+    for (int i=0; i<array.count; i++)
+    {
+        NSDictionary *dic=array[i];
+        UILabel *butLabel=[[UILabel alloc]init];
+        butLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"name"]];
+        butLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
+        [butLabel setNumberOfLines:1];
+        [butLabel sizeToFit];
+        butLabel.frame=FRAME(10, 8, butLabel.frame.size.width, 21);
+        Ks=Ks+butLabel.frame.size.width;
+    }
+    K=Ks+20*(array.count+1);
     int X=0;
     for (int i=0; i<array.count; i++) {
         NSDictionary *dic=array[i];
@@ -157,10 +172,28 @@ WholeViewController *wholeViewController;
         butLabel.frame=FRAME(10, 8, butLabel.frame.size.width, 21);
 //        [button addSubview:butLabel];
 //        button.titleLabel.textColor=;
-        button.frame=CGRectMake(X, 0, butLabel.frame.size.width+20, 37);
+        int S=0;
+        if (K<WIDTH) {
+            
+            button.frame=CGRectMake((WIDTH-Ks)/(array.count+1)+X+(WIDTH-Ks)/(array.count+1)*i, 0, butLabel.frame.size.width, 37);
+            X=X+butLabel.frame.size.width;
+            if (i==0||i==array.count-1) {
+                S=button.frame.size.width+(WIDTH-Ks)/(array.count+1)*3/2;
+            }else{
+                S=button.frame.size.width+(WIDTH-Ks)/(array.count+1);
+            }
+        }else{
+            button.frame=CGRectMake(20+X+20*i, 0, butLabel.frame.size.width, 37);
+            X=X+butLabel.frame.size.width;
+            if (i==0||i==array.count-1) {
+                S=button.frame.size.width+20*3/2;
+            }else{
+                S=button.frame.size.width+20;
+            }
+        }
         [rootView addSubview:button];
-        X=X+butLabel.frame.size.width+20;
-        int S=butLabel.frame.size.width+20;
+        
+        
         NSString *stringt=[NSString stringWithFormat:@"%d",S];
         [W addObject:stringt];
     }
@@ -169,13 +202,15 @@ WholeViewController *wholeViewController;
         int k=[[W objectAtIndex:i]intValue];
         kuan+=k;
     }
-    rootView.contentSize=CGSizeMake(kuan, 37);
+    rootView.contentSize=CGSizeMake(K, 37);
     maximumOffset = rootView.contentSize.width;
     CGRect bounds = rootView.bounds;
     UIEdgeInsets inset = rootView.contentInset;
     currentOffset = rootView.contentOffset.x+bounds.size.width - inset.bottom;
     int s=[[W objectAtIndex:0]intValue];
     lineImageView.frame=CGRectMake(0, 35, s, 2);
+
+    
 }
 #pragma mark 搜索按钮点击方法
 -(void)searchButAction
@@ -356,7 +391,7 @@ WholeViewController *wholeViewController;
     previousBtn.titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
     UIButton *currentBtn = (UIButton *)[self.view viewWithTag:currentSelectButtonIndex];;
     [currentBtn setTitleColor:[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1] forState:UIControlStateNormal];
-    currentBtn.titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:18];
+    currentBtn.titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
     previousSelectButtonIndex=currentSelectButtonIndex;
     
     

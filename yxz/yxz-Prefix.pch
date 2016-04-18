@@ -50,7 +50,12 @@
 #import "EjectAlertView.h"
 #import "WebPageViewController.h"
 #import "UpLoadViewController.h"
-
+//登录页面
+#import "MyLogInViewController.h"
+//友盟微社区
+#import "UMCommunity.h"
+#import "UMComSession.h"
+#import "UMComNavigationController.h"
 
 #import <objc/message.h>
 

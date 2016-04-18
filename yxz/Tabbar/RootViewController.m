@@ -7,41 +7,41 @@
 //
 
 #import "RootViewController.h"
-#import "FirstViewController.h"
-#import "OrderViewController.h"
-#import "MineViewController.h"
-#import "MoreViewController.h"
-#import "PayViewController.h"
-#import "ISLoginManager.h"
+//#import "FirstViewController.h"
+//#import "OrderViewController.h"
+//#import "MineViewController.h"
+//#import "MoreViewController.h"
+//#import "PayViewController.h"
+//#import "ISLoginManager.h"
 
-#import "SMBaseViewController.h"
+//#import "SMBaseViewController.h"
 #import "ChatViewController.h"
-#import "AppDelegate.h"
+//#import "AppDelegate.h"
 #import "CardPageViewController.h"
-#import "FriendViewController.h"
-#import "EaseMob.h"
+//#import "FriendViewController.h"
+//#import "EaseMob.h"
 #import "FoundViewController.h"
 #import "MyselfViewController.h"
-#import "PlusViewController.h"
+//#import "PlusViewController.h"
 
-#import "DownloadManager.h"
+//#import "DownloadManager.h"
 //#pragma mark 循环按钮跳转类
 
 
-#import "OriginalViewController.h"
+//#import "OriginalViewController.h"
 
 #import "ViewController.h"
 #import "ClerkViewController.h"
 
 
-#import "PageTableViewCell.h"
+//#import "PageTableViewCell.h"
 #import "LeaveListViewController.h"
 #import "PlusCollectionViewCell.h"
 #import "AppCenterViewController.h"
 
 #import "BookingViewController.h"
 #import "MeetingViewController.h"
-#import "UpLoadViewController.h"
+//#import "UpLoadViewController.h"
 #import "AttendanceViewController.h"
 #import "ApplyForLeaveViewController.h"
 #import "WaterListViewController.h"
@@ -50,6 +50,8 @@
 #import "AssetsAdministrationViewController.h"
 
 #import "HomePageTableViewController.h"
+#import "FatherViewController.h"
+#import "MyLogInViewController.h"
 @interface RootViewController ()<UIAlertViewDelegate, IChatManagerDelegate,UIAlertViewDelegate>
 {
     UIView *mainView;
@@ -80,7 +82,8 @@
     NSMutableArray *plusArray;
     UILabel *alertLabel;
     NSDictionary *coreDic;
-    int  tabBarID;
+    
+    FatherViewController *fatherVc;
 }
 @end
 #pragma mark - View lifecycle
@@ -88,7 +91,7 @@ HomePageTableViewController *homePageVIewController;
 CardPageViewController *pageViewVC;
 ViewController * viewController;
 FoundViewController * firstViewController;
-ViewController *secondViewController;
+HomePageTableViewController *secondViewController;
 //FriendViewController * friendViewController;
 MyselfViewController *thirdViewController;
 //MyLogInViewController *myLogInViewController;
@@ -170,6 +173,7 @@ MyselfViewController *thirdViewController;
 {
     NSDictionary *dic=dataSource.object;
     WebPageViewController *webVC=[[WebPageViewController alloc]init];
+    webVC.barIDS=100;
     webVC.webURL=[NSString stringWithFormat:@"%@",[dic objectForKey:@"webUrl"]];
     webVC.vcIDs=1000;
     [[self getCurrentVC] presentViewController:webVC animated:YES completion:nil];
@@ -191,13 +195,14 @@ MyselfViewController *thirdViewController;
     [[self getCurrentVC] presentViewController:vc animated:YES completion:nil];
 }
 - (void)viewDidLoad {
+    fatherVc=[[FatherViewController alloc]init];
     NSDictionary *helpDic;
     
     plusArray=[[NSMutableArray alloc]init];
     self.view.backgroundColor=[UIColor whiteColor];
     coreDic=@{@"name":@"应用中心",@"logo":@"http://img.51xingzheng.cn/437396cc0b49b04dc89a0552f7e90cae?p=0",@"action":@"asdsad",@"open_type":@"app"};
     helpDic=@{@"action":@"index"};
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"HELP" object:helpDic];
+//    [[NSNotificationCenter defaultCenter] postNotificationName:@"HELP" object:helpDic];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(helpLayout:) name:@"WEBURL" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(pushJumpLayout:) name:@"PushJump" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(pushJumpsLayout:) name:@"PushJumps" object:nil];
@@ -256,25 +261,81 @@ MyselfViewController *thirdViewController;
      将其添加进入底层的ViewController中。
      **/
     
-    NSDate *  senddate=[NSDate date];
     
-    NSDateFormatter  *yerformatter=[[NSDateFormatter alloc] init];
-    [yerformatter setDateFormat:@"yyyy"];
-    NSString *  yearStr=[yerformatter stringFromDate:senddate];
     
-    NSDateFormatter  *monthformatter=[[NSDateFormatter alloc] init];
-    [monthformatter setDateFormat:@"MM"];
-    NSString *  monthStr=[monthformatter stringFromDate:senddate];
     
-    DownloadManager *download = [[DownloadManager alloc]init];
-    NSDictionary *dict=@{@"user_id":_manager.telephone,@"year":yearStr,@"month":monthStr};
-    [download requestWithUrl:@"simi/app/user/msg/total_by_month.json"  dict:dict view:self.view delegate:self finishedSEL:@selector(RiLiSuccess:) isPost:NO failedSEL:@selector(RiLiFailure:)];
     [self setupUntreatedApplyCount];
     [self makeTabbarView];
     [self bottomViewLayout];
     
     [self setupUnreadMessageCount];
+    
+    UIStoryboard *story  = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    viewController=[story instantiateViewControllerWithIdentifier:@"ViewController"];
+    [self addChildViewController:viewController];
+    
+    firstViewController = [[FoundViewController alloc]init];
+    firstViewController.backBtn.hidden=YES;
+    [self addChildViewController:firstViewController];
+    
+    secondViewController = [[HomePageTableViewController alloc]init];
+    [self addChildViewController:secondViewController];
+    
+    //    friendViewController=[[FriendViewController alloc]init];
+    ////    friendViewController.backBtn.hidden=YES;
+    //    [self addChildViewController:friendViewController];
+    
+    thirdViewController = [[MyselfViewController alloc]init];
+    [self addChildViewController:thirdViewController];
+    
+    homePageVIewController=[[HomePageTableViewController alloc]init];
+    [self addChildViewController:homePageVIewController];
+    
+    //    myLogInViewController = [[MyLogInViewController alloc]init];
+    //    [self addChildViewController:myLogInViewController];
+    
+//    if (_is_new_userID==1) {
+//        [mainView addSubview:secondViewController.view];
+//        currentViewController = secondViewController;
+//        [UIView beginAnimations:@"Animation" context:nil];
+//        [UIView setAnimationDuration:1];
+//        tab.hidden=YES;
+//        [UIView commitAnimations];
+//        bottomView.hidden=NO;
+//        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
+//        [self plusLAyout];
+//    }else{
+        [mainView addSubview:homePageVIewController.view];
+        currentViewController = homePageVIewController;
+//    }
+    if (fatherVc.loginYesOrNo==YES) {
+        _manager = [ISLoginManager shareManager];
+        NSLog(@"有值么%@",_manager.telephone);
+        DownloadManager *_download = [[DownloadManager alloc]init];
+        NSDictionary *_dict=@{@"user_id":_manager.telephone};
+        [_download requestWithUrl:USER_INFO dict:_dict view:self.view delegate:self finishedSEL:@selector(QJDowLoadFinish:) isPost:NO failedSEL:@selector(QJDownFail:)];
+
+    }
+
+    
 //    [self plusLAyout];
+}
+#pragma mark用户信息详情获取成功方法
+-(void)QJDowLoadFinish:(id)sender
+{
+    NSLog(@"数据详情%@",sender);
+    NSDictionary *dic=[sender objectForKey:@"data"];
+    AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication] delegate];
+    delegate.globalDic=@{@"user_id":[dic objectForKey:@"id"],@"sec_id":[dic objectForKey:@"sec_id"],@"is_senior":[dic objectForKey:@"is_senior"],@"senior_range":[dic objectForKey:@"senior_range"],@"mobile":[dic objectForKey:@"mobile"],@"user_type":[dic objectForKey:@"user_type"],@"name":[dic objectForKey:@"name"],@"has_company":[dic objectForKey:@"has_company"],@"head_img":[dic objectForKey:@"head_img"],@"company_id":[dic objectForKey:@"company_id"],@"company_name":[dic objectForKey:@"company_name"]};
+    NSLog(@"看看是什么啊%@",delegate.globalDic);
+    
+   
+    
+}
+#pragma mark用户信息详情获取失败方法
+-(void)QJDownFail:(id)sender
+{
+    
 }
 #pragma mark - private
 // 未读消息数量变化回调
@@ -316,64 +377,6 @@ MyselfViewController *thirdViewController;
     //    [[EMSDKFull sharedInstance].callManager removeDelegate:self];
 }
 
--(void)RiLiSuccess:(id)sender
-{
-    NSArray *array=[sender objectForKey:@"data"];
-    AppDelegate *delegates=(AppDelegate*)[[UIApplication sharedApplication] delegate];
-    for (int i=0; i<array.count; i++) {
-        if([delegates.riliArray containsObject:array[i]])
-        {
-            
-        }else{
-            [delegates.riliArray addObject:array[i]];
-        }
-    }
-
-    
-    
-    UIStoryboard *story  = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-    viewController=[story instantiateViewControllerWithIdentifier:@"ViewController"];
-    [self addChildViewController:viewController];
-    
-    firstViewController = [[FoundViewController alloc]init];
-    firstViewController.backBtn.hidden=YES;
-    [self addChildViewController:firstViewController];
-    
-    secondViewController = [[ViewController alloc]init];
-    [self addChildViewController:secondViewController];
-    
-//    friendViewController=[[FriendViewController alloc]init];
-////    friendViewController.backBtn.hidden=YES;
-//    [self addChildViewController:friendViewController];
-    
-    thirdViewController = [[MyselfViewController alloc]init];
-    [self addChildViewController:thirdViewController];
-    
-    homePageVIewController=[[HomePageTableViewController alloc]init];
-    [self addChildViewController:homePageVIewController];
-    
-//    myLogInViewController = [[MyLogInViewController alloc]init];
-//    [self addChildViewController:myLogInViewController];
-    
-    if (_is_new_userID==1) {
-        [mainView addSubview:secondViewController.view];
-        currentViewController = secondViewController;
-        [UIView beginAnimations:@"Animation" context:nil];
-        [UIView setAnimationDuration:1];
-        tab.hidden=YES;
-        [UIView commitAnimations];
-        bottomView.hidden=NO;
-        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
-        [self plusLAyout];
-    }else{
-        [mainView addSubview:homePageVIewController.view];
-        currentViewController = homePageVIewController;
-    }
-
-    
-    
-
-}
 #pragma mark未读消息书
 - (void)setupUntreatedApplyCount
 {
@@ -385,23 +388,7 @@ MyselfViewController *thirdViewController;
     }
 
 }
--(void)RiLiFailure:(id)sender
-{
-    NSLog(@"日历布局失败返回:是啥%@",sender);
-    alertLabel=[[UILabel alloc]initWithFrame:FRAME((WIDTH-260)/2, (HEIGHT-40)/2, 260, 40)];
-    alertLabel.backgroundColor=[UIColor blackColor];
-    alertLabel.alpha=0.4;
-    alertLabel.text=@"还没有输入评论内容哦～";
-    alertLabel.textColor=[UIColor whiteColor];
-    alertLabel.textAlignment=NSTextAlignmentCenter;
-//    [self.view addSubview:alertLabel];
-    
-    [NSTimer scheduledTimerWithTimeInterval:2.0f
-                                     target:self
-                                   selector:@selector(viewLayout:)
-                                   userInfo:alertLabel
-                                    repeats:NO];
-}
+
 -(void)viewLayout:(NSTimer *)theTimer
 {
     alertLabel.hidden=YES;
@@ -571,9 +558,10 @@ MyselfViewController *thirdViewController;
     switch (sender.tag) {
         case 1000:
         {
-            tabBarID=0;
+            [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
+            _tabBarID=0;
             helpDic=@{@"action":@"index"};
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"HELP" object:helpDic];
+//            [[NSNotificationCenter defaultCenter] postNotificationName:@"HELP" object:helpDic];
             indexesID=0;
             [self transitionFromViewController:currentViewController toViewController:homePageVIewController duration:0.5 options:0 animations:^{
             }  completion:^(BOOL finished) {
@@ -608,9 +596,10 @@ MyselfViewController *thirdViewController;
              break;
         case 1001:
         {
-            tabBarID=1;
+            [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
+            _tabBarID=1;
             helpDic=@{@"action":@"discover"};
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"HELP" object:helpDic];
+//            [[NSNotificationCenter defaultCenter] postNotificationName:@"HELP" object:helpDic];
             
             int b=0;
             indexesID=0;
@@ -656,76 +645,103 @@ MyselfViewController *thirdViewController;
             
         case 1002:
         {
-            helpDic=@{@"action":@"work"};
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"HELP" object:helpDic];
-            indexesID=1;
-//            self.backBtn.hidden=YES;
-            [self transitionFromViewController:currentViewController toViewController:secondViewController duration:0.5 options:0 animations:^{
-                
-            }  completion:^(BOOL finished) {
-                if (finished) {
-                    currentViewController=secondViewController;
-                    [UIView beginAnimations:@"Animation" context:nil];
-                    [UIView setAnimationDuration:1];
-                    tab.hidden=YES;
-                    [UIView commitAnimations];
-                    bottomView.hidden=NO;
-                    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
-                    [self plusLAyout];
-                }else{
-                    currentViewController=oldViewController;
+            if(fatherVc.loginYesOrNo==YES){
+                [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
+                helpDic=@{@"action":@"work"};
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"HELP" object:helpDic];
+                indexesID=1;
+                //            self.backBtn.hidden=YES;
+                [self transitionFromViewController:currentViewController toViewController:secondViewController duration:0.5 options:0 animations:^{
                     
-                }
-            }];
+                }  completion:^(BOOL finished) {
+                    if (finished) {
+                        currentViewController=secondViewController;
+                        [UIView beginAnimations:@"Animation" context:nil];
+                        [UIView setAnimationDuration:1];
+                        tab.hidden=YES;
+                        [UIView commitAnimations];
+                        bottomView.hidden=NO;
+                        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
+                        [self plusLAyout];
+                    }else{
+                        currentViewController=oldViewController;
+                        
+                    }
+                }];
+            }else{
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    MyLogInViewController *loginViewController = [[MyLogInViewController alloc] init];
+                    loginViewController.vCYMID=100;
+                    UMComNavigationController *navigationController = [[UMComNavigationController alloc] initWithRootViewController:loginViewController];
+                    [self presentViewController:navigationController animated:YES completion:^{
+                    }];
+                });
+            }
+            
         }
             break;
         case 1003:
         {
-            tabBarID=3;
-            helpDic=@{@"action":@"sns"};
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"HELP" object:helpDic];
-            indexesID=0;
-            [self transitionFromViewController:currentViewController toViewController:viewController duration:0.5 options:0 animations:^{
-            }  completion:^(BOOL finished) {
-                if(finished){
-                    currentViewController=viewController;
+            
+            if(fatherVc.loginYesOrNo==YES){
+                [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:NO];
+                _tabBarID=3;
+                helpDic=@{@"action":@"sns"};
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"HELP" object:helpDic];
+                indexesID=0;
+                [self transitionFromViewController:currentViewController toViewController:viewController duration:0.5 options:0 animations:^{
+                }  completion:^(BOOL finished) {
+                    if(finished){
+                        currentViewController=viewController;
+                        
+                        pageImage.image=[UIImage imageNamed:@"common_icon_chum@2x"];
+                        pageLabel.textColor=[UIColor blackColor];
+                        
+                        foundImage.image=[UIImage imageNamed:@"common_icon_find@2x"];
+                        foundLabel.textColor=[UIColor blackColor];
+                        
+                        friendImage.image=[UIImage imageNamed:@"common_icon_home_c@2x"];
+                        friendLabel.textColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
+                        
+                        meImage.image=[UIImage imageNamed:@"common_icon_mine@2x"];
+                        meLabel.textColor=[UIColor blackColor];
+                    }else{
+                        currentViewController=oldViewController;
+                        pageImage.image=[UIImage imageNamed:@"common_icon_chum@2x"];
+                        pageLabel.textColor=[UIColor blackColor];
+                        
+                        foundImage.image=[UIImage imageNamed:@"common_icon_find@2x"];
+                        foundLabel.textColor=[UIColor blackColor];
+                        
+                        friendImage.image=[UIImage imageNamed:@"common_icon_home_c@2x"];
+                        friendLabel.textColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
+                        
+                        meImage.image=[UIImage imageNamed:@"common_icon_mine@2x"];
+                        meLabel.textColor=[UIColor blackColor];
+                        
+                    }
                     
-                    pageImage.image=[UIImage imageNamed:@"common_icon_chum@2x"];
-                    pageLabel.textColor=[UIColor blackColor];
-                    
-                    foundImage.image=[UIImage imageNamed:@"common_icon_find@2x"];
-                    foundLabel.textColor=[UIColor blackColor];
-                    
-                    friendImage.image=[UIImage imageNamed:@"common_icon_home_c@2x"];
-                    friendLabel.textColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
-                    
-                    meImage.image=[UIImage imageNamed:@"common_icon_mine@2x"];
-                    meLabel.textColor=[UIColor blackColor];
-                }else{
-                    currentViewController=oldViewController;
-                    pageImage.image=[UIImage imageNamed:@"common_icon_chum@2x"];
-                    pageLabel.textColor=[UIColor blackColor];
-                    
-                    foundImage.image=[UIImage imageNamed:@"common_icon_find@2x"];
-                    foundLabel.textColor=[UIColor blackColor];
-                    
-                    friendImage.image=[UIImage imageNamed:@"common_icon_home_c@2x"];
-                    friendLabel.textColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
-                    
-                    meImage.image=[UIImage imageNamed:@"common_icon_mine@2x"];
-                    meLabel.textColor=[UIColor blackColor];
-
-                }
-                
-            }];
+                }];
+            }else{
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    MyLogInViewController *loginViewController = [[MyLogInViewController alloc] init];
+                    loginViewController.vCYMID=100;
+                    UMComNavigationController *navigationController = [[UMComNavigationController alloc] initWithRootViewController:loginViewController];
+                    [self presentViewController:navigationController animated:YES completion:^{
+                    }];
+                });
+            }
+            
         }
             break;
         case 1004:
         {
-            tabBarID=4;
-            helpDic=@{@"action":@"mine"};
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"HELP" object:helpDic];
-            indexesID=0;
+            if(fatherVc.loginYesOrNo==YES){
+                [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
+                _tabBarID=4;
+                helpDic=@{@"action":@"mine"};
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"HELP" object:helpDic];
+                indexesID=0;
                 [self transitionFromViewController:currentViewController toViewController:thirdViewController duration:0.5 options:0 animations:^{
                     
                 }  completion:^(BOOL finished) {
@@ -764,7 +780,17 @@ MyselfViewController *thirdViewController;
                     }
                 }];
 
+            }else{
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    MyLogInViewController *loginViewController = [[MyLogInViewController alloc] init];
+                    loginViewController.vCYMID=100;
+                    UMComNavigationController *navigationController = [[UMComNavigationController alloc] initWithRootViewController:loginViewController];
+                    [self presentViewController:navigationController animated:YES completion:^{
+                    }];
+                });
             }
+            
+        }
             break;
     
         default:
@@ -776,19 +802,88 @@ MyselfViewController *thirdViewController;
 
 - (void)LoginReturn:(NSNotification *)noti
 {
-    currentViewController=homePageVIewController;
-    pageImage.image=[UIImage imageNamed:@"common_icon_chum_c@2x"];
-    pageLabel.textColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
-    
-    foundImage.image=[UIImage imageNamed:@"common_icon_find@2x"];
-    foundLabel.textColor=[UIColor blackColor];
-    
-    friendImage.image=[UIImage imageNamed:@"common_icon_home@2x"];
-    friendLabel.textColor=[UIColor blackColor];
-    
-    meImage.image=[UIImage imageNamed:@"common_icon_mine@2x"];
-    meLabel.textColor=[UIColor blackColor];
-    [mainView addSubview:currentViewController.view];
+    switch (_tabBarID) {
+        case 0:
+        {
+            currentViewController=homePageVIewController;
+            pageImage.image=[UIImage imageNamed:@"common_icon_chum_c@2x"];
+            pageLabel.textColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
+            
+            foundImage.image=[UIImage imageNamed:@"common_icon_find@2x"];
+            foundLabel.textColor=[UIColor blackColor];
+            
+            friendImage.image=[UIImage imageNamed:@"common_icon_home@2x"];
+            friendLabel.textColor=[UIColor blackColor];
+            
+            meImage.image=[UIImage imageNamed:@"common_icon_mine@2x"];
+            meLabel.textColor=[UIColor blackColor];
+            [mainView addSubview:homePageVIewController.view];
+            [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+        }
+            break;
+        case 1:
+        {
+            currentViewController=firstViewController;
+            firstViewController.vcID=0;
+            pageImage.image=[UIImage imageNamed:@"common_icon_chum@2x"];
+            pageLabel.textColor=[UIColor blackColor];
+            
+            foundImage.image=[UIImage imageNamed:@"common_icon_find_c@2x"];
+            foundLabel.textColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
+            
+            friendImage.image=[UIImage imageNamed:@"common_icon_home@2x"];
+            friendLabel.textColor=[UIColor blackColor];
+            
+            meImage.image=[UIImage imageNamed:@"common_icon_mine@2x"];
+            meLabel.textColor=[UIColor blackColor];
+            [mainView addSubview:firstViewController.view];
+            [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+        }
+            break;
+        case 3:
+        {
+            currentViewController=viewController;
+            
+            pageImage.image=[UIImage imageNamed:@"common_icon_chum@2x"];
+            pageLabel.textColor=[UIColor blackColor];
+            
+            foundImage.image=[UIImage imageNamed:@"common_icon_find@2x"];
+            foundLabel.textColor=[UIColor blackColor];
+            
+            friendImage.image=[UIImage imageNamed:@"common_icon_home_c@2x"];
+            friendLabel.textColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
+            
+            meImage.image=[UIImage imageNamed:@"common_icon_mine@2x"];
+            meLabel.textColor=[UIColor blackColor];
+            [mainView addSubview:viewController.view];
+            [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
+        }
+            break;
+        case 4:
+        {
+            currentViewController=thirdViewController;
+            //                thirdViewController.rootId=0;
+            
+            pageImage.image=[UIImage imageNamed:@"common_icon_chum@2x"];
+            pageLabel.textColor=[UIColor blackColor];
+            
+            foundImage.image=[UIImage imageNamed:@"common_icon_find@2x"];
+            foundLabel.textColor=[UIColor blackColor];
+            
+            friendImage.image=[UIImage imageNamed:@"common_icon_home@2x"];
+            friendLabel.textColor=[UIColor blackColor];
+            
+            meImage.image=[UIImage imageNamed:@"common_icon_mine_c@2x"];
+            meLabel.textColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
+            [mainView addSubview:thirdViewController.view];
+            [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
+        }
+            break;
+            
+        default:
+            break;
+    }
+
 }
 - (void)ZFBPaySuccess:(NSNotification *)notification
 {
@@ -816,23 +911,23 @@ MyselfViewController *thirdViewController;
     tab.hidden=NO;
     [UIView commitAnimations];
     bottomView.hidden=YES;
-    if (_is_new_userID==1) {
-        currentViewController=homePageVIewController;
-        pageImage.image=[UIImage imageNamed:@"common_icon_chum_c@2x"];
-        pageLabel.textColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
-        
-        foundImage.image=[UIImage imageNamed:@"common_icon_find@2x"];
-        foundLabel.textColor=[UIColor blackColor];
-        
-        friendImage.image=[UIImage imageNamed:@"common_icon_home@2x"];
-        friendLabel.textColor=[UIColor blackColor];
-        
-        meImage.image=[UIImage imageNamed:@"common_icon_mine@2x"];
-        meLabel.textColor=[UIColor blackColor];
-        [mainView addSubview:homePageVIewController.view];
-        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
-    }else{
-        switch (tabBarID) {
+//    if (_is_new_userID==1) {
+//        currentViewController=homePageVIewController;
+//        pageImage.image=[UIImage imageNamed:@"common_icon_chum_c@2x"];
+//        pageLabel.textColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
+//        
+//        foundImage.image=[UIImage imageNamed:@"common_icon_find@2x"];
+//        foundLabel.textColor=[UIColor blackColor];
+//        
+//        friendImage.image=[UIImage imageNamed:@"common_icon_home@2x"];
+//        friendLabel.textColor=[UIColor blackColor];
+//        
+//        meImage.image=[UIImage imageNamed:@"common_icon_mine@2x"];
+//        meLabel.textColor=[UIColor blackColor];
+//        [mainView addSubview:homePageVIewController.view];
+//        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+//    }else{
+        switch (_tabBarID) {
             case 0:
             {
                 currentViewController=homePageVIewController;
@@ -913,7 +1008,7 @@ MyselfViewController *thirdViewController;
             default:
                 break;
         }
-    }
+//    }
     
     
 //    [self tabBarAction];
@@ -1225,6 +1320,7 @@ MyselfViewController *thirdViewController;
         }
     }else if ([category isEqualToString:@"h5"]){
         WebPageViewController *webPageVC=[[WebPageViewController alloc]init];
+        webPageVC.barIDS=100;
         webPageVC.webURL=[NSString stringWithFormat:@"%@",[dic objectForKey:@"url"]];
         [self.navigationController pushViewController:webPageVC animated:YES];
     }

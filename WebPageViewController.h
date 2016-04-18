@@ -6,9 +6,10 @@
 //  Copyright © 2016年 zhirunjia.com. All rights reserved.
 //
 
-#import "FatherViewController.h"
-
-@interface WebPageViewController : FatherViewController<UIWebViewDelegate,UIScrollViewDelegate>
+#import <UIKit/UIKit.h>
+#import "NJKWebViewProgress.h"
+@interface WebPageViewController : UIViewController<UIWebViewDelegate,UIScrollViewDelegate,NJKWebViewProgressDelegate>
 @property (nonatomic ,strong)NSString *webURL;
 @property (nonatomic ,assign)int vcIDs;
+@property (nonatomic ,assign)int barIDS;
 @end

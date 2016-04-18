@@ -58,7 +58,7 @@ GrowUp_or_MakeMoneyViewController *growUp_or_MakeMoneyViewController;
     UIView *shuView=[[UIView alloc]initWithFrame:FRAME(WIDTH/2-0.5, 2, 1, 40)];
     shuView.backgroundColor=[UIColor colorWithRed:231/255.0f green:231/255.0f blue:231/255.0f alpha:1];
     [tabBarView addSubview:shuView];
-    NSArray *nameArray=@[@"工作与工具",@"成长与赚钱"];
+    NSArray *nameArray=@[@"工作与工具",@"成长与提升"];
     for (int i=0; i<nameArray.count; i++) {
         UIButton *tabbarBut=[[UIButton alloc]initWithFrame:FRAME((WIDTH/2+0.5)*i, 0, WIDTH/2-0.5, 43)];
         tabbarBut.backgroundColor=[UIColor whiteColor];

@@ -43,7 +43,9 @@
 @implementation SecretFriendsViewController
 @synthesize _tableView;
 - (void)viewDidLoad {
+    
     [super viewDidLoad];
+//    self.navlabel.text=@"好友";
     self.view.backgroundColor=[UIColor colorWithRed:231/255.0f green:231/255.0f blue:231/255.0f alpha:1];
     page=1;
     secretArray=[[NSMutableArray alloc]init];
@@ -64,7 +66,7 @@
     });
     
     recommendArray=@[@"企业通讯录",@"添加通讯录好友",@"扫一扫加好友",@"好友申请"];//,
-    _tableView=[[UITableView alloc]initWithFrame:FRAME(0, 110, WIDTH, HEIGHT-110)];
+    _tableView=[[UITableView alloc]initWithFrame:FRAME(0, 64, WIDTH, HEIGHT-64)];
     _tableView.dataSource=self;
     _tableView.delegate=self;
     [self.view addSubview:_tableView];

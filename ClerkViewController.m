@@ -29,8 +29,13 @@
 @implementation ClerkViewController
 
 @synthesize _tableView,seekArray,sec_Id,secID,is_senior,height,Y,service_type_id;
+- (void)LoginPopReturn:(NSNotification *)noti
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(LoginPopReturn:) name:@"RETURN_POP" object:nil];
     gaoIDArray=[[NSMutableDictionary alloc]init];
     page=1;
     seekArray=[[NSMutableArray alloc]init];
@@ -39,12 +44,42 @@
     meView.color = [UIColor redColor];
     [self.view addSubview:meView];
     [meView startAnimating];
-    AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication] delegate];
-    sec_Id=[NSString stringWithFormat:@"%@",[delegate.globalDic objectForKey:@"sec_id"]];
-    is_senior=[[delegate.globalDic objectForKey:@"is_senior"]intValue];
+    
     NSLog(@"秘书ID %@, 是否有秘书 %d",sec_Id,is_senior);
-    [self tableViewSource];
-    [self tableViewLayout];
+    [_tableView removeFromSuperview];
+    _tableView=[[UITableView alloc]initWithFrame:FRAME(0, 64, WIDTH, HEIGHT-64)];
+    if ([self._tableView respondsToSelector:@selector(setSeparatorInset:)]) {
+        
+        [self._tableView setSeparatorInset:UIEdgeInsetsZero];
+        [_tableView setSeparatorInset:UIEdgeInsetsMake(0, 0, 0, 0)];
+        
+    }
+    _tableView.dataSource=self;
+    _tableView.delegate=self;
+    _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    [self.view addSubview:_tableView];
+    UIView *v = [[UIView alloc] initWithFrame:CGRectZero];
+    
+    [_tableView setTableFooterView:v];
+    
+    _refreshHeader = [[MJRefreshHeaderView alloc] init];
+    _refreshHeader.delegate = self;
+    _refreshHeader.scrollView = _tableView;
+    
+    _moreFooter = [[MJRefreshFooterView alloc] init];
+    _moreFooter.delegate = self;
+    _moreFooter.scrollView = _tableView;
+    if(self.loginYesOrNo!=YES)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            MyLogInViewController *loginViewController = [[MyLogInViewController alloc] init];
+            loginViewController.vCYMID=100;
+            UMComNavigationController *navigationController = [[UMComNavigationController alloc] initWithRootViewController:loginViewController];
+            [self presentViewController:navigationController animated:YES completion:^{
+            }];
+        });
+    }
+//    [self tableViewLayout];
 }
 -(void)viewWillAppear:(BOOL)animated
 {
@@ -54,6 +89,15 @@
         [_refreshHeader beginRefreshing];
         _needRefresh = NO;
     }
+    if (self.loginYesOrNo) {
+        AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication] delegate];
+        sec_Id=[NSString stringWithFormat:@"%@",[delegate.globalDic objectForKey:@"sec_id"]];
+        is_senior=[[delegate.globalDic objectForKey:@"is_senior"]intValue];
+        [self tableViewSource];
+    }else{
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+    
 }
 -(void)tableViewSource
 {

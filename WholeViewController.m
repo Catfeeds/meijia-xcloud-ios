@@ -50,6 +50,15 @@
     // Do any additional setup after loading the view.
     [self dataSourceLayout];
 }
+-(void)viewWillAppear:(BOOL)animated
+{
+    if (_whoVCID==101) {
+        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
+    }else{
+        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+    }
+    
+}
 -(void)dataSourceLayout
 {
     DownloadManager *_download = [[DownloadManager alloc]init];

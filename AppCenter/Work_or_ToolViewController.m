@@ -127,6 +127,74 @@
     NSDictionary*_dict =@{@"app_type":@"xcloud",@"user_id":_manager.telephone};
     NSLog(@"字典数据%@",_dict);
     [_download requestWithUrl:WATER_CELL dict:_dict view:self.view  delegate:self finishedSEL:@selector(logDowLoadFinish:) isPost:NO failedSEL:@selector(DownFail:)];
+
+//    NSString *path = [[[NSBundle mainBundle] bundlePath] stringByAppendingPathComponent:@"simi.db"];
+//    sqlite3_open([path UTF8String], &app_toolsdb);
+//    
+//    sqlite3_stmt *statement;
+//    NSString *sql = @"SELECT * FROM app_tools order by no";
+//    
+//    if (sqlite3_prepare_v2(app_toolsdb, [sql UTF8String], -1, &statement, nil) == SQLITE_OK)
+//    {
+//        while (sqlite3_step(statement) == SQLITE_ROW) {
+//            char *t_id = (char *)sqlite3_column_text(statement, 0);
+//            NSString *t_idStr = [[NSString alloc] initWithUTF8String:t_id];
+//            
+//            char *name = (char *)sqlite3_column_text(statement, 2);
+//            NSString *nameStr = [[NSString alloc] initWithUTF8String:name];
+//            
+//            char *logo = (char *)sqlite3_column_text(statement, 3);
+//            NSString *logo_Str = [[NSString alloc] initWithUTF8String:logo];
+//            
+//            char *app_type = (char *)sqlite3_column_text(statement, 4);
+//            NSString *app_typeStr = [[NSString alloc] initWithUTF8String:app_type];
+//            
+//            char *menu_type = (char *)sqlite3_column_text(statement, 5);
+//            NSString *menu_typeeStr = [[NSString alloc] initWithUTF8String:menu_type];
+//            
+//            char *open_type = (char *)sqlite3_column_text(statement, 6);
+//            NSString *open_typeStr = [[NSString alloc] initWithUTF8String:open_type];
+//            
+//            char *url = (char *)sqlite3_column_text(statement, 7);
+//            NSString *urlStr = [[NSString alloc] initWithUTF8String:url];
+//            
+//            char *action = (char *)sqlite3_column_text(statement, 8);
+//            NSString *actionStr = [[NSString alloc] initWithUTF8String:action];
+//            
+//            char *params = (char *)sqlite3_column_text(statement, 9);
+//            NSString *paramsStr = [[NSString alloc] initWithUTF8String:params];
+//            
+//            char *is_default = (char *)sqlite3_column_text(statement, 10);
+//            NSString *is_defaultStr = [[NSString alloc] initWithUTF8String:is_default];
+//            
+//            char *is_del = (char *)sqlite3_column_text(statement, 11);
+//            NSString *is_delStr = [[NSString alloc] initWithUTF8String:is_del];
+//            
+//            char *is_partner = (char *)sqlite3_column_text(statement, 12);
+//            NSString *is_partnerStr = [[NSString alloc] initWithUTF8String:is_partner];
+//            
+//            char *is_online = (char *)sqlite3_column_text(statement, 13);
+//            NSString *is_onlineStr = [[NSString alloc] initWithUTF8String:is_online];
+//            
+//            char *app_provider = (char *)sqlite3_column_text(statement, 14);
+//            NSString *app_providerStr = [[NSString alloc] initWithUTF8String:app_provider];
+//            
+//            char *app_describe = (char *)sqlite3_column_text(statement, 15);
+//            NSString *app_describeStr = [[NSString alloc] initWithUTF8String:app_describe];
+//            
+//            char *auth_url = (char *)sqlite3_column_text(statement, 16);
+//            NSString *auth_urlStr = [[NSString alloc] initWithUTF8String:auth_url];
+//        
+//            NSDictionary *dic=@{@"t_id":t_idStr,@"name":nameStr,@"logo":logo_Str,@"app_type":app_typeStr,@"menu_type":menu_typeeStr,@"open_type":open_typeStr,@"url":urlStr,@"action":actionStr,@"params":paramsStr,@"is_default":is_defaultStr,@"is_del":is_delStr,@"is_partner":is_partnerStr,@"is_online":is_onlineStr,@"app_provider":app_providerStr,@"app_describe":app_describeStr,@"auth_url":auth_urlStr};
+//            if ([dataArray containsObject:dic]) {
+//                
+//            }else{
+//                [dataArray addObject:dic];
+//            }
+//            
+//        }
+//        sqlite3_finalize(statement);
+//    }
 }
 -(void)logDowLoadFinish:(id)sender
 {

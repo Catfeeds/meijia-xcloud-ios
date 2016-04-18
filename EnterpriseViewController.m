@@ -71,6 +71,7 @@
 {
     if (open==0) {
         WebPageViewController *webVC=[[WebPageViewController alloc]init];
+        webVC.barIDS=100;
         webVC.webURL=@"http://123.57.173.36/simi-h5/show/company-reg.html";
         [self.navigationController pushViewController:webVC animated:YES];
     }else{

@@ -11,5 +11,5 @@
 @interface RootViewController : UIViewController<UICollectionViewDataSource,UICollectionViewDelegate,UIWebViewDelegate>
 @property (nonatomic ,strong)UICollectionView *collectionView;
 @property (nonatomic, strong)UIImageView *tab;
-@property (nonatomic ,assign)int is_new_userID;
+@property (nonatomic ,assign)int  tabBarID;;
 @end

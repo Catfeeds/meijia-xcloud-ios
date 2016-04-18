@@ -236,6 +236,7 @@ appDelegate
             
         }else{
             WebPageViewController *webVc=[[WebPageViewController alloc]init];
+            webVc.barIDS=100;
             webVc.webURL=[NSString stringWithFormat:@"%@",url];
             [self.navigationController pushViewController:webVc animated:YES];
         }
@@ -262,21 +263,25 @@ appDelegate
     self.navlabel.text = @"快速注册与登录";
 //    self.title=@"快速注册与登录";
     if (self.loginYesOrNo == YES) {
+        [self ymCommunity];
         [self pushToIM];
-        
-        RootViewController *vc=[[RootViewController alloc]init];
-        [self.navigationController pushViewController:vc animated:YES];
+        if (_vCYMID==101) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"SIGNSS" object:nil];
+        }
+//        RootViewController *vc=[[RootViewController alloc]init];
+//        [self.navigationController pushViewController:vc animated:YES];
+        [self.navigationController popViewControllerAnimated:YES];
         [self AppdeleAction];
         [self getUserInfo];//1
     }else{
         secondsDown = 60;
         
         
-        self.backBtn.hidden = YES;
+//        self.backBtn.hidden = YES;
 //        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(back) name:@"MylogVcBack" object:nil];
 //        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pushToIM) name:@"PUSHTOCHAT" object:nil];
         
-        UIView *viewheade=[[UIView alloc]initWithFrame:FRAME(0, 20, WIDTH, HEIGHT*0.3)];
+        UIView *viewheade=[[UIView alloc]initWithFrame:FRAME(0, 64, WIDTH, HEIGHT*0.3)];
         viewheade.backgroundColor=[UIColor whiteColor];
         [self.view addSubview:viewheade];
         UIImageView *headeImage=[[UIImageView alloc]initWithFrame:FRAME((WIDTH-200)/2, (HEIGHT*0.3)/3, 200, (HEIGHT*0.3)/3)];
@@ -289,7 +294,7 @@ appDelegate
         headImageView.image=[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imageUrl]]];
         [viewheade addSubview:headImageView];
         
-        view = [[UIView alloc]initWithFrame:FRAME(0, 20+HEIGHT*0.3, SELF_VIEW_WIDTH, 1.5+108)];
+        view = [[UIView alloc]initWithFrame:FRAME(0, 64+HEIGHT*0.3, SELF_VIEW_WIDTH, 1.5+108)];
         view.backgroundColor = HEX_TO_UICOLOR(CHOICE_BACK_VIEW_COLOR, 1.0);
         [self.view addSubview:view];
         
@@ -558,13 +563,21 @@ appDelegate
 -(void)back
 {
     if (self.loginYesOrNo==YES) {
-        RootViewController *vc=[[RootViewController alloc]init];
-        vc.is_new_userID=[[cGDic objectForKey:@"is_new_user"]intValue];
-        [self.navigationController pushViewController:vc animated:YES];
+        
+        [self ymCommunity];
+        
+//        RootViewController *vc=[[RootViewController alloc]init];
+//        vc.is_new_userID=[[cGDic objectForKey:@"is_new_user"]intValue];
+//        [self.navigationController pushViewController:vc animated:YES];
+        if (_vCYMID==101) {
+             [[NSNotificationCenter defaultCenter] postNotificationName:@"SIGNSS" object:nil];
+        }
+        [self.navigationController popViewControllerAnimated:YES];
         _vCLID=0;
         [self AppdeleAction];
 //        [self userAddress];
         [self getUserInfo];//2
+        
         
     }
     //[self.navigationController popViewControllerAnimated:YES];
@@ -1081,8 +1094,13 @@ appDelegate
         NSLog(@"1");
     }
     if (wxID==1) {
-        RootViewController *vc=[[RootViewController alloc]init];
-        [self presentViewController:vc animated:YES completion:nil];
+        [self ymCommunity];
+//        RootViewController *vc=[[RootViewController alloc]init];
+//        [self presentViewController:vc animated:YES completion:nil];
+        if (_vCYMID==101) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"SIGNSS" object:nil];
+        }
+        [self.navigationController popViewControllerAnimated:YES];
     }
 }
 
@@ -1232,8 +1250,48 @@ appDelegate
     
     [self.view addSubview:phoneCallWebView];
 }
+-(void)ymCommunity
+{
+    ISLoginManager *_manager = [ISLoginManager shareManager];
+    NSLog(@"有值么%@",_manager.telephone);
+    DownloadManager *_download = [[DownloadManager alloc]init];
+    NSDictionary *_dict=@{@"user_id":_manager.telephone};
+    [_download requestWithUrl:USER_INFO dict:_dict view:self.view delegate:self finishedSEL:@selector(CommunityFinish:) isPost:NO failedSEL:@selector(CommunityFail:)];
+    
 
+    
 
+}
+-(void)CommunityFinish:(id)source
+{
+    UMComUserAccount *account = [[UMComUserAccount alloc] initWithSnsType:UMComSnsTypeSelfAccount];
+    account.usid =[NSString stringWithFormat:@"%@",[[source objectForKey:@"data"]objectForKey:@"id"]];//用户自己所在系统的uid
+    account.name = [NSString stringWithFormat:@"%@",[[source objectForKey:@"data"]objectForKey:@"name"]];
+    account.icon_url=[NSString stringWithFormat:@"%@",[[source objectForKey:@"data"]objectForKey:@"head_img"]];
+    [UMComLoginManager loginWithLoginViewController:self userAccount:account loginCompletion:nil];
+}
+-(void)CommunityFail:(id)source
+{
+    
+}
+-(void)todoSomething
+{
+    if (_vCYMID==100) {
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }else{
+        [self.navigationController popViewControllerAnimated:YES];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"RETURN_POP" object:nil];
+ 
+    }
+}
+- (void)backAction
+{
+    [[self class] cancelPreviousPerformRequestsWithTarget:self selector:@selector(todoSomething) object:nil];
+    [self performSelector:@selector(todoSomething) withObject:nil afterDelay:0.2f];
+    
+    //    [[self class] cancelPreviousPerformRequestsWithTarget:self];
+    
+}
 //- (void)backAction
 //{
 //    //    [[NSNotificationCenter defaultCenter]postNotificationName:@"RETURN" object:nil userInfo:nil];

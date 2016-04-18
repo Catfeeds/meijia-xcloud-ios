@@ -104,12 +104,17 @@
             [myTableView reloadData];
         }
 
+    }else{
+        [_refreshHeader performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+        [_moreFooter performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
     }
-   }
+}
 #pragma mark领用列表数据失败方法
 -(void)addDressFail:(id)source
 {
     NSLog(@"领用列表数据失败:%@",source);
+    [_refreshHeader performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+    [_moreFooter performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
 }
 -(void)viewWillAppear:(BOOL)animated
 {

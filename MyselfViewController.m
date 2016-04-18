@@ -35,6 +35,15 @@
 
 #import "FriendViewController.h"
 #import "IntegralListViewController.h"
+
+//我的消息点击引用类
+#import "UMComNoticeSystemViewController.h"
+#import "UMComFeedTableViewController.h"
+#import "UMComUsersTableViewController.h"
+#import "UMComViewController.h"
+#import "UMComUserCenterViewController.h"
+#import "UMComTopicsTableViewController.h"
+
 @interface MyselfViewController ()
 {
     FXBlurView *blurView;
@@ -255,8 +264,10 @@
     tableScrollView.contentSize=CGSizeMake(WIDTH, 131*3+80);
     tableScrollView.delegate=self;
     [self.view addSubview:tableScrollView];
-    NSArray *toolArray=@[@"Wallet_Lcon",@"Coupon_Lcon",@"Order_Lcon",@"iconfont-changyongdizhi"];
-    NSArray *growArray=@[@"Knowledge_Lcon",@"iconfont-gongzuotuijian",@"Integral_Lcon",@"Part-time-job_Lcon"];
+//    NSArray *toolArray=@[@"Wallet_Lcon",@"Coupon_Lcon",@"Order_Lcon",@"iconfont-changyongdizhi"];
+//    NSArray *growArray=@[@"Knowledge_Lcon",@"iconfont-gongzuotuijian",@"Integral_Lcon",@"Part-time-job_Lcon"];
+    NSArray *toolArray=@[@"消息",@"话题",@"关注",@"粉丝"];
+    NSArray *growArray=@[@"订单",@"优惠券128",@"积分商城",@"会员服务"];
     for (int i=0; i<4; i++) {
         UIView *view=[[UIView alloc]init];
         if (i!=3) {
@@ -272,43 +283,43 @@
         switch (i) {
             case 0:
             {
-                lineView.frame=FRAME(0, 50, WIDTH, 1);
-                UIView *lineVw=[[UIView alloc]initWithFrame:FRAME(0, 121, WIDTH, 1)];
+                lineView.frame=FRAME(0, 50, WIDTH, 0.5);
+                UIView *lineVw=[[UIView alloc]initWithFrame:FRAME(0, 121, WIDTH, 0.5)];
                 lineVw.backgroundColor=[UIColor colorWithRed:205/255.0f green:205/255.0f blue:205/255.0f alpha:1];
                 [view addSubview:lineVw];
                 
-                UIImageView *toolHeadeImage=[[UIImageView alloc]initWithFrame:FRAME(10, 15, 20, 20)];
-                toolHeadeImage.image=[UIImage imageNamed:@"Toolbox_Lcon"];
-                [view addSubview:toolHeadeImage];
-                UILabel *toolLabel=[[UILabel alloc]initWithFrame:FRAME(toolHeadeImage.frame.size.width+toolHeadeImage.frame.origin.x, 10, 80, 30)];
-                toolLabel.text=@"工具箱";
+//                UIImageView *toolHeadeImage=[[UIImageView alloc]initWithFrame:FRAME(10, 15, 20, 20)];
+//                toolHeadeImage.image=[UIImage imageNamed:@"Toolbox_Lcon"];
+//                [view addSubview:toolHeadeImage];
+                UILabel *toolLabel=[[UILabel alloc]initWithFrame:FRAME(20, 10, 80, 30)];
+                toolLabel.text=@"我的消息";
                 toolLabel.font=[UIFont fontWithName:@"Heiti SC" size:16];
                 toolLabel.textColor=[UIColor colorWithRed:100/255.0f green:100/255.0f blue:100/255.0f alpha:1];
                 [view addSubview:toolLabel];
                 
-//                UIButton *toolMoreBut=[[UIButton alloc]initWithFrame:FRAME(WIDTH-70, 10, 50, 30)];
-//                [toolMoreBut addTarget:self action:@selector(toolMoreButAction) forControlEvents:UIControlEventTouchUpInside];
-//                [view addSubview:toolMoreBut];
-                
-                UIView *toolMoreBut=[[UIView alloc]initWithFrame:FRAME(WIDTH-70, 10, 50, 30)];
+                UIButton *toolMoreBut=[[UIButton alloc]initWithFrame:FRAME(WIDTH-70, 10, 50, 30)];
+                [toolMoreBut addTarget:self action:@selector(toolMoreButAction) forControlEvents:UIControlEventTouchUpInside];
                 [view addSubview:toolMoreBut];
-                UILongPressGestureRecognizer * longPressGr = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressToDo:)];
-                longPressGr.minimumPressDuration = 5.0;
-                [toolMoreBut addGestureRecognizer:longPressGr];
+                
+//                UIView *toolMoreBut=[[UIView alloc]initWithFrame:FRAME(WIDTH-70, 10, 50, 30)];
+//                [view addSubview:toolMoreBut];
+//                UILongPressGestureRecognizer * longPressGr = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressToDo:)];
+//                longPressGr.minimumPressDuration = 5.0;
+//                [toolMoreBut addGestureRecognizer:longPressGr];
                 
                 
                 UILabel *toolViceLabel=[[UILabel alloc]initWithFrame:FRAME(0, 5, 40, 20)];
-                toolViceLabel.text=@"更多";
+//                toolViceLabel.text=@"更多";
                 toolViceLabel.textAlignment=NSTextAlignmentRight;
                 toolViceLabel.font=[UIFont fontWithName:@"Heiti SC" size:13];
                 toolViceLabel.textColor=[UIColor colorWithRed:190/255.0f green:190/255.0f blue:190/255.0f alpha:1];
-//                [toolMoreBut addSubview:toolViceLabel];
+                [toolMoreBut addSubview:toolViceLabel];
                 
                 UIImageView *toolMoreImage=[[UIImageView alloc]initWithFrame:FRAME(40, 5, 20, 20)];
                 toolMoreImage.image=[UIImage imageNamed:@"JH_JT_TB_@2x"];
-//                [toolMoreBut addSubview:toolMoreImage];
+                [toolMoreBut addSubview:toolMoreImage];
                 
-                NSArray *array=@[@"钱包",@"优惠劵",@"订单",@"常用地址"];
+                NSArray *array=@[@"动态",@"话题",@"关注",@"粉丝"];
                 for (int j=0; j<array.count; j++) {
                     UIButton *toolButton=[[UIButton alloc]initWithFrame:FRAME(WIDTH/4*j, 51, WIDTH/4, 70)];
                     toolButton.tag=100+j;
@@ -330,37 +341,41 @@
                 break;
             case 1:
             {
-                lineView.frame=FRAME(0, 50, WIDTH, 1);
-                UIView *lineVw=[[UIView alloc]initWithFrame:FRAME(0, 121, WIDTH, 1)];
+                lineView.frame=FRAME(0, 50, WIDTH, 0.5);
+                UIView *lineVw=[[UIView alloc]initWithFrame:FRAME(0, 121, WIDTH, 0.5)];
                 lineVw.backgroundColor=[UIColor colorWithRed:205/255.0f green:205/255.0f blue:205/255.0f alpha:1];
                 [view addSubview:lineVw];
                 
-                UIImageView *growHeadeImage=[[UIImageView alloc]initWithFrame:FRAME(10, 15, 20, 20)];
-                growHeadeImage.image=[UIImage imageNamed:@"Grow-up_Lcon"];
-                [view addSubview:growHeadeImage];
-                UILabel *growLabel=[[UILabel alloc]initWithFrame:FRAME(growHeadeImage.frame.size.width+growHeadeImage.frame.origin.x, 10, 80, 30)];
-                growLabel.text=@"会员服务";
+//                UIImageView *growHeadeImage=[[UIImageView alloc]initWithFrame:FRAME(10, 15, 20, 20)];
+//                growHeadeImage.image=[UIImage imageNamed:@"Grow-up_Lcon"];
+//                [view addSubview:growHeadeImage];
+                UILabel *growLabel=[[UILabel alloc]initWithFrame:FRAME(20, 10, 80, 30)];
+                growLabel.text=@"我的钱包";
                 growLabel.font=[UIFont fontWithName:@"Heiti SC" size:16];
                 growLabel.textColor=[UIColor colorWithRed:100/255.0f green:100/255.0f blue:100/255.0f alpha:1];
                 [view addSubview:growLabel];
                 
-                UIButton *growMoreBut=[[UIButton alloc]initWithFrame:FRAME(WIDTH-70, 10, 50, 30)];
+                UIButton *growMoreBut=[[UIButton alloc]init];
                 [growMoreBut addTarget:self action:@selector(growMoreButAction) forControlEvents:UIControlEventTouchUpInside];
                 [view addSubview:growMoreBut];
                 
-                UILabel *growViceLabel=[[UILabel alloc]initWithFrame:FRAME(0, 5, 40, 20)];
-                growViceLabel.text=@"LV3";
+                UILabel *growViceLabel=[[UILabel alloc]init];
+                growViceLabel.text=@"充值有优惠";
                 growViceLabel.textAlignment=NSTextAlignmentRight;
                 growViceLabel.font=[UIFont fontWithName:@"Heiti SC" size:13];
                 growViceLabel.textColor=[UIColor colorWithRed:190/255.0f green:190/255.0f blue:190/255.0f alpha:1];
-                //[growMoreBut addSubview:growViceLabel];
-                
-                UIImageView *growMoreImage=[[UIImageView alloc]initWithFrame:FRAME(40, 5, 20, 20)];
+                [growViceLabel setNumberOfLines:1];
+                [growViceLabel sizeToFit];
+                growViceLabel.frame=FRAME(0, 5, growViceLabel.frame.size.width, 20);
+                [growMoreBut addSubview:growViceLabel];
+                growMoreBut.frame=FRAME(WIDTH-(growViceLabel.frame.size.width+30), 10, growViceLabel.frame.size.width+20, 30);
+                UIImageView *growMoreImage=[[UIImageView alloc]initWithFrame:FRAME(growMoreBut.frame.size.width-20, 5, 20, 20)];
                 growMoreImage.image=[UIImage imageNamed:@"JH_JT_TB_@2x"];
-                //[growMoreBut addSubview:growMoreImage];
+                [growMoreBut addSubview:growMoreImage];
 
                 
-                NSArray *array=@[@"知识库",@"工作推荐",@"积分商城",@"开店"];
+                
+                NSArray *array=@[@"我的订单",@"优惠卷",@"积分商城",@"会员服务"];
                 for (int k=0; k<array.count; k++) {
                     UIButton *growButton=[[UIButton alloc]initWithFrame:FRAME(WIDTH/4*k, 51, WIDTH/4, 70)];
                     growButton.tag=1000+k;
@@ -383,23 +398,23 @@
                 break;
             case 2:
             {
-                lineView.frame=FRAME(0, 60, WIDTH, 1);
-                UIView *lineVw=[[UIView alloc]initWithFrame:FRAME(0, 121, WIDTH, 1)];
+                lineView.frame=FRAME(0, 60, WIDTH, 0.5);
+                UIView *lineVw=[[UIView alloc]initWithFrame:FRAME(0, 121, WIDTH, 0.5)];
                 lineVw.backgroundColor=[UIColor colorWithRed:205/255.0f green:205/255.0f blue:205/255.0f alpha:1];
                 [view addSubview:lineVw];
-                NSArray *otherArray=@[@"推荐给好友",@"更多"];
-                NSArray *otherImageArray=@[@"Recommend_Lcon",@"More_lcon"];
+                NSArray *otherArray=@[@"推荐给好友",@"我是服务者"];
+//                NSArray *otherImageArray=@[@"Recommend_Lcon",@"More_lcon"];
                 for (int s=0; s<otherArray.count; s++) {
                     UIButton *otherButton=[[UIButton alloc]initWithFrame:FRAME(0, 61*s, WIDTH, 60)];
                     otherButton.tag=10000+s;
                     [otherButton addTarget:self action:@selector(otherButAction:) forControlEvents:UIControlEventTouchUpInside];
                     [view addSubview:otherButton];
                     
-                    UIImageView *otherHeadeImage=[[UIImageView alloc]initWithFrame:FRAME(10, 20, 20, 20)];
-                    otherHeadeImage.image=[UIImage imageNamed:[NSString stringWithFormat:@"%@",otherImageArray[s]]];
-                    [otherButton addSubview:otherHeadeImage];
+//                    UIImageView *otherHeadeImage=[[UIImageView alloc]initWithFrame:FRAME(10, 20, 20, 20)];
+//                    otherHeadeImage.image=[UIImage imageNamed:[NSString stringWithFormat:@"%@",otherImageArray[s]]];
+//                    [otherButton addSubview:otherHeadeImage];
                     
-                    UILabel *otherLabel=[[UILabel alloc]initWithFrame:FRAME(otherHeadeImage.frame.size.width+otherHeadeImage.frame.origin.x, 15, 90, 30)];
+                    UILabel *otherLabel=[[UILabel alloc]initWithFrame:FRAME(20, 15, 90, 30)];
                     otherLabel.text=[NSString stringWithFormat:@"%@",otherArray[s]];
                     otherLabel.font=[UIFont fontWithName:@"Heiti SC" size:16];
                     otherLabel.textColor=[UIColor colorWithRed:100/255.0f green:100/255.0f blue:100/255.0f alpha:1];
@@ -409,6 +424,7 @@
                     arrowImage.image=[UIImage imageNamed:@"JH_JT_TB_@2x"];
                     [otherButton addSubview:arrowImage];
                     
+                    
                 }
                 
                 
@@ -416,18 +432,18 @@
                 break;
             case 3:
             {
-                lineView.frame=FRAME(0, 60, WIDTH, 1);
+                lineView.frame=FRAME(0, 60, WIDTH, 0.5);
                 UIButton *merchantButton=[[UIButton alloc]initWithFrame:FRAME(0, 0, WIDTH, 60)];
                 merchantButton.tag=10;
                 [merchantButton addTarget:self action:@selector(merchantButAction:) forControlEvents:UIControlEventTouchUpInside];
                 [view addSubview:merchantButton];
                 
-                UIImageView *merchantHeadeImage=[[UIImageView alloc]initWithFrame:FRAME(10, 20, 20, 20)];
-                merchantHeadeImage.image=[UIImage imageNamed:[NSString stringWithFormat:@"Merchant_Lcon"]];
-                [merchantButton addSubview:merchantHeadeImage];
+//                UIImageView *merchantHeadeImage=[[UIImageView alloc]initWithFrame:FRAME(10, 20, 20, 20)];
+//                merchantHeadeImage.image=[UIImage imageNamed:[NSString stringWithFormat:@"Merchant_Lcon"]];
+//                [merchantButton addSubview:merchantHeadeImage];
                 
-                UILabel *merchantLabel=[[UILabel alloc]initWithFrame:FRAME(merchantHeadeImage.frame.size.width+merchantHeadeImage.frame.origin.x, 15, 90, 30)];
-                merchantLabel.text=@"我是商家";
+                UILabel *merchantLabel=[[UILabel alloc]initWithFrame:FRAME(20, 15, 90, 30)];
+                merchantLabel.text=@"更多";
                 merchantLabel.font=[UIFont fontWithName:@"Heiti SC" size:16];
                 merchantLabel.textColor=[UIColor colorWithRed:100/255.0f green:100/255.0f blue:100/255.0f alpha:1];
                 [merchantButton addSubview:merchantLabel];
@@ -436,14 +452,14 @@
                 arrowImage.image=[UIImage imageNamed:@"JH_JT_TB_@2x"];
                 [merchantButton addSubview:arrowImage];
                 
-                UILabel *mobileLabel=[[UILabel alloc]init];
-                mobileLabel.text=@"400-169-1615";
-                mobileLabel.textColor=[UIColor colorWithRed:100/255.0f green:100/255.0f blue:100/255.0f alpha:1];
-                mobileLabel.font=[UIFont fontWithName:@"Heiti SC" size:13];
-                [mobileLabel setNumberOfLines:1];
-                [mobileLabel sizeToFit];
-                mobileLabel.frame=FRAME(WIDTH-30-mobileLabel.frame.size.width, 20, mobileLabel.frame.size.width, 20);
-                [merchantButton addSubview:mobileLabel];
+//                UILabel *mobileLabel=[[UILabel alloc]init];
+//                mobileLabel.text=@"400-169-1615";
+//                mobileLabel.textColor=[UIColor colorWithRed:100/255.0f green:100/255.0f blue:100/255.0f alpha:1];
+//                mobileLabel.font=[UIFont fontWithName:@"Heiti SC" size:13];
+//                [mobileLabel setNumberOfLines:1];
+//                [mobileLabel sizeToFit];
+//                mobileLabel.frame=FRAME(WIDTH-30-mobileLabel.frame.size.width, 20, mobileLabel.frame.size.width, 20);
+//                [merchantButton addSubview:mobileLabel];
 
 
             }
@@ -456,82 +472,107 @@
     
     
 }
--(void)longPressToDo:(UILongPressGestureRecognizer *)gesture
-{
-    
-    if(gesture.state == UIGestureRecognizerStateBegan)
-    {
-        WaterfallViewController *centerVC=[[WaterfallViewController alloc]init];
-        [self.navigationController pushViewController:centerVC animated:YES];
-    }
-}
+//-(void)longPressToDo:(UIButton *)gesture
+//{
+//    
+////    if(gesture.state == UIGestureRecognizerStateBegan)
+////    {
+//        WaterfallViewController *centerVC=[[WaterfallViewController alloc]init];
+//        [self.navigationController pushViewController:centerVC animated:YES];
+////    }
+//}
 #pragma mark 工具箱更多按钮点击方法
 -(void)toolMoreButAction
 {
     NSLog(@"更多工具被点击了！！！");
-    WaterfallViewController *centerVC=[[WaterfallViewController alloc]init];
-    [self.navigationController pushViewController:centerVC animated:YES];
+    UMComNoticeSystemViewController *userNewaNoticeViewController = [[UMComNoticeSystemViewController alloc] init];
+    userNewaNoticeViewController.umNotVC=100;
+    [self.navigationController  pushViewController:userNewaNoticeViewController animated:YES];
 }
-#pragma mark 我的成长等级按钮点击方法
+#pragma mark 我的充值有优惠按钮点击方法
 -(void)growMoreButAction
 {
     NSLog(@"我在查看等级哦！！！");
+    MyWalletViewController *mywalletVC=[[MyWalletViewController alloc]init];
+    [self.navigationController pushViewController:mywalletVC animated:YES];
 }
-#pragma mark 工具箱多个按钮的点击方法
+#pragma mark 我的消息多个按钮的点击方法
 -(void)toolButAction:(UIButton *)sender
 {
     NSInteger tag=sender.tag;
     int tg=(int)tag;
-    NSArray *array=@[@"钱包",@"优惠劵",@"订单",@"常用地址"];
+    NSArray *array=@[@"动态",@"话题",@"关注",@"粉丝"];
     NSLog(@"%@--被点击了",array[tg-100]);
+//    NSString *se=@"a8c44753ced7bac4f98d6611c4db1901";
     switch (tg) {
         case 100:
         {
-            MyWalletViewController *mywalletVC=[[MyWalletViewController alloc]init];
-            [self.navigationController pushViewController:mywalletVC animated:YES];
+            UMComUserCenterViewController *userCenterViewController = [[UMComUserCenterViewController alloc] initWithUser:[UMComSession sharedInstance].loginUser];
+            userCenterViewController.title = UMComLocalizedString(@"follow_topics", @"动态");
+            userCenterViewController.umVCiD=100;
+            [self.navigationController pushViewController:userCenterViewController animated:YES];//            UMComFeedTableViewController *postTableViewController = [[UMComFeedTableViewController alloc]init];/*]WithFetchRequest:[[UMComUserFeedsRequest alloc] initWithUid:_manager.telephone count:BatchSize type:UMComTimeLineTypeDefault]];*/
+//            [self.navigationController pushViewController:postTableViewController animated:YES];
         }
             break;
         case 101:
         {
-            MineJifenViewController *mineVc=[[MineJifenViewController alloc]init];
-            [self.navigationController pushViewController:mineVc animated:YES];
+            UMComTopicsTableViewController *topicsViewController = [[UMComTopicsTableViewController alloc] init];
+            topicsViewController.umTopVC=100;
+            topicsViewController.title = UMComLocalizedString(@"follow_topics", @"关注话题");
+            topicsViewController.isAutoStartLoadData = YES;
+            topicsViewController.fetchRequest = [[UMComUserTopicsRequest alloc]initWithUid:[UMComSession sharedInstance].loginUser.uid count:BatchSize];
+            [self.navigationController pushViewController:topicsViewController animated:YES];
         }
             break;
         case 102:
         {
-            Order_ListViewController *orderVc=[[Order_ListViewController alloc]init];
-            [self.navigationController pushViewController:orderVc animated:YES];
+//            UMComUsersTableViewController *followersTableViewController = [[UMComUsersTableViewController alloc]init];
+//            [self.navigationController pushViewController:followersTableViewController animated:YES];
+            UMComUserCenterViewController *userCenterViewController = [[UMComUserCenterViewController alloc] initWithUser:[UMComSession sharedInstance].loginUser];
+            userCenterViewController.title = UMComLocalizedString(@"follow_topics", @"关注");
+            userCenterViewController.umVCiD=101;
+            [self.navigationController pushViewController:userCenterViewController animated:YES];
         }
             break;
         case 103:
         {
-            userdressVC=[[UsedDressViewController alloc]init];
-            [self.navigationController pushViewController:userdressVC animated:YES];
+            UMComUserCenterViewController *userCenterViewController = [[UMComUserCenterViewController alloc] initWithUser:[UMComSession sharedInstance].loginUser];
+            userCenterViewController.title = UMComLocalizedString(@"follow_topics", @"粉丝");
+            userCenterViewController.umVCiD=102;
+            [self.navigationController pushViewController:userCenterViewController animated:YES];
+//            UMComUsersTableViewController *fanTableViewController = [[UMComUsersTableViewController alloc]init];
+//            [self.navigationController pushViewController:fanTableViewController animated:YES];
+//            userdressVC=[[UsedDressViewController alloc]init];
+//            [self.navigationController pushViewController:userdressVC animated:YES];
         }
             break;
         default:
             break;
     }
 }
-#pragma mark 我的成长中多个按钮点击方法
+#pragma mark 我的钱包中多个按钮点击方法
 -(void)growButAction:(UIButton *)sender
 {
     NSInteger tag=sender.tag;
     int tg=(int)tag;
-    NSArray *array=@[@"知识库",@"工作推荐",@"积分商城",@"开店"];
+    NSArray *array=@[@"我的订单",@"优惠卷",@"积分商城",@"会员服务"];
     NSLog(@"%@--被点击了",array[tg-1000]);
     switch (tg) {
         case 1000:
         {
-            webURL=@"http://51xingzheng.cn/";
-            [self webViewLayout];
+//            webURL=@"http://51xingzheng.cn/";
+//            [self webViewLayout];
+            
+            Order_ListViewController *orderVc=[[Order_ListViewController alloc]init];
+            [self.navigationController pushViewController:orderVc animated:YES];
         }
             break;
         case 1001:
         {
-           webURL=@"http://m.58.com/bj/renli/?PGTID=0d303652-0000-171b-6d46-e307e18a1ae0&ClickID=3";
-            [self webViewLayout];
-            
+//           webURL=@"http://m.58.com/bj/renli/?PGTID=0d303652-0000-171b-6d46-e307e18a1ae0&ClickID=3";
+//            [self webViewLayout];
+            MineJifenViewController *mineVc=[[MineJifenViewController alloc]init];
+            [self.navigationController pushViewController:mineVc animated:YES];
         }
             break;
         case 1002:
@@ -545,9 +586,10 @@
             break;
         case 1003:
         {
-            webURL=[NSString stringWithFormat:@"http://123.57.173.36/simi-h5/show/store-my-index.html?user_id=%@",_userID];
-            [self webViewLayout];
-            
+            WebPageViewController *webPageVC=[[WebPageViewController alloc]init];
+            webPageVC.barIDS=100;
+            webPageVC.webURL=@"http://h5.eqxiu.com/s/kdhQZ0t4";
+            [self.navigationController pushViewController:webPageVC animated:YES];
         }
             break;
         default:
@@ -627,7 +669,7 @@
 }
 
 
-#pragma mark 推荐给好友与更多按钮点击方法
+#pragma mark 推荐给好友与我是服务者按钮点击方法
 -(void)otherButAction:(UIButton *)sender
 {
     NSInteger tag=sender.tag;
@@ -640,8 +682,27 @@
             break;
         case 10001:
         {
-            MoreViewController *moreVC=[[MoreViewController alloc]init];
-            [self.navigationController pushViewController:moreVC animated:YES];
+//            NSLog(@"我是商家--被点击了");
+//            NSString *phoneNum = @"";// 电话号码
+//            
+//            phoneNum = @"400-169-1615";
+//            
+//            NSURL *phoneURL = [NSURL URLWithString:[NSString stringWithFormat:@"tel:%@",phoneNum]];
+//            
+//            UIWebView *phoneCallWebView;
+//            
+//            if ( !phoneCallWebView ) {
+//                
+//                phoneCallWebView = [[UIWebView alloc] initWithFrame:CGRectZero];
+//                
+//            }
+//            
+//            [phoneCallWebView loadRequest:[NSURLRequest requestWithURL:phoneURL]];
+//            phoneCallWebView.userInteractionEnabled=YES;
+//            [self.view addSubview:phoneCallWebView];
+            webURL=[NSString stringWithFormat:@"http://123.57.173.36/simi-h5/show/store-my-index.html?user_id=%@",_userID];
+            [self webViewLayout];
+            
         }
             break;
             
@@ -649,27 +710,11 @@
             break;
     }
 }
-#pragma mark 我是商家按钮点击方法
+#pragma mark 更多按钮点击方法
 -(void)merchantButAction:(UIButton *)sender
 {
-    NSLog(@"我是商家--被点击了");
-    NSString *phoneNum = @"";// 电话号码
-    
-    phoneNum = @"400-169-1615";
-    
-    NSURL *phoneURL = [NSURL URLWithString:[NSString stringWithFormat:@"tel:%@",phoneNum]];
-    
-    UIWebView *phoneCallWebView;
-    
-    if ( !phoneCallWebView ) {
-        
-        phoneCallWebView = [[UIWebView alloc] initWithFrame:CGRectZero];
-        
-    }
-    
-    [phoneCallWebView loadRequest:[NSURLRequest requestWithURL:phoneURL]];
-    phoneCallWebView.userInteractionEnabled=YES;
-    [self.view addSubview:phoneCallWebView];
+    MoreViewController *moreVC=[[MoreViewController alloc]init];
+    [self.navigationController pushViewController:moreVC animated:YES];
 }
 //头像点击事件
 -(void)tapActiion:(UITapGestureRecognizer *)sender
@@ -801,7 +846,7 @@
     qrCodeIamge.image=[UIImage imageNamed:@"QRcode"];
     [qrCode addSubview:qrCodeIamge];
 
-    NSArray *array=@[@"好友",@"动态",@"积分"];
+    NSArray *array=@[@"好友",@"积分",@"经验"];
     for (int i=0; i<array.count; i++) {
         UILabel *label=[[UILabel alloc]initWithFrame:FRAME(WIDTH/3*i+0.5, tmtView.frame.size.height-19/2-11, WIDTH/3-0.5, 11)];
         label.text=array[i];
@@ -878,7 +923,7 @@
 {
     NSLog(@"获取二维码失败%@",sender);
 }
-#pragma mark卡片文字显示方法
+#pragma mark好友文字显示方法
 -(void)cradLabelLayout
 {
     NSString *moneyString=[NSString stringWithFormat:@"%@",[dict objectForKey:@"total_friends"]];
@@ -900,11 +945,11 @@
     [tmtView addSubview:cradLabel];
     
 }
-#pragma mar订单文字显示方法
+#pragma mark积分文字显示方法
 -(void)orderLabelLayout
 {
     
-    orderString=[NSString stringWithFormat:@"%@",[dict objectForKey:@"total_feed"]];
+    orderString=[NSString stringWithFormat:@"%@",[dict objectForKey:@"score"]];
     orderLabel.text=orderString;
     orderLabel.textAlignment=NSTextAlignmentCenter;
     orderLabel.lineBreakMode=NSLineBreakByTruncatingTail;
@@ -915,10 +960,10 @@
     orderLabel.font=[UIFont fontWithName:@"Heiti SC" size:16];
     [tmtView addSubview:orderLabel];
 }
-#pragma mark关注文字显示方法
+#pragma mark经验文字显示方法
 -(void)concernLabelLayout
 {
-    concernString=[NSString stringWithFormat:@"%@",[dict objectForKey:@"score"]];
+    concernString=[NSString stringWithFormat:@"%@",[dict objectForKey:@"exp"]];
     concernLabel.text=concernString;
     concernLabel.textAlignment=NSTextAlignmentCenter;
     concernLabel.lineBreakMode=NSLineBreakByTruncatingTail;
@@ -1035,16 +1080,18 @@
             break;
         case 1:
         {
-            FriendViewController *foundVC=[[FriendViewController alloc]init];
-            foundVC.friendVcID=100;
-            [self.navigationController pushViewController:foundVC animated:YES];
+            IntegralListViewController *integraVC=[[IntegralListViewController alloc]init];
+            integraVC.productFractionStr=concernString;
+            [self.navigationController pushViewController:integraVC animated:YES];
         }
             break;
         case 2:
         {
-            IntegralListViewController *integraVC=[[IntegralListViewController alloc]init];
-            integraVC.productFractionStr=concernString;
-            [self.navigationController pushViewController:integraVC animated:YES];
+            ISLoginManager *_manager = [ISLoginManager shareManager];
+            WebPageViewController *webPageVC=[[WebPageViewController alloc]init];
+            webPageVC.barIDS=100;
+            webPageVC.webURL=[NSString stringWithFormat:@"http://123.57.173.36/simi-h5/show/level-my-index.html?user_id=%@",_manager.telephone];
+            [self.navigationController pushViewController:webPageVC animated:YES];
         }
             break;
             

@@ -153,8 +153,8 @@
                 
             }else{
                 //余额购买管家卡
-                
-                if (_userbaseclass.data.restMoney < 300) {
+                int mony=[_card_money intValue];
+                if (_userbaseclass.data.restMoney < mony) {
                     [self showAlertViewWithTitle:@"提示" message:@"余额不足以此次支付，请充值!"];
                 }else{
                     NSDictionary *_dict = @{@"user_id":_manager.telephone,@"senior_type":@"1",@"pay_type":@"0"};

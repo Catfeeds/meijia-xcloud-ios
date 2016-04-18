@@ -16,9 +16,11 @@
 {
     sqlite3 *simi;
 }
++ (MyLogInViewController *)shareInstance;
 @property (nonatomic, copy) NSString *leiMing;
 
 @property (nonatomic, assign)int vCLID;
+@property (nonatomic, assign)int vCYMID;
 
 @property (nonatomic, retain)TencentOAuth *tencentOAuth;
 @property (nonatomic, strong)NSString*lngString;

@@ -72,7 +72,7 @@ static NSString *originUserAgent;
 }
 -(void)viewWillAppear:(BOOL)animated{
     if(originUserAgent==nil){
-        UIWebView* webView = [[UIWebView alloc] initWithFrame:CGRectZero];
+        UIWebView* webView = [[UIWebView alloc] initWithFrame:FRAME(0, 64, WIDTH, HEIGHT-64)];
         originUserAgent = [webView stringByEvaluatingJavaScriptFromString:@"navigator.userAgent"];
     }
     NSString *ua=[originUserAgent stringByAppendingFormat:@" Duiba/%@",DUIBA_VERSION];
@@ -80,7 +80,7 @@ static NSString *originUserAgent;
 }
 - (void)viewDidLoad
 {
-    self.navigationController.navigationBarHidden=NO;
+//    self.navigationController.navigationBarHidden=NO;
     if(!byPresent && navController==nil){
         navController=self.navigationController;
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(shouldNewOpen:) name:@"dbnewopen" object:nil];
@@ -115,7 +115,7 @@ static NSString *originUserAgent;
 }
 
 -(void)viewDidAppear:(BOOL)animated{
-    self.webView.frame=self.view.bounds;
+    self.webView.frame=FRAME(0, 64, WIDTH, HEIGHT-64);
     if(self.needRefreshUrl!=nil){
         [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:self.needRefreshUrl]]];
         self.needRefreshUrl=nil;

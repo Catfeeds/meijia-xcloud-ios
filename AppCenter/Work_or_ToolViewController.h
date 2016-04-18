@@ -9,5 +9,7 @@
 #import "FatherViewController.h"
 
 @interface Work_or_ToolViewController : FatherViewController<UITableViewDataSource,UITableViewDelegate,MJRefreshBaseViewDelegate>
-
+{
+    sqlite3 *app_toolsdb;
+}
 @end

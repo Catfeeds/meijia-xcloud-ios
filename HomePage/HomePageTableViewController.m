@@ -30,6 +30,8 @@
     BOOL selectedID;
     EjectAlertView *pushEjectView;
     NSDictionary *signDic;
+    FatherViewController *fatherVc;
+    UIButton *qrCodeBut;
     
 }
 @end
@@ -38,14 +40,17 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(SignFication:) name:@"SIGNSS" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(requestLayout) name:@"HOMERefresh" object:nil];
+    fatherVc=[[FatherViewController alloc]init];
     selectedID=NO;
     selectedPage=1;
     sourceArray=[[NSMutableArray alloc]init];
     expData=[[NSMutableData alloc]init];
-    headeView=[[UIView alloc]initWithFrame:FRAME(0, 0, WIDTH, 268)];
+    headeView=[[UIView alloc]initWithFrame:FRAME(0, 0, WIDTH, 288)];
     headeView.backgroundColor=[UIColor whiteColor];
-    NSArray *butImageArray=@[@"iconfont-zhishixueyuan",@"iconfont-fuwudating",@"iconfont-qiandaoyouli",@"iconfont-jifenshangcheng"];
-    NSArray *butArray=@[@"知识学院",@"服务大厅",@"签到有礼",@"积分兑换"];
+    NSArray *butImageArray=@[@"iconfont-zhishixueyuan",@"iconfont-fuwudating",@"iconfont-shequ",@"iconfont-qiandaoyouli"];
+    NSArray *butArray=@[@"知识学院",@"服务大厅",@"微社区",@"签到有礼"];
     for (int i=0; i<butArray.count; i++) {
         UIButton *button=[[UIButton alloc]initWithFrame:FRAME((WIDTH-160)/4/2+(40+(WIDTH-160)/4)*i, headeView.frame.size.height-75, 40, 40)];
         [button setImage:[UIImage imageNamed:butImageArray[i]] forState:UIControlStateNormal];
@@ -62,7 +67,7 @@
         [headeView addSubview:butNameLabel];
     }
     
-    myTableView=[[UITableView alloc]initWithFrame:FRAME(0, 0, WIDTH, HEIGHT-49)style:UITableViewStyleGrouped];
+    myTableView=[[UITableView alloc]initWithFrame:FRAME(0, 0, WIDTH, HEIGHT-29)style:UITableViewStyleGrouped];
     myTableView.delegate=self;
     myTableView.dataSource=self;
     myTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -72,12 +77,12 @@
     UIView *v = [[UIView alloc] initWithFrame:CGRectZero];
     [myTableView setTableFooterView:v];
     
-    UIButton *qrCodeBut=[[UIButton alloc]initWithFrame:FRAME(WIDTH-40, 25, 30, 30)];
+    qrCodeBut=[[UIButton alloc]initWithFrame:FRAME(WIDTH-40, 25, 30, 30)];
     [qrCodeBut addTarget:self action:@selector(qrCodeButAction:) forControlEvents:UIControlEventTouchUpInside];
     qrCodeBut.backgroundColor=[UIColor whiteColor];
     qrCodeBut.layer.cornerRadius=qrCodeBut.frame.size.width/2;
     qrCodeBut.clipsToBounds=YES;
-    [self.view addSubview:qrCodeBut];
+   
     UIImageView *barCodeImage=[[UIImageView alloc]initWithFrame:FRAME(5, 5, 20, 20)];
     barCodeImage.image=[UIImage imageNamed:@"iconfont-saotiaoma"];
     [qrCodeBut addSubview:barCodeImage];
@@ -93,6 +98,10 @@
     [layer setBorderColor:[[UIColor colorWithRed:200/255.0f green:200/255.0f blue:200/255.0f alpha:1] CGColor]];
     
     
+    
+}
+-(void)viewWillAppear:(BOOL)animated
+{
     [self imageLayout];
     [self requestLayout];
 }
@@ -219,6 +228,7 @@
         case 0:
         {
             WebPageViewController *webPageVC=[[WebPageViewController alloc]init];
+            webPageVC.barIDS=100;
             webPageVC.webURL=[NSString stringWithFormat:@"http://51xingzheng.cn"];
             [self.navigationController pushViewController:webPageVC animated:YES];
         }
@@ -233,26 +243,47 @@
             break;
         case 2:
         {
-            ISLoginManager *_manager = [ISLoginManager shareManager];
-            NSDictionary *_dict = @{@"user_id":_manager.telephone};
-            DownloadManager *_download = [[DownloadManager alloc]init];
-            [_download requestWithUrl:[NSString stringWithFormat:@"%@",HOMEPAHE_SIGN] dict:_dict view:self.view delegate:self finishedSEL:@selector(SignSuccess:) isPost:YES failedSEL:@selector(SignFail:)];
+            UINavigationController *communityViewController = [UMCommunity getFeedsModalViewController];
+            [self presentViewController:communityViewController animated:YES completion:nil];
             
         }
             break;
         case 3:
         {
-            ISLoginManager *_manager = [ISLoginManager shareManager];
-            NSString *url=[NSString stringWithFormat:@"http://123.57.173.36/simi/app/user/score_shop.json?user_id=%@",_manager.telephone];
-            CreditWebViewController *web=[[CreditWebViewController alloc]initWithUrl:url];//实际中需要改为带签名的地址
-            //如果已经有UINavigationContoller了，就 创建出一个 CreditWebViewController 然后 push 进去
-            [self.navigationController pushViewController:web animated:YES];
+//            ISLoginManager *_manager = [ISLoginManager shareManager];
+//            NSString *url=[NSString stringWithFormat:@"http://123.57.173.36/simi/app/user/score_shop.json?user_id=%@",_manager.telephone];
+//            CreditWebViewController *web=[[CreditWebViewController alloc]initWithUrl:url];//实际中需要改为带签名的地址
+//            //如果已经有UINavigationContoller了，就 创建出一个 CreditWebViewController 然后 push 进去
+//            [self.navigationController pushViewController:web animated:YES];
+            if(fatherVc.loginYesOrNo){
+                [self SignLayout];
+            }else{
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    MyLogInViewController *loginViewController = [[MyLogInViewController alloc] init];
+                    loginViewController.vCYMID=100;
+                    UMComNavigationController *navigationController = [[UMComNavigationController alloc] initWithRootViewController:loginViewController];
+                    [self presentViewController:navigationController animated:YES completion:^{
+                    }];
+                });
+            }
+            
         }
             break;
             
         default:
             break;
     }
+}
+-(void)SignFication:(NSNotification *)obj
+{
+    [self SignLayout];
+}
+-(void)SignLayout
+{
+    ISLoginManager *_manager = [ISLoginManager shareManager];
+    NSDictionary *_dict = @{@"user_id":_manager.telephone};
+    DownloadManager *_download = [[DownloadManager alloc]init];
+    [_download requestWithUrl:[NSString stringWithFormat:@"%@",HOMEPAHE_SIGN] dict:_dict view:self.view delegate:self finishedSEL:@selector(SignSuccess:) isPost:YES failedSEL:@selector(SignFail:)];
 }
 #pragma mark 签到成功返回
 -(void)SignSuccess:(id)Source
@@ -273,7 +304,7 @@
 #pragma mark  广告数据请求
 -(void)requestLayout
 {
-    NSString *urlStr=@"http://51xingzheng.cn/?json=get_tag_posts&count=5&order=ASC&slug=%E9%A6%96%E9%A1%B5%E7%B2%BE%E9%80%89&include=id,title,modified,url,thumbnail,custom_fields";
+    NSString *urlStr=@"http://51xingzheng.cn/?json=get_tag_posts&count=5&order=DESC&slug=%E9%A6%96%E9%A1%B5%E7%B2%BE%E9%80%89&include=id,title,modified,url,thumbnail,custom_fields";
     NSString *urlString = [NSString stringWithFormat:@"%@&page=%d",urlStr,selectedPage];
     AFHTTPRequestOperationManager *mymanager = [AFHTTPRequestOperationManager manager];
     
@@ -326,11 +357,11 @@
      NSMutableArray *viewsArray = [@[] mutableCopy];
     for (int i=0; i<imageArray.count; i++) {
         NSDictionary *dic=imageArray[i];
-        UIButton *viewImage=[[UIButton alloc]initWithFrame:FRAME(WIDTH*i, 0, WIDTH, 180)];
+        UIButton *viewImage=[[UIButton alloc]initWithFrame:FRAME(WIDTH*i, 0, WIDTH, 200)];
         viewImage.backgroundColor=[UIColor whiteColor];
         viewImage.tag=i;
         [viewsArray addObject:viewImage];
-        UIImageView *imageView=[[UIImageView alloc]initWithFrame:FRAME(0, 0, WIDTH, 180)];
+        UIImageView *imageView=[[UIImageView alloc]initWithFrame:FRAME(0, 0, WIDTH, 200)];
         NSString *imageUrl=[NSString stringWithFormat:@"%@",[dic objectForKey:@"img_url"]];
         [imageView setImageWithURL:[NSURL URLWithString:imageUrl]placeholderImage:nil];
         [viewImage addSubview:imageView];
@@ -341,7 +372,7 @@
         [viewImage addSubview:textLabel];
     }
     if (adView==nil) {
-        adView= [[CycleScrollView alloc]initWithFrame:FRAME(0, 0, WIDTH, 180) animationDuration:5];
+        adView= [[CycleScrollView alloc]initWithFrame:FRAME(0, 0, WIDTH, 200) animationDuration:5];
         adView.pageID=(int)viewsArray.count;
         adView.backgroundColor = [[UIColor purpleColor] colorWithAlphaComponent:0.1];
         adView.fetchContentViewAtIndex = ^UIView *(NSInteger pageIndex){
@@ -356,6 +387,7 @@
             [self imageButAction:(int)pageIndex];
         };
         [headeView addSubview:adView];
+        [headeView addSubview:qrCodeBut];
     }
     
 }
@@ -364,6 +396,7 @@
 {
     NSDictionary *dic=imageArray[button];
     WebPageViewController *webPageVC=[[WebPageViewController alloc]init];
+    webPageVC.barIDS=100;
     webPageVC.webURL=[NSString stringWithFormat:@"%@",[dic objectForKey:@"goto_url"]];
     [self.navigationController pushViewController:webPageVC animated:YES];
 }
@@ -384,7 +417,17 @@
     UIView *sectionView=[[UIView alloc]initWithFrame:CGRectMake(0, 10, WIDTH, 14)];
     sectionView.backgroundColor=[UIColor colorWithRed:241/255.0f green:241/255.0f blue:241/255.0f alpha:1];
     UILabel *label=[[UILabel alloc]init];
-    label.text=@"每日新闻";
+    switch (section) {
+        case 0:
+            label.text=@"每日新知";
+            break;
+        case 1:
+            label.text=@"猜你喜欢";
+            break;
+        default:
+            break;
+    }
+    
     label.lineBreakMode=NSLineBreakByTruncatingTail;
     [label setNumberOfLines:1];
     [label sizeToFit];
@@ -396,11 +439,22 @@
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return sourceArray.count;
+    int  secId;
+    switch (section) {
+        case 0:
+            secId=sourceArray.count;
+            break;
+        case 1:
+            secId=0;
+            break;
+        default:
+            break;
+    }
+    return secId;
 }
 
 
@@ -428,24 +482,53 @@
 #pragma mark  列表组尾部高度
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    return 50;
+    int h=0;
+    switch (section) {
+        case 0:
+            h=50;
+            break;
+        case 1:
+            h=0;
+            break;
+   
+        default:
+            break;
+    }
+    return h;
 }
 #pragma mark  列表尾部view
 -(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
-    UIView *sectionView=[[UIView alloc]initWithFrame:CGRectMake(0, 0, WIDTH, 50)];
-    sectionView.backgroundColor=[UIColor whiteColor];
-    if (selectedID==YES) {
-        UIButton *button=[[UIButton alloc]initWithFrame:FRAME(0, 0, WIDTH, 50)];
-        [button setTitle:@"没有更多了！" forState:UIControlStateNormal];
-        [button setTitleColor:[UIColor colorWithRed:200/255.0f green:200/255.0f blue:200/255.0f alpha:1] forState:UIControlStateNormal];
-        [sectionView addSubview:button];
-    }else{
-        UIButton *button=[[UIButton alloc]initWithFrame:FRAME(0, 0, WIDTH, 50)];
-        [button setTitle:@"加载更多" forState:UIControlStateNormal];
-        [button setTitleColor:[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1] forState:UIControlStateNormal];
-        [button addTarget:self action:@selector(LoadAction:) forControlEvents:UIControlEventTouchUpInside];
-        [sectionView addSubview:button];
+    UIView *sectionView;
+    switch (section) {
+        case 0:
+        {
+            sectionView=[[UIView alloc]initWithFrame:CGRectMake(0, 0, WIDTH, 50)];
+            sectionView.backgroundColor=[UIColor whiteColor];
+            if (selectedID==YES) {
+                UIButton *button=[[UIButton alloc]initWithFrame:FRAME(0, 0, WIDTH, 50)];
+                [button setTitle:@"没有更多了！" forState:UIControlStateNormal];
+                [button setTitleColor:[UIColor colorWithRed:200/255.0f green:200/255.0f blue:200/255.0f alpha:1] forState:UIControlStateNormal];
+                [sectionView addSubview:button];
+            }else{
+                UIButton *button=[[UIButton alloc]initWithFrame:FRAME(0, 0, WIDTH, 50)];
+                [button setTitle:@"加载更多" forState:UIControlStateNormal];
+                [button setTitleColor:[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1] forState:UIControlStateNormal];
+                [button addTarget:self action:@selector(LoadAction:) forControlEvents:UIControlEventTouchUpInside];
+                [sectionView addSubview:button];
+            }
+
+        }
+            break;
+        case 1:
+        {
+            sectionView=[[UIView alloc]initWithFrame:CGRectMake(0, 0, WIDTH, 10)];
+            sectionView.backgroundColor=[UIColor whiteColor];
+        }
+            break;
+            
+        default:
+            break;
     }
     
     return sectionView;
@@ -457,6 +540,7 @@
     [myTableView deselectRowAtIndexPath:indexPath animated:NO];
     NSDictionary *dic=sourceArray[indexPath.row];
     WebPageViewController *webPageVC=[[WebPageViewController alloc]init];
+    webPageVC.barIDS=100;
     webPageVC.webURL=[NSString stringWithFormat:@"%@",[dic objectForKey:@"url"]];
     [self.navigationController pushViewController:webPageVC animated:YES];
 }

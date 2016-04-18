@@ -20,7 +20,7 @@
 #import "AFHTTPRequestOperationManager.h"
 #import "ISLoginManager.h"
 #import "DownloadManager.h"
-#import "MyLogInViewController.h"
+#import "RootViewController.h"
 //环信
 
 #import "LoginViewController.h"
@@ -73,6 +73,8 @@
     int pushIDs;
     EjectAlertView *pushEjectView;
     NSDictionary *pushDic;
+    
+    EjectAlertView *newinFormationView;
 }
 
 @end
@@ -162,7 +164,7 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     BOOL success;
     
     NSFileManager *fileManager = [NSFileManager defaultManager];
-    NSError *error;
+//    NSError *error;
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
     NSString *writableDBPath = [documentsDirectory stringByAppendingPathComponent:dbName];
@@ -205,6 +207,26 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
         NSLog(@"数据库操作数据失败!");
     }
 }
+#pragma mark判断数据库是否存在某张表
+-(BOOL)checkName:(NSString *)name{
+    
+    char *err;
+    
+    NSString *sql = [NSString stringWithFormat:@"SELECT COUNT(*) FROM simi.db where type='table' and name='%@';",name];
+    
+    const char *sql_stmt = [sql UTF8String];
+    
+    if(sqlite3_exec(simi, sql_stmt, NULL, NULL, &err) == 1){
+        
+        return YES;
+        
+    }else{
+        
+        return NO;
+        
+    }
+    
+}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -225,7 +247,53 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
             NSLog(@"open database fail");
         }
     }
-//    [self deleteFileAtPath:[self readyDatabase:@"simi.db"]];
+    if ([self checkName:@"op_ad"]) {
+        NSLog(@"有");
+    }else{
+        NSLog(@"没有啊有");
+    }
+    sqlite3_close(simi);
+//    
+    NSString *cityStr=@"";
+    NSString *app_toolsStr=@"";
+    NSString *expressStr=@"";
+    NSString *xcompany_settingsStr=@"";
+    sqlite3_stmt *statement;
+    NSString *citySql = @"select max(add_time)  from city";
+    if (sqlite3_prepare_v2(simi, [citySql UTF8String], -1, &statement, nil) == SQLITE_OK) {
+        while (sqlite3_step(statement) == SQLITE_ROW) {
+            char *_id = (char *)sqlite3_column_text(statement, 0);
+            cityStr= [[NSString alloc] initWithUTF8String:_id];
+        }
+    }
+    NSString *app_toolsSql = @"select max(update_time)  from app_tools";
+    if (sqlite3_prepare_v2(simi, [app_toolsSql UTF8String], -1, &statement, nil) == SQLITE_OK) {
+        while (sqlite3_step(statement) == SQLITE_ROW) {
+            char *_id = (char *)sqlite3_column_text(statement, 0);
+            app_toolsStr= [[NSString alloc] initWithUTF8String:_id];
+        }
+    }
+    NSString *expressSql = @"select max(update_time)  from express";
+    if (sqlite3_prepare_v2(simi, [expressSql UTF8String], -1, &statement, nil) == SQLITE_OK) {
+        while (sqlite3_step(statement) == SQLITE_ROW) {
+            char *_id = (char *)sqlite3_column_text(statement, 0);
+            expressStr= [[NSString alloc] initWithUTF8String:_id];
+        }
+    }
+    NSString *xcompany_settingsSql = @"select max(update_time)  from xcompany_setting";
+    if (sqlite3_prepare_v2(simi, [xcompany_settingsSql UTF8String], -1, &statement, nil) == SQLITE_OK) {
+        while (sqlite3_step(statement) == SQLITE_ROW) {
+            char *_id = (char *)sqlite3_column_text(statement, 0);
+            xcompany_settingsStr= [[NSString alloc] initWithUTF8String:_id];
+        }
+    }
+    sqlite3_close(simi);
+    NSLog(@"%@,%@,%@,%@",cityStr,app_toolsStr,xcompany_settingsStr,xcompany_settingsStr);
+    
+    DownloadManager *_download = [[DownloadManager alloc]init];
+    NSDictionary *_dict=@{@"t_city":cityStr,@"t_apptools":app_toolsStr,@"t_express":expressStr,@"t_assets":xcompany_settingsStr,};
+    [_download requestWithUrl:APP_BASIC_DATA dict:_dict view:self.window delegate:self finishedSEL:@selector(Basic_dataSuccess:) isPost:NO failedSEL:@selector(Basic_dataFail:)];
+    [self deleteFileAtPath:[self readyDatabase:@"simi.db"]];
     
     
     self.riliArray=[[NSMutableArray alloc]init];
@@ -337,7 +405,7 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     //打开调试日志
     [UMSocialData openLog:YES];
     [UMCheckUpdate checkUpdateWithAppkey:YMAPPKEY channel:@"App Store"];
-    
+    [UMCommunity setWithAppKey:YMAPPKEY];
     
     APPLIACTION.application = application;
     APPLIACTION.leiName = @"66";
@@ -477,6 +545,8 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(viewShowcase:) name:@"ASDEDSA" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(viewLayout:) name:@"EJECT" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(helpLayout:) name:@"HELP" object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(NewinformationLayout:) name:@"Newinformation" object:nil];
+    
     _appID = appID;
     _appKey = appKey;
     _appSecret =appSecret;
@@ -490,6 +560,108 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     //[1-3]:设置电子围栏功能，开启LBS定位服务 和 是否允许SDK 弹出用户定位请求
     [GeTuiSdk lbsLocationEnable:NO andUserVerify:NO];
     
+}
+-(void)NewinformationLayout:(NSNotification *)dataSource
+{
+//    NSDictionary *dic=dataSource.object;
+//    [newinFormationView removeFromSuperview];
+//    newinFormationView = [EjectAlertView new];
+//    newinFormationView.frame=FRAME(0, 0, WIDTH, HEIGHT);
+//    newinFormationView.backgroundColor = [UIColor redColor];
+//    [newinFormationView setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleLeftMargin];
+//    [self.window addSubview:newinFormationView];
+//    UIView *view=[[UIView alloc]initWithFrame:FRAME(0, 0, WIDTH,100)];
+//    view.backgroundColor=[UIColor whiteColor];
+////    view.layer.cornerRadius=10;
+////    view.clipsToBounds=YES;
+//    [newinFormationView addSubview:view];
+//    
+//    UILabel *titleLabel=[[UILabel alloc]initWithFrame:FRAME(10, 20, WIDTH-40, 20)];
+//    titleLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"rt"]];
+//    titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:18];
+//    [view addSubview:titleLabel];
+//    
+//    UILabel *textLabel=[[UILabel alloc]initWithFrame:FRAME(30, 50, WIDTH-40, 20)];
+//    textLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"rc"]];
+//    textLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
+//    [view addSubview:textLabel];
+//    
+//    [NSTimer scheduledTimerWithTimeInterval:2.0f
+//                                     target:self
+//                                   selector:@selector(newinTimerMethod:)
+//                                   userInfo:nil
+//                                    repeats:NO];
+    
+    
+    NSDictionary *dic=dataSource.object;
+    NSLog(@"%@",dic);
+    [newinFormationView removeFromSuperview];
+    newinFormationView = [EjectAlertView new];
+    newinFormationView.frame=FRAME(0, 0, WIDTH, HEIGHT);
+    newinFormationView.backgroundColor = [UIColor redColor];
+    [newinFormationView setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleLeftMargin];
+    [self.window addSubview:newinFormationView];
+    UIView *grayView=[[UIView alloc]initWithFrame:FRAME(0, 0, WIDTH, HEIGHT)];
+    grayView.backgroundColor=[UIColor blackColor];
+    grayView.alpha=0.4;
+    [newinFormationView addSubview:grayView];
+    
+    UIView *view=[[UIView alloc]initWithFrame:FRAME((WIDTH-WIDTH*0.72)/2, (HEIGHT-356)/2, WIDTH*0.72, WIDTH*0.72*0.70+168)];
+    view.backgroundColor=[UIColor whiteColor];
+    view.layer.cornerRadius=10;
+    view.clipsToBounds=YES;
+    [newinFormationView addSubview:view];
+    
+    UIImageView *headeImageView=[[UIImageView alloc]initWithFrame:FRAME(0, 0, WIDTH*0.72, WIDTH*0.72*0.70)];
+    headeImageView.image=[UIImage imageNamed:@"风景切图-iOS750x1334"];
+    [view addSubview:headeImageView];
+    
+    UILabel *titleLabel=[[UILabel alloc]init];
+    titleLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"rt"]];
+    titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:16];
+    [titleLabel setNumberOfLines:1];
+    [titleLabel sizeToFit];
+    titleLabel.frame=FRAME((WIDTH*0.72-titleLabel.frame.size.width)/2, WIDTH*0.72*0.70+10, titleLabel.frame.size.width, 17);
+    [view addSubview:titleLabel];
+    
+    UILabel *textLabel=[[UILabel alloc]init];
+    textLabel.text=[NSString stringWithFormat:@"    %@",[dic objectForKey:@"rc"]];
+    
+    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc]initWithString:textLabel.text];;
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc]init];
+    [paragraphStyle setLineSpacing:5];
+    [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, textLabel.text.length)];
+    textLabel.attributedText = attributedString;
+    
+    UIFont *font=[UIFont fontWithName:@"Heiti SC" size:13];
+    textLabel.textColor=[UIColor colorWithRed:150/255.0f green:150/255.0f blue:150/255.0f alpha:1];
+    textLabel.font=font;
+    [textLabel setNumberOfLines:0];
+    [textLabel sizeToFit];
+    textLabel.lineBreakMode = NSLineBreakByTruncatingTail;
+    CGSize maximumLabelSize = CGSizeMake(WIDTH*0.72-20, 90);
+    CGSize expectSize = [textLabel sizeThatFits:maximumLabelSize];
+    textLabel.frame=FRAME(10, WIDTH*0.72*0.70+37, expectSize.width, expectSize.height);
+    [view addSubview:textLabel];
+    
+    UIView *hengView=[[UIView alloc]initWithFrame:FRAME(0, WIDTH*0.72*0.70+127, WIDTH*0.72, 1)];
+    hengView.backgroundColor=[UIColor colorWithRed:232/255.0f green:232/255.0f blue:232/255.0f alpha:1];
+    [view addSubview:hengView];
+    
+    
+    UIButton *cancelBut=[[UIButton alloc]initWithFrame:FRAME(0, WIDTH*0.72*0.70+128, WIDTH*0.72, 40)];
+    cancelBut.backgroundColor=[UIColor whiteColor];
+    cancelBut.tag=12;
+    [cancelBut addTarget:self action:@selector(newinTimerMethod:) forControlEvents:UIControlEventTouchUpInside];
+    cancelBut.titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:16];
+    [cancelBut setTitle:@"我知道了" forState:UIControlStateNormal];
+    [cancelBut setTitleColor:[UIColor colorWithRed:17/255.0f green:150/255.0f blue:219/255.0f alpha:1] forState:UIControlStateNormal];
+    [view addSubview:cancelBut];
+}
+-(void)newinTimerMethod:(UIButton *)theTimer
+{
+    newinFormationView.hidden=YES;
+    [newinFormationView removeFromSuperview];
 }
 -(void)noticeLayout:(NSNotification *)dataSource
 {
@@ -873,6 +1045,11 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     
     NSLog(@"deviceToken:%@",_pushDeviceToken);
     
+    //微社区
+    NSLog(@"----devicetoken------%@",[[[[deviceToken description] stringByReplacingOccurrencesOfString: @"<" withString: @""]
+                                       stringByReplacingOccurrencesOfString: @">" withString: @""]
+                                      stringByReplacingOccurrencesOfString: @" " withString: @""]);
+    
     // [3]:向个推服务器注册deviceToken
     
     [GeTuiSdk registerDeviceToken:_pushDeviceToken];
@@ -1063,7 +1240,8 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
         }
     NSString *actionStr=[NSString stringWithFormat:@"%@",[dic objectForKey:@"ac"]];
     if ([actionStr isEqualToString:@"m"]) {
-        return;
+        
+//        return;
     }
     if ([[dic objectForKey:@"ac"] isEqualToString:@"a"]) {
         badge=100;
@@ -1108,18 +1286,22 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
         }
         NSString *trueStr=[dic objectForKey:@"is"];
         if ([trueStr isEqual:@"true"]) {
+            NSString *actionStr=[NSString stringWithFormat:@"%@",[dic objectForKey:@"ac"]];
             NSDateFormatter  *dateformatter=[[NSDateFormatter alloc] init];
             
             [dateformatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-            if ([[dic objectForKey:@"ac"] isEqualToString:@"a"]) {
+            if ([actionStr isEqualToString:@"a"]) {
                 badge=100;
                 if (pushIDs!=1000) {
                     [[NSNotificationCenter defaultCenter] postNotificationName:@"ALERT" object:dic];
                 }
                 
+            }else if([actionStr isEqualToString:@"m"]){
+                if (pushIDs!=1000) {
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"Newinformation" object:dic];
+                }
             }else{
                 if (pushIDs!=1000) {
-                    
                     [[NSNotificationCenter defaultCenter] postNotificationName:@"NOTICEPUSH" object:dic];
                 }
             }
@@ -1130,7 +1312,7 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
         }else{
             
         }
-
+    pushIDs=0;
     
 }
 -(NSString*) formateTime:(NSDate*) date {
@@ -1290,8 +1472,8 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     NSLog(@"(guidstring:%@",_guidstring);
     if (_guidstring) {
         
-        MyLogInViewController *controller = [[MyLogInViewController alloc]init];
-        controller.vCLID=0;
+        RootViewController *controller = [[RootViewController alloc]init];
+//        controller.vCLID=0;
         UINavigationController *navcontroller = [[UINavigationController alloc]initWithRootViewController:controller];
         self.window.rootViewController = navcontroller;
         navcontroller.navigationBarHidden = YES;
@@ -1299,7 +1481,7 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
             //设置启动页
             splashView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, self.window.bounds.size.width, self.window.bounds.size.height)];
             
-            [splashView setImage:[UIImage imageNamed:@"Default@2x"]];
+            [splashView setImage:[UIImage imageNamed:@"1242X2208启动页"]];
             
             [self.window addSubview:splashView];
             
@@ -1537,6 +1719,7 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
     NSLog(@"badge%d",badge);
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"HOMERefresh" object:dateDic];
     [GeTuiSdk resume];
      NSError *err = nil;
     [GeTuiSdk startSdkWithAppId:_appID appKey:_appKey appSecret:_appSecret delegate:self error:&err];
@@ -1714,7 +1897,223 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
 //    NSLog(@"COOKIE{name: %@", cookies);
 //    return true;
 //}
+#pragma mark 基础数据更新接口成功返回
+-(void)Basic_dataSuccess:(id)SourceData
+{
+    NSLog(@"基础数据更新接口成功返回:::%@",SourceData);
+    NSDictionary *dataDict=[SourceData objectForKey:@"data"];
+    NSArray *cityArray=[dataDict objectForKey:@"city"];
+    //应用中心列表数组
+    NSArray *apptoolsArray=[dataDict objectForKey:@"apptools"];
+    NSArray *expressArray=[dataDict objectForKey:@"express"];
+    NSArray *assetsArray=[dataDict objectForKey:@"asset_types"];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
 
+    
+    
+    BOOL find = [fileManager fileExistsAtPath:[self readyDatabase:@"simi.db"]];
+    
+    if (find) {
+        if(sqlite3_open([[self readyDatabase:@"simi.db"] UTF8String], &simi) != SQLITE_OK) {
+            sqlite3_close(simi);
+            NSLog(@"open database fail");
+        }
+    }
+    //城市列表数据更新
+    for (int i=0; i<cityArray.count; i++) {
+        NSDictionary *dict=cityArray[i];
+        NSArray *ar=dict.allKeys;
+        NSLog(@"+++++++++%@",ar);
+        
+        
+        
+        sqlite3_stmt *dbps;
+        
+        NSString *searchSQL = [NSString stringWithFormat:@"SELECT * from city where city_id = %@",[dict objectForKey:@"city_id"]];
+        
+        const char *searchtUTF8 = [searchSQL UTF8String];
+        
+        if (sqlite3_prepare_v2(simi, searchtUTF8, -1, &dbps, nil) != SQLITE_OK) {
+            NSLog(@"数据查询失败");
+            
+        }else{
+            NSLog(@"查询成功");
+            
+            if (sqlite3_step(dbps) == SQLITE_ROW) { //查询有这个小区
+                char *abc = (char *)sqlite3_column_text(dbps, 5);
+                NSString *str = [[NSString alloc]initWithCString:abc encoding:NSUTF8StringEncoding];
+                NSLog(@"str : %@",str);
+               NSString *updateSQL = [NSString stringWithFormat:@"update city set city_id=%i,name='%@',add_time=%i,province_id=%i,is_enable=%i,zip_code=%i where city_id =%i",[[dict objectForKey:@"city_id"]intValue],[dict objectForKey:@"name"],[[dict objectForKey:@"add_time"]intValue],[[dict objectForKey:@"province_id"]intValue],[[dict objectForKey:@"is_enable"]intValue],[[dict objectForKey:@"zip_code"]intValue],[[dict objectForKey:@"city_id"]intValue]];
+                NSLog(@"SQL语句:%@",updateSQL);
+                [self updatetableName:updateSQL];
+                continue;
+            }else{
+                NSString *insertSQL=[NSString stringWithFormat:@"INSERT INTO city (city_id,name,add_time,province_id,is_enable,zip_code) VALUES (%i, '%@', %i, %i,%i, %i)",[[dict objectForKey:@"city_id"]intValue],[dict objectForKey:@"name"],[[dict objectForKey:@"add_time"]intValue],[[dict objectForKey:@"province_id"]intValue],[[dict objectForKey:@"is_enable"]intValue],[[dict objectForKey:@"zip_code"]intValue]];
+                
+                [self insertIntoTableName:insertSQL];  ////查询没有这个小区
+            }
+            
+            //        [self deleteTableName:@"cell" cellId:1];
+            
+            
+        }
+
+        
+    }
+    //应用中心数据更新
+    for (int i=0; i<apptoolsArray.count; i++) {
+        NSDictionary *dict=apptoolsArray[i];
+        
+        sqlite3_stmt *dbps;
+        
+        NSString *searchSQL = [NSString stringWithFormat:@"SELECT * from app_tools where t_id = %@",[dict objectForKey:@"t_id"]];
+        
+        const char *searchtUTF8 = [searchSQL UTF8String];
+        
+        if (sqlite3_prepare_v2(simi, searchtUTF8, -1, &dbps, nil) != SQLITE_OK) {
+            NSLog(@"数据查询失败");
+            
+        }else{
+            NSLog(@"查询成功");
+            
+            if (sqlite3_step(dbps) == SQLITE_ROW) { //查询有这个小区
+                char *abc = (char *)sqlite3_column_text(dbps, 19);
+                NSString *str = [[NSString alloc]initWithCString:abc encoding:NSUTF8StringEncoding];
+                NSLog(@"str : %@",str);
+                NSString *updateSQL =[NSString stringWithFormat:@"update app_tools set t_id=%i,no=%i,name='%@',logo='%@',app_type='%@',menu_type='%@',open_type='%@',url='%@',action='%@',params='%@',is_default=%i,is_del=%i,is_partner=%i,is_online=%i,app_provider='%@',app_describe='%@',auth_url='%@',qr_code='%@',add_time='%@',update_time='%@' where t_id=%i",[[dict objectForKey:@"t_id"]intValue],[[dict objectForKey:@"no"]intValue],[dict objectForKey:@"name"],[dict objectForKey:@"logo"],[dict objectForKey:@"app_type"],[dict objectForKey:@"menu_type"],[dict objectForKey:@"open_type"],[dict objectForKey:@"url"],[dict objectForKey:@"action"],[dict objectForKey:@"params"],[[dict objectForKey:@"is_default"]intValue],[[dict objectForKey:@"is_del"]intValue],[[dict objectForKey:@"is_partner"]intValue],[[dict objectForKey:@"is_online"]intValue],[dict objectForKey:@"app_provider"],[dict objectForKey:@"app_describe"],[dict objectForKey:@"auth_url"],[dict objectForKey:@"qr_code"],[dict objectForKey:@"add_time"],[dict objectForKey:@"update_time"],[[dict objectForKey:@"t_id"]intValue]];
+                NSLog(@"SQL语句:%@",updateSQL);
+                [self updatetableName:updateSQL];
+                continue;
+            }else{
+                NSString *insertSQL=[NSString stringWithFormat:@"INSERT INTO app_tools (t_id,no,name,logo,app_type,menu_type,open_type,url,action,params,is_default,is_del,is_partner,is_online,app_provider,app_describe,auth_url,qr_code,add_time, update_time) VALUES (%i, %i, '%@', '%@','%@', '%@', '%@', '%@','%@','%@',%i,%i,%i,%i,'%@','%@','%@','%@',%i,%i)",[[dict objectForKey:@"t_id"]intValue],[[dict objectForKey:@"no"]intValue],[dict objectForKey:@"name"],[dict objectForKey:@"logo"],[dict objectForKey:@"app_type"],[dict objectForKey:@"menu_type"],[dict objectForKey:@"open_type"],[dict objectForKey:@"url"],[dict objectForKey:@"action"],[dict objectForKey:@"params"],[[dict objectForKey:@"is_default"]intValue],[[dict objectForKey:@"is_del"]intValue],[[dict objectForKey:@"is_partner"]intValue],[[dict objectForKey:@"is_online"]intValue],[dict objectForKey:@"app_provider"],[dict objectForKey:@"app_describe"],[dict objectForKey:@"auth_url"],[dict objectForKey:@"qr_code"],[[dict objectForKey:@"add_time"]intValue],[[dict objectForKey:@"update_time"]intValue]];
+                
+                [self insertIntoTableName:insertSQL];  ////查询没有这个小区
+            }
+            
+            //        [self deleteTableName:@"cell" cellId:1];
+           
+            
+        }
+    }
+    
+    //快递列表数据更新
+    for (int i=0; i<expressArray.count; i++) {
+        NSDictionary *dict=expressArray[i];
+        sqlite3_stmt *dbps;
+        
+        NSString *searchSQL = [NSString stringWithFormat:@"SELECT * from express where express_id = %@",[dict objectForKey:@"express_id"]];
+        
+        const char *searchtUTF8 = [searchSQL UTF8String];
+        
+        if (sqlite3_prepare_v2(simi, searchtUTF8, -1, &dbps, nil) != SQLITE_OK) {
+            NSLog(@"数据查询失败");
+            
+        }else{
+            NSLog(@"查询成功");
+            
+            if (sqlite3_step(dbps) == SQLITE_ROW) { //查询有这个小区
+                char *abc = (char *)sqlite3_column_text(dbps, 8);
+                NSString *str = [[NSString alloc]initWithCString:abc encoding:NSUTF8StringEncoding];
+                NSLog(@"str : %@",str);
+               NSString *updateSQL = [NSString stringWithFormat:@"update express set express_id=%i,ecode='%@',name='%@',is_hot=%i,website'=%@',api_order_url='%@',api_search_url='%@',add_time=%i,update_time=%i where express_id =%i",[[dict objectForKey:@"express_id"]intValue],[dict objectForKey:@"ecode"],[dict objectForKey:@"name"],[[dict objectForKey:@"is_hot"]intValue],[dict objectForKey:@"website"],[dict objectForKey:@"api_order_url"],[dict objectForKey:@"api_search_url"],[[dict objectForKey:@"add_time"]intValue],[[dict objectForKey:@"update_time"]intValue],[[dict objectForKey:@"express_id"]intValue]];
+                NSLog(@"SQL语句:%@",updateSQL);
+                [self updatetableName:updateSQL];
+                continue;
+            }else{
+               NSString *insertSQL=[NSString stringWithFormat:@"INSERT INTO express (express_id,ecode,name,is_hot,website,api_order_url,api_search_url,add_time,update_time) VALUES (%i, '%@', '%@', %i,'%@', '%@','%@', %i, %i)",[[dict objectForKey:@"express_id"]intValue],[dict objectForKey:@"ecode"],[dict objectForKey:@"name"],[[dict objectForKey:@"is_hot"]intValue],[dict objectForKey:@"website"],[dict objectForKey:@"api_order_url"],[dict objectForKey:@"api_search_url"],[[dict objectForKey:@"add_time"]intValue],[[dict objectForKey:@"update_time"]intValue]];
+                
+                [self insertIntoTableName:insertSQL];  ////查询没有这个小区
+            }
+            
+            //        [self deleteTableName:@"cell" cellId:1];
+            
+            
+        }
+    }
+    
+    //资产列表数据更新
+    for (int i=0; i<assetsArray.count; i++) {
+        NSDictionary *dict=assetsArray[i];
+        sqlite3_stmt *dbps;
+        
+        NSString *searchSQL = [NSString stringWithFormat:@"SELECT * from xcompany_setting where id = %@",[dict objectForKey:@"id"]];
+        
+        const char *searchtUTF8 = [searchSQL UTF8String];
+        
+        if (sqlite3_prepare_v2(simi, searchtUTF8, -1, &dbps, nil) != SQLITE_OK) {
+            NSLog(@"数据查询失败");
+            
+        }else{
+            NSLog(@"查询成功");
+            
+            if (sqlite3_step(dbps) == SQLITE_ROW) { //查询有这个小区
+                char *abc = (char *)sqlite3_column_text(dbps, 7);
+                NSString *str = [[NSString alloc]initWithCString:abc encoding:NSUTF8StringEncoding];
+                NSLog(@"str : %@",str);
+                NSString *updateSQL = [NSString stringWithFormat:@"update xcompany_setting set id=%i,company_id=%i,name='%@',setting_type='%@',setting_json='%@',is_enable=%i,add_time=%i,update_time=%i where id =%i",[[dict objectForKey:@"id"]intValue],[[dict objectForKey:@"company_id"]intValue],[dict objectForKey:@"name"],[dict objectForKey:@"setting_type"],[dict objectForKey:@"setting_json"],[[dict objectForKey:@"is_enable"]intValue],[[dict objectForKey:@"add_time"]intValue],[[dict objectForKey:@"update_time"]intValue],[[dict objectForKey:@"id"]intValue]];
+                NSLog(@"SQL语句:%@",updateSQL);
+                [self updatetableName:updateSQL];
+                continue;
+            }else{
+                NSString *insertSQL=[NSString stringWithFormat:@"INSERT INTO xcompany_setting (id,company_id,name,setting_type,setting_json,is_enable,add_time,update_time) VALUES (%i, %i, '%@','%@','%@',%i,%i,%i)",[[dict objectForKey:@"id"]intValue],[[dict objectForKey:@"company_id"]intValue],[dict objectForKey:@"name"],[dict objectForKey:@"setting_type"],[dict objectForKey:@"setting_json"],[[dict objectForKey:@"is_enable"]intValue],[[dict objectForKey:@"add_time"]intValue],[[dict objectForKey:@"update_time"]intValue]];
+                
+                [self insertIntoTableName:insertSQL];  ////查询没有这个小区
+            }
+            
+            //        [self deleteTableName:@"cell" cellId:1];
+            
+            
+        }
+
+    }
+    sqlite3_close(simi);
+}
+
+- (void)updatetableName:(NSString *)tablename
+{
+    sqlite3_stmt *dbps = nil;
+    
+    const char *searchtUTF8 = [tablename UTF8String];
+    
+    int result = sqlite3_prepare_v2(simi, searchtUTF8, -1, &dbps, NULL);
+    
+    if (result == SQLITE_OK) {
+        NSLog(@"%d",sqlite3_step(dbps));
+        if (sqlite3_step(dbps)==SQLITE_DONE) {
+         NSLog(@"更新成功");
+        }
+    }
+    
+    sqlite3_finalize(dbps);
+}
+#pragma mark 如果没有这个数据就插入这条数据
+- (void)insertIntoTableName:(NSString *)tablename
+{
+    
+    
+    sqlite3_stmt *dbps ;
+    
+    const char *insertUTF8 = [tablename UTF8String];
+    
+    int result = sqlite3_prepare_v2(simi, insertUTF8, -1, &dbps, NULL);
+    
+    if(result == SQLITE_OK){
+        NSLog(@"插入成功");
+        
+        if (sqlite3_step(dbps) == SQLITE_DONE) {
+            sqlite3_finalize(dbps);
+            NSLog(@"成功");
+        }
+    }else{
+        NSLog(@"插入失败");
+    }
+}
+
+#pragma mark 基础数据更新接口失败返回
+-(void)Basic_dataFail:(id)SourceData
+{
+    NSLog(@"基础数据更新接口失败返回:::%@",SourceData);
+}
 #pragma mark - Application's Documents directory
 
 // Returns the URL to the application's Documents directory.

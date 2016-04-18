@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "CreditWebView.h"
 
-@interface CreditWebViewController : UIViewController
+@interface CreditWebViewController : FatherViewController
 
 @property(nonatomic,strong) NSString *needRefreshUrl;
 -(id)initWithUrl:(NSString*)url;

@@ -185,4 +185,5 @@
 #define BASICE_GENERAL_ADVERTISING       @"simi/app/dict/get_ads.json"                   //获取频道内广告信息接口
 #define HOMEPAHE_SIGN                    @"simi/app/user/day_sign.json"                  //用户签到接口（首页签到有礼访问接口）
 #define USER_DETAILED_LIST               @"simi/app/user/get_score.json"                 //我的积分明细接口
+#define APP_BASIC_DATA                   @"simi/app/get_base_datas.json"                 //基础数据接口
 #endif

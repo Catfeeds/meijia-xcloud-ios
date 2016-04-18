@@ -58,7 +58,7 @@
     toolImageArray =[[NSMutableArray alloc]init];
     growImageArray =[[NSMutableArray alloc]init];
     self.navlabel.text=@"应用中心";
-    titleNameArray=@[@"工具与服务",@"成长与赚钱"];
+    titleNameArray=@[@"工具与服务",@"成长与提升"];
     
     flowView=[[UICollectionViewFlowLayout alloc]init];
     [flowView setScrollDirection:UICollectionViewScrollDirectionVertical];

@@ -44,11 +44,11 @@
     
     //将图像添加到scrollview中
     UIImageView *imageview1=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
-    [imageview1 setImage:[UIImage imageNamed:@"引导页1-1242X2208.jpg"]];
+    [imageview1 setImage:[UIImage imageNamed:@"引导页1.jpg"]];
     UIImageView *imageview2=[[UIImageView alloc]initWithFrame:CGRectMake(WIDTH, 0, self.view.frame.size.width, self.view.frame.size.height)];
-    [imageview2 setImage:[UIImage imageNamed:@"引导页2-1242X2208.jpg"]];
+    [imageview2 setImage:[UIImage imageNamed:@"引导页2.jpg"]];
     UIImageView *imageview3=[[UIImageView alloc]initWithFrame:CGRectMake(WIDTH*2, 0, self.view.frame.size.width, self.view.frame.size.height)];
-    [imageview3 setImage:[UIImage imageNamed:@"引导页3-1242X2208.jpg"]];
+    [imageview3 setImage:[UIImage imageNamed:@"引导页3.jpg"]];
 //    UIImageView *imageview4=[[UIImageView alloc]initWithFrame:CGRectMake(640+320, 0, self.view.frame.size.width, self.view.frame.size.height)];
 //    [imageview4 setImage:[UIImage imageNamed:@"boot_4.jpg"]];
     [myscrollview addSubview:imageview1];

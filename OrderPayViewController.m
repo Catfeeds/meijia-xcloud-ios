@@ -258,7 +258,7 @@
                 
             }else{
                 //余额购买管家卡
-                
+//                int mony=[_card_money intValue];
                 if (_userbaseclass.data.restMoney < 300) {
                     [self showAlertViewWithTitle:@"提示" message:@"余额不足以此次支付，请充值!"];
                 }else{

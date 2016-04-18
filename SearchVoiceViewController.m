@@ -480,6 +480,15 @@
     UIView *lineview=[[UIView alloc]initWithFrame:FRAME(0, Y+21+size.height, WIDTH, 10)];
     lineView.backgroundColor=[UIColor colorWithRed:232/255.0f green:232/255.0f blue:232/255.0f alpha:1];
     [cell addSubview:lineview];
+    
+    if([indexPath row] == ((NSIndexPath*)[[tableView indexPathsForVisibleRows] lastObject]).row){
+        //end of loading
+        dispatch_async(dispatch_get_main_queue(),^{
+            [_refreshHeader performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+            [_moreFooter performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+        });
+    }
+
     return cell;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath

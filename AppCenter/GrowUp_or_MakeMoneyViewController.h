@@ -9,5 +9,7 @@
 #import "FatherViewController.h"
 
 @interface GrowUp_or_MakeMoneyViewController : FatherViewController<UITableViewDataSource,UITableViewDelegate,MJRefreshBaseViewDelegate>
-
+{
+    sqlite3 *app_toolsdb;
+}
 @end

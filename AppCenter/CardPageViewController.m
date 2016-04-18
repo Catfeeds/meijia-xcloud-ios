@@ -73,8 +73,9 @@ float lastContentOffset;
 -(void)viewWillAppear:(BOOL)animated
 {
     [MobClick beginLogPageView:@"首页"];
+    numberArray=[[NSMutableArray alloc]init];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
-    
+    [self PLJKLayout];
    
 }
 - (void)viewWillDisappear:(BOOL)animated
@@ -527,7 +528,7 @@ float lastContentOffset;
 {
     NSDictionary *dic=numberArray[indexPath.row];
     NSString *identifier =[NSString stringWithFormat:@"cell%ld",(long)indexPath.row];
-    int card_type_Id=[[dic objectForKey:@"card_type"]intValue];
+//    int card_type_Id=[[dic objectForKey:@"card_type"]intValue];
 
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     if (cell == nil) {

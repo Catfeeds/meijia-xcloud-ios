@@ -17,11 +17,13 @@
 #import "MyAccountController.h"
 #import "MineViewController.h"
 
-#import "MyLogInViewController.h"
+#import "RootViewController.h"
 #import "AFHTTPRequestOperationManager.h"
 #import "UpLoadViewController.h"
 #import "LoginViewController.h"
 #import <AssetsLibrary/AssetsLibrary.h>
+
+#import "UMComSession.h"
 @interface UserInfoViewController ()<userInfoDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate>
 {
     UserinfoView *_userview;
@@ -279,6 +281,8 @@
 - (void)takeout
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"LOGOUT" object:nil];
+    [[UMComSession sharedInstance] userLogout];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kUserLogoutSucceedNotification object:nil];
   [[EaseMob sharedInstance].chatManager asyncLogoffWithUnbindDeviceToken:YES completion:^(NSDictionary *info, EMError *error)
     {
         if (error && error.errorCode != EMErrorServerNotLogin)
@@ -291,8 +295,8 @@
             [_default removeObjectForKey:@"telephone"];
             [_default removeObjectForKey:@"islogin"];
             [_default synchronize];
-            MyLogInViewController *vc=[[MyLogInViewController alloc]init];
-            vc.vCLID=100;
+            RootViewController *vc=[[RootViewController alloc]init];
+//            vc.vCLID=100;
             UINavigationController *nav=[[UINavigationController alloc]initWithRootViewController:vc];
             [self presentViewController:nav animated:YES completion:nil];
 

@@ -72,7 +72,7 @@
 }
 -(void)pageViewLayout
 {
-    pageControl = [[UIPageControl alloc]initWithFrame:CGRectMake((WIDTH-5*_pageID-10*(_pageID+1))/2, 150, 5*_pageID+10*(_pageID+1), 30)];
+    pageControl = [[UIPageControl alloc]initWithFrame:CGRectMake((WIDTH-5*_pageID-10*(_pageID+1))/2, 170, 5*_pageID+10*(_pageID+1), 30)];
     pageControl.numberOfPages =_pageID;
     //    pageControl.backgroundColor=[UIColor redColor];
     pageControl.currentPage = 0;

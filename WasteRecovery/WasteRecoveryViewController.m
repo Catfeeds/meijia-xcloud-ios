@@ -122,6 +122,7 @@
         
     }else{
         WebPageViewController *webPageVC=[[WebPageViewController alloc]init];
+        webPageVC.barIDS=100;
         if (_wasteID==100) {
             webPageVC.webURL=@"http://123.57.173.36/simi-h5/show/recycle-price.html";//废品回收参考价格跳转URL
         }else if (_wasteID==101){

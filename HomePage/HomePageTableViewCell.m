@@ -34,7 +34,7 @@
         _subTitleLabel.font=[UIFont fontWithName:@"Heiti SC" size:10];
         _subTitleLabel.textColor=[UIColor colorWithRed:200/255.0f green:200/255.0f blue:200/255.0f alpha:1];
         [self addSubview:_subTitleLabel];
-        UIView *lineView=[[UIView alloc]initWithFrame:FRAME(0, 99, WIDTH, 1)];
+        UIView *lineView=[[UIView alloc]initWithFrame:FRAME(15, 99.5, WIDTH-30, 0.5)];
         lineView.backgroundColor=[UIColor colorWithRed:215/255.0f green:215/255.0f blue:215/255.0f alpha:1];
         [self addSubview:lineView];
     }

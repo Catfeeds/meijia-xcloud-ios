@@ -25,7 +25,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    self.navlabel.text=@"我的积分";
+    self.navlabel.textColor=[UIColor whiteColor];
+    self.lineLable.hidden=YES;
     self.img.hidden=YES;
     UIImageView *img = [[UIImageView alloc]initWithFrame:FRAME(18, (40-20)/2, 20, 20)];
     img.image = [UIImage imageNamed:@"iconfont-p-back"];
@@ -38,7 +40,7 @@
     headeView.backgroundColor=[UIColor colorWithRed:241/255.0f green:90/255.0f blue:90/255.0f alpha:1];
     [self.view addSubview:headeView];
     [self HeadeViewLayout];
-    myTableView=[[UITableView alloc]initWithFrame:FRAME(0, headeView.frame.size.height+64, WIDTH, HEIGHT-(headeView.frame.size.height+64))];
+    myTableView=[[UITableView alloc]initWithFrame:FRAME(0, headeView.frame.size.height+64, WIDTH, HEIGHT-(headeView.frame.size.height+64))style:UITableViewStyleGrouped];
     myTableView.delegate=self;
     myTableView.dataSource=self;
     [self.view addSubview:myTableView];
@@ -116,12 +118,14 @@
 -(void)markBut:(UIButton *)button
 {
     WebPageViewController *webPageVC=[[WebPageViewController alloc]init];
+//    webPageVC.barIDS=100;
     webPageVC.webURL=[NSString stringWithFormat:@"http://123.57.173.36/simi-h5/show/score-intro.html"];
     [self.navigationController pushViewController:webPageVC animated:YES];
 }
 #pragma mark  积分兑换商品按钮方法
 -(void)ButAction:(UIButton *)button
 {
+//    self.backlable.hidden=YES;
     ISLoginManager *_manager = [ISLoginManager shareManager];
     NSString *url=[NSString stringWithFormat:@"http://123.57.173.36/simi/app/user/score_shop.json?user_id=%@",_manager.telephone];
     CreditWebViewController *web=[[CreditWebViewController alloc]initWithUrl:url];//实际中需要改为带签名的地址
@@ -131,6 +135,7 @@
 #pragma mark  积分明细列表数据请求方法
 -(void)dataSourceLayout
 {
+    
     ISLoginManager *_manager = [ISLoginManager shareManager];
     NSString *pageStr=[NSString stringWithFormat:@"%ld",(long)page];
     NSDictionary *_dict = @{@"user_id":_manager.telephone,@"page":pageStr};
@@ -252,6 +257,7 @@
     label.font=[UIFont fontWithName:@"Heiti SC" size:15];
     label.frame=FRAME(10,20, label.frame.size.width, 20);
     [sectionView addSubview:label];
+    
     return sectionView;
 }
 
@@ -271,7 +277,7 @@
     if (cell == nil) {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:TableSampleIdentifier];
     }
-    UILabel *titleLabel=[[UILabel alloc]initWithFrame:FRAME(20, 20, 100, 20)];
+    UILabel *titleLabel=[[UILabel alloc]initWithFrame:FRAME(20, 13, 100, 16)];
     titleLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"remarks"]];
     titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:16];
     titleLabel.textColor=[UIColor colorWithRed:102/255.0f green:102/255.0f blue:102/255.0f alpha:1];
@@ -281,29 +287,54 @@
     int textId=[[dic objectForKey:@"is_consume"]intValue];
     UILabel *textLabel=[[UILabel alloc]init];
     if (textId==0) {
-        textLabel.text=@"+1";
+        textLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"score"]];
+        textLabel.textColor=[UIColor colorWithRed:92/255.0f green:189/255.0f blue:33/255.0f alpha:1];
     }else if (textId==1){
         textLabel.text=@"使用";
+        textLabel.textColor=[UIColor colorWithRed:254/255.0f green:140/255.0f blue:28/255.0f alpha:1];
     }
     
     textLabel.font=[UIFont fontWithName:@"Heiti SC" size:16];
-    textLabel.textColor=[UIColor colorWithRed:102/255.0f green:102/255.0f blue:102/255.0f alpha:1];
-    textLabel.frame=FRAME(WIDTH-textLabel.frame.size.width, 20, textLabel.frame.size.width, 20);
+    
+    [textLabel setNumberOfLines:1];
+    [textLabel sizeToFit];
+    textLabel.frame=FRAME(WIDTH-textLabel.frame.size.width-18, 13, textLabel.frame.size.width, 16);
     [cell addSubview:textLabel];
     
-    UILabel *timeLabel=[[UILabel alloc]initWithFrame:FRAME(20, 50, 100, 20)];
-    timeLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"add_time"]];
+    int  timeint=[[dic objectForKey:@"add_time"]intValue];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateStyle:NSDateFormatterMediumStyle];
+    [formatter setTimeStyle:NSDateFormatterShortStyle];
+    [formatter setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
+    NSDate *confromTimesp = [NSDate dateWithTimeIntervalSince1970:timeint];
+    NSLog(@"1296035591  = %@",confromTimesp);
+    NSString *timeStr = [formatter stringFromDate:confromTimesp];
+    UILabel *timeLabel=[[UILabel alloc]initWithFrame:FRAME(20, 39, WIDTH-40, 16)];
+    timeLabel.text=[NSString stringWithFormat:@"%@",timeStr];
     timeLabel.font=[UIFont fontWithName:@"Heiti SC" size:12];
-    timeLabel.textColor=[UIColor colorWithRed:199/255.0f green:199/255.0f blue:199/255.0f alpha:1];
+    timeLabel.textColor=[UIColor colorWithRed:153/255.0f green:153/255.0f blue:153/255.0f alpha:1];
     [cell addSubview:timeLabel];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    if([indexPath row] == ((NSIndexPath*)[[tableView indexPathsForVisibleRows] lastObject]).row){
+        //end of loading
+        dispatch_async(dispatch_get_main_queue(),^{
+            [_refreshHeader performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+            [_moreFooter performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+        });
+    }
+
     
     return cell;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 90;
+    return 67;
 }
-
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    // 取消选中状态
+    [myTableView deselectRowAtIndexPath:indexPath animated:NO];
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
