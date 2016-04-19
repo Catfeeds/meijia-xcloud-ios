@@ -42,6 +42,7 @@
 @implementation BuySecretaryViewController
 -(void)viewWillAppear:(BOOL)animated
 {
+    [self.navigationController setNavigationBarHidden:YES animated:YES];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
     actiView=[[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     actiView.center=CGPointMake(WIDTH/2,HEIGHT/2);
@@ -416,6 +417,7 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [myTableView deselectRowAtIndexPath:indexPath animated:NO];
+    [self.navigationController setNavigationBarHidden:NO animated:NO];
     int cardTypeId;
     NSString *typeID=[NSString stringWithFormat:@"%ld",(long)indexPath.row];
     int cardId=[typeID intValue];

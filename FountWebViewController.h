@@ -6,9 +6,9 @@
 //  Copyright © 2015年 zhirunjia.com. All rights reserved.
 //
 
-#import "FatherViewController.h"
-
-@interface FountWebViewController : FatherViewController<UIWebViewDelegate,UIScrollViewDelegate>
+#import <UIKit/UIKit.h>
+#import "NJKWebViewProgress.h"
+@interface FountWebViewController : UIViewController<UIWebViewDelegate,UIScrollViewDelegate,NJKWebViewProgressDelegate,UITableViewDelegate,UITableViewDataSource,UMSocialUIDelegate,MJRefreshBaseViewDelegate>
 @property(nonatomic ,strong)NSString *goto_type;
 @property(nonatomic ,strong)NSString *imgurl;
 @property(nonatomic ,strong)NSString *service_type_id;

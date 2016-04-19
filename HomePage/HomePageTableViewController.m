@@ -97,8 +97,6 @@
     //设置边框线的颜色
     [layer setBorderColor:[[UIColor colorWithRed:200/255.0f green:200/255.0f blue:200/255.0f alpha:1] CGColor]];
     
-    
-    
 }
 -(void)viewWillAppear:(BOOL)animated
 {
@@ -551,4 +549,7 @@
     selectedPage++;
     [self requestLayout];
 }
+
+
+
 @end

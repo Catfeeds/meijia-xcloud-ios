@@ -220,8 +220,8 @@
 //        [[NSNotificationCenter defaultCenter]postNotificationName:@"PAYSUCCESS" object:@"simika"];
         UserInfoViewController *user = [[UserInfoViewController alloc]init];
         [self.navigationController presentViewController:user animated:YES completion:nil];
-        
-        _buyview.selfmoney = [NSString stringWithFormat:@"%.2f",_userbaseclass.data.restMoney-300];
+        int mony=[_card_money intValue];
+        _buyview.selfmoney = [NSString stringWithFormat:@"%.2f",_userbaseclass.data.restMoney-mony];
 //        [self showAlertViewWithTitle:@"提示" message:@"购买管家卡服务成功"];
     }
 }

@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 #import <AVFoundation/AVFoundation.h>
 @interface HomePageTableViewController : UIViewController<UIScrollViewDelegate,UITableViewDataSource,UITableViewDelegate,AVCaptureMetadataOutputObjectsDelegate,NSURLConnectionDataDelegate>
-
+@property (nonatomic, strong) UIImage *image;
 @end

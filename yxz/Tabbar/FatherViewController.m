@@ -27,6 +27,8 @@
 @synthesize hxPassword,hxUserName,imToUserID,imToUserName,ID,backlable,helpBut,img;
 - (void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:YES];
+    [self.navigationController setNavigationBarHidden:YES animated:YES];
     self.navigationController.navigationBarHidden = YES;
 }
 - (void)viewDidLoad {
@@ -72,12 +74,17 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(openWebView:) name:@"OPENWEBVIEW" object:nil];
     
 }
+
 -(void)helpButAvtion:(UIButton *)button
 {
+//    [self.navigationController setNavigationBarHidden:NO animated:NO];
     WebPageViewController *webVC=[[WebPageViewController alloc]init];
     webVC.webURL=[NSString stringWithFormat:@"http://123.57.173.36/simi-h5/show/help-%@.html",_tyPeStr];
+//    [webVC setModalTransitionStyle:UIModalTransitionStylePartialCurl];
+     UINavigationController *nav=[[UINavigationController alloc]initWithRootViewController:webVC];
     webVC.vcIDs=1000;
-    [[self getCurrentVC] presentViewController:webVC animated:YES completion:nil];
+    webVC.barIDS=100;
+    [[self getCurrentVC] presentViewController:nav animated:YES completion:nil];
 }
 //获取当前屏幕显示的viewcontroller
 - (UIViewController *)getCurrentVC

@@ -55,8 +55,14 @@
     _moreFooter.scrollView = myTableView;
     // Do any additional setup after loading the view.
 }
+-(void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:YES];
+    [self.navigationController setNavigationBarHidden:NO animated:NO];
+}
 -(void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:YES];
+    [self.navigationController setNavigationBarHidden:YES animated:YES];
     [self dataSourceLayout];
 }
 #pragma mark 头部试图布局
@@ -118,7 +124,7 @@
 -(void)markBut:(UIButton *)button
 {
     WebPageViewController *webPageVC=[[WebPageViewController alloc]init];
-//    webPageVC.barIDS=100;
+    webPageVC.barIDS=100;
     webPageVC.webURL=[NSString stringWithFormat:@"http://123.57.173.36/simi-h5/show/score-intro.html"];
     [self.navigationController pushViewController:webPageVC animated:YES];
 }

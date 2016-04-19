@@ -397,10 +397,15 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     [MobClick setAppVersion:version];
     [MobClick setLogEnabled:YES];
     //设置微信AppId、appSecret，分享url
-    [UMSocialWechatHandler setWXAppId:@"wx93aa45d30bf6cba3" appSecret:@"7a4ec42a0c548c6e39ce9ed25cbc6bd7" url:@"http://51xingzheng.cn/h5-app-download.html"];
-    [UMSocialQQHandler setQQWithAppId:@"1104934408" appKey:@"bRW2glhUCR6aJYIZ" url:@"http://51xingzheng.cn/h5-app-download.html"];
+    [UMSocialWechatHandler setWXAppId:@"wx93aa45d30bf6cba3" appSecret:@"7a4ec42a0c548c6e39ce9ed25cbc6bd7" url:Handlers];
+    [UMSocialQQHandler setQQWithAppId:@"1104934408" appKey:@"bRW2glhUCR6aJYIZ" url:QQHandlerss];
     [UMSocialQQHandler setSupportWebView:YES];
-    [UMSocialSinaSSOHandler openNewSinaSSOWithAppKey:@"247547429" RedirectURL:@"http://sns.whalecloud.com"];
+    [UMSocialSinaSSOHandler openNewSinaSSOWithAppKey:@"247547429" RedirectURL:SSOHandlers];
+//    [UMSocialSinaSSOHandler openNewSinaSSOWithAppKey:@"247547429"
+//                                              secret:@"e2d6413a2c1aa9a605d46355ba15cbe4"
+//                                         RedirectURL:SSOHandlers];
+    
+    
     //UMSocial_Sdk_Extra_Frameworks
     //打开调试日志
     [UMSocialData openLog:YES];

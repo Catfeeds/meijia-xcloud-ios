@@ -52,6 +52,7 @@
 
 -(void)viewWillAppear:(BOOL)animated
 {
+    [self.navigationController setNavigationBarHidden:YES animated:YES];
     [super viewWillAppear:animated];
     if (_needRefresh) {
         [_refreshHeader beginRefreshing];
@@ -261,6 +262,7 @@
         clerkVC.service_type_id=[NSString stringWithFormat:@"%@",[dic objectForKey:@"service_type_ids"]];
         [self.navigationController pushViewController:clerkVC animated:YES];
     }else{
+        [self.navigationController setNavigationBarHidden:NO animated:NO];
         FountWebViewController *fountVC=[[FountWebViewController alloc]init];
         fountVC.goto_type=[NSString stringWithFormat:@"%@",[dic objectForKey:@"goto_type"]];
         fountVC.imgurl=[NSString stringWithFormat:@"%@",[dic objectForKey:@"goto_url"]];

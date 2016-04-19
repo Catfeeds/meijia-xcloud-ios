@@ -258,8 +258,8 @@
                 
             }else{
                 //余额购买管家卡
-//                int mony=[_card_money intValue];
-                if (_userbaseclass.data.restMoney < 300) {
+                int mony=[moneyStr intValue];
+                if (_userbaseclass.data.restMoney < mony) {
                     [self showAlertViewWithTitle:@"提示" message:@"余额不足以此次支付，请充值!"];
                 }else{
                     NSString *pay_type;
@@ -372,19 +372,19 @@
             
         }else{
             if (_buyview.MODE==YES) {
-                if (_orderVCID==1) {
+//                if (_orderVCID==1) {
                     Order_DetailsViewController *orderVC=[[Order_DetailsViewController alloc]init];
-                    orderVC.details_ID=1;
+                    orderVC.details_ID=5;
                     orderVC.user_ID=_user_ID;
                     orderVC.order_ID=_order_ID;
                     [self.navigationController pushViewController:orderVC animated:YES];
-                }else if(_orderVCID==100){
-                    Water_Order_DetailsViewController *orderVC=[[Water_Order_DetailsViewController alloc]init];
-                    orderVC.details_ID=5;
-                    orderVC.user_ID=[NSString stringWithFormat:@"%@",[dic objectForKey:@"user_id"]];
-                    orderVC.order_ID=[NSString stringWithFormat:@"%@",[dic objectForKey:@"order_id"]];
-                    [self.navigationController pushViewController:orderVC animated:YES];
-                }
+//                }else if(_orderVCID==100){
+//                    Water_Order_DetailsViewController *orderVC=[[Water_Order_DetailsViewController alloc]init];
+//                    orderVC.details_ID=5;
+//                    orderVC.user_ID=[NSString stringWithFormat:@"%@",[dic objectForKey:@"user_id"]];
+//                    orderVC.order_ID=[NSString stringWithFormat:@"%@",[dic objectForKey:@"order_id"]];
+//                    [self.navigationController pushViewController:orderVC animated:YES];
+//                }
 
             }else{
                 NSLog(@"wx");
@@ -424,8 +424,8 @@
         //        [[NSNotificationCenter defaultCenter]postNotificationName:@"PAYSUCCESS" object:@"simika"];
         UserInfoViewController *user = [[UserInfoViewController alloc]init];
         [self.navigationController presentViewController:user animated:YES completion:nil];
-        
-        _buyview.selfmoney = [NSString stringWithFormat:@"%.2f",_userbaseclass.data.restMoney-300];
+        int mony=[moneyStr intValue];
+        _buyview.selfmoney = [NSString stringWithFormat:@"%.2f",_userbaseclass.data.restMoney-mony];
         //        [self showAlertViewWithTitle:@"提示" message:@"购买管家卡服务成功"];
     }
 }

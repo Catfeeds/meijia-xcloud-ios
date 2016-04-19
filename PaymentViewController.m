@@ -249,8 +249,8 @@
                 
             }else{
                 //余额购买管家卡
-                
-                if (_userbaseclass.data.restMoney < 300) {
+                int mony=[moneyStr intValue];
+                if (_userbaseclass.data.restMoney < mony) {
                     [self showAlertViewWithTitle:@"提示" message:@"余额不足以此次支付，请充值!"];
                 }else{
                     NSString *pay_type;
@@ -486,8 +486,8 @@
         //        [[NSNotificationCenter defaultCenter]postNotificationName:@"PAYSUCCESS" object:@"simika"];
         UserInfoViewController *user = [[UserInfoViewController alloc]init];
         [self.navigationController presentViewController:user animated:YES completion:nil];
-        
-        _buyview.selfmoney = [NSString stringWithFormat:@"%.2f",_userbaseclass.data.restMoney-300];
+        int mony=[moneyStr intValue];
+        _buyview.selfmoney = [NSString stringWithFormat:@"%.2f",_userbaseclass.data.restMoney-mony];
         //        [self showAlertViewWithTitle:@"提示" message:@"购买管家卡服务成功"];
     }
 }

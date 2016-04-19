@@ -12,6 +12,7 @@
 #import "Order_TeamworkViewController.h"
 #import "Express_RegisterViewController.h"
 #import "Order_DetailsViewController.h"
+#import "HairTableViewCell.h"
 @interface WasteRecoveryViewController ()
 {
     UITableView *myTableView;
@@ -21,6 +22,7 @@
     BOOL _needRefresh;
     BOOL _hasMore;
     NSInteger   page;
+    int  pushID;
 }
 @end
 
@@ -75,7 +77,7 @@
     }else if (_wasteID==101){
         [wasteBut setTitle:@"上门服务" forState:UIControlStateNormal];
     }else if (_wasteID==102){
-        [wasteBut setTitle:@"团队建设" forState:UIControlStateNormal];
+        [wasteBut setTitle:@"一键预约" forState:UIControlStateNormal];
     }else if (_wasteID==103){
         [wasteBut setTitle:@"快递登记" forState:UIControlStateNormal];
     }
@@ -93,7 +95,7 @@
     }else if (_wasteID==101){
         [referBut setTitle:@"智能配置" forState:UIControlStateNormal];
     }else if (_wasteID==102){
-        [referBut setTitle:@"智能设置" forState:UIControlStateNormal];
+        [referBut setTitle:@"团建记录" forState:UIControlStateNormal];
     }else if (_wasteID==103){
         [referBut setTitle:@"叫快递" forState:UIControlStateNormal];
     }
@@ -106,6 +108,7 @@
 -(void)butAction:(UIButton *)button
 {
     if (button.tag==1001) {
+        pushID=1000;
         if (_wasteID==100) {
             WasteRecoveryOrderViewController *orderVC=[[WasteRecoveryOrderViewController alloc]init];
             [self.navigationController pushViewController:orderVC animated:YES];
@@ -125,15 +128,25 @@
         webPageVC.barIDS=100;
         if (_wasteID==100) {
             webPageVC.webURL=@"http://123.57.173.36/simi-h5/show/recycle-price.html";//废品回收参考价格跳转URL
+            [self.navigationController pushViewController:webPageVC animated:YES];
         }else if (_wasteID==101){
             webPageVC.webURL=@"http://123.57.173.36/simi-h5/show/clean-set.html";//保洁智能设置跳转URL
+            [self.navigationController pushViewController:webPageVC animated:YES];
         }else if (_wasteID==102){
-            webPageVC.webURL=@"http://123.57.173.36/simi-h5/show/teamwork-set.html";//团建智能设置跳转URL
+//            webPageVC.webURL=@"http://123.57.173.36/simi-h5/show/teamwork-set.html";//团建智能设置跳转URL
+            
+            ISLoginManager *_manager = [ISLoginManager shareManager];
+            NSString *pageStr=[NSString stringWithFormat:@"%ld",(long)page];
+            NSDictionary *_dict = @{@"user_id":_manager.telephone,@"page":pageStr};
+            DownloadManager *_download = [[DownloadManager alloc]init];
+            [_download requestWithUrl:[NSString stringWithFormat:@"%@",LWAGYEBUILDING_LIST] dict:_dict view:self.view delegate:self finishedSEL:@selector(addDressSuccess:) isPost:NO failedSEL:@selector(addDressFail:)];
+            pushID=104;
         }else if (_wasteID==103){
             webPageVC.webURL=@"http://m.kuaidi100.com/courier/search.jsp";//团建智能设置跳转URL
+            [self.navigationController pushViewController:webPageVC animated:YES];
         }
         
-        [self.navigationController pushViewController:webPageVC animated:YES];
+        
     }
 }
 -(void)tableViewLayout
@@ -165,7 +178,8 @@
     }else if (_wasteID==101){
         [_download requestWithUrl:[NSString stringWithFormat:@"%@",CLEAN_ORDER_LIST] dict:_dict view:self.view delegate:self finishedSEL:@selector(addDressSuccess:) isPost:NO failedSEL:@selector(addDressFail:)];
     }else if (_wasteID==102){
-        [_download requestWithUrl:[NSString stringWithFormat:@"%@",LWAGYEBUILDING_LIST] dict:_dict view:self.view delegate:self finishedSEL:@selector(addDressSuccess:) isPost:NO failedSEL:@selector(addDressFail:)];
+        NSDictionary *_dict = @{@"user_id":_manager.telephone,@"page":pageStr,@"service_type_id":@"79"};
+        [_download requestWithUrl:[NSString stringWithFormat:@"%@",COMPANY_LIST] dict:_dict view:self.view delegate:self finishedSEL:@selector(addDressSuccess:) isPost:NO failedSEL:@selector(addDressFail:)];
     }else if (_wasteID==103){
         [_download requestWithUrl:[NSString stringWithFormat:@"%@",EXPRESS_ORDER_LIST] dict:_dict view:self.view delegate:self finishedSEL:@selector(addDressSuccess:) isPost:NO failedSEL:@selector(addDressFail:)];
     }
@@ -212,6 +226,7 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
+    pushID=1000;
     [self defaultInterfaceLayout];
 }
 #pragma mark 表格刷新相关
@@ -291,86 +306,133 @@
 }
 -(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 120;
+    int  hed=0;
+    if (_wasteID==100||_wasteID==101||_wasteID==103||pushID==104) {
+        hed=120;
+    }else{
+        hed=250;
+    }
+    return hed;
 }
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDictionary *dic=dataSourceArray[indexPath.row];
-    NSString *TableSampleIdentifier = [NSString stringWithFormat:@"cell%ld",(long)indexPath.row];
-    UITableViewCell *Cell = [tableView cellForRowAtIndexPath:indexPath];
-    if (Cell == nil) {
-        Cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:TableSampleIdentifier];
-    }
-    UIImageView *imageView=[[UIImageView alloc]initWithFrame:FRAME(20, 25, 70, 70)];
-    NSString *imageUrl;
-    if (_wasteID==100) {
-        imageUrl=@"http://123.57.173.36/simi-h5/icon/icon-dingdan-caolv.png";
-    }else if (_wasteID==101){
-        imageUrl=@"http://123.57.173.36/simi-h5/icon/icon-dingdan-qianlan.png";
-    }else if (_wasteID==102){
-        imageUrl=@"http://123.57.173.36/simi-h5/icon/icon-dingdan-chenghuang.png";
-    }else if (_wasteID==103){
-        imageUrl=@"http://123.57.173.36/simi-h5/icon/icon-dingdan-molv.png";
-    }
-    [imageView setImageWithURL:[NSURL URLWithString:imageUrl]placeholderImage:nil];;
-    [Cell addSubview:imageView];
-    UILabel *moneyLabel=[[UILabel alloc]initWithFrame:FRAME(imageView.frame.size.width+30, 20, WIDTH-(imageView.frame.size.width+100), 20)];
-    moneyLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
-    [moneyLabel setFont:[UIFont fontWithName:@"Helvetica-Bold" size:15]];
-    if (_wasteID==100) {
-        moneyLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"recycle_type_name"]];
-    }else if (_wasteID==101){
-        moneyLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"clean_type_name"]];
-    }else if (_wasteID==102){
-        moneyLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"team_type_name"]];
-    }else if (_wasteID==103){
-        int exp_typ=[[dic objectForKey:@"express_type"]intValue];
-        if (exp_typ==0) {
-           moneyLabel.text=@"收件";
-        }else if (exp_typ==1){
-           moneyLabel.text=@"寄件";
-        }
-        
-    }
     
-    [Cell addSubview:moneyLabel];
-    UILabel *stateLabel=[[UILabel alloc]initWithFrame:FRAME(moneyLabel.frame.origin.x, 50, moneyLabel.frame.size.width, 20)];
-    stateLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
-    if (_wasteID==103) {
-        int is_done=[[dic objectForKey:@"is_done"]intValue];
-        if (is_done==0) {
-            stateLabel.text=@"在路上";
-        }else if (is_done==1){
-            stateLabel.text=@"已送达";
+    if(_wasteID==100||_wasteID==101||_wasteID==103||pushID==104){
+        NSDictionary *dic=dataSourceArray[indexPath.row];
+        NSString *TableSampleIdentifier = [NSString stringWithFormat:@"cell%ld",(long)indexPath.row];
+        UITableViewCell *Cell = [tableView cellForRowAtIndexPath:indexPath];
+        if (Cell == nil) {
+            Cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:TableSampleIdentifier];
+        }
+        UIImageView *imageView=[[UIImageView alloc]initWithFrame:FRAME(20, 25, 70, 70)];
+        NSString *imageUrl;
+        if (_wasteID==100) {
+            imageUrl=@"http://123.57.173.36/simi-h5/icon/icon-dingdan-caolv.png";
+        }else if (_wasteID==101){
+            imageUrl=@"http://123.57.173.36/simi-h5/icon/icon-dingdan-qianlan.png";
+        }else if (_wasteID==102){
+            imageUrl=@"http://123.57.173.36/simi-h5/icon/icon-dingdan-chenghuang.png";
+        }else if (_wasteID==103){
+            imageUrl=@"http://123.57.173.36/simi-h5/icon/icon-dingdan-molv.png";
+        }
+        [imageView setImageWithURL:[NSURL URLWithString:imageUrl]placeholderImage:nil];;
+        [Cell addSubview:imageView];
+        UILabel *moneyLabel=[[UILabel alloc]initWithFrame:FRAME(imageView.frame.size.width+30, 20, WIDTH-(imageView.frame.size.width+100), 20)];
+        moneyLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
+        [moneyLabel setFont:[UIFont fontWithName:@"Helvetica-Bold" size:15]];
+        if (_wasteID==100) {
+            moneyLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"recycle_type_name"]];
+        }else if (_wasteID==101){
+            moneyLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"clean_type_name"]];
+        }else if (_wasteID==102){
+            moneyLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"team_type_name"]];
+        }else if (_wasteID==103){
+            int exp_typ=[[dic objectForKey:@"express_type"]intValue];
+            if (exp_typ==0) {
+                moneyLabel.text=@"收件";
+            }else if (exp_typ==1){
+                moneyLabel.text=@"寄件";
+            }
+            
         }
         
+        [Cell addSubview:moneyLabel];
+        UILabel *stateLabel=[[UILabel alloc]initWithFrame:FRAME(moneyLabel.frame.origin.x, 50, moneyLabel.frame.size.width, 20)];
+        stateLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
+        if (_wasteID==103) {
+            int is_done=[[dic objectForKey:@"is_done"]intValue];
+            if (is_done==0) {
+                stateLabel.text=@"在路上";
+            }else if (is_done==1){
+                stateLabel.text=@"已送达";
+            }
+            
+        }else{
+            stateLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"order_status_name"]];
+        }
+        
+        [Cell addSubview:stateLabel];
+        UILabel *waterLabel=[[UILabel alloc]initWithFrame:FRAME(moneyLabel.frame.origin.x, 80, WIDTH-(imageView.frame.size.width+40), 20)];
+        waterLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
+        waterLabel.text=[NSString stringWithFormat:@"下单时间:%@",[dic objectForKey:@"add_time_str"]];
+        [Cell addSubview:waterLabel];
+        [Cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+        if([indexPath row] == ((NSIndexPath*)[[tableView indexPathsForVisibleRows] lastObject]).row){
+            //end of loading
+            dispatch_async(dispatch_get_main_queue(),^{
+                [_refreshHeader performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+                [_moreFooter performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+            });
+        }
+        
+        //    button.tag=indexPath.row;
+        //    button.titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
+        //    [button addTarget:self action:@selector(butAction:) forControlEvents:UIControlEventTouchUpInside];
+        //    [Cell addSubview:button];
+        return Cell;
     }else{
-        stateLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"order_status_name"]];
+        NSDictionary *dic=dataSourceArray[indexPath.row];
+        NSString *TableSampleIdentifier = [NSString stringWithFormat:@"cell%ld",(long)indexPath.row];
+        UILabel *textLabel=[[UILabel alloc]init];
+        HairTableViewCell *Cell = [tableView cellForRowAtIndexPath:indexPath];
+        if (Cell == nil) {
+            Cell = [[HairTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:TableSampleIdentifier];
+        }
+        
+        NSString *imageUrl=[NSString stringWithFormat:@"%@",[dic objectForKey:@"img_url"]];
+        [Cell.pictureImageView setImageWithURL:[NSURL URLWithString:imageUrl]placeholderImage:nil];
+        textLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"name"]];
+        textLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
+        textLabel.textColor=[UIColor colorWithRed:150/255.0f green:150/255.0f blue:150/255.0f alpha:1];
+//        [textLabel setNumberOfLines:1];
+//        [textLabel sizeToFit];
+        textLabel.textAlignment=NSTextAlignmentCenter;
+        textLabel.frame=FRAME(10, 10, WIDTH-20, 20);
+        [Cell.labelView addSubview:textLabel];
+        
+        
+//        UILabel *moneyLabel=[[UILabel alloc]initWithFrame:FRAME(textLabel.frame.size.width+10, 10, WIDTH-textLabel.frame.size.width-20, 20)];
+//        moneyLabel.text=[NSString stringWithFormat:@"价钱:%@",[dic objectForKey:@"dis_price"]];
+//        moneyLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
+//        moneyLabel.textColor=[UIColor colorWithRed:150/255.0f green:150/255.0f blue:150/255.0f alpha:1];
+//        [moneyLabel setNumberOfLines:1];
+//        moneyLabel.textAlignment=NSTextAlignmentRight;
+//        [Cell.labelView addSubview:moneyLabel];
+        Cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        if([indexPath row] == ((NSIndexPath*)[[tableView indexPathsForVisibleRows] lastObject]).row){
+            //end of loading
+            dispatch_async(dispatch_get_main_queue(),^{
+                [_refreshHeader performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+                [_moreFooter performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+            });
+        }
+        return Cell;
     }
-    
-    [Cell addSubview:stateLabel];
-    UILabel *waterLabel=[[UILabel alloc]initWithFrame:FRAME(moneyLabel.frame.origin.x, 80, WIDTH-(imageView.frame.size.width+40), 20)];
-    waterLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
-    waterLabel.text=[NSString stringWithFormat:@"下单时间:%@",[dic objectForKey:@"add_time_str"]];
-    [Cell addSubview:waterLabel];
-    [Cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-    if([indexPath row] == ((NSIndexPath*)[[tableView indexPathsForVisibleRows] lastObject]).row){
-        //end of loading
-        dispatch_async(dispatch_get_main_queue(),^{
-            [_refreshHeader performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
-            [_moreFooter performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
-        });
-    }
-    
-//    button.tag=indexPath.row;
-//    button.titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
-//    [button addTarget:self action:@selector(butAction:) forControlEvents:UIControlEventTouchUpInside];
-//    [Cell addSubview:button];
-    return Cell;
+    return nil;
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if(_wasteID!=103){
+    if(_wasteID==100||_wasteID==101||pushID==104){
         NSDictionary *dic=dataSourceArray[indexPath.row];
         Order_DetailsViewController *order_vc=[[Order_DetailsViewController alloc]init];
         order_vc.order_ID=[NSString stringWithFormat:@"%@",[dic objectForKey:@"order_id"]];
