@@ -13,4 +13,7 @@
 @property(nonatomic ,strong)NSString *imgurl;
 @property(nonatomic ,strong)NSString *service_type_id;
 @property(nonatomic ,strong)NSString *titleName;
+@property(nonatomic ,strong)UIButton *liftButton;
+@property(nonatomic ,strong)UIButton *cancelBut;
+@property(nonatomic ,strong)UIButton *rightButton;
 @end

@@ -42,5 +42,5 @@
 @property (nonatomic, weak) __weak id <BUYDELEGATE> delegate;
 
 
-- (id)initWithFrame:(CGRect)frame num:(int)num;
+- (id)initWithFrame:(CGRect)frame num:(int)num addid:(int)ids;
 @end

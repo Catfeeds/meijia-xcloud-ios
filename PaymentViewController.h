@@ -8,7 +8,7 @@
 
 #import "FatherViewController.h"
 #import "VIPLISTData.h"
-@interface PaymentViewController : FatherViewController
+@interface PaymentViewController : FatherViewController<UIScrollViewDelegate>
 {
      NSString *_moneystring;
 }

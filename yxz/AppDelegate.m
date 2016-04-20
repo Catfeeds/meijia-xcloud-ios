@@ -392,7 +392,7 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     [UMSocialData setAppKey:YMAPPKEY];
     [UMFeedback setAppkey:YMAPPKEY];
     [MobClick setCrashReportEnabled:NO];
-    [MobClick startWithAppkey:YMAPPKEY reportPolicy:BATCH   channelId:@"Web"];
+    [MobClick startWithAppkey:YMAPPKEY reportPolicy:BATCH   channelId:@"appmarket-main"];
     NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
     [MobClick setAppVersion:version];
     [MobClick setLogEnabled:YES];

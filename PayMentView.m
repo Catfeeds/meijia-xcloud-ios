@@ -17,7 +17,7 @@
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.
 
-- (id)initWithFrame:(CGRect)frame num:(int)num
+- (id)initWithFrame:(CGRect)frame num:(int)num addid:(int)ids
 {
     self = [super initWithFrame:frame];
     if (self) {
@@ -111,7 +111,7 @@
         [actualView addSubview:actLabel];
 
         
-        if (_addressID==0) {
+        if (ids==0) {
             Y=81;
             
         }else{

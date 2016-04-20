@@ -85,8 +85,6 @@
 		1015CB811CBE531800EBAE2C /* 话题.png in Resources */ = {isa = PBXBuildFile; fileRef = 1015CB791CBE531800EBAE2C /* 话题.png */; };
 		1015CB821CBE531800EBAE2C /* 会员服务.png in Resources */ = {isa = PBXBuildFile; fileRef = 1015CB7A1CBE531800EBAE2C /* 会员服务.png */; };
 		1015CB831CBE531800EBAE2C /* 积分商城.png in Resources */ = {isa = PBXBuildFile; fileRef = 1015CB7B1CBE531800EBAE2C /* 积分商城.png */; };
-		1015CB841CBE531800EBAE2C /* 消息.png in Resources */ = {isa = PBXBuildFile; fileRef = 1015CB7C1CBE531800EBAE2C /* 消息.png */; };
-		1015CB851CBE531800EBAE2C /* 优惠券128.png in Resources */ = {isa = PBXBuildFile; fileRef = 1015CB7D1CBE531800EBAE2C /* 优惠券128.png */; };
 		1015CB881CC08D3C00EBAE2C /* Modify_InformationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1015CB871CC08D3B00EBAE2C /* Modify_InformationViewController.m */; };
 		1015CB8F1CC1DE1C00EBAE2C /* NJKWebViewProgress.m in Sources */ = {isa = PBXBuildFile; fileRef = 1015CB8C1CC1DE1C00EBAE2C /* NJKWebViewProgress.m */; };
 		1015CB901CC1DE1C00EBAE2C /* NJKWebViewProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1015CB8E1CC1DE1C00EBAE2C /* NJKWebViewProgressView.m */; };
@@ -1070,6 +1068,10 @@
 		10E9673D1CC635D00047E819 /* UMSnsAccountViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 10E967311CC635D00047E819 /* UMSnsAccountViewController.xib */; };
 		10E9673E1CC635D00047E819 /* UMSShareListController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 10E967321CC635D00047E819 /* UMSShareListController.xib */; };
 		10E9673F1CC635D00047E819 /* UMSocialSDKResourcesNew.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 10E967331CC635D00047E819 /* UMSocialSDKResourcesNew.bundle */; };
+		10E967421CC777E80047E819 /* BlankViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 10E967411CC777E80047E819 /* BlankViewController.m */; };
+		10E967451CC780340047E819 /* My_QR_codeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 10E967441CC780340047E819 /* My_QR_codeViewController.m */; };
+		10E967481CC785D50047E819 /* 动态.png in Resources */ = {isa = PBXBuildFile; fileRef = 10E967461CC785D50047E819 /* 动态.png */; };
+		10E967491CC785D50047E819 /* 优惠券.png in Resources */ = {isa = PBXBuildFile; fileRef = 10E967471CC785D50047E819 /* 优惠券.png */; };
 		10ED4A241CA5518E00AE0996 /* CLGH_TX_TB_@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 10ED4A221CA5518E00AE0996 /* CLGH_TX_TB_@2x.png */; };
 		10ED4A251CA5518E00AE0996 /* HYAP_XG_TB_@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 10ED4A231CA5518E00AE0996 /* HYAP_XG_TB_@2x.png */; };
 		10ED4A271CA5580600AE0996 /* common_icon_review@2x(1).png in Resources */ = {isa = PBXBuildFile; fileRef = 10ED4A261CA5580600AE0996 /* common_icon_review@2x(1).png */; };
@@ -1541,8 +1543,6 @@
 		1015CB791CBE531800EBAE2C /* 话题.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "话题.png"; sourceTree = "<group>"; };
 		1015CB7A1CBE531800EBAE2C /* 会员服务.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "会员服务.png"; sourceTree = "<group>"; };
 		1015CB7B1CBE531800EBAE2C /* 积分商城.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "积分商城.png"; sourceTree = "<group>"; };
-		1015CB7C1CBE531800EBAE2C /* 消息.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "消息.png"; sourceTree = "<group>"; };
-		1015CB7D1CBE531800EBAE2C /* 优惠券128.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "优惠券128.png"; sourceTree = "<group>"; };
 		1015CB861CC08D3B00EBAE2C /* Modify_InformationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Modify_InformationViewController.h; sourceTree = "<group>"; };
 		1015CB871CC08D3B00EBAE2C /* Modify_InformationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Modify_InformationViewController.m; sourceTree = "<group>"; };
 		1015CB8B1CC1DE1C00EBAE2C /* NJKWebViewProgress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NJKWebViewProgress.h; sourceTree = "<group>"; };
@@ -3415,6 +3415,12 @@
 		10E967321CC635D00047E819 /* UMSShareListController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UMSShareListController.xib; sourceTree = "<group>"; };
 		10E967331CC635D00047E819 /* UMSocialSDKResourcesNew.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = UMSocialSDKResourcesNew.bundle; sourceTree = "<group>"; };
 		10E967341CC635D00047E819 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/UMSocialLocalizable.strings"; sourceTree = "<group>"; };
+		10E967401CC777E80047E819 /* BlankViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlankViewController.h; sourceTree = "<group>"; };
+		10E967411CC777E80047E819 /* BlankViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BlankViewController.m; sourceTree = "<group>"; };
+		10E967431CC780340047E819 /* My_QR_codeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = My_QR_codeViewController.h; sourceTree = "<group>"; };
+		10E967441CC780340047E819 /* My_QR_codeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = My_QR_codeViewController.m; sourceTree = "<group>"; };
+		10E967461CC785D50047E819 /* 动态.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "动态.png"; sourceTree = "<group>"; };
+		10E967471CC785D50047E819 /* 优惠券.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "优惠券.png"; sourceTree = "<group>"; };
 		10ED4A221CA5518E00AE0996 /* CLGH_TX_TB_@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "CLGH_TX_TB_@2x.png"; sourceTree = "<group>"; };
 		10ED4A231CA5518E00AE0996 /* HYAP_XG_TB_@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "HYAP_XG_TB_@2x.png"; sourceTree = "<group>"; };
 		10ED4A261CA5580600AE0996 /* common_icon_review@2x(1).png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "common_icon_review@2x(1).png"; sourceTree = "<group>"; };
@@ -5586,6 +5592,10 @@
 				100FF9151C7C163D006DD46A /* FriendsApprovalDetailsViewController.m */,
 				106974491CB7BEF300E8093A /* foundWebViewController.h */,
 				1069744A1CB7BEF300E8093A /* foundWebViewController.m */,
+				10E967401CC777E80047E819 /* BlankViewController.h */,
+				10E967411CC777E80047E819 /* BlankViewController.m */,
+				10E967431CC780340047E819 /* My_QR_codeViewController.h */,
+				10E967441CC780340047E819 /* My_QR_codeViewController.m */,
 			);
 			name = TabBarViewController;
 			sourceTree = "<group>";
@@ -7609,6 +7619,8 @@
 		10CEF98C1C040B970092FA8D /* 我的ImageLcon */ = {
 			isa = PBXGroup;
 			children = (
+				10E967461CC785D50047E819 /* 动态.png */,
+				10E967471CC785D50047E819 /* 优惠券.png */,
 				1015CB931CC271C300EBAE2C /* Wallet_Lcon.png */,
 				1015CB761CBE531800EBAE2C /* 订单.png */,
 				1015CB771CBE531800EBAE2C /* 粉丝.png */,
@@ -7616,8 +7628,6 @@
 				1015CB791CBE531800EBAE2C /* 话题.png */,
 				1015CB7A1CBE531800EBAE2C /* 会员服务.png */,
 				1015CB7B1CBE531800EBAE2C /* 积分商城.png */,
-				1015CB7C1CBE531800EBAE2C /* 消息.png */,
-				1015CB7D1CBE531800EBAE2C /* 优惠券128.png */,
 				10E81DF81CAD2C6600065EE3 /* iconfont-saotiaoma.png */,
 				1097D9AF1C9F9B130098B193 /* iconfont_company_tongxunbu.png */,
 				1097D9B01C9F9B130098B193 /* iconfont_rq_code.png */,
@@ -9345,7 +9355,6 @@
 				105130F51BFF0C2E0004DA20 /* LBXScan.podspec in Resources */,
 				10DCF26A1C1C03320058A08E /* TQ.png in Resources */,
 				108962791C3A7A2700D88350 /* VoiceSearchFeedback006@2x.png in Resources */,
-				1015CB851CBE531800EBAE2C /* 优惠券128.png in Resources */,
 				1089627C1C3A7A2700D88350 /* VoiceSearchFeedback008.png in Resources */,
 				1015CB9A1CC292D200EBAE2C /* 引导页3.jpg in Resources */,
 				10FF22CF1BA982D100BAF5EA /* SYCELL_YHB_@2x.png in Resources */,
@@ -9465,6 +9474,7 @@
 				108962911C3A7A2700D88350 /* VoiceSearchFeedback018@2x.png in Resources */,
 				108962CC1C3A7A2700D88350 /* chatBar_colorMore_location@2x.png in Resources */,
 				1089628D1C3A7A2700D88350 /* VoiceSearchFeedback016@2x.png in Resources */,
+				10E967491CC785D50047E819 /* 优惠券.png in Resources */,
 				107063B41B79BAD400CD8B93 /* 95%.png in Resources */,
 				108962F71C3A7A2700D88350 /* account.png in Resources */,
 				10CEF9A61C0411D30092FA8D /* Toolbox_Lcon.png in Resources */,
@@ -9484,7 +9494,6 @@
 				108962B41C3A7A2700D88350 /* imageDownloadFail@2x.png in Resources */,
 				035B5A051B0C2E0200F8D693 /* 演唱会.png in Resources */,
 				1015CB7E1CBE531800EBAE2C /* 订单.png in Resources */,
-				1015CB841CBE531800EBAE2C /* 消息.png in Resources */,
 				105EE0801B82E7B000144CCD /* TMT(2).png in Resources */,
 				108962B81C3A7A2700D88350 /* chatBar_keyboard.png in Resources */,
 				107FA1DC1BEC645A00FE0166 /* UMFeedbackLocalizable.strings in Resources */,
@@ -9548,6 +9557,7 @@
 				101E240D1C521D90001BA88D /* PageStoryboard.storyboard in Resources */,
 				10BFDBA81CBC909000DD274D /* UMComCommentInput.xib in Resources */,
 				108961F21C3A7A2700D88350 /* sr_refresh.png in Resources */,
+				10E967481CC785D50047E819 /* 动态.png in Resources */,
 				1069743C1CB5093600E8093A /* iconfont-jifenshangcheng.png in Resources */,
 				108962C71C3A7A2700D88350 /* chatBar_recordSelectedBg@2x.png in Resources */,
 				102725D71C587D3700FB6289 /* icon_rili.png in Resources */,
@@ -9693,6 +9703,7 @@
 				105130DC1BFF0C2E0004DA20 /* ZXQRCodeDecoder.m in Sources */,
 				101F8AB41C17D82000007985 /* HairTableViewCell.m in Sources */,
 				105130EE1BFF0C2E0004DA20 /* ZXMultiFinderPatternFinder.m in Sources */,
+				10E967451CC780340047E819 /* My_QR_codeViewController.m in Sources */,
 				105130D71BFF0C2E0004DA20 /* ZXPDF417Writer.m in Sources */,
 				1051303D1BFF0C2D0004DA20 /* ZXTelResultParser.m in Sources */,
 				108961E21C3A7A2700D88350 /* UIImageView+EMWebCache.m in Sources */,
@@ -10103,6 +10114,7 @@
 				106B7A211C89877A00D6ECC2 /* WasteRecoveryListViewController.m in Sources */,
 				10E81DE11CACFBEB00065EE3 /* AssetsAdministrationViewController.m in Sources */,
 				8F9B69AB1A493E34000BA266 /* YOUHUIData.m in Sources */,
+				10E967421CC777E80047E819 /* BlankViewController.m in Sources */,
 				1051302F1BFF0C2D0004DA20 /* ZXExpandedProductResultParser.m in Sources */,
 				03905C0A1B4CEB8300731769 /* DPRequest.m in Sources */,
 				105130231BFF0C2D0004DA20 /* ZXAztecWriter.m in Sources */,

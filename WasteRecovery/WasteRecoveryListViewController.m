@@ -29,7 +29,7 @@
         self.backlable.backgroundColor=HEX_TO_UICOLOR(0x11cd6e, 1.0);
         dataSourceArray=@[@"日常办公垃圾",@"废旧电器",@"硒鼓墨盒",@"其他"];
     }else if (_listID==101){
-        dataSourceArray=@[@"定期保洁",@"深度养护",@"维修清洗",@"其他"];
+        dataSourceArray=@[@"定期保洁",@"深度养护",@"维修清洗",@"其他",@"绿植购买",@"绿植租摆"];
         self.backlable.backgroundColor=HEX_TO_UICOLOR(0x56abe4, 1.0);
     }else if (_listID==102){
         dataSourceArray=@[@"不限",@"年会",@"拓展培训",@"聚会沙龙",@"度假休闲",@"其他"];

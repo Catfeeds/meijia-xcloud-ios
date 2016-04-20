@@ -308,7 +308,9 @@
     
     [mymanager GET:[NSString stringWithFormat:@"%@",urlString] parameters:nil success:^(AFHTTPRequestOperation *opretion, id responseObject){
         
-       
+        if(selectedPage==1){
+            [sourceArray removeAllObjects];
+        }
         NSLog(@"数据%@",responseObject);
         NSArray *array=[responseObject objectForKey:@"posts"];
         for (int i=0; i<array.count; i++) {

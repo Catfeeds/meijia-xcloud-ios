@@ -52,6 +52,7 @@
 #import "HomePageTableViewController.h"
 #import "FatherViewController.h"
 #import "MyLogInViewController.h"
+#import "BlankViewController.h"
 @interface RootViewController ()<UIAlertViewDelegate, IChatManagerDelegate,UIAlertViewDelegate>
 {
     UIView *mainView;
@@ -91,7 +92,7 @@ HomePageTableViewController *homePageVIewController;
 CardPageViewController *pageViewVC;
 ViewController * viewController;
 FoundViewController * firstViewController;
-HomePageTableViewController *secondViewController;
+BlankViewController *secondViewController;
 //FriendViewController * friendViewController;
 MyselfViewController *thirdViewController;
 //MyLogInViewController *myLogInViewController;
@@ -278,7 +279,7 @@ MyselfViewController *thirdViewController;
     firstViewController.backBtn.hidden=YES;
     [self addChildViewController:firstViewController];
     
-    secondViewController = [[HomePageTableViewController alloc]init];
+    secondViewController = [[BlankViewController alloc]init];
     [self addChildViewController:secondViewController];
     
     //    friendViewController=[[FriendViewController alloc]init];

@@ -35,14 +35,23 @@
     NSString *addressID;
     NSString *moneyStr;
     NSString *couponId;
+    
+    UIScrollView *myScrollview;
 }
 @end
 
 @implementation PaymentViewController
 @synthesize moneystring = _moneystring;
 @synthesize vipdata;
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:YES];
+    [self.navigationController setNavigationBarHidden:NO animated:NO];
+}
 -(void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:YES];
+    [self.navigationController setNavigationBarHidden:YES animated:YES];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(Qianbao) name:@"QIANBAOSUCCESS" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(Wxchaxun) name:@"WEIXINCHAXUN" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(WxPaySuccess) name:@"WXPAYSUCCESS" object:nil];
@@ -69,21 +78,28 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     A=0;
+    myScrollview=[[UIScrollView alloc]initWithFrame:FRAME(0, 64, WIDTH, HEIGHT-64)];
+    myScrollview.delegate=self;
+    [self.view addSubview:myScrollview];
     self.navlabel.text=@"购买支付";
-    self.view.backgroundColor=[UIColor colorWithRed:241/255.0f green:241/255.0f blue:241/255.0f alpha:1];
-    
+    myScrollview.backgroundColor=[UIColor colorWithRed:241/255.0f green:241/255.0f blue:241/255.0f alpha:1];
     [self viewLayout];
     // Do any additional setup after loading the view.
 }
 -(void)viewLayout
 {
     
+    dress=[[UsedDressViewController alloc]init];
     _payd = [[PayData alloc]init];
     
     ISLoginManager *_manager = [ISLoginManager shareManager];
     
-    
-    _buyview = [[PayMentView alloc]initWithFrame:FRAME(0, 64, _WIDTH, _HEIGHT-64) num:([self.moneystring isEqualToString:@"300"] ? 2 : 3)];
+    if ([_addssID intValue]==0) {
+        _buyview = [[PayMentView alloc]initWithFrame:FRAME(0, 0, _WIDTH, _HEIGHT-64) num:([self.moneystring isEqualToString:@"300"] ? 2 : 3) addid:[_addssID intValue]];
+    }else{
+        _buyview = [[PayMentView alloc]initWithFrame:FRAME(0, 0, _WIDTH, _HEIGHT-34) num:([self.moneystring isEqualToString:@"300"] ? 2 : 3) addid:[_addssID intValue]];
+    }
+    myScrollview.contentSize=CGSizeMake(WIDTH, _buyview.frame.size.height);
     _buyview.addressID=[_addssID intValue];
     _buyview.backgroundColor = COLOR_VAULE(242.0);
     _buyview.zhanghu = [NSString stringWithFormat:@"%@", _manager.telephone];
@@ -92,7 +108,7 @@
     _buyview.fanxian =_moneyStr;
     
     
-    [self.view addSubview:_buyview];
+    [myScrollview addSubview:_buyview];
     
     if (![self.moneystring isEqualToString:@"0"]) {
         
@@ -228,8 +244,18 @@
                             
                         }else{
                             if ([_actualStr isEqualToString:@"0"]) {
+                                if (addressID==nil||addressID==NULL||[addressID isEqualToString:@""]) {
+                                    UIAlertView *tsView=[[UIAlertView alloc]initWithTitle:@"提醒" message:@"您还没有选择地址！" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                                    [tsView show];
+                                    return;
+                                }
                                 dic=@{@"partner_user_id":_sec_ID,@"service_type_id":_service_type_id,@"service_price_id":_service_price_id,@"user_id":_manager.telephone,@"mobile":moile,@"pay_type":pay_type,@"addr_id":addressID};
                             }else{
+                                if (addressID==nil||addressID==NULL||[addressID isEqualToString:@""]) {
+                                    UIAlertView *tsView=[[UIAlertView alloc]initWithTitle:@"提醒" message:@"您还没有选择地址！" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                                    [tsView show];
+                                    return;
+                                }
                                 dic=@{@"partner_user_id":_sec_ID,@"service_type_id":_service_type_id,@"service_price_id":_service_price_id,@"user_id":_manager.telephone,@"mobile":moile,@"pay_type":pay_type,@"user_coupon_id":couponId,@"addr_id":addressID};
                             }
                             
@@ -309,8 +335,18 @@
                                 
                             }else{
                                 if ([_actualStr isEqualToString:@"0"]) {
-                                    dic=@{@"partner_user_id":_sec_ID,@"service_type_id":_service_type_id,@"service_price_id":_service_price_id,@"user_id":_manager.telephone,@"mobile":moile,@"pay_type":pay_type,@"addr_id":addressID};
+                                    
+                                    if (addressID==nil||addressID==NULL||[addressID isEqualToString:@""]) {
+                                        UIAlertView *tsView=[[UIAlertView alloc]initWithTitle:@"提醒" message:@"您还没有选择地址！" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                                        [tsView show];
+                                        return;
+                                    }dic=@{@"partner_user_id":_sec_ID,@"service_type_id":_service_type_id,@"service_price_id":_service_price_id,@"user_id":_manager.telephone,@"mobile":moile,@"pay_type":pay_type,@"addr_id":addressID};
                                 }else{
+                                    if (addressID==nil||addressID==NULL||[addressID isEqualToString:@""]) {
+                                        UIAlertView *tsView=[[UIAlertView alloc]initWithTitle:@"提醒" message:@"您还没有选择地址！" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                                        [tsView show];
+                                        return;
+                                    }
                                     dic=@{@"partner_user_id":_sec_ID,@"service_type_id":_service_type_id,@"service_price_id":_service_price_id,@"user_id":_manager.telephone,@"mobile":moile,@"pay_type":pay_type,@"user_coupon_id":couponId,@"addr_id":addressID};
                                 }
                                 
@@ -389,8 +425,18 @@
 
                     }else{
                         if ([_actualStr isEqualToString:@"0"]) {
+                            if (addressID==nil||addressID==NULL||[addressID isEqualToString:@""]) {
+                                UIAlertView *tsView=[[UIAlertView alloc]initWithTitle:@"提醒" message:@"您还没有选择地址！" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                                [tsView show];
+                                return;
+                            }
                             dic=@{@"partner_user_id":_sec_ID,@"service_type_id":_service_type_id,@"service_price_id":_service_price_id,@"user_id":_manager.telephone,@"mobile":moile,@"pay_type":pay_type,@"addr_id":addressID};
                         }else{
+                            if (addressID==nil||addressID==NULL||[addressID isEqualToString:@""]) {
+                                UIAlertView *tsView=[[UIAlertView alloc]initWithTitle:@"提醒" message:@"您还没有选择地址！" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                                [tsView show];
+                                return;
+                            }
                             dic=@{@"partner_user_id":_sec_ID,@"service_type_id":_service_type_id,@"service_price_id":_service_price_id,@"user_id":_manager.telephone,@"mobile":moile,@"pay_type":pay_type,@"user_coupon_id":couponId,@"addr_id":addressID};
                         }
 

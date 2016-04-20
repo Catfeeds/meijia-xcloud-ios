@@ -50,6 +50,11 @@
     [actiView startAnimating];
     
 }
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:YES];
+    [self.navigationController setNavigationBarHidden:NO animated:NO];
+}
 -(void) viewDidAppear:(BOOL)animated
 {
     [actiView stopAnimating]; // 结束旋转
@@ -417,7 +422,6 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [myTableView deselectRowAtIndexPath:indexPath animated:NO];
-    [self.navigationController setNavigationBarHidden:NO animated:NO];
     int cardTypeId;
     NSString *typeID=[NSString stringWithFormat:@"%ld",(long)indexPath.row];
     int cardId=[typeID intValue];

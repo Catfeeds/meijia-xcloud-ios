@@ -56,6 +56,8 @@
 }
 -(void) viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:YES];
+    [self.navigationController setNavigationBarHidden:YES animated:YES];
     [self GetDataDress];
 }
 -(void) viewDidDisappear:(BOOL)animated

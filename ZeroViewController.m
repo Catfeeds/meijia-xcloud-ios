@@ -14,7 +14,15 @@
 @end
 
 @implementation ZeroViewController
-
+-(void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:YES];
+    [self.navigationController setNavigationBarHidden:NO animated:NO];
+}
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:YES];
+    [self.navigationController setNavigationBarHidden:YES animated:YES];
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navlabel.text=@"咨询服务";

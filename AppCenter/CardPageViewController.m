@@ -459,7 +459,7 @@ float lastContentOffset;
     
     //    [self.tableView removeFromSuperview];
     [viewMR removeFromSuperview];
-    viewMR=[[UIView alloc]initWithFrame:CGRectMake(0.0f, 134, WIDTH,HEIGHT-64-119)];
+    viewMR=[[UIView alloc]initWithFrame:CGRectMake(0.0f, 0, WIDTH,_tableView.frame.size.height)];
     viewMR.backgroundColor=[UIColor colorWithRed:236/255.0f green:236/255.0f blue:236/255.0f alpha:1];
     UIImageView *imageView=[[UIImageView alloc]initWithFrame:FRAME((WIDTH-100)/2, 40, 100, 100)];
     imageView.image=[UIImage imageNamed:@"家-服务单-无订单_03"];
@@ -502,9 +502,9 @@ float lastContentOffset;
     }
     [self.view addSubview:self.tableView];
     [_tableView reloadData];
-    if ((dataString==nil||dataString==NULL||dataString.length==0||[dataString isEqualToString:@""])&&[senderString isEqualToString:@""]){
-        viewMR.hidden=NO;
-        [self.view addSubview:viewMR];
+    if ((senderString==nil||senderString==NULL||senderString.length==0||[senderString isEqualToString:@""])&&[senderString isEqualToString:@""]){
+//        viewMR.hidden=NO;
+        [_tableView addSubview:viewMR];
     }else{
         viewMR.hidden=YES;
         
@@ -732,7 +732,7 @@ float lastContentOffset;
     [UMSocialWechatHandler setWXAppId:@"wx93aa45d30bf6cba3" appSecret:@"7a4ec42a0c548c6e39ce9ed25cbc6bd7" url:Handlers];
     [UMSocialQQHandler setQQWithAppId:@"1104934408" appKey:@"bRW2glhUCR6aJYIZ" url:QQHandlerss];
     [UMSocialSinaSSOHandler openNewSinaSSOWithAppKey:@"247547429" RedirectURL:SSOHandlers];
-    [UMSocialSnsService presentSnsIconSheetView:self appKey:YMAPPKEY shareText:@"云行政，企业行政服务第一平台！极大降低企业行政管理成本，有效提升行政综合服务能力，快来试试吧！体验就送礼哦：http://51xingzheng.cn/h5-app-download.html" shareImage:[UIImage imageNamed:@"yunxingzheng-Logo-512.png"] shareToSnsNames:[NSArray arrayWithObjects:UMShareToSina,UMShareToQQ,UMShareToQzone,nil] delegate:self];
+    [UMSocialSnsService presentSnsIconSheetView:self appKey:YMAPPKEY shareText:@"云行政，企业行政服务第一平台！极大降低企业行政管理成本，有效提升行政综合服务能力，快来试试吧！体验就送礼哦：http://51xingzheng.cn/h5-app-download.html" shareImage:[UIImage imageNamed:@"yunxingzheng-Logo-512.png"] shareToSnsNames:[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQQ,UMShareToQzone,UMShareToSina,nil] delegate:self];
 }
 
 

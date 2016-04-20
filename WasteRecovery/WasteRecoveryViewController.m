@@ -13,6 +13,7 @@
 #import "Express_RegisterViewController.h"
 #import "Order_DetailsViewController.h"
 #import "HairTableViewCell.h"
+#import "foundWebViewController.h"
 @interface WasteRecoveryViewController ()
 {
     UITableView *myTableView;
@@ -33,7 +34,7 @@
     if (_wasteID==100) {
         self.navlabel.text=@"废品回收";
     }else if (_wasteID==101){
-        self.navlabel.text=@"保洁";
+        self.navlabel.text=@"办公环境";
     }else if (_wasteID==102){
         self.navlabel.text=@"团队拓展";
     }else if (_wasteID==103){
@@ -75,7 +76,7 @@
     if (_wasteID==100) {
         [wasteBut setTitle:@"上门回收" forState:UIControlStateNormal];
     }else if (_wasteID==101){
-        [wasteBut setTitle:@"上门服务" forState:UIControlStateNormal];
+        [wasteBut setTitle:@"一键预约" forState:UIControlStateNormal];
     }else if (_wasteID==102){
         [wasteBut setTitle:@"一键预约" forState:UIControlStateNormal];
     }else if (_wasteID==103){
@@ -93,7 +94,7 @@
     if (_wasteID==100) {
        [referBut setTitle:@"参考价格" forState:UIControlStateNormal];
     }else if (_wasteID==101){
-        [referBut setTitle:@"智能配置" forState:UIControlStateNormal];
+        [referBut setTitle:@"服务记录" forState:UIControlStateNormal];
     }else if (_wasteID==102){
         [referBut setTitle:@"团建记录" forState:UIControlStateNormal];
     }else if (_wasteID==103){
@@ -130,8 +131,14 @@
             webPageVC.webURL=@"http://123.57.173.36/simi-h5/show/recycle-price.html";//废品回收参考价格跳转URL
             [self.navigationController pushViewController:webPageVC animated:YES];
         }else if (_wasteID==101){
-            webPageVC.webURL=@"http://123.57.173.36/simi-h5/show/clean-set.html";//保洁智能设置跳转URL
-            [self.navigationController pushViewController:webPageVC animated:YES];
+//            webPageVC.webURL=@"http://123.57.173.36/simi-h5/show/clean-set.html";//保洁智能设置跳转URL
+//            [self.navigationController pushViewController:webPageVC animated:YES];
+            ISLoginManager *_manager = [ISLoginManager shareManager];
+            NSString *pageStr=[NSString stringWithFormat:@"%ld",(long)page];
+            NSDictionary *_dict = @{@"user_id":_manager.telephone,@"page":pageStr};
+            DownloadManager *_download = [[DownloadManager alloc]init];
+            [_download requestWithUrl:[NSString stringWithFormat:@"%@",CLEAN_ORDER_LIST] dict:_dict view:self.view delegate:self finishedSEL:@selector(addDressSuccess:) isPost:NO failedSEL:@selector(addDressFail:)];
+            pushID=104;
         }else if (_wasteID==102){
 //            webPageVC.webURL=@"http://123.57.173.36/simi-h5/show/teamwork-set.html";//团建智能设置跳转URL
             
@@ -176,7 +183,10 @@
     if (_wasteID==100) {
         [_download requestWithUrl:[NSString stringWithFormat:@"%@",WASTE_LIST] dict:_dict view:self.view delegate:self finishedSEL:@selector(addDressSuccess:) isPost:NO failedSEL:@selector(addDressFail:)];
     }else if (_wasteID==101){
-        [_download requestWithUrl:[NSString stringWithFormat:@"%@",CLEAN_ORDER_LIST] dict:_dict view:self.view delegate:self finishedSEL:@selector(addDressSuccess:) isPost:NO failedSEL:@selector(addDressFail:)];
+//        [_download requestWithUrl:[NSString stringWithFormat:@"%@",CLEAN_ORDER_LIST] dict:_dict view:self.view delegate:self finishedSEL:@selector(addDressSuccess:) isPost:NO failedSEL:@selector(addDressFail:)];
+        
+        NSDictionary *_dict = @{@"user_id":_manager.telephone,@"page":pageStr,@"service_type_id":@"204"};
+        [_download requestWithUrl:[NSString stringWithFormat:@"%@",COMPANY_LIST] dict:_dict view:self.view delegate:self finishedSEL:@selector(addDressSuccess:) isPost:NO failedSEL:@selector(addDressFail:)];
     }else if (_wasteID==102){
         NSDictionary *_dict = @{@"user_id":_manager.telephone,@"page":pageStr,@"service_type_id":@"79"};
         [_download requestWithUrl:[NSString stringWithFormat:@"%@",COMPANY_LIST] dict:_dict view:self.view delegate:self finishedSEL:@selector(addDressSuccess:) isPost:NO failedSEL:@selector(addDressFail:)];
@@ -225,6 +235,8 @@
 }
 -(void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:YES];
+    [self.navigationController setNavigationBarHidden:YES animated:YES];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
     pushID=1000;
     [self defaultInterfaceLayout];
@@ -307,7 +319,7 @@
 -(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     int  hed=0;
-    if (_wasteID==100||_wasteID==101||_wasteID==103||pushID==104) {
+    if (_wasteID==100||_wasteID==103||pushID==104) {
         hed=120;
     }else{
         hed=250;
@@ -317,7 +329,7 @@
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
-    if(_wasteID==100||_wasteID==101||_wasteID==103||pushID==104){
+    if(_wasteID==100||_wasteID==103||pushID==104){
         NSDictionary *dic=dataSourceArray[indexPath.row];
         NSString *TableSampleIdentifier = [NSString stringWithFormat:@"cell%ld",(long)indexPath.row];
         UITableViewCell *Cell = [tableView cellForRowAtIndexPath:indexPath];
@@ -432,13 +444,57 @@
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if(_wasteID==100||_wasteID==101||pushID==104){
+    if(_wasteID==100||pushID==104){
         NSDictionary *dic=dataSourceArray[indexPath.row];
         Order_DetailsViewController *order_vc=[[Order_DetailsViewController alloc]init];
         order_vc.order_ID=[NSString stringWithFormat:@"%@",[dic objectForKey:@"order_id"]];
         order_vc.user_ID=[NSString stringWithFormat:@"%@",[dic objectForKey:@"user_id"]];
         [self.navigationController pushViewController:order_vc animated:YES];
+    }else if (_wasteID==102||_wasteID==101)
+    {
+        [self.navigationController setNavigationBarHidden:NO animated:NO];
+        foundWebViewController *_controller = [[foundWebViewController alloc]init];
+        _controller.moneystring = @"0";
+        NSDictionary *dic=dataSourceArray[indexPath.row];
+        NSString *dayString=[NSString stringWithFormat:@"%@",[dic objectForKey:@"name"]];
+        _controller.buyString=dayString;
+        _controller.moneyStr=[NSString stringWithFormat:@"%@",[dic objectForKey:@"dis_price"]];
+        _controller.cardTypeID=1;
+        _controller.service_type_id=[NSString stringWithFormat:@"%@",[dic objectForKey:@"service_type_id"]];
+        _controller.service_price_id=[NSString stringWithFormat:@"%@",[dic objectForKey:@"service_price_id"]];
+        _controller.sec_ID=[NSString stringWithFormat:@"%@",[dic objectForKey:@"partner_user_id"]];
+        _controller.addssID=[NSString stringWithFormat:@"%@",[dic objectForKey:@"is_addr"]];
+        _controller.zeroDic=dic;
+        _controller.imgurl=[NSString stringWithFormat:@"%@",[dic objectForKey:@"detail_url"]];
+        _controller.goto_type=@"h5+list";
+        _controller.titleName=[NSString stringWithFormat:@"%@",[dic objectForKey:@"name"]];
+        NSString  *str=[NSString stringWithFormat:@"%@",[dic objectForKey:@"detail_url"]];
+        if (str==nil||str==NULL||[str isEqualToString:@""]) {
+            
+        }else{
+            [self.navigationController pushViewController:_controller animated:YES];
+            
+        }
+
     }
+}
+
+-(void)todoSomething
+{
+    if (pushID==104) {
+        pushID=1000;
+        [self defaultInterfaceLayout];
+    }else{
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+}
+- (void)backAction
+{
+    [[self class] cancelPreviousPerformRequestsWithTarget:self selector:@selector(todoSomething) object:nil];
+    [self performSelector:@selector(todoSomething) withObject:nil afterDelay:0.2f];
+    
+    //    [[self class] cancelPreviousPerformRequestsWithTarget:self];
+    
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

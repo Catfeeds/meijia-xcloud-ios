@@ -9,6 +9,8 @@
 #import "WaterListViewController.h"
 #import "WaterOrderViewController.h"
 #import "Order_DetailsViewController.h"
+#import "HairTableViewCell.h"
+#import "foundWebViewController.h"
 @interface WaterListViewController ()
 {
     UIActivityIndicatorView *view;
@@ -27,6 +29,7 @@
     BOOL _needRefresh;
     BOOL _hasMore;
     NSInteger   page;
+    int  pushID;
 }
 @end
 
@@ -68,7 +71,7 @@
 }
 -(void)tableViewLayout
 {
-    myTableView=[[UITableView alloc]initWithFrame:FRAME(0, 164, WIDTH, HEIGHT-164)];
+    myTableView=[[UITableView alloc]initWithFrame:FRAME(0, 64, WIDTH, HEIGHT-114)];
     myTableView.dataSource=self;
     myTableView.delegate=self;
     [self.view addSubview:myTableView];
@@ -87,11 +90,9 @@
 {
     ISLoginManager *_manager = [ISLoginManager shareManager];
     NSString *pageStr=[NSString stringWithFormat:@"%ld",(long)page];
-    NSDictionary *_dict = @{@"user_id":_manager.telephone,@"page":pageStr};
-    
     DownloadManager *_download = [[DownloadManager alloc]init];
-    [_download requestWithUrl:[NSString stringWithFormat:@"%@",ORDER_ORDER_LIST] dict:_dict view:self.view delegate:self finishedSEL:@selector(addDressSuccess:) isPost:NO failedSEL:@selector(addDressFail:)];
-    
+    NSDictionary *_dict = @{@"user_id":_manager.telephone,@"page":pageStr,@"service_type_id":@"239"};
+    [_download requestWithUrl:[NSString stringWithFormat:@"%@",COMPANY_LIST] dict:_dict view:self.view delegate:self finishedSEL:@selector(addDressSuccess:) isPost:NO failedSEL:@selector(addDressFail:)];
 }
 #pragma mark默认班次数据成功方法
 -(void)addDressSuccess:(id)source
@@ -134,6 +135,7 @@
 }
 -(void)viewWillAppear:(BOOL)animated
 {
+    pushID=1000;
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
     [self defaultInterfaceLayout];
 }
@@ -143,7 +145,7 @@
 {
     UIView *attendanceView=[[UIView alloc]initWithFrame:FRAME(0, 64, WIDTH, 100)];
     attendanceView.backgroundColor=[UIColor colorWithRed:89/255.0f green:181/255.0f blue:218/255.0f alpha:1];
-    [self.view addSubview:attendanceView];
+//    [self.view addSubview:attendanceView];
     nameLabel=[[UILabel alloc]init];//WithFrame:FRAME(20, 20, <#w#>, <#h#>)
     [self nameLabelLayout];
     [attendanceView addSubview:nameLabel];
@@ -175,10 +177,39 @@
     [signButton setTitleColor:[UIColor colorWithRed:89/255.0f green:181/255.0f blue:218/255.0f alpha:1] forState:UIControlStateNormal];
     [attendanceView addSubview:signButton];
     
-    UIButton *attendanceBut=[[UIButton alloc]initWithFrame:FRAME((WIDTH-WIDTH/4)/2, HEIGHT-WIDTH/4, WIDTH/4, WIDTH/4)];
-    [attendanceBut setImage:[UIImage imageNamed:@"一键送水按钮"] forState:UIControlStateNormal];
-    [attendanceBut addTarget:self action:@selector(attendBut) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:attendanceBut];
+    UIView *butView=[[UIView alloc]initWithFrame:FRAME(0, HEIGHT-56, WIDTH, 56)];
+    butView.backgroundColor=self.backlable.backgroundColor;
+    [self.view addSubview:butView];
+    UIButton *wasteBut=[[UIButton alloc]initWithFrame:FRAME(0, 0, WIDTH/2-0.5, 56)];
+    [wasteBut setTitle:@"一键送水" forState:UIControlStateNormal];
+    wasteBut.tag=1001;
+    [wasteBut addTarget:self action:@selector(butViewAction:) forControlEvents:UIControlEventTouchUpInside];
+    [butView addSubview:wasteBut];
+    UIView *verticalView=[[UIView alloc]initWithFrame:FRAME(WIDTH/2-0.5, 10, 1, 36)];
+    verticalView.backgroundColor=[UIColor whiteColor];
+    [butView addSubview:verticalView];
+    UIButton *referBut=[[UIButton alloc]initWithFrame:FRAME(WIDTH/2+0.5, 0, WIDTH/2-0.5, 56)];
+    [referBut setTitle:@"服务记录" forState:UIControlStateNormal];
+    referBut.tag=1002;
+    [referBut addTarget:self action:@selector(butViewAction:) forControlEvents:UIControlEventTouchUpInside];
+    [butView addSubview:referBut];
+    
+}
+-(void)butViewAction:(UIButton *)button
+{
+    if (button.tag==1001) {
+        pushID=1000;
+        WaterOrderViewController *waterVC=[[WaterOrderViewController alloc]init];
+        [self.navigationController pushViewController:waterVC animated:YES];
+    }else{
+        pushID=111;
+        ISLoginManager *_manager = [ISLoginManager shareManager];
+        NSString *pageStr=[NSString stringWithFormat:@"%ld",(long)page];
+        NSDictionary *_dict = @{@"user_id":_manager.telephone,@"page":pageStr};
+        
+        DownloadManager *_download = [[DownloadManager alloc]init];
+        [_download requestWithUrl:[NSString stringWithFormat:@"%@",ORDER_ORDER_LIST] dict:_dict view:self.view delegate:self finishedSEL:@selector(addDressSuccess:) isPost:NO failedSEL:@selector(addDressFail:)];
+    }
 }
 -(void)signBut
 {
@@ -207,11 +238,11 @@
     weekLabel.frame=FRAME(20, 35, weekLabel.frame.size.width, 38);
     
 }
--(void)attendBut
-{
-    WaterOrderViewController *waterVC=[[WaterOrderViewController alloc]init];
-    [self.navigationController pushViewController:waterVC animated:YES];
-}
+//-(void)attendBut
+//{
+//    WaterOrderViewController *waterVC=[[WaterOrderViewController alloc]init];
+//    [self.navigationController pushViewController:waterVC animated:YES];
+//}
 -(void)timerFireMethod
 {
     promptLabel.hidden=YES;
@@ -219,14 +250,6 @@
 -(void)companyBut
 {
     
-}
-- (void)backAction
-{
-    ISLoginManager *_manager = [ISLoginManager shareManager];
-    NSLog(@"有值么%@",_manager.telephone);
-    DownloadManager *_download = [[DownloadManager alloc]init];
-    NSDictionary *_dict=@{@"user_id":_manager.telephone};
-    [_download requestWithUrl:USER_INFO dict:_dict view:self.view delegate:self finishedSEL:@selector(QJDowLoadFinish:) isPost:NO failedSEL:@selector(QJDownFail:)];
 }
 #pragma mark用户信息详情获取成功方法
 -(void)QJDowLoadFinish:(id)sender
@@ -241,6 +264,7 @@
 #pragma mark用户信息详情获取失败方法
 -(void)QJDownFail:(id)sender
 {
+    NSLog(@"%@",sender);
     
 }
 
@@ -321,77 +345,147 @@
 }
 -(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 120;
+    if (pushID==111) {
+        return 120;
+    }else{
+       return 250;
+    }
+    return 0;
 }
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *dic=dataSourceArray[indexPath.row];
-    NSString *TableSampleIdentifier = [NSString stringWithFormat:@"cell%ld",(long)indexPath.row];
-    UITableViewCell *Cell = [tableView cellForRowAtIndexPath:indexPath];
-    if (Cell == nil) {
-        Cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:TableSampleIdentifier];
-    }
-    UIImageView *imageView=[[UIImageView alloc]initWithFrame:FRAME(20, 25, 70, 70)];
-    NSString *imageUrl=[NSString stringWithFormat:@"%@",[dic objectForKey:@"img_url"]];
-    [imageView setImageWithURL:[NSURL URLWithString:imageUrl]placeholderImage:nil];;
-    [Cell addSubview:imageView];
-    UILabel *moneyLabel=[[UILabel alloc]initWithFrame:FRAME(imageView.frame.size.width+30, 20, WIDTH-(imageView.frame.size.width+100), 20)];
-    moneyLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
-    [moneyLabel setFont:[UIFont fontWithName:@"Helvetica-Bold" size:15]];
-    moneyLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"service_price_name"]];
-    [Cell addSubview:moneyLabel];
-    UILabel *stateLabel=[[UILabel alloc]init];
-    stateLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
-    int dis_price=[[dic objectForKey:@"dis_price"]intValue];
-    int the_number=[[dic objectForKey:@"service_num"]intValue];
-    int monetStr=dis_price*the_number;
-    stateLabel.text=[NSString stringWithFormat:@"订单金额:%@",[dic objectForKey:@"order_pay"]];
-    [stateLabel setNumberOfLines:1];
-    [stateLabel sizeToFit];
-    stateLabel.frame=FRAME(moneyLabel.frame.origin.x, 50, stateLabel.frame.size.width, 20);
-    [Cell addSubview:stateLabel];
-    
-    UILabel *label=[[UILabel alloc]initWithFrame:FRAME(stateLabel.frame.origin.x+stateLabel.frame.size.width+10, 50, 30, 20)];
-    label.font=[UIFont fontWithName:@"Heiti SC" size:15];
-    label.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"order_status_name"]];
-    [Cell addSubview:label];
-    
-    UILabel *waterLabel=[[UILabel alloc]initWithFrame:FRAME(moneyLabel.frame.origin.x, 80, moneyLabel.frame.size.width, 20)];
-    waterLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
-    waterLabel.text=[NSString stringWithFormat:@"下单时间:%@",[dic objectForKey:@"add_time_str"]];
-    [Cell addSubview:waterLabel];
-    [Cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-    int  order_ext_status=[[dic objectForKey:@"order_ext_status"]intValue];
-    UIButton *button=[[UIButton alloc]initWithFrame:FRAME(WIDTH-60, 45, 50, 30)];
-    button.backgroundColor=[UIColor colorWithRed:89/255.0f green:181/255.0f blue:218/255.0f alpha:1];
-    if (order_ext_status==2) {
-        [button setTitle:@"已签收" forState:UIControlStateNormal];
-        [button setTitleColor:[UIColor colorWithRed:210/255.0f green:210/255.0f blue:210/255.0f alpha:1] forState:UIControlStateNormal];
+    if (pushID==111) {
+        NSString *TableSampleIdentifier = [NSString stringWithFormat:@"cell%ld",(long)indexPath.row];
+        UITableViewCell *Cell = [tableView cellForRowAtIndexPath:indexPath];
+        if (Cell == nil) {
+            Cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:TableSampleIdentifier];
+        }
+        UIImageView *imageView=[[UIImageView alloc]initWithFrame:FRAME(20, 25, 70, 70)];
+        NSString *imageUrl=[NSString stringWithFormat:@"%@",[dic objectForKey:@"img_url"]];
+        [imageView setImageWithURL:[NSURL URLWithString:imageUrl]placeholderImage:nil];;
+        [Cell addSubview:imageView];
+        UILabel *moneyLabel=[[UILabel alloc]initWithFrame:FRAME(imageView.frame.size.width+30, 20, WIDTH-(imageView.frame.size.width+100), 20)];
+        moneyLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
+        [moneyLabel setFont:[UIFont fontWithName:@"Helvetica-Bold" size:15]];
+        moneyLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"service_price_name"]];
+        [Cell addSubview:moneyLabel];
+        UILabel *stateLabel=[[UILabel alloc]init];
+        stateLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
+        int dis_price=[[dic objectForKey:@"dis_price"]intValue];
+        int the_number=[[dic objectForKey:@"service_num"]intValue];
+        int monetStr=dis_price*the_number;
+        stateLabel.text=[NSString stringWithFormat:@"订单金额:%@",[dic objectForKey:@"order_pay"]];
+        [stateLabel setNumberOfLines:1];
+        [stateLabel sizeToFit];
+        stateLabel.frame=FRAME(moneyLabel.frame.origin.x, 50, stateLabel.frame.size.width, 20);
+        [Cell addSubview:stateLabel];
+        
+        UILabel *label=[[UILabel alloc]initWithFrame:FRAME(stateLabel.frame.origin.x+stateLabel.frame.size.width+10, 50, 30, 20)];
+        label.font=[UIFont fontWithName:@"Heiti SC" size:15];
+        label.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"order_status_name"]];
+        [Cell addSubview:label];
+        
+        UILabel *waterLabel=[[UILabel alloc]initWithFrame:FRAME(moneyLabel.frame.origin.x, 80, moneyLabel.frame.size.width, 20)];
+        waterLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
+        waterLabel.text=[NSString stringWithFormat:@"下单时间:%@",[dic objectForKey:@"add_time_str"]];
+        [Cell addSubview:waterLabel];
+        [Cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+        int  order_ext_status=[[dic objectForKey:@"order_ext_status"]intValue];
+        UIButton *button=[[UIButton alloc]initWithFrame:FRAME(WIDTH-60, 45, 50, 30)];
+        button.backgroundColor=[UIColor colorWithRed:89/255.0f green:181/255.0f blue:218/255.0f alpha:1];
+        if (order_ext_status==2) {
+            [button setTitle:@"已签收" forState:UIControlStateNormal];
+            [button setTitleColor:[UIColor colorWithRed:210/255.0f green:210/255.0f blue:210/255.0f alpha:1] forState:UIControlStateNormal];
+        }else{
+            [button setTitle:@"签收" forState:UIControlStateNormal];
+            [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        }
+        if([indexPath row] == ((NSIndexPath*)[[tableView indexPathsForVisibleRows] lastObject]).row){
+            //end of loading
+            dispatch_async(dispatch_get_main_queue(),^{
+                [_refreshHeader performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+                [_moreFooter performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+            });
+        }
+        
+        button.tag=indexPath.row;
+        button.titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
+        [button addTarget:self action:@selector(butAction:) forControlEvents:UIControlEventTouchUpInside];
+        [Cell addSubview:button];
+        return Cell;
     }else{
-        [button setTitle:@"签收" forState:UIControlStateNormal];
-        [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        NSString *TableSampleIdentifier = [NSString stringWithFormat:@"cell%ld",(long)indexPath.row];
+        UILabel *textLabel=[[UILabel alloc]init];
+        HairTableViewCell *Cell = [tableView cellForRowAtIndexPath:indexPath];
+        if (Cell == nil) {
+            Cell = [[HairTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:TableSampleIdentifier];
+        }
+        
+        NSString *imageUrl=[NSString stringWithFormat:@"%@",[dic objectForKey:@"img_url"]];
+        [Cell.pictureImageView setImageWithURL:[NSURL URLWithString:imageUrl]placeholderImage:nil];
+        textLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"name"]];
+        textLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
+        textLabel.textColor=[UIColor colorWithRed:150/255.0f green:150/255.0f blue:150/255.0f alpha:1];
+        //        [textLabel setNumberOfLines:1];
+        //        [textLabel sizeToFit];
+        textLabel.textAlignment=NSTextAlignmentCenter;
+        textLabel.frame=FRAME(10, 10, WIDTH-20, 20);
+        [Cell.labelView addSubview:textLabel];
+        
+        Cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        if([indexPath row] == ((NSIndexPath*)[[tableView indexPathsForVisibleRows] lastObject]).row){
+            //end of loading
+            dispatch_async(dispatch_get_main_queue(),^{
+                [_refreshHeader performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+                [_moreFooter performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+            });
+        }
+        return Cell;
     }
-    if([indexPath row] == ((NSIndexPath*)[[tableView indexPathsForVisibleRows] lastObject]).row){
-        //end of loading
-        dispatch_async(dispatch_get_main_queue(),^{
-            [_refreshHeader performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
-            [_moreFooter performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
-        });
-    }
-
-    button.tag=indexPath.row;
-    button.titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
-    [button addTarget:self action:@selector(butAction:) forControlEvents:UIControlEventTouchUpInside];
-    [Cell addSubview:button];
-    return Cell;
+   
+    return nil;
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDictionary *dic=dataSourceArray[indexPath.row];
-    Order_DetailsViewController *order_vc=[[Order_DetailsViewController alloc]init];
-    order_vc.order_ID=[NSString stringWithFormat:@"%@",[dic objectForKey:@"order_id"]];
-    order_vc.user_ID=[NSString stringWithFormat:@"%@",[dic objectForKey:@"user_id"]];
-    [self.navigationController pushViewController:order_vc animated:YES];
+    if(pushID==111){
+        NSDictionary *dic=dataSourceArray[indexPath.row];
+        Order_DetailsViewController *order_vc=[[Order_DetailsViewController alloc]init];
+        order_vc.order_ID=[NSString stringWithFormat:@"%@",[dic objectForKey:@"order_id"]];
+        order_vc.user_ID=[NSString stringWithFormat:@"%@",[dic objectForKey:@"user_id"]];
+        [self.navigationController pushViewController:order_vc animated:YES];
+    }else{
+        [self.navigationController setNavigationBarHidden:NO animated:NO];
+        foundWebViewController *_controller = [[foundWebViewController alloc]init];
+        _controller.moneystring = @"0";
+        NSDictionary *dic=dataSourceArray[indexPath.row];
+        NSString *dayString=[NSString stringWithFormat:@"%@",[dic objectForKey:@"name"]];
+        _controller.buyString=dayString;
+        _controller.moneyStr=[NSString stringWithFormat:@"%@",[dic objectForKey:@"dis_price"]];
+        _controller.cardTypeID=1;
+        _controller.service_type_id=[NSString stringWithFormat:@"%@",[dic objectForKey:@"service_type_id"]];
+        _controller.service_price_id=[NSString stringWithFormat:@"%@",[dic objectForKey:@"service_price_id"]];
+        _controller.sec_ID=[NSString stringWithFormat:@"%@",[dic objectForKey:@"partner_user_id"]];
+        _controller.addssID=[NSString stringWithFormat:@"%@",[dic objectForKey:@"is_addr"]];
+        _controller.zeroDic=dic;
+        _controller.imgurl=[NSString stringWithFormat:@"%@",[dic objectForKey:@"detail_url"]];
+        _controller.goto_type=@"h5+list";
+        _controller.titleName=[NSString stringWithFormat:@"%@",[dic objectForKey:@"name"]];
+        NSString  *str=[NSString stringWithFormat:@"%@",[dic objectForKey:@"detail_url"]];
+        if (str==nil||str==NULL||[str isEqualToString:@""]) {
+            
+        }else{
+            [self.navigationController pushViewController:_controller animated:YES];
+            
+        }
+        
+    }
+
+//    NSDictionary *dic=dataSourceArray[indexPath.row];
+//    Order_DetailsViewController *order_vc=[[Order_DetailsViewController alloc]init];
+//    order_vc.order_ID=[NSString stringWithFormat:@"%@",[dic objectForKey:@"order_id"]];
+//    order_vc.user_ID=[NSString stringWithFormat:@"%@",[dic objectForKey:@"user_id"]];
+//    [self.navigationController pushViewController:order_vc animated:YES];
 }
 
 -(void)butAction:(UIButton *)button
@@ -412,6 +506,30 @@
 {
     
 }
+
+-(void)todoSomething
+{
+    if (pushID==104) {
+        pushID=1000;
+        [self defaultInterfaceLayout];
+    }else{
+        ISLoginManager *_manager = [ISLoginManager shareManager];
+        NSLog(@"有值么%@",_manager.telephone);
+        DownloadManager *_download = [[DownloadManager alloc]init];
+        NSDictionary *_dict=@{@"user_id":_manager.telephone};
+        [_download requestWithUrl:USER_INFO dict:_dict view:self.view delegate:self finishedSEL:@selector(QJDowLoadFinish:) isPost:NO failedSEL:@selector(QJDownFail:)];
+//        [self.navigationController popViewControllerAnimated:YES];
+    }
+}
+- (void)backAction
+{
+    [[self class] cancelPreviousPerformRequestsWithTarget:self selector:@selector(todoSomething) object:nil];
+    [self performSelector:@selector(todoSomething) withObject:nil afterDelay:0.2f];
+    
+    //    [[self class] cancelPreviousPerformRequestsWithTarget:self];
+    
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

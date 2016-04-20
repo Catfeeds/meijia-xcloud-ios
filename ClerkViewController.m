@@ -81,8 +81,14 @@
     }
 //    [self tableViewLayout];
 }
+-(void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:YES];
+    [self.navigationController setNavigationBarHidden:NO animated:NO];
+}
 -(void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:YES];
+    [self.navigationController setNavigationBarHidden:YES animated:YES];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault animated:NO];
     [super viewWillAppear:animated];
     if (_needRefresh) {

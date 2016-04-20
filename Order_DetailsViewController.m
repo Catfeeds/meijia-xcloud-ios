@@ -20,9 +20,15 @@
 @end
 
 @implementation Order_DetailsViewController
-
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillAppear:YES];
+//    [self.navigationController setNavigationBarHidden:NO animated:NO];
+}
 -(void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:YES];
+    [self.navigationController setNavigationBarHidden:YES animated:YES];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
     if (_details_ID!=2) {
         DownloadManager *_download = [[DownloadManager alloc]init];

@@ -74,6 +74,7 @@
     UITableView *myTableView;
     NSArray *textArray;
     int tableID;
+    NSString *refreshURL;
 }
 
 @end
@@ -332,6 +333,7 @@
     [webActivityView stopAnimating]; // 结束旋转
     [webActivityView setHidesWhenStopped:YES]; //当旋转结束时隐藏
     webTitleLabel.text = [webView stringByEvaluatingJavaScriptFromString:@"document.title"];
+    refreshURL=webView.request.URL.absoluteString;
 }
 
 
@@ -352,6 +354,7 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:identifier];
     }
     cell.textLabel.text=[NSString stringWithFormat:@"%@",textArray[indexPath.row]];
+    cell.textLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
     return cell;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -368,19 +371,27 @@
             [UMSocialWechatHandler setWXAppId:@"wx93aa45d30bf6cba3" appSecret:@"7a4ec42a0c548c6e39ce9ed25cbc6bd7" url:_imgurl];
             [UMSocialQQHandler setQQWithAppId:@"1104934408" appKey:@"bRW2glhUCR6aJYIZ" url:_imgurl];
             [UMSocialSinaSSOHandler openNewSinaSSOWithAppKey:@"247547429" RedirectURL:_imgurl];
-            [UMSocialSnsService presentSnsIconSheetView:self appKey:YMAPPKEY shareText:_imgurl shareImage:[UIImage imageNamed:@"yunxingzheng-Logo-512.png"] shareToSnsNames:[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQQ,UMShareToQzone,UMShareToSina,nil] delegate:self];
+            [UMSocialSnsService presentSnsIconSheetView:self appKey:YMAPPKEY shareText:webTitleLabel.text shareImage:[UIImage imageNamed:@"yunxingzheng-Logo-512.png"] shareToSnsNames:[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQQ,UMShareToQzone,UMShareToSina,nil] delegate:self];
             [self rightButAction];
         }
             break;
         case 1:
         {
-            [self loadGoogle];
+            [self refreshURLgo];
             [self rightButAction];
         }
             break;
         default:
             break;
     }
+    
+}
+-(void)refreshURLgo
+{
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@",refreshURL]];
+    //NSLog(@"gourl  =  %@",_imgurl);
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    [myWebView loadRequest:request];
     
 }
 
