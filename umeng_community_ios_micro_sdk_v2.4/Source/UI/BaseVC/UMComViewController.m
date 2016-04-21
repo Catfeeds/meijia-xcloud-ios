@@ -35,7 +35,22 @@
     if ([self respondsToSelector:@selector(edgesForExtendedLayout)]) {
         [self setEdgesForExtendedLayout:UIRectEdgeNone];
     }
+    
+    UIButton *liftButton=[[UIButton alloc]initWithFrame:FRAME(0, 0, 40, 44)];
+    liftButton.backgroundColor=[UIColor redColor];
+    //        liftButton.backgroundColor=[UIColor blackColor];
+    [liftButton addTarget:self action:@selector(liftButAction) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *lifebar = [[UIBarButtonItem alloc] initWithCustomView:liftButton];
+    self.navigationItem.leftBarButtonItem = lifebar;
+    UIImageView *image = [[UIImageView alloc]initWithFrame:FRAME(15, 11, 10, 20)];
+    image.image = [UIImage imageNamed:@"title_left_back"];
+    [liftButton addSubview:image];
+
     // Do any additional setup after loading the view.
+}
+-(void)liftButAction
+{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 

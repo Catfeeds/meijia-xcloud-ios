@@ -15,6 +15,7 @@
 #import "LBXScanViewStyle.h"
 #import "LBXScanViewController.h"
 #import "AFHTTPRequestOperationManager.h"
+#import "SchoolViewController.h"
 #import <objc/message.h>
 @interface HomePageTableViewController ()
 {
@@ -47,24 +48,44 @@
     selectedPage=1;
     sourceArray=[[NSMutableArray alloc]init];
     expData=[[NSMutableData alloc]init];
-    headeView=[[UIView alloc]initWithFrame:FRAME(0, 0, WIDTH, 288)];
+    headeView=[[UIView alloc]initWithFrame:FRAME(0, 0, WIDTH, 363)];
     headeView.backgroundColor=[UIColor whiteColor];
-    NSArray *butImageArray=@[@"iconfont-zhishixueyuan",@"iconfont-fuwudating",@"iconfont-shequ",@"iconfont-qiandaoyouli"];
-    NSArray *butArray=@[@"知识学院",@"服务大厅",@"微社区",@"签到有礼"];
+    NSArray *butImageArray=@[@"index-tonghangreliao.jpg",@"index-jingpinkecheng.jpg",@"index-zhishixueyuan.jpg",@"index-qiandaoyouli.jpg",@"index-shangjinlieren.jpg",@"index-jianlijiaohuan.jpg",@"index-fuwudating.jpg",@"index-fulishangcheng.jpg"];
+//    NSArray *butArray=@[@"知识学院",@"服务大厅",@"微社区",@"签到有礼"];
+    NSArray *butArray=@[@"同城热聊",@"精品课程",@"知识学院",@"签到有礼",@"赏金猎人",@"简历交换",@"服务大厅",@"福利商城"];
+    int x=0;
     for (int i=0; i<butArray.count; i++) {
-        UIButton *button=[[UIButton alloc]initWithFrame:FRAME((WIDTH-160)/4/2+(40+(WIDTH-160)/4)*i, headeView.frame.size.height-75, 40, 40)];
-        [button setImage:[UIImage imageNamed:butImageArray[i]] forState:UIControlStateNormal];
-        button.tag=i;
-        [button addTarget:self action:@selector(ButAction:) forControlEvents:UIControlEventTouchUpInside];
-        button.layer.cornerRadius=20;
-        button.clipsToBounds=YES;
-        [headeView addSubview:button];
+        if (i<4) {
+            UIButton *button=[[UIButton alloc]initWithFrame:FRAME((WIDTH-160)/4/2+(40+(WIDTH-160)/4)*i, 213, 40, 40)];
+            [button setImage:[UIImage imageNamed:butImageArray[i]] forState:UIControlStateNormal];
+            button.tag=i;
+            [button addTarget:self action:@selector(ButAction:) forControlEvents:UIControlEventTouchUpInside];
+            button.layer.cornerRadius=20;
+            button.clipsToBounds=YES;
+            [headeView addSubview:button];
+            
+            UILabel *butNameLabel=[[UILabel alloc]initWithFrame:FRAME((WIDTH-240)/4/2+(60+(WIDTH-240)/4)*i, button.frame.origin.y+button.frame.size.height+10, 60, 15)];
+            butNameLabel.text=[NSString stringWithFormat:@"%@",butArray[i]];
+            butNameLabel.textAlignment=NSTextAlignmentCenter;
+            butNameLabel.font=[UIFont fontWithName:@"Heiti SC" size:13];
+            [headeView addSubview:butNameLabel];
+        }else{
+            UIButton *button=[[UIButton alloc]initWithFrame:FRAME((WIDTH-160)/4/2+(40+(WIDTH-160)/4)*x, 288, 40, 40)];
+            [button setImage:[UIImage imageNamed:butImageArray[i]] forState:UIControlStateNormal];
+            button.tag=i;
+            [button addTarget:self action:@selector(ButAction:) forControlEvents:UIControlEventTouchUpInside];
+            button.layer.cornerRadius=20;
+            button.clipsToBounds=YES;
+            [headeView addSubview:button];
+            
+            UILabel *butNameLabel=[[UILabel alloc]initWithFrame:FRAME((WIDTH-240)/4/2+(60+(WIDTH-240)/4)*x, button.frame.origin.y+button.frame.size.height+10, 60, 15)];
+            butNameLabel.text=[NSString stringWithFormat:@"%@",butArray[i]];
+            butNameLabel.textAlignment=NSTextAlignmentCenter;
+            butNameLabel.font=[UIFont fontWithName:@"Heiti SC" size:13];
+            [headeView addSubview:butNameLabel];
+            x++;
+        }
         
-        UILabel *butNameLabel=[[UILabel alloc]initWithFrame:FRAME((WIDTH-240)/4/2+(60+(WIDTH-240)/4)*i, headeView.frame.size.height-25, 60, 15)];
-        butNameLabel.text=[NSString stringWithFormat:@"%@",butArray[i]];
-        butNameLabel.textAlignment=NSTextAlignmentCenter;
-        butNameLabel.font=[UIFont fontWithName:@"Heiti SC" size:13];
-        [headeView addSubview:butNameLabel];
     }
     
     myTableView=[[UITableView alloc]initWithFrame:FRAME(0, 0, WIDTH, HEIGHT-29)style:UITableViewStyleGrouped];
@@ -222,27 +243,35 @@
 #pragma mark头部四个按钮点击方法
 -(void)ButAction:(UIButton *)button
 {
+    //    NSArray *butArray=@[@"知识学院",@"服务大厅",@"微社区",@"签到有礼"];
     switch (button.tag) {
         case 0:
         {
-            WebPageViewController *webPageVC=[[WebPageViewController alloc]init];
-            webPageVC.barIDS=100;
-            webPageVC.webURL=[NSString stringWithFormat:@"http://51xingzheng.cn"];
-            [self.navigationController pushViewController:webPageVC animated:YES];
+//            WebPageViewController *webPageVC=[[WebPageViewController alloc]init];
+//            webPageVC.barIDS=100;
+//            webPageVC.webURL=[NSString stringWithFormat:@"http://51xingzheng.cn"];
+//            [self.navigationController pushViewController:webPageVC animated:YES];
+            UINavigationController *communityViewController = [UMCommunity getFeedsModalViewController];
+            [self presentViewController:communityViewController animated:YES completion:nil];
+            
         }
             break;
         case 1:
         {
-            WholeViewController *wholeViewController=[[WholeViewController alloc]init];
-            wholeViewController.channel_id=[NSString stringWithFormat:@"99"];
-            wholeViewController.whoVCID=101;
-            [self.navigationController pushViewController:wholeViewController animated:YES];
+            
+            WebPageViewController *webPageVC=[[WebPageViewController alloc]init];
+            webPageVC.barIDS=100;
+            webPageVC.webURL=[NSString stringWithFormat:@"http://edu.51xingzheng.cn"];
+            [self.navigationController pushViewController:webPageVC animated:YES];
+            
         }
             break;
         case 2:
         {
-            UINavigationController *communityViewController = [UMCommunity getFeedsModalViewController];
-            [self presentViewController:communityViewController animated:YES completion:nil];
+            
+            SchoolViewController *schoolVC=[[SchoolViewController alloc]init];
+            [self.navigationController pushViewController:schoolVC animated:YES];
+           
             
         }
             break;
@@ -267,7 +296,31 @@
             
         }
             break;
-            
+        case 4:
+        {
+        }
+            break;
+        case 5:
+        {
+        }
+            break;
+        case 6:
+        {
+            WholeViewController *wholeViewController=[[WholeViewController alloc]init];
+            wholeViewController.channel_id=[NSString stringWithFormat:@"99"];
+            wholeViewController.whoVCID=101;
+            [self.navigationController pushViewController:wholeViewController animated:YES];
+        }
+            break;
+        case 7:
+        {
+            ISLoginManager *_manager = [ISLoginManager shareManager];
+            NSString *url=[NSString stringWithFormat:@"http://123.57.173.36/simi/app/user/score_shop.json?user_id=%@",_manager.telephone];
+            CreditWebViewController *web=[[CreditWebViewController alloc]initWithUrl:url];//实际中需要改为带签名的地址
+            //如果已经有UINavigationContoller了，就 创建出一个 CreditWebViewController 然后 push 进去
+            [self.navigationController pushViewController:web animated:YES];
+        }
+            break;
         default:
             break;
     }
@@ -446,7 +499,7 @@
     int  secId;
     switch (section) {
         case 0:
-            secId=sourceArray.count;
+            secId=(int)sourceArray.count;
             break;
         case 1:
             secId=0;

@@ -371,7 +371,7 @@
 
                 
                 
-                NSArray *array=@[@"我的订单",@"优惠卷",@"积分商城",@"会员服务"];
+                NSArray *array=@[@"我的订单",@"优惠券",@"积分商城",@"会员服务"];
                 for (int k=0; k<array.count; k++) {
                     UIButton *growButton=[[UIButton alloc]initWithFrame:FRAME(WIDTH/4*k, 51, WIDTH/4, 70)];
                     growButton.tag=1000+k;

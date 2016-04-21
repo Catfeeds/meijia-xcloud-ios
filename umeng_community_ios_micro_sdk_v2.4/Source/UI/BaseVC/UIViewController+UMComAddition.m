@@ -75,7 +75,7 @@ const char kAnimationCompletion;
     }else{
         //在IOS8.0以上把返回按钮的坐标设置为0
         CGRect backButtonRC = backButtonItem.customButtonView.frame;
-        backButtonRC.origin.x = 0;
+        backButtonRC.origin.x = 10;
         backButtonItem.customButtonView.frame = backButtonRC;
         self.navigationItem.leftBarButtonItem = backButtonItem;
     }

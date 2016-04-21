@@ -158,8 +158,15 @@
 
 #pragma mark 表格刷新相关
 
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:YES];
+    [self.navigationController setNavigationBarHidden:NO animated:NO];
+}
 -(void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:YES];
+    [self.navigationController setNavigationBarHidden:YES animated:YES];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
     DownloadManager *_download = [[DownloadManager alloc]init];
     [_download requestWithUrl:SERVICE_RSLB dict:nil view:self.view delegate:self finishedSEL:@selector(HotSearchSuccess:) isPost:NO failedSEL:@selector(HotSearchFailure:)];

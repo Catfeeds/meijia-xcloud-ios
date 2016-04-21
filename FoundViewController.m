@@ -148,7 +148,7 @@ WholeViewController *wholeViewController;
         butLabel.frame=FRAME(10, 8, butLabel.frame.size.width, 21);
         Ks=Ks+butLabel.frame.size.width;
     }
-    K=Ks+20*(array.count+1);
+    K=Ks+20*(int)(array.count+1);
     int X=0;
     for (int i=0; i<array.count; i++) {
         NSDictionary *dic=array[i];
