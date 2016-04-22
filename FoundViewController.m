@@ -325,7 +325,7 @@ WholeViewController *wholeViewController;
     int _offSet=(int)(sender.tag-1000);
     NSDictionary *dic=array[_offSet];
     if (kuan>WIDTH) {
-        if (_offSet>2&&_offSet!=array.count-1&&_offSet>scrollID) {
+        if (_offSet>2/*&&_offSet!=array.count-1*/&&_offSet>scrollID) {
             buttID=1;
             [UIView beginAnimations: @"Animation" context:nil];
             [UIView setAnimationDuration:1];

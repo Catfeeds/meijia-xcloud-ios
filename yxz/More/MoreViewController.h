@@ -8,6 +8,6 @@
 
 #import "FatherViewController.h"
 
-@interface MoreViewController : FatherViewController<UMSocialUIDelegate>
+@interface MoreViewController : FatherViewController<UMSocialUIDelegate,UIAlertViewDelegate>
 
 @end

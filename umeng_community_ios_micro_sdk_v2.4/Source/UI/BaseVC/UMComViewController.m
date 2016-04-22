@@ -37,7 +37,7 @@
     }
     
     UIButton *liftButton=[[UIButton alloc]initWithFrame:FRAME(0, 0, 40, 44)];
-    liftButton.backgroundColor=[UIColor redColor];
+//    liftButton.backgroundColor=[UIColor redColor];
     //        liftButton.backgroundColor=[UIColor blackColor];
     [liftButton addTarget:self action:@selector(liftButAction) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *lifebar = [[UIBarButtonItem alloc] initWithCustomView:liftButton];

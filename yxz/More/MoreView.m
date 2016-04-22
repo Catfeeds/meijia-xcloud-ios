@@ -17,10 +17,10 @@
     
     if (self) {
         
-        NSArray *_titleArr = @[@"用户协议",@"分享好友",@"意见反馈",@"关于我们",@"当前版本",@"联系客服"];
+        NSArray *_titleArr = @[@"用户协议",@"分享好友",@"意见反馈",@"关于我们",@"当前版本",@"联系客服",@"清理缓存"];
         
         
-        for (int i = 0; i < 6; i ++) {
+        for (int i = 0; i < _titleArr.count; i ++) {
             
 
             
@@ -56,9 +56,9 @@
                 case 5:
                     _button.frame = FRAME(0, 27+54*5, _CELL_WIDTH, 54);
                     break;
-//                case 6:
-//                    _button.frame = FRAME(0, 36+54*6, _CELL_WIDTH, 54);
-//                    break;
+                case 6:
+                    _button.frame = FRAME(0, 36+54*6, _CELL_WIDTH, 54);
+                    break;
                     
                 default:
                     break;

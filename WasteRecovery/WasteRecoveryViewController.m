@@ -204,6 +204,8 @@
     if (string==nil||string==NULL||[string isEqualToString:@"(\n)"]) {
         [_refreshHeader performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
         [_moreFooter performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+        [dataSourceArray removeAllObjects];
+        [myTableView reloadData];
     }else{
         
         NSArray *array=[source objectForKey:@"data"];

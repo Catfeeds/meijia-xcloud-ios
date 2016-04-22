@@ -298,10 +298,21 @@
             break;
         case 4:
         {
+            ISLoginManager *_manager = [ISLoginManager shareManager];
+            WebPageViewController *webPageVC=[[WebPageViewController alloc]init];
+            webPageVC.barIDS=100;
+            webPageVC.webURL=[NSString stringWithFormat:@"http://123.57.173.36/simi-h5/show/job-reward-list.html?user_id=%@",_manager.telephone];
+            [self.navigationController pushViewController:webPageVC animated:YES];
         }
             break;
         case 5:
         {
+            ISLoginManager *_manager = [ISLoginManager shareManager];
+            WebPageViewController *webPageVC=[[WebPageViewController alloc]init];
+            webPageVC.barIDS=100;
+            webPageVC.webURL=[NSString stringWithFormat:@"http://123.57.173.36/simi-h5/show/cv-switch-list.html?user_id=%@",_manager.telephone];
+            [self.navigationController pushViewController:webPageVC animated:YES];
+            
         }
             break;
         case 6:

@@ -10,6 +10,7 @@
 #import "HairTableViewCell.h"
 #import "ClerkViewController.h"
 #import "FountWebViewController.h"
+#import "Pre_loadingViewController.h"
 @interface HairViewController ()
 {
     UITableView *myTableView;
@@ -22,6 +23,7 @@
     BOOL _needRefresh;
     BOOL _hasMore;
     NSInteger   page;
+    Pre_loadingViewController *preLoadingVC;
 }
 @end
 
@@ -33,6 +35,7 @@
     self.lineLable.hidden=YES;
     self.navlabel.hidden=YES;
     self.backlable.hidden=YES;
+    preLoadingVC=[[Pre_loadingViewController alloc]init];
     page=1;
     arrayImage=[[NSMutableArray alloc]init];
     self.view .backgroundColor=[UIColor whiteColor];
@@ -65,6 +68,8 @@
     NSString *pageStr=[NSString stringWithFormat:@"%ld",page];
     NSDictionary *dict=@{@"channel_id":_channel_id,@"page":pageStr};
     [_download requestWithUrl:CHANNEL_CARD dict:dict view:self.view delegate:self finishedSEL:@selector(ChannelSuccess:) isPost:NO failedSEL:@selector(ChannelFailure:)];
+    
+    [preLoadingVC preLoadingImage:_channel_id page:pageStr post_or_get:CHANNEL_CARD];
 }
 - (void)timerFireMethod:(NSTimer*)theTimer
 {
@@ -242,7 +247,14 @@
         });
     }
     NSString *imageUrl=[NSString stringWithFormat:@"%@",[dic objectForKey:@"img_url"]];
-    [cell.pictureImageView setImageWithURL:[NSURL URLWithString:imageUrl]placeholderImage:nil];
+    UIImage * image =[self loadLocalImage:imageUrl];
+    if (image==nil) {
+        [cell.pictureImageView setImageWithURL:[NSURL URLWithString:imageUrl]placeholderImage:nil];
+    }else{
+        cell.pictureImageView.image=image;
+    }
+    
+    
     textLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"title"]];
     textLabel.textColor=[UIColor colorWithRed:150/255.0f green:150/255.0f blue:150/255.0f alpha:1];
     textLabel.textAlignment=NSTextAlignmentCenter;
@@ -273,6 +285,49 @@
     
     
 }
+
+
+#pragma mark - 加载本地图像
+- (UIImage *)loadLocalImage:(NSString *)imageUrl
+{
+    
+    // 获取图像路径
+    NSString * filePath = [self imageFilePath:imageUrl];
+    
+    
+    UIImage * image = [UIImage imageWithContentsOfFile:filePath];
+    
+    
+    if (image != nil) {
+        return image;
+    }
+    
+    return nil;
+}
+#pragma mark - 获取图像路径
+- (NSString *)imageFilePath:(NSString *)imageUrl
+{
+    NSString *pathDocuments = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    NSString *createPath = [NSString stringWithFormat:@"%@/PreLoadingImage", pathDocuments];
+//    NSArray *file = [[[NSFileManager alloc] init] subpathsAtPath:createPath];
+//    //NSLog(@"%d",[file count]);
+//    NSLog(@"%@",file);
+    NSFileManager * fileManager = [NSFileManager defaultManager];
+    if (![fileManager fileExistsAtPath:createPath]) {
+        
+        
+        [fileManager createDirectoryAtPath:createPath withIntermediateDirectories:YES attributes:nil error:nil];
+    }
+    
+    int a=arc4random()%100;
+#pragma mark 拼接图像文件在沙盒中的路径,因为图像URL有"/",要在存入前替换掉,随意用"_"代替
+    NSString * imageName = [imageUrl stringByReplacingOccurrencesOfString:@"/" withString:@"_"];
+    NSString * imageFilePath = [createPath stringByAppendingPathComponent:imageName];
+    
+    
+    return imageFilePath;
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }

@@ -88,11 +88,21 @@
 }
 -(void)defaultInterfaceLayout
 {
-    ISLoginManager *_manager = [ISLoginManager shareManager];
-    NSString *pageStr=[NSString stringWithFormat:@"%ld",(long)page];
-    DownloadManager *_download = [[DownloadManager alloc]init];
-    NSDictionary *_dict = @{@"user_id":_manager.telephone,@"page":pageStr,@"service_type_id":@"239"};
-    [_download requestWithUrl:[NSString stringWithFormat:@"%@",COMPANY_LIST] dict:_dict view:self.view delegate:self finishedSEL:@selector(addDressSuccess:) isPost:NO failedSEL:@selector(addDressFail:)];
+    if (pushID==111) {
+        ISLoginManager *_manager = [ISLoginManager shareManager];
+        NSString *pageStr=[NSString stringWithFormat:@"%ld",(long)page];
+        NSDictionary *_dict = @{@"user_id":_manager.telephone,@"page":pageStr};
+        
+        DownloadManager *_download = [[DownloadManager alloc]init];
+        [_download requestWithUrl:[NSString stringWithFormat:@"%@",ORDER_ORDER_LIST] dict:_dict view:self.view delegate:self finishedSEL:@selector(addDressSuccess:) isPost:NO failedSEL:@selector(addDressFail:)];
+    }else{
+        ISLoginManager *_manager = [ISLoginManager shareManager];
+        NSString *pageStr=[NSString stringWithFormat:@"%ld",(long)page];
+        DownloadManager *_download = [[DownloadManager alloc]init];
+        NSDictionary *_dict = @{@"user_id":_manager.telephone,@"page":pageStr,@"service_type_id":@"239"};
+        [_download requestWithUrl:[NSString stringWithFormat:@"%@",COMPANY_LIST] dict:_dict view:self.view delegate:self finishedSEL:@selector(addDressSuccess:) isPost:NO failedSEL:@selector(addDressFail:)];
+    }
+    
 }
 #pragma mark默认班次数据成功方法
 -(void)addDressSuccess:(id)source
@@ -102,6 +112,8 @@
     if (string==nil||string==NULL||[string isEqualToString:@"(\n)"]) {
         [_refreshHeader performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
         [_moreFooter performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+        [dataSourceArray removeAllObjects];
+        [myTableView reloadData];
     }else{
         
         NSArray *array=[source objectForKey:@"data"];
@@ -203,12 +215,8 @@
         [self.navigationController pushViewController:waterVC animated:YES];
     }else{
         pushID=111;
-        ISLoginManager *_manager = [ISLoginManager shareManager];
-        NSString *pageStr=[NSString stringWithFormat:@"%ld",(long)page];
-        NSDictionary *_dict = @{@"user_id":_manager.telephone,@"page":pageStr};
-        
-        DownloadManager *_download = [[DownloadManager alloc]init];
-        [_download requestWithUrl:[NSString stringWithFormat:@"%@",ORDER_ORDER_LIST] dict:_dict view:self.view delegate:self finishedSEL:@selector(addDressSuccess:) isPost:NO failedSEL:@selector(addDressFail:)];
+        page=1;
+        [self defaultInterfaceLayout];
     }
 }
 -(void)signBut
@@ -509,9 +517,10 @@
 
 -(void)todoSomething
 {
-    if (pushID==104) {
+    if (pushID==111) {
         pushID=1000;
         [self defaultInterfaceLayout];
+        page=1;
     }else{
         ISLoginManager *_manager = [ISLoginManager shareManager];
         NSLog(@"有值么%@",_manager.telephone);

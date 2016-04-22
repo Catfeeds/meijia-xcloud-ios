@@ -9,7 +9,7 @@
 #import "MoreViewController.h"
 #import "MoreView.h"
 #import "MoreWebViewController.h"
-
+#import "SDImageCache.h"
 @interface MoreViewController ()
 <MOREDELEGATE>
 {
@@ -92,14 +92,82 @@
         
     }else if (tag == 405){
         [self telephoneBtn];
+    }else if (tag == 406){
+        NSString *pathDocuments = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+        NSString *createPath = [NSString stringWithFormat:@"%@/PreLoadingImage", pathDocuments];
+        [self folderSizeAtPath:createPath];
+        NSString *string=[NSString stringWithFormat:@"缓存大小为%.2fM.确定要清理缓存么？",[self folderSizeAtPath:createPath]];
+        UIAlertView *tsView=[[UIAlertView alloc]initWithTitle:@"提示" message:string delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+        [tsView show];
     }
 }
 
+- (long long) fileSizeAtPath:(NSString*) filePath{
+    
+    NSFileManager* manager = [NSFileManager defaultManager];
+    
+    if ([manager fileExistsAtPath:filePath]){
+        
+        return [[manager attributesOfItemAtPath:filePath error:nil] fileSize];
+        
+    }
+    
+    return 0;
+    
+}
+#pragma mark 计算目录大小
+-(float)folderSizeAtPath:(NSString *)path{
+    NSFileManager* manager = [NSFileManager defaultManager];
+    
+    if (![manager fileExistsAtPath:path]) return 0;
+    
+    NSEnumerator *childFilesEnumerator = [[manager subpathsAtPath:path] objectEnumerator];
+    
+    NSString* fileName;
+    
+    long long folderSize = 0;
+    
+    while ((fileName = [childFilesEnumerator nextObject]) != nil){
+        
+        NSString* fileAbsolutePath = [path stringByAppendingPathComponent:fileName];
+        
+        folderSize += [self fileSizeAtPath:fileAbsolutePath];
+        
+    }
+    
+    return folderSize/(1024.0*1024.0);
+}
 
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex==1) {
+        NSString *pathDocuments = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+        NSString *createPath = [NSString stringWithFormat:@"%@/PreLoadingImage", pathDocuments];
+        [self clearCache:createPath];
+    }
+    
+}
+-(void)clearCache:(NSString *)path{
+    NSFileManager *fileManager=[NSFileManager defaultManager];
+    if ([fileManager fileExistsAtPath:path]) {
+        NSArray *childerFiles=[fileManager subpathsAtPath:path];
+        for (NSString *fileName in childerFiles) {
+            //如有需要，加入条件，过滤掉不想删除的文件
+            NSString *absolutePath=[path stringByAppendingPathComponent:fileName];
+            [fileManager removeItemAtPath:absolutePath error:nil];
+        }
+    }
+    [[SDImageCache sharedImageCache] cleanDisk];
+    
+    NSArray *file = [[[NSFileManager alloc] init] subpathsAtPath:path];
+    //NSLog(@"%d",[file count]);
+    NSLog(@"%@",file);
+
+}
 
 /*-(void)onCheckVersion:(NSString *)currentVersion
 {
-    
+ 
     NSString *URL = APP_URL;
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
     [request setURL:[NSURL URLWithString:URL]];
