@@ -37,7 +37,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.navlabel.text=@"送水";
+    self.navlabel.text=_titleName;
     UIFont *fnt = [UIFont fontWithName:@"HelveticaNeue" size:16.0f];
     CGRect tmpRect = [self.navlabel.text boundingRectWithSize:CGSizeMake(WIDTH, 44) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObjectsAndKeys:fnt,NSFontAttributeName, nil] context:nil];
     self.helpBut.hidden=NO;
@@ -147,11 +147,17 @@
 }
 -(void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
+    [MobClick beginLogPageView:self.navlabel.text];
     pushID=1000;
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
     [self defaultInterfaceLayout];
 }
-
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [MobClick endLogPageView:self.navlabel.text];
+}
 
 -(void)viewLayout
 {

@@ -9,5 +9,5 @@
 #import "FatherViewController.h"
 
 @interface AssetsAdministrationViewController : FatherViewController
-
+@property(nonatomic ,strong)NSString *titleName;
 @end

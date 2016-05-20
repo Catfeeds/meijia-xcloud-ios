@@ -173,13 +173,13 @@
     segmentedControl.hidden = YES;
     [segmentedControl setfont:UMComFontNotoSansLightWithSafeSize(14) titleColor:UMComColorWithColorValueString(@"#008BEA") selectedColor:[UIColor whiteColor]];
     self.segmentControl = segmentedControl;
-    [self.view addSubview:segmentedControl];
+//    [self.view addSubview:segmentedControl];
    
 #ifndef USING_SearchBarInTableviewHeader
     CGRect commonFrame = self.view.frame;
     commonFrame.origin.y = self.searchBar.frame.size.height;
     commonFrame.size.height = commonFrame.size.height - commonFrame.origin.y;
-    CGFloat centerY = commonFrame.size.height/2+commonFrame.origin.y;
+//    CGFloat centerY = commonFrame.size.height/2+commonFrame.origin.y;
     UMComHotFeedMenuViewController *hotMenuVc = [[UMComHotFeedMenuViewController alloc]init];
     hotMenuVc.view.frame = commonFrame;
     [self addChildViewController:hotMenuVc];
@@ -232,7 +232,7 @@
     recommendPostListController.isShowEditButton = YES;
     recommendPostListController.feedCellBgViewTopEdge = 0;
     recommendPostListController.view.frame = commonFrame;
-    recommendPostListController.view.center = CGPointMake(commonFrame.size.width * 3 / 2, centerY);
+//    recommendPostListController.view.center = CGPointMake(commonFrame.size.width * 3 / 2, centerY);
     
 #ifdef USING_SearchBarInTableviewHeader
     //添加推荐界面的searchBar---begin
@@ -269,7 +269,7 @@
     UMComTopicsTableViewController *followingPostListController = [[UMComTopicsTableViewController alloc] initWithFetchRequest:[[UMComAllTopicsRequest alloc] initWithCount:BatchSize]];
     [self addChildViewController:followingPostListController];
     followingPostListController.view.frame = commonFrame;
-    followingPostListController.view.center = CGPointMake(commonFrame.size.width * 3 / 2, centerY);
+//    followingPostListController.view.center = CGPointMake(commonFrame.size.width * 3 / 2, centerY);
     
 #ifdef USING_SearchBarInTableviewHeader
     //添加话题界面的searchBar---begin
@@ -470,7 +470,7 @@
     }
     CGRect searchBarFrame = self.searchBar.frame;
     CGRect commonViewFrame = currentViewController.view.frame;
-    if (currentPage > 0) {
+    if (currentPage >= 0) {
         self.segmentControl.hidden = YES;
         searchBarFrame.origin.y = 0;
         

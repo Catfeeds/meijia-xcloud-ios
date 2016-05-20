@@ -19,8 +19,8 @@
         
         self.backgroundColor = COLOR_VAULE(245.0);
         
-        NSArray *_nameArr = @[@"     积分获得行为",@"     订单消费",@"     分享给好友",@"     完成评价"];
-        NSArray *_titleArr = @[@"积分",@"5元=1分",@"10分",@"10分"];
+        NSArray *_nameArr = @[@"     金币获得行为",@"     订单消费",@"     分享给好友",@"     完成评价"];
+        NSArray *_titleArr = @[@"金币",@"5元=1分",@"10分",@"10分"];
         
         for (int i = 0; i < 4; i ++) {
             
@@ -77,7 +77,7 @@
         UILabel *_downlabel = [[UILabel alloc]initWithFrame:FRAME(18, 18+216+9, _CELL_WIDTH-36, 11)];
         _downlabel.font = MYFONT(10);
         _downlabel.textColor = COLOR_VAULE(178.0);
-        _downlabel.text = @"注 :同一行为一天只获得一次积分";
+        _downlabel.text = @"注 :同一行为一天只获得一次金币";
         [self addSubview:_downlabel];
         
     }

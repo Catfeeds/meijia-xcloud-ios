@@ -187,4 +187,9 @@
 #define USER_DETAILED_LIST               @"simi/app/user/get_score.json"                 //我的积分明细接口
 #define APP_BASIC_DATA                   @"simi/app/get_base_datas.json"                 //基础数据接口
 #define COMPANY_LIST                     @"simi/app/partner/get_default_service_price_list.json"   //服务商-获取默认商品列表
+#define USER_CAR_REGISTER                @"simi/app/car/post_car_no.json"               //用户车辆登记接口
+#define USER_CAR_NEWS                    @"simi/app/car/get_car.json"                   //用户车辆信息接口
+#define WATER_SETUP                      @"simi/app/op/get_apptools_status.json"        //用户-应用列表配置接口
+#define ORDER_schedule                   @"simi/app/order/get_log.json"                 //订单日志/进度接口
+#define ARTICLE_CLICK_BOOL               @"simi/app/feed/get_zan.json"                  //获取当前动态是否点赞接口
 #endif

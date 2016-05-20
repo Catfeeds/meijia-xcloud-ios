@@ -101,7 +101,7 @@ const CGFloat g_UMComUserInfoBar_SpaceBetweenNameAndMedal = 5;//勋章和名字�
         _status.layer.borderColor = UMComColorWithColorValueString(@"34C035").CGColor;
         _follower.text = [NSString stringWithFormat:@"粉丝 %@", countString(user.fans_count)];
         _folowing.text = [NSString stringWithFormat:@"关注 %@", countString(user.following_count)];
-        _score.text = [NSString stringWithFormat:@"积分 %@", countString(user.point)];
+        _score.text = [NSString stringWithFormat:@"金币 %@", countString(user.point)];
         [_avatar setImageURL:[user.icon_url small_url_string] placeHolderImage:UMComImageWithImageName(@"um_forum_post_default")];
         [self hideInfoSubviews:NO];
         _loginTip.hidden = YES;

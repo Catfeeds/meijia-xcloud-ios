@@ -246,7 +246,19 @@
 -(void)handleClick:(UIButton *)but
 {
     searchStr=[NSString stringWithFormat:@"%@",arr[but.tag]];
-    [self handleSearchForTerm:searchStr];
+    if(self.loginYesOrNo!=YES)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            MyLogInViewController *loginViewController = [[MyLogInViewController alloc] init];
+            loginViewController.vCYMID=100;
+            UMComNavigationController *navigationController = [[UMComNavigationController alloc] initWithRootViewController:loginViewController];
+            [self presentViewController:navigationController animated:YES completion:^{
+            }];
+        });
+    }else{
+        [self handleSearchForTerm:searchStr];
+    }
+    
 }
 
 - (void) searchBarSearchButtonClicked:(UISearchBar *)searchBar

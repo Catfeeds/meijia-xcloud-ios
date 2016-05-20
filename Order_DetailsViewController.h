@@ -8,7 +8,7 @@
 
 #import "FatherViewController.h"
 
-@interface Order_DetailsViewController : FatherViewController
+@interface Order_DetailsViewController : FatherViewController<UIScrollViewDelegate>
 @property(nonatomic ,strong)NSDictionary *dic;
 @property(nonatomic ,strong)NSString *user_ID;
 @property(nonatomic ,strong)NSString *order_ID;

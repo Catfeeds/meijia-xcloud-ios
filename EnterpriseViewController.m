@@ -26,6 +26,7 @@
 @implementation EnterpriseViewController
 
 - (void)viewDidLoad {
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(sureButLayout:) name:@"SUREBUT" object:nil];
     [super viewDidLoad];
     if (_webId==0) {
         self.navlabel.text=@"创建企业通讯录";
@@ -53,6 +54,10 @@
     
     // Do any additional setup after loading the view.
 }
+-(void)sureButLayout:(NSNotification *)dataSource
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
 -(void)addButAction:(UIButton *)button
 {
 
@@ -66,6 +71,7 @@
         _mobileArray=companyVC.mobileArray;
         _idArray=companyVC.idArray;
     }
+    
 }
 -(void)pullDownAnimated:(int)open
 {
@@ -189,6 +195,7 @@
     companyVC.dataMobileArray=_mobileArray;
     companyVC.dataIdArray=_idArray;
     companyVC.nameString=[NSString stringWithFormat:@"%@",[dic objectForKey:@"company_name"]];
+    companyVC.poplIDS=_poepleID;
     [self.navigationController pushViewController:companyVC animated:YES];
 }
 - (void)didReceiveMemoryWarning {

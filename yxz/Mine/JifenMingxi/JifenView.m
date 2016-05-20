@@ -30,7 +30,7 @@
             _leftlb1.font = MYFONT(13.5);
             [_leftlb1 setTag:(3000+i)];
             if (i == 0) {
-                _leftlb1.text = @"当前积分:";
+                _leftlb1.text = @"当前金币:";
                 _leftlb1.textColor = [self getColor:@"666666"];
             }else{
                 _leftlb1.textColor = [self getColor:@"E8374A"];
@@ -46,7 +46,7 @@
         _rightlabel.font = MYFONT(13.5);
         _rightlabel.textColor = [self getColor:@"b1b1b1"];
         _rightlabel.textAlignment = NSTextAlignmentRight;
-        _rightlabel.text = @"怎样获得积分";
+        _rightlabel.text = @"怎样获得金币";
         [self addSubview:_rightlabel];
         
         UIButton *_getjifenBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -86,7 +86,7 @@
             }
         }
         
-        NSArray *_btnArr = @[@"   积分兑换",@"   积分明细"];
+        NSArray *_btnArr = @[@"   金币兑换",@"   金币明细"];
         NSArray *_imgArr = @[@"integral-test_click",@"list-_01"];
         
         for (int i = 0; i < 2; i ++) {

@@ -145,7 +145,7 @@
         buttonFrame.size.width = buttonFrame.size.width;
         
         NSString *pointStr = [NSString stringWithFormat:@"%ld",(long)countString(user.point)];
-        UIButton *point = [self createNewButtonWithImageName:@"um_forum_user_score" title:[NSString stringWithFormat:@"积分%@",pointStr] action:@selector(clickOnScoreButton:) frame:buttonFrame];
+        UIButton *point = [self createNewButtonWithImageName:@"um_forum_user_score" title:[NSString stringWithFormat:@"金币%@",pointStr] action:@selector(clickOnScoreButton:) frame:buttonFrame];
         [self addSubview:point];
         point.enabled = NO;
         _scoreButton = point;

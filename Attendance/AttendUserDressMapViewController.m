@@ -152,7 +152,7 @@
         [MBProgressHUD showError:@"请选择地址!" toView:self.view];
         return;
     }
-    if (nsString ==nil||nsString==NULL ||[nsString isEqualToString:@""]) {
+    if (nsString ==nil||nsString==NULL ||[nsString isEqualToString:@"(\n)"]) {
         [self jiekou];
     }else{
         for (int i=0; i<checkin_netArray.count; i++) {

@@ -17,4 +17,5 @@
 @property(nonatomic ,assign)int cardsID;
 @property(nonatomic ,assign)int pushID;
 @property(nonatomic ,strong)NSString *cardString;
+@property(nonatomic ,strong)NSString *titleName;
 @end

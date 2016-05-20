@@ -9,4 +9,5 @@
 #import "FatherViewController.h"
 @interface AttendanceViewController : FatherViewController<UIWebViewDelegate,UIScrollViewDelegate>
 @property (nonatomic ,assign)int webID;
+@property(nonatomic ,strong)NSString *titleName;
 @end

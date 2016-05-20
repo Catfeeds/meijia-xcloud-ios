@@ -119,7 +119,7 @@
     cellID=(int)indexPath.row;
     _waterString=[NSString stringWithFormat:@"%@",[dic objectForKey:@"name"]];
     _moneyString=[NSString stringWithFormat:@"原价%@元/桶，折扣价%@元/桶",[dic objectForKey:@"price"],[dic objectForKey:@"dis_price"]];
-    _service_price_id=[NSString stringWithFormat:@"%@",[dic objectForKey:@"servce_price_id"]];
+    _service_price_id=[NSString stringWithFormat:@"%@",[dic objectForKey:@"service_price_id"]];
     [myTableView reloadData];
     [self.navigationController popViewControllerAnimated:YES];
 }

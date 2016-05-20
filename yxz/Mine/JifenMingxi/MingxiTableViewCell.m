@@ -69,11 +69,11 @@
     
     UILabel *_namelabel = (UILabel *)[self viewWithTag:1000];
     if (mydata.actionId == 1) {
-        _namelabel.text = @"订单获得积分";
+        _namelabel.text = @"订单获得金币";
     }else if (mydata.actionId == 2){
-        _namelabel.text = @"订单使用积分";
+        _namelabel.text = @"订单使用金币";
     }else if(mydata.actionId == 3){
-        _namelabel.text = @"分享获得积分";
+        _namelabel.text = @"分享获得金币";
     }
     
     UILabel *_scorelabel = (UILabel *)[self viewWithTag:1001];

@@ -25,7 +25,7 @@ StorageRecordViewController *myApprovalViewController;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.navlabel.text=@"请假审批";
+    self.navlabel.text=_titleName;
     self.backlable.backgroundColor=HEX_TO_UICOLOR(0x11cd6e, 1.0);
     _navlabel.textColor = [UIColor whiteColor];
     self.img.hidden=YES;
@@ -37,9 +37,11 @@ StorageRecordViewController *myApprovalViewController;
     [self.view addSubview:mainView];
     
     myLaunchViewController=[[CollectRecordsViewController alloc]init];
+    myLaunchViewController.titleName=_titleName;
     [self addChildViewController:myLaunchViewController];
     
     myApprovalViewController=[[StorageRecordViewController alloc]init];
+    myApprovalViewController.titleName=_titleName;
     [self addChildViewController:myApprovalViewController];
     
     [mainView addSubview:myLaunchViewController.view];
@@ -98,7 +100,14 @@ StorageRecordViewController *myApprovalViewController;
 
 -(void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
+    [MobClick beginLogPageView:self.navlabel.text];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault animated:NO];
+}
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [MobClick endLogPageView:self.navlabel.text];
 }
 -(void)tabBarButton:(UIButton *)sender
 {

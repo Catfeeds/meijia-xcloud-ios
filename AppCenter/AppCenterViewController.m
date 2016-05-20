@@ -79,7 +79,14 @@ GrowUp_or_MakeMoneyViewController *growUp_or_MakeMoneyViewController;
 }
 -(void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
+    [MobClick beginLogPageView:self.navlabel.text];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
+}
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [MobClick endLogPageView:self.navlabel.text];
 }
 -(void)tabBarButton:(UIButton *)sender
 {

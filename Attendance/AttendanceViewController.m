@@ -33,9 +33,14 @@
 
 @implementation AttendanceViewController
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [MobClick endLogPageView:self.navlabel.text];
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.navlabel.text=@"签到";
+    self.navlabel.text=_titleName;
     self.backlable.backgroundColor=HEX_TO_UICOLOR(0xea8010, 1.0);
     UIFont *fnt = [UIFont fontWithName:@"HelveticaNeue" size:16.0f];
     CGRect tmpRect = [self.navlabel.text boundingRectWithSize:CGSizeMake(WIDTH, 44) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObjectsAndKeys:fnt,NSFontAttributeName, nil] context:nil];
@@ -112,6 +117,8 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
+    [super viewWillAppear:animated];
+    [MobClick beginLogPageView:self.navlabel.text];//("PageOne"为页面名称，可自定义)
     [self defaultInterfaceLayout];
 }
 -(void)webViewLayout

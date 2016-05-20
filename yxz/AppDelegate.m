@@ -43,11 +43,15 @@
 
 #import "UMSocialWechatHandler.h"
 #import "UMSocialQQHandler.h"
-#import "MobClick.h"
+//#import "MobClick.h"
 #import "UMSocialSinaSSOHandler.h"
 #import "DetailsViewController.h"
 #import "UMCheckUpdate.h"
 #import "WaterListViewController.h"
+
+#import "Service_hallViewController.h"
+#import "Op_ad_hallViewController.h"
+
 #define IosAppVersion [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]
 @interface AppDelegate ()<WXApiDelegate>//,WeiboSDKDelegate
 {
@@ -237,6 +241,13 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
 //    {
 //        NSLog(@"font name:%@",name);
 //    }
+    
+    
+    UMConfigInstance.appKey = YMAPPKEY;
+    UMConfigInstance.channelId = @"appmarket-main";
+    UMConfigInstance.eSType = E_UM_GAME;
+    UMConfigInstance.ePolicy=REALTIMEs;
+    
     NSFileManager *fileManager = [NSFileManager defaultManager];
     
     BOOL find = [fileManager fileExistsAtPath:[self readyDatabase:@"simi.db"]];
@@ -252,12 +263,13 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     }else{
         NSLog(@"没有啊有");
     }
-    sqlite3_close(simi);
+    
 //    
     NSString *cityStr=@"";
     NSString *app_toolsStr=@"";
     NSString *expressStr=@"";
     NSString *xcompany_settingsStr=@"";
+    NSString *op_adStr=@"";
     sqlite3_stmt *statement;
     NSString *citySql = @"select max(add_time)  from city";
     if (sqlite3_prepare_v2(simi, [citySql UTF8String], -1, &statement, nil) == SQLITE_OK) {
@@ -287,11 +299,21 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
             xcompany_settingsStr= [[NSString alloc] initWithUTF8String:_id];
         }
     }
+    
+    NSString *op_adSql = @"select max(update_time)  from op_ad";
+    if (sqlite3_prepare_v2(simi, [op_adSql UTF8String], -1, &statement, nil) == SQLITE_OK) {
+        while (sqlite3_step(statement) == SQLITE_ROW) {
+            char *_id = (char *)sqlite3_column_text(statement, 0);
+            op_adStr= [[NSString alloc] initWithUTF8String:_id];
+        }
+    }
     sqlite3_close(simi);
-    NSLog(@"%@,%@,%@,%@",cityStr,app_toolsStr,xcompany_settingsStr,xcompany_settingsStr);
+    NSLog(@"%@,%@,%@,%@,%@",cityStr,app_toolsStr,xcompany_settingsStr,xcompany_settingsStr,op_adStr);
+    
+    
     
     DownloadManager *_download = [[DownloadManager alloc]init];
-    NSDictionary *_dict=@{@"t_city":cityStr,@"t_apptools":app_toolsStr,@"t_express":expressStr,@"t_assets":xcompany_settingsStr,};
+    NSDictionary *_dict=@{@"t_city":cityStr,@"t_apptools":app_toolsStr,@"t_express":expressStr,@"t_assets":xcompany_settingsStr,@"t_opads":op_adStr};
     [_download requestWithUrl:APP_BASIC_DATA dict:_dict view:self.window delegate:self finishedSEL:@selector(Basic_dataSuccess:) isPost:NO failedSEL:@selector(Basic_dataFail:)];
     [self deleteFileAtPath:[self readyDatabase:@"simi.db"]];
     
@@ -392,7 +414,7 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     [UMSocialData setAppKey:YMAPPKEY];
     [UMFeedback setAppkey:YMAPPKEY];
     [MobClick setCrashReportEnabled:NO];
-    [MobClick startWithAppkey:YMAPPKEY reportPolicy:BATCH   channelId:@"appmarket-main"];
+//    [MobClick startWithAppkey:YMAPPKEY reportPolicy:BATCH   channelId:@"appmarket-main"];
     NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
     [MobClick setAppVersion:version];
     [MobClick setLogEnabled:YES];
@@ -1466,6 +1488,51 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
 }
 
 
++(NSString *)wangluo
+{
+    UIApplication *application = [UIApplication sharedApplication];
+    NSArray *subviews = [[[application valueForKey:@"statusBar"] valueForKey:@"foregroundView"]subviews];
+    
+    NSNumber *dataNetWorkItemView = nil;
+    
+    for (id subView in subviews) {
+        if ([subView isKindOfClass:[NSClassFromString(@"UIStatusBarDataNetworkItemView") class]]) {
+            dataNetWorkItemView = subView;
+            break;
+        }
+    }
+    NSString *string;
+    NetWorkTypes networkType = NetWorkType_Nones;
+    switch ([[dataNetWorkItemView valueForKey:@"dataNetworkType"] integerValue]) {
+        case 0:
+            NSLog(@"No wifi or cellular");
+            networkType = NetWorkType_Nones;
+            string=@"0";
+            break;
+        case 1:
+            NSLog(@"2G");
+            networkType = NetWorkType_2Gs;
+            string=@"1";
+            break;
+        case 2:
+            NSLog(@"3G");
+            networkType = NetWorkType_3Gs;
+            string=@"2";
+            break;
+        case 3:
+            NSLog(@"4G");
+            networkType = NetWorkType_4Gs;
+            string=@"3";
+            break;
+        default:
+            NSLog(@"Wifi");
+            networkType = NetWorkType_WIFIs;
+            string=@"4";
+            break;
+    }
+    
+    return string;
+}
 
 #pragma mark
 - (void)ChoseRootController
@@ -1484,6 +1551,9 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
         navcontroller.navigationBarHidden = YES;
         if (_pushID!=1) {
             //设置启动页
+            NSString *strs=[self.class wangluo];
+            int wifiID=[strs intValue];
+            
             splashView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, self.window.bounds.size.width, self.window.bounds.size.height)];
             
             [splashView setImage:[UIImage imageNamed:@"1242X2208启动页"]];
@@ -1493,10 +1563,19 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
             [self.window bringSubviewToFront:splashView];
             _adView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, WIDTH, HEIGHT-150)];
             NSString *imageUrl=@"http://123.57.173.36/simi-h5/img/load-ad-update.jpg";
-            //        [headImageView setImageWithURL:[NSURL URLWithString:imageUrl]placeholderImage:nil];
-            _adView.image=[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imageUrl]]];
+            if (wifiID==0) {
+                [_adView setImageWithURL:[NSURL URLWithString:imageUrl]placeholderImage:nil];
+            }else if (wifiID==1){
+                [_adView setImageWithURL:[NSURL URLWithString:imageUrl]placeholderImage:nil];
+            }else{
+                 _adView.image=[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imageUrl]]];
+            }
 //            _adView.backgroundColor=[UIColor redColor];
             [splashView addSubview:_adView];
+            splashView.userInteractionEnabled=YES;
+            _adView.userInteractionEnabled=YES;
+            UITapGestureRecognizer *imageTap=[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(imgTap)];
+            [_adView addGestureRecognizer:imageTap];
             
             [self performSelector:@selector(showWord) withObject:nil afterDelay:3.0f];
             
@@ -1522,6 +1601,17 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     }
     
     
+}
+#pragma mark 启动页点击事件
+-(void)imgTap
+{
+//    [[NSNotificationCenter defaultCenter] postNotificationName:@"IMGTAPP" object:nil];
+    WebPageViewController *webPageVC=[[WebPageViewController alloc]init];
+    webPageVC.barIDS=100;
+    webPageVC.qdIDl=1000;
+    webPageVC.webURL=[NSString stringWithFormat:@"https://www.baidu.com"];
+    UINavigationController *navcontroller = [[UINavigationController alloc]initWithRootViewController:webPageVC];
+    [self.window.rootViewController presentViewController:navcontroller animated:YES completion:nil];
 }
 - (void)getBeijingcity
 {
@@ -1912,6 +2002,7 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     NSArray *apptoolsArray=[dataDict objectForKey:@"apptools"];
     NSArray *expressArray=[dataDict objectForKey:@"express"];
     NSArray *assetsArray=[dataDict objectForKey:@"asset_types"];
+    NSArray *op_adArray=[dataDict objectForKey:@"opads"];
     NSFileManager *fileManager = [NSFileManager defaultManager];
 
     
@@ -1965,8 +2056,12 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
 
         
     }
+    Service_hallViewController*preLoadingVC=[[Service_hallViewController alloc]init];
+    [preLoadingVC preLoadingImage:apptoolsArray];
     //应用中心数据更新
     for (int i=0; i<apptoolsArray.count; i++) {
+        
+        
         NSDictionary *dict=apptoolsArray[i];
         
         sqlite3_stmt *dbps;
@@ -2071,6 +2166,44 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
         }
 
     }
+    Op_ad_hallViewController *op_adLoadingVC=[[Op_ad_hallViewController alloc]init];
+    [op_adLoadingVC preLoadingImage:op_adArray];
+    //服务大厅数据更新
+    for (int i=0; i<op_adArray.count; i++) {
+        NSDictionary *dict=op_adArray[i];
+        sqlite3_stmt *dbps;
+        
+        NSString *searchSQL = [NSString stringWithFormat:@"SELECT * from op_ad where id = %@",[dict objectForKey:@"id"]];
+        
+        const char *searchtUTF8 = [searchSQL UTF8String];
+        
+        if (sqlite3_prepare_v2(simi, searchtUTF8, -1, &dbps, nil) != SQLITE_OK) {
+            NSLog(@"数据查询失败");
+            
+        }else{
+            NSLog(@"查询成功");
+            
+            if (sqlite3_step(dbps) == SQLITE_ROW) { //查询有这个小区
+                char *abc = (char *)sqlite3_column_text(dbps, 10);
+                NSString *str = [[NSString alloc]initWithCString:abc encoding:NSUTF8StringEncoding];
+                NSLog(@"str : %@",str);
+                NSString *updateSQL = [NSString stringWithFormat:@"update op_ad set id=%i ,no=%i ,title='%@', ad_type=%i, service_type_ids=%i, img_url='%@', goto_type='%@', goto_url='%@', add_time=%i, update_time=%i, enable=%i where id = %i",[[dict objectForKey:@"id"]intValue],[[dict objectForKey:@"no"]intValue],[dict objectForKey:@"title"],[[dict objectForKey:@"ad_type"]intValue],[[dict objectForKey:@"service_type_ids"]intValue],[dict objectForKey:@"img_url"],[dict objectForKey:@"goto_type"],[dict objectForKey:@"goto_url"],[[dict objectForKey:@"add_time"]intValue] ,[[dict objectForKey:@"update_time"]intValue],[[dict objectForKey:@"enable"]intValue],[[dict objectForKey:@"id"]intValue]];
+                NSLog(@"SQL语句:%@",updateSQL);
+                [self updatetableName:updateSQL];
+                continue;
+            }else{
+                NSString *insertSQL=[NSString stringWithFormat:@"INSERT INTO op_ad (id ,no ,title, ad_type, service_type_ids, img_url, goto_type, goto_url, add_time, update_time, enable) VALUES (%i, %i, '%@',%i,%i,'%@','%@','%@',%i,%i,%i)",[[dict objectForKey:@"id"]intValue],[[dict objectForKey:@"no"]intValue],[dict objectForKey:@"title"],[[dict objectForKey:@"ad_type"]intValue],[[dict objectForKey:@"service_type_ids"]intValue],[dict objectForKey:@"img_url"],[dict objectForKey:@"goto_type"],[dict objectForKey:@"goto_url"],[[dict objectForKey:@"add_time"]intValue],[[dict objectForKey:@"update_time"]intValue],[[dict objectForKey:@"enable"]intValue]];
+                
+                [self insertIntoTableName:insertSQL];  ////查询没有这个小区
+            }
+            
+            //        [self deleteTableName:@"cell" cellId:1];
+            
+            
+        }
+        
+    }
+
     sqlite3_close(simi);
 }
 

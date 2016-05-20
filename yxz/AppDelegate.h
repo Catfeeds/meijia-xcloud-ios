@@ -17,6 +17,14 @@
 #import "HuanxinBase.h"
 
 #import "GeTuiSdk.h"
+#import <SystemConfiguration/CaptiveNetwork.h>
+typedef enum {
+    NetWorkType_Nones = 0,
+    NetWorkType_WIFIs,
+    NetWorkType_2Gs,
+    NetWorkType_3Gs,
+    NetWorkType_4Gs,
+} NetWorkTypes;
 @protocol appDelegate <NSObject>
 
 - (void)LoginSuccessNavPush;

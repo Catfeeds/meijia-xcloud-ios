@@ -9,5 +9,5 @@
 #import "FatherViewController.h"
 
 @interface WaterListViewController : FatherViewController<UITableViewDataSource,UITableViewDelegate,MJRefreshBaseViewDelegate>
-
+@property(nonatomic ,strong)NSString *titleName;
 @end

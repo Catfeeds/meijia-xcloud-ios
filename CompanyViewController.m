@@ -15,11 +15,13 @@
     UITableView *myTableView;
     NSMutableArray *imageArray;
     UIView *qrCodeView;
+    UIButton *sureBut;
 }
 @end
 @implementation CompanyViewController
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     
     self.navlabel.text=_nameString;
     imageArray=[[NSMutableArray alloc]init];
@@ -32,13 +34,34 @@
     _idArray=[[NSMutableArray alloc]init];
     [_idArray addObjectsFromArray:_dataIdArray];
     _theNumber=(int)_nameArray.count;
+    if (_poplIDS==10000) {
+        sureBut=[[UIButton alloc]initWithFrame:FRAME(WIDTH-60, 27, 50, 30)];
+        [sureBut setTitle:@"确定" forState:UIControlStateNormal];
+        
+        if (_nameArray.count>0) {
+            sureBut.backgroundColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
+            sureBut.titleLabel.textColor=[UIColor whiteColor];
+            sureBut.enabled=TRUE;
+        }else{
+            sureBut.backgroundColor=[UIColor colorWithRed:232/255.0f green:232/255.0f blue:232/255.0f alpha:1];
+            sureBut.titleLabel.textColor=[UIColor colorWithRed:170/255.0f green:170/255.0f blue:170/255.0f alpha:1];
+            sureBut.enabled=FALSE;
+        }
+        
+        sureBut.clipsToBounds=YES;
+        sureBut.layer.cornerRadius=5;
+        [sureBut addTarget:self action:@selector(sureButAction) forControlEvents:UIControlEventTouchUpInside];
+        [self.view addSubview:sureBut];
+       
+    }else{
+        UIButton *reBut=[[UIButton alloc]initWithFrame:FRAME(WIDTH-50, 20, 50, 44)];
+        [reBut addTarget:self action:@selector(reButAction) forControlEvents:UIControlEventTouchUpInside];
+        [self.view addSubview:reBut];
+        UIImageView *butImage=[[UIImageView alloc]initWithFrame:FRAME(13, 10, 24, 24)];
+        butImage.image=[UIImage imageNamed:@"company_rqi"];
+        [reBut addSubview:butImage];
+    }
     
-    UIButton *reBut=[[UIButton alloc]initWithFrame:FRAME(WIDTH-50, 20, 50, 44)];
-    [reBut addTarget:self action:@selector(reButAction) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:reBut];
-    UIImageView *butImage=[[UIImageView alloc]initWithFrame:FRAME(13, 10, 24, 24)];
-    butImage.image=[UIImage imageNamed:@"company_rqi"];
-    [reBut addSubview:butImage];
     ISLoginManager *_manager = [ISLoginManager shareManager];
     NSLog(@"有值么%@",_manager.telephone);
     DownloadManager *_download = [[DownloadManager alloc]init];
@@ -48,6 +71,11 @@
     DownloadManager *download = [[DownloadManager alloc]init];
     [download requestWithUrl:WAGE_ORCODE dict:_dict view:self.view delegate:self finishedSEL:@selector(DetailsSuccess:) isPost:NO failedSEL:@selector(DetailsFailure:)];
     // Do any additional setup after loading the view.
+}
+-(void)sureButAction
+{
+    [self.navigationController popViewControllerAnimated:YES];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SUREBUT" object:nil];
 }
 -(void)DetailsSuccess:(id)sender
 {
@@ -267,6 +295,15 @@
         }
         checkboxImageView.image = image;
         [myTableView reloadData];
+    }
+    if (_nameArray.count>0) {
+        sureBut.backgroundColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
+        sureBut.titleLabel.textColor=[UIColor whiteColor];
+        sureBut.enabled=TRUE;
+    }else{
+        sureBut.backgroundColor=[UIColor colorWithRed:232/255.0f green:232/255.0f blue:232/255.0f alpha:1];
+        sureBut.titleLabel.textColor=[UIColor colorWithRed:170/255.0f green:170/255.0f blue:170/255.0f alpha:1];
+        sureBut.enabled=FALSE;
     }
 }
 - (void)didReceiveMemoryWarning {

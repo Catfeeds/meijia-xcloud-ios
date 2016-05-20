@@ -25,7 +25,7 @@
         
         UILabel *_labal2 = [[UILabel alloc]initWithFrame:FRAME(18, 34, 60, 11)];
         _labal2.font = MYFONT(10);
-        _labal2.text = @"所需积分:";
+        _labal2.text = @"所需金币:";
         _labal2.textColor = COLOR_VAULE(178.0);
         [self addSubview:_labal2];
 

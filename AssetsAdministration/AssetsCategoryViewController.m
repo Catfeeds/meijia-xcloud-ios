@@ -29,7 +29,9 @@
     [_backBtn addSubview:img];
 
     dicArray=[[NSMutableArray alloc]init];
-    NSString *path = [[[NSBundle mainBundle] bundlePath] stringByAppendingPathComponent:@"simi.db"];
+    NSString *pathDocuments = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    NSString *path = [NSString stringWithFormat:@"%@/simi.db", pathDocuments];
+   
     sqlite3_open([path UTF8String], &xcompany_setting);
     
     sqlite3_stmt *statement;

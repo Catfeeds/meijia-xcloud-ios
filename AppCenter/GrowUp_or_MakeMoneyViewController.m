@@ -18,6 +18,9 @@
     BOOL _hasMore;
     NSInteger   page;
     NSString *senderStr;
+    
+    NSMutableArray *idArray;
+    NSMutableArray *statusArray;
 }
 @end
 
@@ -33,6 +36,8 @@
     img.image = [UIImage imageNamed:@"iconfont-p-back"];
     [_backBtn addSubview:img];
     dataArray =[[NSMutableArray alloc]init];
+    idArray=[[NSMutableArray alloc]init];
+    statusArray=[[NSMutableArray alloc]init];
     page=1;
     myTableView=[[UITableView alloc]initWithFrame:FRAME(0, 108, WIDTH, HEIGHT-108)];
     myTableView.dataSource=self;
@@ -50,6 +55,7 @@
     _moreFooter.delegate = self;
     _moreFooter.scrollView = myTableView;
     [self PLJKLayout];
+    [self warceSetup];
     // Do any additional setup after loading the view.
 }
 #pragma mark 表格刷新相关
@@ -112,140 +118,163 @@
     //本底数据
     //    [_arrData addObjectsFromArray:[UIFont familyNames]];
     
-    [self PLJKLayout];
+    [self warceSetup];
     
     
     
 }
+-(void)warceSetup
+{
+    
+    ISLoginManager *_manager = [ISLoginManager shareManager];
+    DownloadManager*_download = [[DownloadManager alloc]init];
+    NSDictionary*_dict =@{@"app_type":@"xcloud",@"user_id":_manager.telephone};
+    NSLog(@"字典数据%@",_dict);
+    [_download requestWithUrl:WATER_SETUP dict:_dict view:self.view  delegate:self finishedSEL:@selector(logDowLoadFinish:) isPost:NO failedSEL:@selector(DownFail:)];
+}
+
+#pragma mark 在沙盒路径下拷贝一份数据库  否则数据库是只读属性  不能修改
+- (NSString *)readyDatabase:(NSString *)dbName {
+    // First, test for existence.
+    BOOL success;
+    
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    //    NSError *error;
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString *writableDBPath = [documentsDirectory stringByAppendingPathComponent:dbName];
+    success = [fileManager fileExistsAtPath:writableDBPath];
+    
+    
+    // The writable database does not exist, so copy the default to the appropriate location.
+    
+    //    if (!success) {
+    //        NSString *defaultDBPaths = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:dbName];
+    //        success = [fileManager copyItemAtPath:defaultDBPaths toPath:writableDBPath error:&error];
+    //        if (!success) {
+    //            //            NSAssert1(0, @"Failed to create writable database file with message '%@'.", [error localizedDescription]);
+    //        }
+    //
+    //    }
+    NSLog(@"%@",writableDBPath);
+    AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication] delegate];
+    delegate.defaultDBPath=writableDBPath;
+    return writableDBPath;
+}
+
 #pragma mark 表格刷新相关
 -(void)PLJKLayout
 {
-    ISLoginManager *_manager = [ISLoginManager shareManager];
-    DownloadManager*_download = [[DownloadManager alloc]init];
-    //    NSString *pageStr=[NSString stringWithFormat:@"%ld",(long)page];
-    NSDictionary*_dict =@{@"app_type":@"xcloud",@"user_id":_manager.telephone};
-    NSLog(@"字典数据%@",_dict);
-    [_download requestWithUrl:WATER_CELL dict:_dict view:self.view  delegate:self finishedSEL:@selector(logDowLoadFinish:) isPost:NO failedSEL:@selector(DownFail:)];
+//    ISLoginManager *_manager = [ISLoginManager shareManager];
+//    DownloadManager*_download = [[DownloadManager alloc]init];
+//    //    NSString *pageStr=[NSString stringWithFormat:@"%ld",(long)page];
+//    NSDictionary*_dict =@{@"app_type":@"xcloud",@"user_id":_manager.telephone};
+//    NSLog(@"字典数据%@",_dict);
+//    [_download requestWithUrl:WATER_CELL dict:_dict view:self.view  delegate:self finishedSEL:@selector(logDowLoadFinish:) isPost:NO failedSEL:@selector(DownFail:)];
 
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    BOOL find = [fileManager fileExistsAtPath:[self readyDatabase:@"simi.db"]];
     
-//    NSString *path = [[[NSBundle mainBundle] bundlePath] stringByAppendingPathComponent:@"simi.db"];
+    if (find) {
+        if(sqlite3_open([[self readyDatabase:@"simi.db"] UTF8String], &app_toolsdb) != SQLITE_OK) {
+            sqlite3_close(app_toolsdb);
+            NSLog(@"open database fail");
+        }
+    }
 //    sqlite3_open([path UTF8String], &app_toolsdb);
-//    
-//    sqlite3_stmt *statement;
-//    NSString *sql = @"SELECT * FROM app_tools order by no";
-//    
-//    if (sqlite3_prepare_v2(app_toolsdb, [sql UTF8String], -1, &statement, nil) == SQLITE_OK)
-//    {
-//        while (sqlite3_step(statement) == SQLITE_ROW) {
-//            char *t_id = (char *)sqlite3_column_text(statement, 0);
-//            NSString *t_idStr = [[NSString alloc] initWithUTF8String:t_id];
-//            
-//            char *name = (char *)sqlite3_column_text(statement, 2);
-//            NSString *nameStr = [[NSString alloc] initWithUTF8String:name];
-//            
-//            char *logo = (char *)sqlite3_column_text(statement, 3);
-//            NSString *logo_Str = [[NSString alloc] initWithUTF8String:logo];
-//            
-//            char *app_type = (char *)sqlite3_column_text(statement, 4);
-//            NSString *app_typeStr = [[NSString alloc] initWithUTF8String:app_type];
-//            
-//            char *menu_type = (char *)sqlite3_column_text(statement, 5);
-//            NSString *menu_typeeStr = [[NSString alloc] initWithUTF8String:menu_type];
-//            
-//            char *open_type = (char *)sqlite3_column_text(statement, 6);
-//            NSString *open_typeStr = [[NSString alloc] initWithUTF8String:open_type];
-//            
-//            char *url = (char *)sqlite3_column_text(statement, 7);
-//            NSString *urlStr = [[NSString alloc] initWithUTF8String:url];
-//            
-//            char *action = (char *)sqlite3_column_text(statement, 8);
-//            NSString *actionStr = [[NSString alloc] initWithUTF8String:action];
-//            
-//            char *params = (char *)sqlite3_column_text(statement, 9);
-//            NSString *paramsStr = [[NSString alloc] initWithUTF8String:params];
-//            
-//            char *is_default = (char *)sqlite3_column_text(statement, 10);
-//            NSString *is_defaultStr = [[NSString alloc] initWithUTF8String:is_default];
-//            
-//            char *is_del = (char *)sqlite3_column_text(statement, 11);
-//            NSString *is_delStr = [[NSString alloc] initWithUTF8String:is_del];
-//            
-//            char *is_partner = (char *)sqlite3_column_text(statement, 12);
-//            NSString *is_partnerStr = [[NSString alloc] initWithUTF8String:is_partner];
-//            
-//            char *is_online = (char *)sqlite3_column_text(statement, 13);
-//            NSString *is_onlineStr = [[NSString alloc] initWithUTF8String:is_online];
-//            
-//            char *app_provider = (char *)sqlite3_column_text(statement, 14);
-//            NSString *app_providerStr = [[NSString alloc] initWithUTF8String:app_provider];
-//            
-//            char *app_describe = (char *)sqlite3_column_text(statement, 15);
-//            NSString *app_describeStr = [[NSString alloc] initWithUTF8String:app_describe];
-//            
-//            char *auth_url = (char *)sqlite3_column_text(statement, 16);
-//            NSString *auth_urlStr = [[NSString alloc] initWithUTF8String:auth_url];
-//            
-//            NSDictionary *dic=@{@"t_id":t_idStr,@"name":nameStr,@"logo":logo_Str,@"app_type":app_typeStr,@"menu_type":menu_typeeStr,@"open_type":open_typeStr,@"url":urlStr,@"action":actionStr,@"params":paramsStr,@"is_default":is_defaultStr,@"is_del":is_delStr,@"is_partner":is_partnerStr,@"is_online":is_onlineStr,@"app_provider":app_providerStr,@"app_describe":app_describeStr,@"auth_url":auth_urlStr};
-//            if ([dataArray containsObject:dic]) {
-//                
-//            }else{
-//                [dataArray addObject:dic];
-//            }
-//            
-//        }
-//        sqlite3_finalize(statement);
-//    }
+    
+    sqlite3_stmt *statement;
+    NSString *sql = @"SELECT * FROM app_tools where is_online = 0 order by no";
+    
+    if (sqlite3_prepare_v2(app_toolsdb, [sql UTF8String], -1, &statement, nil) == SQLITE_OK)
+    {
+        while (sqlite3_step(statement) == SQLITE_ROW) {
+            char *t_id = (char *)sqlite3_column_text(statement, 0);
+            NSString *t_idStr = [[NSString alloc] initWithUTF8String:t_id];
+            
+            char *name = (char *)sqlite3_column_text(statement, 2);
+            NSString *nameStr = [[NSString alloc] initWithUTF8String:name];
+            
+            char *logo = (char *)sqlite3_column_text(statement, 3);
+            NSString *logo_Str = [[NSString alloc] initWithUTF8String:logo];
+            
+            char *app_type = (char *)sqlite3_column_text(statement, 4);
+            NSString *app_typeStr = [[NSString alloc] initWithUTF8String:app_type];
+            
+            char *menu_type = (char *)sqlite3_column_text(statement, 5);
+            NSString *menu_typeeStr = [[NSString alloc] initWithUTF8String:menu_type];
+            
+            char *open_type = (char *)sqlite3_column_text(statement, 6);
+            NSString *open_typeStr = [[NSString alloc] initWithUTF8String:open_type];
+            
+            char *url = (char *)sqlite3_column_text(statement, 7);
+            NSString *urlStr = [[NSString alloc] initWithUTF8String:url];
+            
+            char *action = (char *)sqlite3_column_text(statement, 8);
+            NSString *actionStr = [[NSString alloc] initWithUTF8String:action];
+            
+            char *params = (char *)sqlite3_column_text(statement, 9);
+            NSString *paramsStr = [[NSString alloc] initWithUTF8String:params];
+            
+            char *is_default = (char *)sqlite3_column_text(statement, 10);
+            NSString *is_defaultStr = [[NSString alloc] initWithUTF8String:is_default];
+            
+            char *is_del = (char *)sqlite3_column_text(statement, 11);
+            NSString *is_delStr = [[NSString alloc] initWithUTF8String:is_del];
+            
+            char *is_partner = (char *)sqlite3_column_text(statement, 12);
+            NSString *is_partnerStr = [[NSString alloc] initWithUTF8String:is_partner];
+            
+            char *is_online = (char *)sqlite3_column_text(statement, 13);
+            NSString *is_onlineStr = [[NSString alloc] initWithUTF8String:is_online];
+            
+            char *app_provider = (char *)sqlite3_column_text(statement, 14);
+            NSString *app_providerStr = [[NSString alloc] initWithUTF8String:app_provider];
+            
+            char *app_describe = (char *)sqlite3_column_text(statement, 15);
+            NSString *app_describeStr = [[NSString alloc] initWithUTF8String:app_describe];
+            
+            char *auth_url = (char *)sqlite3_column_text(statement, 16);
+            NSString *auth_urlStr = [[NSString alloc] initWithUTF8String:auth_url];
+            
+            NSDictionary *dic=@{@"t_id":t_idStr,@"name":nameStr,@"logo":logo_Str,@"app_type":app_typeStr,@"menu_type":menu_typeeStr,@"open_type":open_typeStr,@"url":urlStr,@"action":actionStr,@"params":paramsStr,@"is_default":is_defaultStr,@"is_del":is_delStr,@"is_partner":is_partnerStr,@"is_online":is_onlineStr,@"app_provider":app_providerStr,@"app_describe":app_describeStr,@"auth_url":auth_urlStr};
+            if ([dataArray containsObject:dic]) {
+                
+            }else{
+                NSString *string=[NSString stringWithFormat:@"%@",[dic objectForKey:@"menu_type"]];
+                if ([string isEqualToString:@"d"]) {
+                    [dataArray addObject:dic];
+                }
+            }
+            
+        }
+        sqlite3_finalize(statement);
+    }
 
 
 }
 -(void)logDowLoadFinish:(id)sender
 {
     
+    NSLog(@"数据信息:%@",sender);
     senderStr=[NSString stringWithFormat:@"%@",[sender objectForKey:@"data"]];
     if (senderStr==nil||senderStr==NULL||[senderStr isEqualToString:@"(\n)"]||[senderStr length]==0) {
         [_refreshHeader performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
         [_moreFooter performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
         
     }else{
+        [idArray removeAllObjects];
+        [statusArray removeAllObjects];
         NSArray *array=[sender objectForKey:@"data"];
-        if (array.count<10*page) {
-            _hasMore=YES;
-        }else{
-            _hasMore=NO;
+        for (int i=0; i<array.count; i++) {
+            NSDictionary *dict=array[i];
+            NSString * tid=[NSString stringWithFormat:@"%@",[dict objectForKey:@"t_id"]];
+            [idArray addObject:tid];
+            NSString *statusStr=[NSString stringWithFormat:@"%@",[dict objectForKey:@"status"]];
+            NSDictionary *dic=@{@"t_id":tid,@"status":statusStr};
+            [statusArray addObject:dic];
         }
-        if (page==1) {
-            [dataArray removeAllObjects];
-            for (int i=0; i<array.count; i++) {
-                NSDictionary *dic=array[i];
-                NSString *menu_type=[NSString stringWithFormat:@"%@",[dic objectForKey:@"menu_type"]];
-                if ([menu_type isEqualToString:@"d"]) {
-                    [dataArray addObject:array[i]];
-                }
-            }
-            
-        }else{
-            for (int i=0; i<array.count; i++) {
-                NSDictionary *dic=array[i];
-                NSString *menu_type=[NSString stringWithFormat:@"%@",[dic objectForKey:@"menu_type"]];
-                if ([menu_type isEqualToString:@"d"]) {
-                    if ([dataArray containsObject:array[i]]) {
-                        
-                    }else{
-                        
-                        [dataArray addObject:array[i]];
-                    }
-                }
-                
-                
-            }
-        }
-        
     }
-    if (dataArray.count==0) {
-        [_refreshHeader performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
-        [_moreFooter performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
-    }
-    NSLog(@"成长与提升数据:%@",dataArray);
     [myTableView reloadData];
 }
 -(void)DownFail:(id)sender
@@ -315,10 +344,94 @@
     //    [app_providerLab setNumberOfLines:1];
     //    [app_providerLab sizeToFit];
     [cell addSubview:app_providerLab];
-    
-    NSString *statusStr=[NSString stringWithFormat:@"%@",[dataDic objectForKey:@"status"]];
     UIButton *addButton=[[UIButton alloc]initWithFrame:FRAME(WIDTH-55, (80-25)/2, 45, 25)];
-    if (statusStr==nil||statusStr==NULL||[statusStr isEqualToString:@"<null>"]) {
+    if (idArray.count!=0) {
+        NSString *idStr=[dataDic objectForKey:@"t_id"];
+        if ([idArray containsObject:idStr]) {
+            for (int i=0; i<statusArray.count; i++) {
+                NSDictionary *dict=statusArray[i];
+                NSString *statusidStr=[dataDic objectForKey:@"t_id"];
+                if ([statusidStr isEqualToString:idStr]) {
+                    NSString *statusStr=[NSString stringWithFormat:@"%@",[dict objectForKey:@"status"]];
+                    if ([statusStr isEqualToString:@"0"]) {
+                        
+                    }else{
+                        int statusID=[[dict objectForKey:@"status"]intValue];
+                        if (statusID==0) {
+                            addButton.enabled=TRUE;
+                            [addButton.layer setMasksToBounds:YES];//设置按钮的圆角半径不会被遮挡
+                            [addButton.layer setCornerRadius:5];
+                            [addButton.layer setBorderWidth:1];//设置边界的宽度
+                            //设置按钮的边界颜色
+                            CGColorSpaceRef colorSpaceRef = CGColorSpaceCreateDeviceRGB();
+                            CGColorRef color = CGColorCreate(colorSpaceRef, (CGFloat[]){1,0,0,1});
+                            [addButton.layer setBorderColor:color];
+                            [addButton setTitle:@"添加" forState:UIControlStateNormal];
+                            [addButton setTitleColor:[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1] forState:UIControlStateNormal];
+                        }else{
+                            int is_delInt=[[dataDic objectForKey:@"is_del"]intValue];
+                            if (is_delInt==0) {
+                                [addButton.layer setMasksToBounds:YES];//设置按钮的圆角半径不会被遮挡
+                                [addButton.layer setCornerRadius:5];
+                                [addButton.layer setBorderWidth:1];//设置边界的宽度
+                                //设置按钮的边界颜色
+                                CGColorSpaceRef colorSpaceRef = CGColorSpaceCreateDeviceRGB();
+                                CGColorRef color = CGColorCreate(colorSpaceRef, (CGFloat[]){0.6,0.6,0.6,1});
+                                [addButton.layer setBorderColor:color];
+                                
+                                [addButton setTitle:@"取消" forState:UIControlStateNormal];
+                                [addButton setTitleColor:[UIColor colorWithRed:150/255.0f green:150/255.0f blue:150/255.0f alpha:1] forState:UIControlStateNormal];
+                                addButton.enabled=TRUE;
+                            }else{
+                                [addButton setTitle:@"已添加" forState:UIControlStateNormal];
+                                [addButton setTitleColor:[UIColor colorWithRed:232/255.0f green:232/255.0f blue:232/255.0f alpha:1] forState:UIControlStateNormal];
+                                addButton.enabled=FALSE;
+                            }
+                            
+                        }
+                    }
+                    
+                }
+                
+            }
+        }else{
+            int is_defaultInt=[[dataDic objectForKey:@"is_default"]intValue];
+            if (is_defaultInt==0) {
+                addButton.enabled=TRUE;
+                [addButton.layer setMasksToBounds:YES];//设置按钮的圆角半径不会被遮挡
+                [addButton.layer setCornerRadius:5];
+                [addButton.layer setBorderWidth:1];//设置边界的宽度
+                //设置按钮的边界颜色
+                CGColorSpaceRef colorSpaceRef = CGColorSpaceCreateDeviceRGB();
+                CGColorRef color = CGColorCreate(colorSpaceRef, (CGFloat[]){1,0,0,1});
+                [addButton.layer setBorderColor:color];
+                [addButton setTitle:@"添加" forState:UIControlStateNormal];
+                [addButton setTitleColor:[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1] forState:UIControlStateNormal];
+            }else{
+                int is_delInt=[[dataDic objectForKey:@"is_del"]intValue];
+                if (is_delInt==0) {
+                    [addButton.layer setMasksToBounds:YES];//设置按钮的圆角半径不会被遮挡
+                    [addButton.layer setCornerRadius:5];
+                    [addButton.layer setBorderWidth:1];//设置边界的宽度
+                    //设置按钮的边界颜色
+                    CGColorSpaceRef colorSpaceRef = CGColorSpaceCreateDeviceRGB();
+                    CGColorRef color = CGColorCreate(colorSpaceRef, (CGFloat[]){0.6,0.6,0.6,1});
+                    [addButton.layer setBorderColor:color];
+                    
+                    [addButton setTitle:@"取消" forState:UIControlStateNormal];
+                    [addButton setTitleColor:[UIColor colorWithRed:150/255.0f green:150/255.0f blue:150/255.0f alpha:1] forState:UIControlStateNormal];
+                    addButton.enabled=TRUE;
+                }else{
+                    [addButton setTitle:@"已添加" forState:UIControlStateNormal];
+                    [addButton setTitleColor:[UIColor colorWithRed:232/255.0f green:232/255.0f blue:232/255.0f alpha:1] forState:UIControlStateNormal];
+                    addButton.enabled=FALSE;
+                }
+                
+            }
+            
+        }
+        
+    }else{
         int is_defaultInt=[[dataDic objectForKey:@"is_default"]intValue];
         if (is_defaultInt==0) {
             addButton.enabled=TRUE;
@@ -352,40 +465,7 @@
             }
             
         }
-    }else{
-        int statusID=[[dataDic objectForKey:@"status"]intValue];
-        if (statusID==0) {
-            addButton.enabled=TRUE;
-            [addButton.layer setMasksToBounds:YES];//设置按钮的圆角半径不会被遮挡
-            [addButton.layer setCornerRadius:5];
-            [addButton.layer setBorderWidth:1];//设置边界的宽度
-            //设置按钮的边界颜色
-            CGColorSpaceRef colorSpaceRef = CGColorSpaceCreateDeviceRGB();
-            CGColorRef color = CGColorCreate(colorSpaceRef, (CGFloat[]){1,0,0,1});
-            [addButton.layer setBorderColor:color];
-            [addButton setTitle:@"添加" forState:UIControlStateNormal];
-            [addButton setTitleColor:[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1] forState:UIControlStateNormal];
-        }else{
-            int is_delInt=[[dataDic objectForKey:@"is_del"]intValue];
-            if (is_delInt==0) {
-                [addButton.layer setMasksToBounds:YES];//设置按钮的圆角半径不会被遮挡
-                [addButton.layer setCornerRadius:5];
-                [addButton.layer setBorderWidth:1];//设置边界的宽度
-                //设置按钮的边界颜色
-                CGColorSpaceRef colorSpaceRef = CGColorSpaceCreateDeviceRGB();
-                CGColorRef color = CGColorCreate(colorSpaceRef, (CGFloat[]){0.6,0.6,0.6,1});
-                [addButton.layer setBorderColor:color];
-                
-                [addButton setTitle:@"取消" forState:UIControlStateNormal];
-                [addButton setTitleColor:[UIColor colorWithRed:150/255.0f green:150/255.0f blue:150/255.0f alpha:1] forState:UIControlStateNormal];
-                addButton.enabled=TRUE;
-            }else{
-                [addButton setTitle:@"已添加" forState:UIControlStateNormal];
-                [addButton setTitleColor:[UIColor colorWithRed:232/255.0f green:232/255.0f blue:232/255.0f alpha:1] forState:UIControlStateNormal];
-                addButton.enabled=FALSE;
-            }
-            
-        }
+        
     }
     
     addButton.titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:13];
@@ -409,13 +489,27 @@
     NSDictionary *dic=dataArray[button.tag];
     NSString *t_idStr=[NSString stringWithFormat:@"%@",[dic objectForKey:@"t_id"]];
     NSString *statusStr=[NSString stringWithFormat:@"%@",[dic objectForKey:@"status"]];
-    if (statusStr==nil||statusStr==NULL||[statusStr isEqualToString:@"<null>"]) {
-        ISLoginManager *_manager = [ISLoginManager shareManager];
-        DownloadManager*_download = [[DownloadManager alloc]init];
-        //    NSString *pageStr=[NSString stringWithFormat:@"%ld",(long)page];
-        NSDictionary*_dict =@{@"user_id":_manager.telephone,@"t_id":t_idStr,@"status":@"1"};
-        NSLog(@"字典数据%@",_dict);
-        [_download requestWithUrl:USER_NEWLY_ADDED dict:_dict view:self.view  delegate:self finishedSEL:@selector(AddedSuccess:) isPost:YES failedSEL:@selector(AddedFail:)];
+    if ([idArray containsObject:t_idStr]) {
+        int is_defaultInt=[[dic objectForKey:@"is_default"]intValue];
+        if (is_defaultInt==0) {
+            ISLoginManager *_manager = [ISLoginManager shareManager];
+            DownloadManager*_download = [[DownloadManager alloc]init];
+            //    NSString *pageStr=[NSString stringWithFormat:@"%ld",(long)page];
+            NSDictionary*_dict =@{@"user_id":_manager.telephone,@"t_id":t_idStr,@"status":@"0"};
+            NSLog(@"字典数据%@",_dict);
+            [_download requestWithUrl:USER_NEWLY_ADDED dict:_dict view:self.view  delegate:self finishedSEL:@selector(AddedSuccess:) isPost:YES failedSEL:@selector(AddedFail:)];
+        }else{
+            int is_delInt=[[dic objectForKey:@"is_del"]intValue];
+            if (is_delInt==0) {
+                ISLoginManager *_manager = [ISLoginManager shareManager];
+                DownloadManager*_download = [[DownloadManager alloc]init];
+                //    NSString *pageStr=[NSString stringWithFormat:@"%ld",(long)page];
+                NSDictionary*_dict =@{@"user_id":_manager.telephone,@"t_id":t_idStr,@"status":@"1"};
+                NSLog(@"字典数据%@",_dict);
+                [_download requestWithUrl:USER_NEWLY_ADDED dict:_dict view:self.view  delegate:self finishedSEL:@selector(AddedSuccess:) isPost:YES failedSEL:@selector(AddedFail:)];
+            }
+        }
+        
         
     }else{
         int statusID=[[dic objectForKey:@"status"]intValue];
@@ -439,7 +533,7 @@
 }
 -(void)AddedSuccess:(id)sourceData
 {
-    [self PLJKLayout];
+    [self warceSetup];
 }
 -(void)AddedFail:(id)sourceData
 {

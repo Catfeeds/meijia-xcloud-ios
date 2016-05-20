@@ -14,8 +14,9 @@
 {
     UICollectionViewFlowLayout *flowView;
     UIActivityIndicatorView *meView;
-    NSArray *dataSourceArray;
+    NSMutableArray *dataSourceArray;
     UILabel *alertLabel;
+    NSString *createPath;
 }
 @end
 
@@ -23,7 +24,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    dataSourceArray =[[NSMutableArray alloc]init];
     meView=[[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     meView.center = CGPointMake(WIDTH/2, HEIGHT/2);
     meView.color = [UIColor redColor];
@@ -36,7 +37,7 @@
     
     //    [_collectionView removeFromSuperview];
     if (_whoVCID==101) {
-        self.navlabel.text=@"服务大厅";
+        self.navlabel.text=@"找服务商";
         _collectionView=[[UICollectionView alloc]initWithFrame:FRAME(0, 64, WIDTH, HEIGHT-64)collectionViewLayout:flowView];
     }else{
         _collectionView=[[UICollectionView alloc]initWithFrame:FRAME(0, 0, WIDTH, HEIGHT-115)collectionViewLayout:flowView];
@@ -61,9 +62,63 @@
 }
 -(void)dataSourceLayout
 {
-    DownloadManager *_download = [[DownloadManager alloc]init];
-    NSDictionary *dict=@{@"channel_id":_channel_id};
-    [_download requestWithUrl:CHANNEL_CARD dict:dict view:self.view delegate:self finishedSEL:@selector(ChannelSuccess:) isPost:NO failedSEL:@selector(ChannelFailure:)];
+//    DownloadManager *_download = [[DownloadManager alloc]init];
+//    NSDictionary *dict=@{@"channel_id":_channel_id};
+//    [_download requestWithUrl:CHANNEL_CARD dict:dict view:self.view delegate:self finishedSEL:@selector(ChannelSuccess:) isPost:NO failedSEL:@selector(ChannelFailure:)];
+    
+    
+    NSString *pathDocuments = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    NSString *path = [NSString stringWithFormat:@"%@/simi.db", pathDocuments];
+    sqlite3_open([path UTF8String], &simi);
+    
+    sqlite3_stmt *statement;
+    NSString *sql =[NSString stringWithFormat:@"SELECT * FROM op_ad where ad_type=99 order by id"];
+    
+    if (sqlite3_prepare_v2(simi, [sql UTF8String], -1, &statement, nil) == SQLITE_OK) {
+        while (sqlite3_step(statement) == SQLITE_ROW) {
+            char *op_id = (char *)sqlite3_column_text(statement, 0);
+            NSString *op_idStr = [[NSString alloc] initWithUTF8String:op_id];
+            
+            char *title = (char *)sqlite3_column_text(statement, 2);
+            NSString *titleStr = [[NSString alloc] initWithUTF8String:title];
+            
+            char *ad_type = (char *)sqlite3_column_text(statement, 3);
+            NSString *add_typeStr = [[NSString alloc] initWithUTF8String:ad_type];
+            
+            char *add_time = (char *)sqlite3_column_text(statement, 8);
+            NSString *add_timeStr = [[NSString alloc] initWithUTF8String:add_time];
+            
+            char *enable = (char *)sqlite3_column_text(statement, 10);
+            NSString *enableStr = [[NSString alloc] initWithUTF8String:enable];
+            
+            char *goto_type = (char *)sqlite3_column_text(statement, 6);
+            NSString *goto_typeStr = [[NSString alloc] initWithUTF8String:goto_type];
+            
+            char *goto_url = (char *)sqlite3_column_text(statement, 7);
+            NSString *goto_urlStr = [[NSString alloc] initWithUTF8String:goto_url];
+            
+            char *img_url = (char *)sqlite3_column_text(statement, 5);
+            NSString *img_urlStr = [[NSString alloc] initWithUTF8String:img_url];
+            
+            char *no = (char *)sqlite3_column_text(statement, 1);
+            NSString *nolStr = [[NSString alloc] initWithUTF8String:no];
+            
+            char *service_type_ids = (char *)sqlite3_column_text(statement, 4);
+            NSString *service_type_idsStr = [[NSString alloc] initWithUTF8String:service_type_ids];
+            
+            char *update_time = (char *)sqlite3_column_text(statement, 9);
+            NSString *update_timeStr = [[NSString alloc] initWithUTF8String:update_time];
+            
+            NSDictionary *dic=@{@"ad_type":add_typeStr,@"add_time":add_timeStr,@"enable":enableStr,@"goto_type":goto_typeStr,@"goto_url":goto_urlStr,@"id":op_idStr,@"img_url":img_urlStr,@"no":nolStr,@"service_type_ids":service_type_idsStr,@"title":titleStr,@"update_time":update_timeStr};
+            
+            if ([dataSourceArray containsObject:dic]) {
+                
+            }else{
+                [dataSourceArray addObject:dic];
+            }
+        }
+        sqlite3_finalize(statement);
+    }
     
 }
 #pragma mark 获取频道列表成功返回方法
@@ -115,6 +170,48 @@
 {
     return 1;
 }
+
+#pragma mark - 获取图像路径
+- (NSString *)imageFilePath:(NSString *)imageUrl
+{
+    NSString *pathDocuments = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    createPath = [NSString stringWithFormat:@"%@/Servicr_HallImage", pathDocuments];
+    //    NSArray *file = [[[NSFileManager alloc] init] subpathsAtPath:createPath];
+    //    //NSLog(@"%d",[file count]);
+    //    NSLog(@"%@",file);
+    
+    NSFileManager * fileManager = [NSFileManager defaultManager];
+    if (![fileManager fileExistsAtPath:createPath]) {
+        
+        
+        [fileManager createDirectoryAtPath:createPath withIntermediateDirectories:YES attributes:nil error:nil];
+    }
+    
+    
+#pragma mark 拼接图像文件在沙盒中的路径,因为图像URL有"/",要在存入前替换掉,随意用"_"代替
+    //    NSString * imageName = [imageUrl stringByReplacingOccurrencesOfString:@"/" withString:@"_"];
+    NSString * imageFilePath = [createPath stringByAppendingPathComponent:imageUrl];
+    
+    
+    return imageFilePath;
+}
+#pragma mark - 加载本地图像
+- (UIImage *)loadLocalImage:(NSString *)imageUrl
+{
+    
+    // 获取图像路径
+    NSString * filePath = [self imageFilePath:imageUrl];
+    
+    
+    UIImage * image = [UIImage imageWithContentsOfFile:filePath];
+    
+    
+    if (image != nil) {
+        return image;
+    }
+    
+    return nil;
+}
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     NSString *identify=@"cell";//[NSString stringWithFormat:@"cell%ld%ld",(long)indexPath.section,(long)indexPath.row];
@@ -126,8 +223,16 @@
     }
     NSString *nameStr=[NSString stringWithFormat:@"%@",[dataDic objectForKey:@"title"]];
    
-    NSString *imageUrl=[NSString stringWithFormat:@"%@",[dataDic objectForKey:@"img_url"]];
-    [cell.lconImageView setImageWithURL:[NSURL URLWithString:imageUrl]placeholderImage:nil];
+   
+    NSString *imageUrl=[NSString stringWithFormat:@"op_ad_%@_%@",[dataDic objectForKey:@"id"],[dataDic objectForKey:@"update_time"]];
+    UIImage * image =[self loadLocalImage:imageUrl];
+    if (image==nil) {
+         NSString *imageUrls=[NSString stringWithFormat:@"%@",[dataDic objectForKey:@"img_url"]];
+        [cell.lconImageView setImageWithURL:[NSURL URLWithString:imageUrls]placeholderImage:nil];
+    }else{
+        cell.lconImageView.image=image;
+    }
+    
     cell.lconImageView.frame=FRAME((WIDTH/4-30)/2, 20, 30, 30);
     cell.nameLabel.text=nameStr;
     cell.nameLabel.font=[UIFont fontWithName:@"Heiti SC" size:13];

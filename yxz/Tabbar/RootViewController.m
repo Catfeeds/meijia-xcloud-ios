@@ -53,6 +53,8 @@
 #import "FatherViewController.h"
 #import "MyLogInViewController.h"
 #import "BlankViewController.h"
+
+#import "ExprViewController.h"
 @interface RootViewController ()<UIAlertViewDelegate, IChatManagerDelegate,UIAlertViewDelegate>
 {
     UIView *mainView;
@@ -85,6 +87,7 @@
     NSDictionary *coreDic;
     
     FatherViewController *fatherVc;
+    NSString *createPath;
 }
 @end
 #pragma mark - View lifecycle
@@ -195,7 +198,15 @@ MyselfViewController *thirdViewController;
     vc.vcIDS=1000;
     [[self getCurrentVC] presentViewController:vc animated:YES completion:nil];
 }
+-(void)imgTap:(NSNotification *)dataSource
+{
+    WebPageViewController *webPageVC=[[WebPageViewController alloc]init];
+    webPageVC.barIDS=100;
+    webPageVC.webURL=[NSString stringWithFormat:@"https://www.baidu.com"];
+    [self.navigationController pushViewController:webPageVC animated:YES];
+}
 - (void)viewDidLoad {
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(imgTap:) name:@"IMGTAPP" object:nil];
     fatherVc=[[FatherViewController alloc]init];
     NSDictionary *helpDic;
     
@@ -255,12 +266,12 @@ MyselfViewController *thirdViewController;
     
     mainView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SELF_VIEW_WIDTH, HEIGHT-49)];
     [self.view addSubview:mainView];
-        /**
-     对于那些当前暂时不需要显示的subview，
-     只通过addChildViewController把subViewController加进去；
-     需要显示时再调用transitionFromViewController方法。
-     将其添加进入底层的ViewController中。
-     **/
+    /**
+    对于那些当前暂时不需要显示的subview，
+    只通过addChildViewController把subViewController加进去；
+    需要显示时再调用transitionFromViewController方法。
+    将其添加进入底层的ViewController中。
+    **/
     
     
     
@@ -1061,6 +1072,49 @@ MyselfViewController *thirdViewController;
 {
     return 1;
 }
+#pragma mark - 获取图像路径
+- (NSString *)imageFilePath:(NSString *)imageUrl
+{
+    NSString *pathDocuments = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    createPath = [NSString stringWithFormat:@"%@/Servicr_HallImage", pathDocuments];
+    //    NSArray *file = [[[NSFileManager alloc] init] subpathsAtPath:createPath];
+    //    //NSLog(@"%d",[file count]);
+    //    NSLog(@"%@",file);
+
+    NSFileManager * fileManager = [NSFileManager defaultManager];
+    if (![fileManager fileExistsAtPath:createPath]) {
+        
+        
+        [fileManager createDirectoryAtPath:createPath withIntermediateDirectories:YES attributes:nil error:nil];
+    }
+    
+    
+#pragma mark 拼接图像文件在沙盒中的路径,因为图像URL有"/",要在存入前替换掉,随意用"_"代替
+    //    NSString * imageName = [imageUrl stringByReplacingOccurrencesOfString:@"/" withString:@"_"];
+    NSString * imageFilePath = [createPath stringByAppendingPathComponent:imageUrl];
+    
+    
+    return imageFilePath;
+}
+#pragma mark - 加载本地图像
+- (UIImage *)loadLocalImage:(NSString *)imageUrl
+{
+    
+    // 获取图像路径
+    NSString * filePath = [self imageFilePath:imageUrl];
+    
+    
+    UIImage * image = [UIImage imageWithContentsOfFile:filePath];
+    
+    
+    if (image != nil) {
+        return image;
+    }
+    
+    return nil;
+}
+
+
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     NSString *identify=@"cell";//[NSString stringWithFormat:@"cell%ld%ld",(long)indexPath.section,(long)indexPath.row];
@@ -1071,9 +1125,20 @@ MyselfViewController *thirdViewController;
         NSLog(@"无法创建CollectionViewCell时打印，自定义cell就不可能进来了");
     }
     NSString *nameStr=[NSString stringWithFormat:@"%@",[dataDic objectForKey:@"name"]];
+    if (indexPath.row==plusArray.count-1) {
+         NSString *imageUrl=[NSString stringWithFormat:@"%@",[dataDic objectForKey:@"logo"]];
+        [cell.lconImageView setImageWithURL:[NSURL URLWithString:imageUrl]placeholderImage:nil];
+    }else{
+        NSString *imageUrl=[NSString stringWithFormat:@"apptools_%@_%@",[dataDic objectForKey:@"t_id"],[dataDic objectForKey:@"update_time"]];
+        UIImage * image =[self loadLocalImage:imageUrl];
+        if (image==nil) {
+            cell.lconImageView.image=[UIImage imageNamed:imageUrl];
+        }else{
+            cell.lconImageView.image=image;
+        }
+    }
     
-    NSString *imageUrl=[NSString stringWithFormat:@"%@",[dataDic objectForKey:@"logo"]];
-    [cell.lconImageView setImageWithURL:[NSURL URLWithString:imageUrl]placeholderImage:nil];
+    
     
     cell.lconImageView.frame=FRAME((WIDTH/4-50)/2, 10, 50, 50);
     cell.lconImageView.layer.cornerRadius=cell.lconImageView.frame.size.width/2;
@@ -1123,6 +1188,7 @@ MyselfViewController *thirdViewController;
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *dic=plusArray[indexPath.row];
+    NSString *nameStr=[NSString stringWithFormat:@"%@",[dic objectForKey:@"name"]];
     NSLog(@"%ld",(long)indexPath.row);
     NSDictionary *helpDic;
     NSString *category=[NSString stringWithFormat:@"%@",[dic objectForKey:@"open_type"]];
@@ -1132,6 +1198,7 @@ MyselfViewController *thirdViewController;
         if ([action isEqualToString:@"alarm"]) {
             if ([params isEqualToString:@"add"]) {
                 MeetingViewController *meetVC=[[MeetingViewController alloc]init];
+                meetVC.titleName=nameStr;
                 meetVC.vcID=1003;
                 [self.navigationController pushViewController:meetVC animated:YES];
             }else if ([params isEqualToString:@"list"]){
@@ -1149,6 +1216,7 @@ MyselfViewController *thirdViewController;
         }else if ([action isEqualToString:@"meeting"]){
             if ([params isEqualToString:@"add"]) {
                 MeetingViewController *meetVC=[[MeetingViewController alloc]init];
+                meetVC.titleName=nameStr;
                 meetVC.vcID=1001;
                 [self.navigationController pushViewController:meetVC animated:YES];
             }else if ([params isEqualToString:@"list"]){
@@ -1166,6 +1234,7 @@ MyselfViewController *thirdViewController;
         }else if ([action isEqualToString:@"notice"]){
             if ([params isEqualToString:@"add"]) {
                 MeetingViewController *meetVC=[[MeetingViewController alloc]init];
+                meetVC.titleName=nameStr;
                 meetVC.vcID=1002;
                 [self.navigationController pushViewController:meetVC animated:YES];
             }else if ([params isEqualToString:@"list"]){
@@ -1183,6 +1252,7 @@ MyselfViewController *thirdViewController;
         }else if ([action isEqualToString:@"interview"]){
             if ([params isEqualToString:@"add"]) {
                 MeetingViewController *meetVC=[[MeetingViewController alloc]init];
+                meetVC.titleName=nameStr;
                 meetVC.vcID=1004;
                 [self.navigationController pushViewController:meetVC animated:YES];
             }else if ([params isEqualToString:@"list"]){
@@ -1200,6 +1270,7 @@ MyselfViewController *thirdViewController;
         }else if ([action isEqualToString:@"trip"]){
             if ([params isEqualToString:@"add"]) {
                 BookingViewController *bookVC=[[BookingViewController alloc]init];
+                bookVC.titleName=nameStr;
                 [self.navigationController pushViewController:bookVC animated:YES];
             }else if ([params isEqualToString:@"list"]){
                 helpDic=@{@"action":@"trip"};
@@ -1216,6 +1287,7 @@ MyselfViewController *thirdViewController;
         }else if ([action isEqualToString:@"checkin"]){
             if ([params isEqualToString:@"add"]) {
                 AttendanceViewController *userVC=[[AttendanceViewController alloc]init];
+                userVC.titleName=nameStr;
                 userVC.tyPeStr=action;
                 AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication] delegate];
                 NSString *has_company=[NSString stringWithFormat:@"%@",[delegate.globalDic objectForKey:@"has_company"]];
@@ -1242,6 +1314,7 @@ MyselfViewController *thirdViewController;
         }else if ([action isEqualToString:@"leave"]){
             if ([params isEqualToString:@"add"]) {
                 ApplyForLeaveViewController *applyVC=[[ApplyForLeaveViewController alloc]init];
+                applyVC.titleName=nameStr;
                 applyVC.tyPeStr=action;
                 applyVC.colorid=100;
                 [self.navigationController pushViewController:applyVC animated:YES];
@@ -1249,6 +1322,7 @@ MyselfViewController *thirdViewController;
                 helpDic=@{@"action":@"leave_pass"};
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"HELP" object:helpDic];
                 LeaveListViewController *leaveListVC=[[LeaveListViewController alloc]init];
+                leaveListVC.titleName=nameStr;
                 leaveListVC.tyPeStr=action;
                 [self.navigationController pushViewController:leaveListVC animated:YES];
             }
@@ -1256,6 +1330,7 @@ MyselfViewController *thirdViewController;
         }else if ([action isEqualToString:@"feed_add"]){
             if ([params isEqualToString:@"add"]) {
                 UpLoadViewController *vcd=[[UpLoadViewController alloc]init];
+                
                 [self.navigationController pushViewController:vcd animated:YES];
             }else if ([params isEqualToString:@"list"]){
                 helpDic=@{@"action":@"feed_add"};
@@ -1271,6 +1346,7 @@ MyselfViewController *thirdViewController;
                 
             }else if ([params isEqualToString:@"list"]){
                 WaterListViewController *plantsVc=[[WaterListViewController alloc]init];
+                plantsVc.titleName=nameStr;
                 plantsVc.tyPeStr=action;
                 [self.navigationController pushViewController:plantsVc animated:YES];
             }
@@ -1279,6 +1355,7 @@ MyselfViewController *thirdViewController;
                 
             }else if ([params isEqualToString:@"list"]){
                 WasteRecoveryViewController *plantsVc=[[WasteRecoveryViewController alloc]init];
+                plantsVc.titleName=nameStr;
                 plantsVc.wasteID=100;
                 plantsVc.tyPeStr=action;
                 [self.navigationController pushViewController:plantsVc animated:YES];
@@ -1288,6 +1365,7 @@ MyselfViewController *thirdViewController;
                 
             }else if ([params isEqualToString:@"list"]){
                 WasteRecoveryViewController *plantsVc=[[WasteRecoveryViewController alloc]init];
+                plantsVc.titleName=nameStr;
                 plantsVc.tyPeStr=action;
                 plantsVc.wasteID=101;
                 [self.navigationController pushViewController:plantsVc animated:YES];
@@ -1298,6 +1376,7 @@ MyselfViewController *thirdViewController;
             }else if ([params isEqualToString:@"list"]){
                 WasteRecoveryViewController *plantsVc=[[WasteRecoveryViewController alloc]init];
                 plantsVc.tyPeStr=action;
+                plantsVc.titleName=nameStr;
                 plantsVc.wasteID=102;
                 [self.navigationController pushViewController:plantsVc animated:YES];
             }
@@ -1306,17 +1385,26 @@ MyselfViewController *thirdViewController;
                 
             }else if ([params isEqualToString:@"list"]){
                 WasteRecoveryViewController *plantsVc=[[WasteRecoveryViewController alloc]init];
+                plantsVc.titleName=nameStr;
                 plantsVc.tyPeStr=action;
                 plantsVc.wasteID=103;
                 [self.navigationController pushViewController:plantsVc animated:YES];
             }
         }else if([action isEqualToString:@"asset"]){
             AssetsAdministrationViewController *plantsVc=[[AssetsAdministrationViewController alloc]init];
+            plantsVc.titleName=nameStr;
+            plantsVc.tyPeStr=action;
+            [self.navigationController pushViewController:plantsVc animated:YES];
+            
+        }else if([action isEqualToString:@"expy"]){
+            ExprViewController *plantsVc=[[ExprViewController alloc]init];
+            plantsVc.titleName=nameStr;
             plantsVc.tyPeStr=action;
             [self.navigationController pushViewController:plantsVc animated:YES];
             
         }else{
             AppCenterViewController *appCenterVC=[[AppCenterViewController alloc]init];
+            appCenterVC.titleName=nameStr;
             [self.navigationController pushViewController:appCenterVC animated:YES];
         }
     }else if ([category isEqualToString:@"h5"]){

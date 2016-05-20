@@ -71,7 +71,7 @@
         feedTableViewC.isShowEditButton = YES;
         UMComHotFeedRequest *hotFeedRequest = [[UMComHotFeedRequest alloc]initWithCount:BatchSize withinDays:1];
         if (index == 0) {
-            hotFeedRequest.days = 1;
+            hotFeedRequest.days = 30;
             feedTableViewC.isAutoStartLoadData = YES;
             [self.view addSubview:feedTableViewC.view];
         }else if (index == 1){

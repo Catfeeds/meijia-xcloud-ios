@@ -8,8 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "NJKWebViewProgress.h"
-@interface WebPageViewController : UIViewController<UIWebViewDelegate,UIScrollViewDelegate,NJKWebViewProgressDelegate,UITableViewDelegate,UITableViewDataSource,UMSocialUIDelegate,MJRefreshBaseViewDelegate>
+@interface WebPageViewController : UIViewController<UIWebViewDelegate,UIScrollViewDelegate,NJKWebViewProgressDelegate,UITableViewDelegate,UITableViewDataSource,UMSocialUIDelegate,MJRefreshBaseViewDelegate,UITextViewDelegate>
 @property (nonatomic ,strong)NSString *webURL;
 @property (nonatomic ,assign)int vcIDs;
 @property (nonatomic ,assign)int barIDS;
+@property (nonatomic ,assign)int qdIDl;
+@property (nonatomic ,assign)int pushID;
+@property (nonatomic ,strong)NSString *listID;
 @end

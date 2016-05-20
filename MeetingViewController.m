@@ -176,35 +176,37 @@ int H = 0,time_ID;
     self.view.tag=1005;
     tapSelf=[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapAction:)];
     [self.view addGestureRecognizer:tapSelf];
-    switch (_vcID) {
-        case 1001:
-        {
-            self.navlabel.text=@"会议安排";
-            card_type_ID=1;
-        }
-            break;
-        case 1002:
-        {
-            self.navlabel.text=@"通知公告";
-            card_type_ID=2;
-        }
-            break;
-        case 1003:
-        {
-            self.navlabel.text=@"事务提醒";
-            card_type_ID=3;
-        }
-            break;
-        case 1004:
-        {
-            self.navlabel.text=@"面试邀约";
-            card_type_ID=4;
-        }
-            break;
-            
-        default:
-            break;
-    }
+//    switch (_vcID) {
+//        case 1001:
+//        {
+//            self.navlabel.text=@"会议安排";
+//            card_type_ID=1;
+//        }
+//            break;
+//        case 1002:
+//        {
+//            self.navlabel.text=@"通知公告";
+//            card_type_ID=2;
+//        }
+//            break;
+//        case 1003:
+//        {
+//            self.navlabel.text=@"事务提醒";
+//            card_type_ID=3;
+//        }
+//            break;
+//        case 1004:
+//        {
+//            self.navlabel.text=@"面试邀约";
+//            card_type_ID=4;
+//        }
+//            break;
+//            
+//        default:
+//            break;
+//    }
+
+    self.navlabel.text=_titleName;
     selfView.backgroundColor=[UIColor colorWithRed:231/255.0f green:231/255.0f blue:231/255.0f alpha:1];
     
     

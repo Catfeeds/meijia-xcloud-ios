@@ -51,7 +51,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.navlabel.text=@"请假";
+    self.navlabel.text=_titleName;
     startString=@"请点击选择时间";
     endString=@"请点击选择时间";
     if (_colorid==100) {
@@ -277,6 +277,8 @@
 
 -(void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
+    [MobClick beginLogPageView:self.navlabel.text];
     pickerView=[[DatePicker alloc]initWithFrame:FRAME(0, HEIGHT, WIDTH, 250)];
     pickerView.delegate=self;
     [self.view addSubview:pickerView];
@@ -304,6 +306,11 @@
         [self poepleLayout];
     }
     company_idStr=enterVc.company_idStr;
+}
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [MobClick endLogPageView:self.navlabel.text];
 }
 -(void)layoutBut:(UIButton *)button
 {
@@ -352,6 +359,7 @@
     enterVc.nameArray=nameArray;
     enterVc.mobileArray=_mobileArray;
     enterVc.idArray=idArray;
+    enterVc.poepleID=10000;
     [self.navigationController pushViewController:enterVc animated:YES];
 }
 -(void)typeLayout

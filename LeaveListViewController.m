@@ -24,7 +24,7 @@ MYApprovalViewController *myApprovalViewController;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.navlabel.text=@"请假审批";
+    self.navlabel.text=_titleName;
    
 
     self.backlable.backgroundColor=HEX_TO_UICOLOR(0x11cd6e, 1.0);
@@ -78,7 +78,14 @@ MYApprovalViewController *myApprovalViewController;
 
 -(void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
+    [MobClick beginLogPageView:self.navlabel.text];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault animated:NO];
+}
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [MobClick endLogPageView:self.navlabel.text];
 }
 -(void)tabBarButton:(UIButton *)sender
 {

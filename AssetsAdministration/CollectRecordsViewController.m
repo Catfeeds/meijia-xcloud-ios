@@ -23,7 +23,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.navlabel.text=@"资产管理";
+    self.navlabel.text=_titleName;
     self.tyPeStr=@"asset";
     UIFont *fnt = [UIFont fontWithName:@"HelveticaNeue" size:16.0f];
     CGRect tmpRect = [self.navlabel.text boundingRectWithSize:CGSizeMake(WIDTH, 44) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObjectsAndKeys:fnt,NSFontAttributeName, nil] context:nil];
@@ -209,7 +209,7 @@
         Cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:TableSampleIdentifier];
     }
     UILabel *nameLabel=[[UILabel alloc]initWithFrame:FRAME(20, 20, WIDTH-40, 20)];
-    nameLabel.text=[NSString stringWithFormat:@"领用人名称:%@",[dic objectForKey:@"from_name"]];
+    nameLabel.text=[NSString stringWithFormat:@"领用人名称:%@",[dic objectForKey:@"name"]];
     nameLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
     [Cell addSubview:nameLabel];
     

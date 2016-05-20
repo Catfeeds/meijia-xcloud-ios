@@ -24,4 +24,5 @@
 @property (nonatomic ,strong)NSString *nameString;
 
 @property (nonatomic ,assign)int vcIDs;
+@property (nonatomic ,assign)int poplIDS;
 @end

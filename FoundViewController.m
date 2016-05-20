@@ -30,6 +30,7 @@
     CGFloat maximumOffset;
     CGFloat currentOffset;
     int widths;
+    int  butID;
     
 }
 @end
@@ -43,8 +44,7 @@ WholeViewController *wholeViewController;
     
     [MobClick beginLogPageView:@"发现"];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
-    DownloadManager *_download = [[DownloadManager alloc]init];
-    [_download requestWithUrl:FOUND_CHANNEL dict:nil view:self.view delegate:self finishedSEL:@selector(ChannelSuccess:) isPost:NO failedSEL:@selector(ChannelFailure:)];
+    
     
     
 }
@@ -63,6 +63,9 @@ WholeViewController *wholeViewController;
     [MobClick endLogPageView:@"发现"];
 }
 - (void)viewDidLoad {
+    butID=-1;
+    DownloadManager *_download = [[DownloadManager alloc]init];
+    [_download requestWithUrl:FOUND_CHANNEL dict:nil view:self.view delegate:self finishedSEL:@selector(ChannelSuccess:) isPost:NO failedSEL:@selector(ChannelFailure:)];
     [super viewDidLoad];
     W=[[NSMutableArray alloc]init];
     if (vcID==1005) {
@@ -311,6 +314,7 @@ WholeViewController *wholeViewController;
 }
 -(void)tabbarButton:(UIButton *)sender
 {
+    butID=(int)sender.tag-1000;
     int huang=0,kuan=0;
      int width=[[W objectAtIndex:(sender.tag-1000)]intValue];
     for (int i=0; i<(sender.tag-1000); i++) {

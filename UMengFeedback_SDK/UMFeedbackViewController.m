@@ -331,17 +331,27 @@ const CGFloat kMessagesInputToolbarHeightDefault = 44.0f;
 - (void)setModalStyle {
     UINavigationBar *bar;
     if (UM_IOS_7_OR_LATER) {
-        bar = [[UINavigationBar alloc] initWithFrame:CGRectMake(0, 20, self.view.frame.size.width, 44)];
+        bar = [[UINavigationBar alloc] initWithFrame:CGRectMake(-10, 20, self.view.frame.size.width, 44)];
     } else {
-        bar = [[UINavigationBar alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
+        bar = [[UINavigationBar alloc] initWithFrame:CGRectMake(-10, 0, self.view.frame.size.width, 44)];
     }
 //    bar.backgroundColor = UM_UIColorFromRGB(122.0, 122.0, 122.0);
     UINavigationItem *item = [[UINavigationItem alloc] initWithTitle:UM_Local(@"Feedback")];
     [bar setItems:@[item]];
-    item.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:UM_Local(@"Close")
-                                                               style:UIBarButtonItemStyleDone
-                                                              target:self
-                                                              action:@selector(close:)];
+    UIButton *rightButton=[[UIButton alloc]initWithFrame:FRAME(WIDTH-70, 0, 50, 40)];
+//            rightButton.backgroundColor=[UIColor blackColor];
+    [rightButton setTitle:@"关闭" forState:UIControlStateNormal];
+    [rightButton setTitleColor:[UIColor colorWithRed:0/255.0f green:176/255.0f blue:249/255.0f alpha:1] forState:UIControlStateNormal];
+    [rightButton addTarget:self action:@selector(close:) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *roghtbar = [[UIBarButtonItem alloc] initWithCustomView:rightButton];
+//    roghtbar.title=@"关闭";
+    item.rightBarButtonItem = roghtbar;
+   
+    
+//    item.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:UM_Local(@"Close")
+//                                                               style:UIBarButtonItemStyleDone
+//                                                              target:self
+//                                                              action:@selector(close:)];
     if (_titleColor) {
         item.rightBarButtonItem.tintColor = _titleColor;
     }
@@ -404,7 +414,7 @@ const CGFloat kMessagesInputToolbarHeightDefault = 44.0f;
             viewHeight= viewSize.height;
 
             self.navBar.frame = CGRectMake(0, self.topOffset, viewWidth, 44);
-            
+//            self.navBar.rightBarButtonItem.frame=CGRectMake(self.view.frame.size.width-60, 20, 50, 44);
             CGRect frame = self.inputToolBar.frame;
             
             frame.size.width = viewWidth;

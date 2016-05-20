@@ -293,7 +293,7 @@
                 toolLabel.textColor=[UIColor colorWithRed:100/255.0f green:100/255.0f blue:100/255.0f alpha:1];
                 [view addSubview:toolLabel];
                 
-                UIButton *toolMoreBut=[[UIButton alloc]initWithFrame:FRAME(WIDTH-70, 10, 50, 30)];
+                UIButton *toolMoreBut=[[UIButton alloc]initWithFrame:FRAME(0, 10, WIDTH, 30)];
                 [toolMoreBut addTarget:self action:@selector(toolMoreButAction) forControlEvents:UIControlEventTouchUpInside];
                 [view addSubview:toolMoreBut];
                 
@@ -304,14 +304,14 @@
 //                [toolMoreBut addGestureRecognizer:longPressGr];
                 
                 
-                UILabel *toolViceLabel=[[UILabel alloc]initWithFrame:FRAME(0, 5, 40, 20)];
+                UILabel *toolViceLabel=[[UILabel alloc]initWithFrame:FRAME(WIDTH-70, 5, 40, 20)];
 //                toolViceLabel.text=@"更多";
                 toolViceLabel.textAlignment=NSTextAlignmentRight;
                 toolViceLabel.font=[UIFont fontWithName:@"Heiti SC" size:13];
                 toolViceLabel.textColor=[UIColor colorWithRed:190/255.0f green:190/255.0f blue:190/255.0f alpha:1];
                 [toolMoreBut addSubview:toolViceLabel];
                 
-                UIImageView *toolMoreImage=[[UIImageView alloc]initWithFrame:FRAME(40, 5, 20, 20)];
+                UIImageView *toolMoreImage=[[UIImageView alloc]initWithFrame:FRAME(WIDTH-30, 5, 20, 20)];
                 toolMoreImage.image=[UIImage imageNamed:@"JH_JT_TB_@2x"];
                 [toolMoreBut addSubview:toolMoreImage];
                 
@@ -362,16 +362,16 @@
                 growViceLabel.textColor=[UIColor colorWithRed:190/255.0f green:190/255.0f blue:190/255.0f alpha:1];
                 [growViceLabel setNumberOfLines:1];
                 [growViceLabel sizeToFit];
-                growViceLabel.frame=FRAME(0, 5, growViceLabel.frame.size.width, 20);
+                growViceLabel.frame=FRAME(WIDTH-(growViceLabel.frame.size.width+30), 5, growViceLabel.frame.size.width, 20);
                 [growMoreBut addSubview:growViceLabel];
-                growMoreBut.frame=FRAME(WIDTH-(growViceLabel.frame.size.width+30), 10, growViceLabel.frame.size.width+20, 30);
-                UIImageView *growMoreImage=[[UIImageView alloc]initWithFrame:FRAME(growMoreBut.frame.size.width-20, 5, 20, 20)];
+                growMoreBut.frame=FRAME(0, 10, WIDTH, 30);
+                UIImageView *growMoreImage=[[UIImageView alloc]initWithFrame:FRAME(growMoreBut.frame.size.width-30, 5, 20, 20)];
                 growMoreImage.image=[UIImage imageNamed:@"JH_JT_TB_@2x"];
                 [growMoreBut addSubview:growMoreImage];
 
                 
                 
-                NSArray *array=@[@"我的订单",@"优惠券",@"积分商城",@"会员服务"];
+                NSArray *array=@[@"我的订单",@"优惠券",@"金币商城",@"会员服务"];
                 for (int k=0; k<array.count; k++) {
                     UIButton *growButton=[[UIButton alloc]initWithFrame:FRAME(WIDTH/4*k, 51, WIDTH/4, 70)];
                     growButton.tag=1000+k;
@@ -499,6 +499,7 @@
     int tg=(int)tag;
     NSArray *array=@[@"动态",@"话题",@"关注",@"粉丝"];
     NSLog(@"%@--被点击了",array[tg-100]);
+
 //    NSString *se=@"a8c44753ced7bac4f98d6611c4db1901";
     switch (tg) {
         case 100:
@@ -551,7 +552,7 @@
 {
     NSInteger tag=sender.tag;
     int tg=(int)tag;
-    NSArray *array=@[@"我的订单",@"优惠卷",@"积分商城",@"会员服务"];
+    NSArray *array=@[@"我的订单",@"优惠卷",@"金币商城",@"会员服务"];
     NSLog(@"%@--被点击了",array[tg-1000]);
     switch (tg) {
         case 1000:
@@ -845,7 +846,7 @@
     qrCodeIamge.image=[UIImage imageNamed:@"QRcode"];
     [qrCode addSubview:qrCodeIamge];
 
-    NSArray *array=@[@"好友",@"积分",@"经验"];
+    NSArray *array=@[@"好友",@"金币",@"经验"];
     for (int i=0; i<array.count; i++) {
         UILabel *label=[[UILabel alloc]initWithFrame:FRAME(WIDTH/3*i+0.5, tmtView.frame.size.height-19/2-11, WIDTH/3-0.5, 11)];
         label.text=array[i];

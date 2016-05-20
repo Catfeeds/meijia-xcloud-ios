@@ -10,4 +10,5 @@
 
 @interface WasteRecoveryViewController : FatherViewController<UITableViewDataSource,UITableViewDelegate,MJRefreshBaseViewDelegate>
 @property(nonatomic ,assign)int wasteID;
+@property(nonatomic ,strong)NSString *titleName;
 @end

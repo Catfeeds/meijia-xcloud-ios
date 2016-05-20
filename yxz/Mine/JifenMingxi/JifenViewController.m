@@ -47,7 +47,7 @@ UITableViewDataSource,UITableViewDelegate,JIFENDELEGATE,DUIHUANDELEGATE,LOADMORE
     
     _pagenum = @"1";
     
-    self.navlabel.text = @"我的积分";
+    self.navlabel.text = @"我的金币";
     
     _listArray = [[NSMutableArray alloc]initWithCapacity:0];
     
@@ -175,7 +175,7 @@ UITableViewDataSource,UITableViewDelegate,JIFENDELEGATE,DUIHUANDELEGATE,LOADMORE
         UIView *_headerview = [[UIView alloc]initWithFrame:FRAME(0, 0, _WIDTH, 54)];
         _headerview.backgroundColor = COLOR_VAULE(255.0);
         
-        NSArray *_headdArr = @[@"详情",@"积分",@"时间"];
+        NSArray *_headdArr = @[@"详情",@"金币",@"时间"];
         for (int i = 0; i < 3; i ++) {
             UILabel *_label = [[UILabel alloc]initWithFrame:FRAME(18+(_WIDTH-120+56)*0.5*i, 0, 28, 54)];
             _label.font = MYFONT(13.5);
@@ -260,7 +260,7 @@ UITableViewDataSource,UITableViewDelegate,JIFENDELEGATE,DUIHUANDELEGATE,LOADMORE
         
         [[NSNotificationCenter defaultCenter] postNotificationName:@"JIFEN_DUIHUAN100" object:@"100"];
         
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:@"积分兑换成功" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:@"金币兑换成功" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
         [alert show];
     }
 }

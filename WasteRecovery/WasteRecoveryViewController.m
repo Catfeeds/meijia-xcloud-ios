@@ -31,15 +31,16 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    if (_wasteID==100) {
-        self.navlabel.text=@"废品回收";
-    }else if (_wasteID==101){
-        self.navlabel.text=@"办公环境";
-    }else if (_wasteID==102){
-        self.navlabel.text=@"团队拓展";
-    }else if (_wasteID==103){
-        self.navlabel.text=@"快递";
-    }
+//    if (_wasteID==100) {
+//        self.navlabel.text=@"废品回收";
+//    }else if (_wasteID==101){
+//        self.navlabel.text=@"办公环境";
+//    }else if (_wasteID==102){
+//        self.navlabel.text=@"团队拓展";
+//    }else if (_wasteID==103){
+//        self.navlabel.text=@"快递";
+//    }
+    self.navlabel.text=_titleName;
     UIFont *fnt = [UIFont fontWithName:@"HelveticaNeue" size:16.0f];
     CGRect tmpRect = [self.navlabel.text boundingRectWithSize:CGSizeMake(WIDTH, 44) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObjectsAndKeys:fnt,NSFontAttributeName, nil] context:nil];
     self.helpBut.hidden=NO;
@@ -237,11 +238,18 @@
 }
 -(void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
+    [MobClick beginLogPageView:self.navlabel.text];
     [super viewWillAppear:YES];
     [self.navigationController setNavigationBarHidden:YES animated:YES];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
     pushID=1000;
     [self defaultInterfaceLayout];
+}
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [MobClick endLogPageView:self.navlabel.text];
 }
 #pragma mark 表格刷新相关
 #pragma mark 刷新

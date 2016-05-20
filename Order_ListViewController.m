@@ -303,17 +303,19 @@
         stateButton.enabled=TRUE;
         CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
         
-        CGColorRef colorref = CGColorCreate(colorSpace,(CGFloat[]){ 1, 0, 0, 1 });
+        CGColorRef colorref = CGColorCreate(colorSpace,(CGFloat[]){ 252, 110, 81, 1 });
         [stateButton.layer setBorderColor:colorref];//边框颜色
-        stateButton.backgroundColor=[UIColor whiteColor];
+        stateButton.backgroundColor=[UIColor colorWithRed:252/255.0f green:110/255.0f blue:81/255.0f alpha:1];
+        stateLabel.textColor=[UIColor colorWithRed:255/255.0f green:255/255.0f blue:255/255.0f alpha:1];
     }else{
         stateButton.enabled=FALSE;
         CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
         
-        CGColorRef colorref = CGColorCreate(colorSpace,(CGFloat[]){ 180, 180, 180, 1 });
+        CGColorRef colorref = CGColorCreate(colorSpace,(CGFloat[]){ 0, 0, 0, 0 });
         [stateButton.layer setBorderColor:colorref];//边框颜色
 
-        stateButton.backgroundColor=[UIColor colorWithRed:200/255.0f green:200/255.0f blue:200/255.0f alpha:1];
+        stateButton.backgroundColor=[UIColor clearColor];
+        stateLabel.textColor=[UIColor colorWithRed:0/255.0f green:186/255.0f blue:239/255.0f alpha:1];
     }
     stateLabel.font=[UIFont fontWithName:@"Heiti SC" size:14];
     stateLabel.textAlignment=NSTextAlignmentCenter;

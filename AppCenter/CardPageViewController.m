@@ -72,7 +72,7 @@ int F=0,M=0,N=0,S,eyeID=0;
 float lastContentOffset;
 -(void)viewWillAppear:(BOOL)animated
 {
-    [MobClick beginLogPageView:@"首页"];
+    [MobClick beginLogPageView:self.navlabel.text];
     numberArray=[[NSMutableArray alloc]init];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
     [self PLJKLayout];
@@ -81,7 +81,7 @@ float lastContentOffset;
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    [MobClick endLogPageView:@"首页"];
+    [MobClick endLogPageView:self.navlabel.text];
     
 }
 - (void)viewDidLoad
@@ -549,14 +549,14 @@ float lastContentOffset;
     [cell addSubview:headeImageView];
     
     UILabel *titleLabel=[[UILabel alloc]initWithFrame:FRAME(headeImageView.frame.size.width+20, 24, (WIDTH-60)*0.66, 15)];
-    titleLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"card_type_name"]];
+    titleLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"create_user_name"]];
     [titleLabel setNumberOfLines:0];
     titleLabel.lineBreakMode =NSLineBreakByTruncatingTail ;
     titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:14];
     [cell addSubview:titleLabel];
     
     UILabel *timeLabels=[[UILabel alloc]initWithFrame:FRAME(headeImageView.frame.size.width+20, titleLabel.frame.size.height+titleLabel.frame.origin.y+8, (WIDTH-60)*0.5, 12)];
-    timeLabels.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"card_type_name"]];
+    timeLabels.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"add_time_str"]];
     [timeLabels setNumberOfLines:0];
     timeLabels.lineBreakMode =NSLineBreakByTruncatingTail ;
     timeLabels.font=[UIFont fontWithName:@"Heiti SC" size:10];

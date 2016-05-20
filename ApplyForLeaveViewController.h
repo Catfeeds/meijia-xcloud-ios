@@ -10,4 +10,5 @@
 
 @interface ApplyForLeaveViewController : FatherViewController
 @property(nonatomic ,assign)int colorid;
+@property(nonatomic ,strong)NSString *titleName;
 @end

@@ -25,7 +25,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.navlabel.text=@"我的积分";
+    self.navlabel.text=@"我的金币";
     self.navlabel.textColor=[UIColor whiteColor];
     self.lineLable.hidden=YES;
     self.img.hidden=YES;
@@ -74,7 +74,7 @@
     view.clipsToBounds=YES;
     [headeView addSubview:view];
     UILabel *titleLabel=[[UILabel alloc]init];
-    titleLabel.text=@"当前积分";
+    titleLabel.text=@"当前金币";
     titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:14];
     titleLabel.textColor=[UIColor colorWithRed:153/255.0f green:153/255.0f blue:153/255.0f alpha:1];
     [titleLabel setNumberOfLines:1];
@@ -91,7 +91,7 @@
     [markBut addSubview:imageView];
     
     UILabel *textLabel=[[UILabel alloc]initWithFrame:FRAME(30, 5, titleLabel.frame.size.width, 20)];
-    textLabel.text=@"积分说明";
+    textLabel.text=@"金币说明";
     textLabel.font=[UIFont fontWithName:@"Heiti SC" size:14];
     textLabel.textColor=[UIColor colorWithRed:49/255.0f green:144/255.0f blue:232/255.0f alpha:1];
     [textLabel setNumberOfLines:1];
@@ -115,7 +115,7 @@
     UIButton *button=[[UIButton alloc]initWithFrame:FRAME(12, 100, view.frame.size.width-24, 42)];
     [button addTarget:self action:@selector(ButAction:) forControlEvents:UIControlEventTouchUpInside];
     button.backgroundColor=[UIColor colorWithRed:254/255.0f green:109/255.0f blue:71/255.0f alpha:1];
-    [button setTitle:@"积分兑换商品" forState:UIControlStateNormal];
+    [button setTitle:@"金币兑换商品" forState:UIControlStateNormal];
     button.layer.cornerRadius=5;
     button.clipsToBounds=YES;
     [view addSubview:button];
@@ -187,7 +187,7 @@
 #pragma mark 获取数据失败
 -(void)SignFail:(id)dataSource
 {
-    NSLog(@"读取积分明细列表失败:%@",dataSource);
+    NSLog(@"读取金币明细列表失败:%@",dataSource);
 }
 #pragma mark 表格刷新相关
 #pragma mark 刷新
@@ -255,7 +255,7 @@
     UIView *sectionView=[[UIView alloc]initWithFrame:CGRectMake(0, 0, WIDTH, 50)];
     sectionView.backgroundColor=[UIColor colorWithRed:241/255.0f green:241/255.0f blue:241/255.0f alpha:1];
     UILabel *label=[[UILabel alloc]init];
-    label.text=@"最近30天积分记录";
+    label.text=@"最近30天金币记录";
     label.lineBreakMode=NSLineBreakByTruncatingTail;
     [label setNumberOfLines:1];
     [label sizeToFit];

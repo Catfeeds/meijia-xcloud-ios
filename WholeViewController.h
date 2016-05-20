@@ -7,8 +7,13 @@
 //
 
 #import "FatherViewController.h"
+#import <sqlite3.h>
+#import <WatchConnectivity/WatchConnectivity.h>
 
 @interface WholeViewController : FatherViewController<UICollectionViewDataSource,UICollectionViewDelegate>
+{
+    sqlite3 *simi;
+}
 @property (nonatomic ,strong)UICollectionView *collectionView;
 @property (nonatomic ,strong)NSString *channel_id;
 @property (nonatomic ,assign)int whoVCID;

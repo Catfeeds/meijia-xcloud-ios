@@ -21,4 +21,5 @@
 @property (strong ,nonatomic)UITextField *priceField;
 @property (strong ,nonatomic)UIView *fieldView;
 @property (nonatomic ,assign)int vcIDS;
+@property(nonatomic ,strong)NSString *titleName;
 @end

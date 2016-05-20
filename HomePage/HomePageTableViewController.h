@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import <AVFoundation/AVFoundation.h>
-@interface HomePageTableViewController : UIViewController<UIScrollViewDelegate,UITableViewDataSource,UITableViewDelegate,AVCaptureMetadataOutputObjectsDelegate,NSURLConnectionDataDelegate>
+@interface HomePageTableViewController : UIViewController<UIScrollViewDelegate,UITableViewDataSource,UITableViewDelegate,AVCaptureMetadataOutputObjectsDelegate,NSURLConnectionDataDelegate,MJRefreshBaseViewDelegate,UISearchBarDelegate>
 @property (nonatomic, strong) UIImage *image;
 @end

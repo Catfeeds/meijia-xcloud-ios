@@ -96,11 +96,12 @@
             [view addSubview:label];
             
         }else{
-            view.frame=FRAME(0, 30+51*(i-1), WIDTH, 51);
+            
             UIView *lineView=[[UIView alloc]initWithFrame:FRAME(0, view.frame.size.height-1, WIDTH, 1)];
             lineView.backgroundColor=[UIColor colorWithRed:210/255.0f green:210/255.0f blue:210/255.0f alpha:1];
-            [view addSubview:lineView];
+//            [view addSubview:lineView];
             if (i==1) {
+                view.frame=FRAME(0, 30+51*(i-1), WIDTH, 51);
                 UIImageView *headImageView=[[UIImageView alloc]initWithFrame:FRAME(10, 10, 30, 30)];
                 headImageView.image=[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[orderDic objectForKey:@"partner_user_head_img"]]]];
                 headImageView.layer.cornerRadius=headImageView.frame.size.width/2;
@@ -150,12 +151,13 @@
                 stateLabel.textAlignment=NSTextAlignmentCenter;
                 [stateButton addSubview:stateLabel];
             }else if(i==2){
+                view.frame=FRAME(0, 30+20*(i-1), WIDTH, 20);
                 UILabel*label=[[UILabel alloc]init];
                 label.text=@"下单时间:";
                 label.font=[UIFont fontWithName:@"Heiti SC" size:12];
                 [label setNumberOfLines:1];
                 [label sizeToFit];
-                label.frame=FRAME(10, 35/2, label.frame.size.width, 15);
+                label.frame=FRAME(10, 5/2, label.frame.size.width, 15);
                 [view addSubview:label];
                 UILabel *ordreLabel=[[UILabel alloc]init];
                 ordreLabel.text=[NSString stringWithFormat:@"%@",[orderDic objectForKey:@"add_time_str"]];
@@ -166,82 +168,87 @@
                 ordreLabel.textAlignment=NSTextAlignmentRight;
                 [view addSubview:ordreLabel];
             }else if(i==3){
+                view.frame=FRAME(0, 30+20*(i-1), WIDTH, 20);
                 UILabel*label=[[UILabel alloc]init];
                 label.font=[UIFont fontWithName:@"Heiti SC" size:12];
                 label.text=@"所在城市:";
                 [label setNumberOfLines:1];
                 [label sizeToFit];
-                label.frame=FRAME(10, 35/2, label.frame.size.width, 15);
+                label.frame=FRAME(10, 5/2, label.frame.size.width, 15);
                 [view addSubview:label];
                 UILabel *ordreLabel=[[UILabel alloc]init];
                 ordreLabel.text=[NSString stringWithFormat:@"%@",[orderDic objectForKey:@"city_name"]];
                 [ordreLabel setNumberOfLines:1];
                 [ordreLabel sizeToFit];
-                ordreLabel.frame=FRAME(WIDTH-10-ordreLabel.frame.size.width, 35/2, ordreLabel.frame.size.width, 15);
+                ordreLabel.frame=FRAME(WIDTH-10-ordreLabel.frame.size.width, 5/2, ordreLabel.frame.size.width, 15);
                 ordreLabel.font=[UIFont fontWithName:@"Heiti SC" size:12];
                 ordreLabel.textAlignment=NSTextAlignmentRight;
                 [view addSubview:ordreLabel];
             }else if(i==4){
+                view.frame=FRAME(0, 30+20*(i-1), WIDTH, 20);
                 UILabel*label=[[UILabel alloc]init];
                 label.font=[UIFont fontWithName:@"Heiti SC" size:12];
                 label.text=@"内容:";
                 [label setNumberOfLines:1];
                 [label sizeToFit];
-                label.frame=FRAME(10, 35/2, label.frame.size.width, 15);
+                label.frame=FRAME(10, 5/2, label.frame.size.width, 15);
                 [view addSubview:label];
                 UILabel *ordreLabel=[[UILabel alloc]init];
                 ordreLabel.text=[NSString stringWithFormat:@"%@",[orderDic objectForKey:@"service_content"]];
                 [ordreLabel setNumberOfLines:1];
                 [ordreLabel sizeToFit];
-                ordreLabel.frame=FRAME(WIDTH-10-ordreLabel.frame.size.width, 35/2, ordreLabel.frame.size.width, 15);
+                ordreLabel.frame=FRAME(WIDTH-10-ordreLabel.frame.size.width, 5/2, ordreLabel.frame.size.width, 15);
                 ordreLabel.font=[UIFont fontWithName:@"Heiti SC" size:12];
                 ordreLabel.textAlignment=NSTextAlignmentRight;
                 [view addSubview:ordreLabel];
             }else if(i==5){
+                view.frame=FRAME(0, 30+20*(i-1), WIDTH, 20);
                 UILabel*label=[[UILabel alloc]init];
                 label.font=[UIFont fontWithName:@"Heiti SC" size:12];
                 label.text=@"金额:";
                 [label setNumberOfLines:1];
                 [label sizeToFit];
-                label.frame=FRAME(10, 35/2, label.frame.size.width, 15);
+                label.frame=FRAME(10, 5/2, label.frame.size.width, 15);
                 [view addSubview:label];
                 UILabel *ordreLabel=[[UILabel alloc]init];
                 ordreLabel.text=[NSString stringWithFormat:@"%@",[orderDic objectForKey:@"order_pay"]];
                 [ordreLabel setNumberOfLines:1];
                 [ordreLabel sizeToFit];
-                ordreLabel.frame=FRAME(WIDTH-10-ordreLabel.frame.size.width, 35/2, ordreLabel.frame.size.width, 15);
+                ordreLabel.frame=FRAME(WIDTH-10-ordreLabel.frame.size.width, 5/2, ordreLabel.frame.size.width, 15);
                 ordreLabel.font=[UIFont fontWithName:@"Heiti SC" size:12];
                 ordreLabel.textAlignment=NSTextAlignmentRight;
                 [view addSubview:ordreLabel];
             }else if(i==6){
+                view.frame=FRAME(0, 30+20*(i-1), WIDTH, 20);
                 UILabel*label=[[UILabel alloc]init];
                 label.font=[UIFont fontWithName:@"Heiti SC" size:12];
                 label.text=@"支付方式:";
                 [label setNumberOfLines:1];
                 [label sizeToFit];
-                label.frame=FRAME(10, 35/2, label.frame.size.width, 15);
+                label.frame=FRAME(10, 5/2, label.frame.size.width, 15);
                 [view addSubview:label];
                 UILabel *ordreLabel=[[UILabel alloc]init];
                 ordreLabel.text=[NSString stringWithFormat:@"%@",[orderDic objectForKey:@"pay_type_name"]];
                 [ordreLabel setNumberOfLines:1];
                 [ordreLabel sizeToFit];
-                ordreLabel.frame=FRAME(WIDTH-10-ordreLabel.frame.size.width, 35/2, ordreLabel.frame.size.width, 15);
+                ordreLabel.frame=FRAME(WIDTH-10-ordreLabel.frame.size.width, 5/2, ordreLabel.frame.size.width, 15);
                 ordreLabel.font=[UIFont fontWithName:@"Heiti SC" size:12];
                 ordreLabel.textAlignment=NSTextAlignmentRight;
                 [view addSubview:ordreLabel];
             }else if(i==7){
+                view.frame=FRAME(0, 30+20*(i-1), WIDTH, 20);
                 UILabel*label=[[UILabel alloc]init];
                 label.font=[UIFont fontWithName:@"Heiti SC" size:12];
                 label.text=@"进度跟踪:";
                 [label setNumberOfLines:1];
                 [label sizeToFit];
-                label.frame=FRAME(10, 35/2, label.frame.size.width, 15);
+                label.frame=FRAME(10, 5/2, label.frame.size.width, 15);
                 [view addSubview:label];
                 UILabel *ordreLabel=[[UILabel alloc]init];
                 ordreLabel.text=[NSString stringWithFormat:@"%@",[orderDic objectForKey:@"order_status_name"]];
                 [ordreLabel setNumberOfLines:1];
                 [ordreLabel sizeToFit];
-                ordreLabel.frame=FRAME(WIDTH-10-ordreLabel.frame.size.width, 35/2, ordreLabel.frame.size.width, 15);
+                ordreLabel.frame=FRAME(WIDTH-10-ordreLabel.frame.size.width, 5/2, ordreLabel.frame.size.width, 15);
                 ordreLabel.font=[UIFont fontWithName:@"Heiti SC" size:12];
                 ordreLabel.textAlignment=NSTextAlignmentRight;
                 [view addSubview:ordreLabel];

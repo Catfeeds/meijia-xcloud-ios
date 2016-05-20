@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface Pre_loadingViewController : UIViewController
--(void)preLoadingImage:(NSString *)channel_id page:(NSString *)page post_or_get:(NSString *)InterfaceStr;
+-(void)preLoadingImage:(NSString *)op_adSql page:(NSString *)page post_or_get:(NSString *)InterfaceStr;
 @end

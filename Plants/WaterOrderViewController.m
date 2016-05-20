@@ -1,3 +1,4 @@
+
 //
 //  WaterOrderViewController.m
 //  yxz
@@ -98,7 +99,7 @@
 }
 -(void)submitBut:(UIButton *)button
 {
-    if (service_price_id==nil||service_price_id==NULL||[service_price_id isEqualToString:@""]) {
+    if (service_price_id==nil||service_price_id==NULL||[service_price_id isEqualToString:@"(null)"]) {
         UIAlertView *tsView=[[UIAlertView alloc]initWithTitle:@"提醒" message:@"品牌不能为空，请选择！" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
         [tsView show];
     }else if (number<1){

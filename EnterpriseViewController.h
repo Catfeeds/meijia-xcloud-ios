@@ -18,4 +18,5 @@
 @property (nonatomic ,assign)int theNumber;
 @property (nonatomic ,strong)NSString *company_idStr;
 @property (nonatomic ,assign)int  vcIDs;
+@property (nonatomic ,assign)int  poepleID;
 @end

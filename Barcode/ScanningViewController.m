@@ -203,7 +203,8 @@
                                                           error:&err];
     NSArray *array=(NSArray *)dic;
     NSDictionary *arrayDic=array[0];
-    NSString *path = [[[NSBundle mainBundle] bundlePath] stringByAppendingPathComponent:@"simi.db"];
+    NSString *pathDocuments = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    NSString *path = [NSString stringWithFormat:@"%@/simi.db", pathDocuments];
     sqlite3_open([path UTF8String], &express);
     
     sqlite3_stmt *statement;

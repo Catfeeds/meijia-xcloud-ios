@@ -27,7 +27,7 @@
 #import "LeaveListViewController.h"
 #import "WasteRecoveryViewController.h"
 #import "FriendsHomeViewController.h"
-
+#import "SettingsViewController.h"
 @interface MyLogInViewController ()
 <
 UITextFieldDelegate,
@@ -756,7 +756,7 @@ appDelegate
                 
                 NSLog(@"username is %@, uid is %@, token is %@ url is %@",snsAccount.userName,snsAccount.usid,snsAccount.accessToken,snsAccount.iconURL);
                 NSLog(@"数组里都有啥啊？%@",snsAccount);
-                [self ThirdPartyLogSuccessWhitOpenID:snsAccount.openId type:@"0" name:snsAccount.userName headImgUrl:snsAccount.iconURL];
+                [self ThirdPartyLogSuccessWhitOpenID:snsAccount.openId type:@"qq" name:snsAccount.userName headImgUrl:snsAccount.iconURL];
                 
             }});
         
@@ -772,7 +772,7 @@ appDelegate
                 UMSocialAccountEntity *snsAccount = [[UMSocialAccountManager socialAccountDictionary]valueForKey:UMShareToWechatSession];
                 
                 NSLog(@"username is %@, uid is %@, token is %@ url is %@",snsAccount.userName,snsAccount.usid,snsAccount.accessToken,snsAccount.iconURL);
-                [self ThirdPartyLogSuccessWhitOpenID:snsAccount.openId type:@"0" name:snsAccount.userName headImgUrl:snsAccount.iconURL];
+                [self ThirdPartyLogSuccessWhitOpenID:snsAccount.openId type:@"weixin" name:snsAccount.userName headImgUrl:snsAccount.iconURL];
                 
             }
             
@@ -794,7 +794,7 @@ appDelegate
                 UMSocialAccountEntity *snsAccount = [[UMSocialAccountManager socialAccountDictionary] valueForKey:UMShareToSina];
                 
                 NSLog(@"username is %@, uid is %@, token is %@ url is %@",snsAccount.userName,snsAccount.usid,snsAccount.accessToken,snsAccount.iconURL);
-                [self ThirdPartyLogSuccessWhitOpenID:snsAccount.usid type:@"0" name:snsAccount.userName headImgUrl:snsAccount.iconURL];
+                [self ThirdPartyLogSuccessWhitOpenID:snsAccount.usid type:@"weibo" name:snsAccount.userName headImgUrl:snsAccount.iconURL];
                 
             }});
         
@@ -1278,10 +1278,33 @@ appDelegate
 {
     if (_vCYMID==100) {
         [self dismissViewControllerAnimated:YES completion:nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"LOGOUT" object:nil];
+        [[UMComSession sharedInstance] userLogout];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kUserLogoutSucceedNotification object:nil];
+        [[EaseMob sharedInstance].chatManager asyncLogoffWithUnbindDeviceToken:YES completion:^(NSDictionary *info, EMError *error)
+         {
+             if (error && error.errorCode != EMErrorServerNotLogin)
+             {
+                 
+             }else{
+                 SettingsViewController *set = [[SettingsViewController alloc]init];
+                 [set logoutAction];
+                 NSUserDefaults *_default = [NSUserDefaults standardUserDefaults];
+                 [_default removeObjectForKey:@"telephone"];
+                 [_default removeObjectForKey:@"islogin"];
+                 [_default synchronize];
+                 RootViewController *vc=[[RootViewController alloc]init];
+                 //            vc.vCLID=100;
+                 UINavigationController *nav=[[UINavigationController alloc]initWithRootViewController:vc];
+                 [self presentViewController:nav animated:YES completion:nil];
+                 
+             }
+         } onQueue:nil];
+
     }else{
         [self.navigationController popViewControllerAnimated:YES];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"RETURN_POP" object:nil];
- 
+        
     }
 }
 - (void)backAction

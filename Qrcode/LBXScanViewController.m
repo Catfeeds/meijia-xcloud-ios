@@ -101,9 +101,10 @@
     //but.backgroundColor=[UIColor redColor];
     [but addTarget:self action:@selector(butAction) forControlEvents:UIControlEventTouchUpInside];
     [_qRScanView addSubview:but];
-    UIImageView *image=[[UIImageView alloc]initWithFrame:FRAME(18, 10, 10, 20)];
-    image.image=[UIImage imageNamed:@"title_left_back"];
-    [but addSubview:image];
+    
+    UIImageView *img = [[UIImageView alloc]initWithFrame:FRAME(18, (40-20)/2, 20, 20)];
+    img.image = [UIImage imageNamed:@"iconfont-p-back"];
+    [but addSubview:img];
       [_qRScanView startDeviceReadyingWithText:@"相机启动中"];
     
     

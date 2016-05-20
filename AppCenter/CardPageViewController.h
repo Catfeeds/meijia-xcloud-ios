@@ -15,4 +15,5 @@
 @property (strong, nonatomic)NSString *lngString;
 @property (nonatomic ,assign)int vcID;
 @property (nonatomic ,strong)NSString *navlabelName;
+
 @end

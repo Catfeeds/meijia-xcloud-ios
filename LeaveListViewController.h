@@ -9,4 +9,5 @@
 #import "FatherViewController.h"
 
 @interface LeaveListViewController : FatherViewController
+@property(nonatomic ,strong)NSString *titleName;
 @end

@@ -24,7 +24,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     dataSourceArray=[[NSMutableArray alloc]init];
-    self.navlabel.text=@"资产管理";
+    self.navlabel.text=_titleName;
     self.tyPeStr=@"asset";
     UIFont *fnt = [UIFont fontWithName:@"HelveticaNeue" size:16.0f];
     CGRect tmpRect = [self.navlabel.text boundingRectWithSize:CGSizeMake(WIDTH, 44) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObjectsAndKeys:fnt,NSFontAttributeName, nil] context:nil];
