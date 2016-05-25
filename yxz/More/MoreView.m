@@ -67,7 +67,7 @@
             [self addSubview:_button];
             
             if (i == 4) {
-                NSString *editionStr=[NSString stringWithFormat:@"V%@",[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]];
+                NSString *editionStr=[NSString stringWithFormat:@"V%@",[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]];
                 UIButton *_phonebutton = [UIButton buttonWithType:UIButtonTypeCustom];
                 _phonebutton.frame = FRAME(_CELL_WIDTH-100-12, 27+54*4, 100, 54);
                 _phonebutton.titleLabel.font = MYFONT(13.5);

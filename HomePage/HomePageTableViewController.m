@@ -17,6 +17,7 @@
 #import "AFHTTPRequestOperationManager.h"
 #import "SchoolViewController.h"
 #import "SearchVoiceViewController.h"
+#import "ArticleWEBViewController.h"
 #import <objc/message.h>
 static CGFloat const imageBGHeight = 363; // 背景图片的高度
 @interface HomePageTableViewController ()
@@ -76,7 +77,7 @@ static CGFloat const imageBGHeight = 363; // 背景图片的高度
     headeView.backgroundColor=[UIColor whiteColor];
     NSArray *butImageArray=@[@"index-tonghangreliao.jpg",@"index-jingpinkecheng.jpg",@"index-zhishixueyuan.jpg",@"index-qiandaoyouli.jpg",@"index-shangjinlieren.jpg",@"index-jianlijiaohuan.jpg",@"index-fuwudating.jpg",@"index-fulishangcheng.jpg"];
 //    NSArray *butArray=@[@"知识学院",@"服务大厅",@"微社区",@"签到有礼"];
-    NSArray *butArray=@[@"同城热聊",@"精品课程",@"知识学院",@"签到有礼",@"赏金猎人",@"简历交换",@"找服务商",@"福利商城"];
+    NSArray *butArray=@[@"同行热聊",@"精品课程",@"知识学院",@"签到有礼",@"赏金猎人",@"简历交换",@"找服务商",@"福利商城"];
     int x=0;
     for (int i=0; i<butArray.count; i++) {
         if (i<4) {
@@ -319,8 +320,15 @@ static CGFloat const imageBGHeight = 363; // 背景图片的高度
 
 -(void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
+    [MobClick beginLogPageView:@"首页"];
     [self imageLayout];
     [self getLayout];
+}
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [MobClick endLogPageView:@"shouye"];
 }
 -(void)qrCodeButAction:(UIButton *)button
 {
@@ -811,7 +819,7 @@ static CGFloat const imageBGHeight = 363; // 背景图片的高度
 {
     [myTableView deselectRowAtIndexPath:indexPath animated:NO];
     NSDictionary *dic=sourceArray[indexPath.row];
-    WebPageViewController *webPageVC=[[WebPageViewController alloc]init];
+    ArticleWEBViewController *webPageVC=[[ArticleWEBViewController alloc]init];
     webPageVC.barIDS=100;
     webPageVC.pushID=100;
     webPageVC.listID=[NSString stringWithFormat:@"%@",[dic objectForKey:@"id"]];
@@ -829,6 +837,7 @@ static CGFloat const imageBGHeight = 363; // 背景图片的高度
 #pragma mark导航点击
 -(void)tabbarButton:(UIButton *)sender
 {
+    page=1;
     int huang=0,kuan=0;
     int width=[[W objectAtIndex:(sender.tag-1000)]intValue];
     for (int i=0; i<(sender.tag-1000); i++) {
@@ -907,37 +916,37 @@ static CGFloat const imageBGHeight = 363; // 背景图片的高度
     switch (scrollID) {
         case 0:
         {
-            page=1;
+           
             urlStr=@"http://51xingzheng.cn/?json=get_tag_posts&count=10&order=DESC&slug=%E9%A6%96%E9%A1%B5%E7%B2%BE%E9%80%89&include=id,title,modified,url,thumbnail,custom_fields";
         }
             break;
         case 1:
         {
-            page=1;
+           
             urlStr=@"http://51xingzheng.cn/?json=get_category_posts&count=10&order=DESC&id=3&include=id,title,modified,url,thumbnail,custom_fields";
         }
             break;
         case 2:
         {
-            page=1;
+            
             urlStr=@"http://51xingzheng.cn/?json=get_category_posts&count=10&order=DESC&id=50&include=id,title,modified,url,thumbnail,custom_fields";
         }
             break;
         case 3:
         {
-            page=1;
+            
             urlStr=@"http://51xingzheng.cn/?json=get_category_posts&count=10&order=DESC&id=2&include=id,title,modified,url,thumbnail,custom_fields";
         }
             break;
         case 4:
         {
-            page=1;
+            
             urlStr=@"http://51xingzheng.cn/?json=get_category_posts&count=10&order=DESC&id=39&include=id,title,modified,url,thumbnail,custom_fields";
         }
             break;
         case 5:
         {
-            page=1;
+        
             urlStr=@"http://51xingzheng.cn/?json=get_category_posts&count=10&order=DESC&id=5&include=id,title,modified,url,thumbnail,custom_fields";
         }
             break;
@@ -955,7 +964,7 @@ static CGFloat const imageBGHeight = 363; // 背景图片的高度
         }
         NSLog(@"数据%@",responseObject);
         NSArray *array=[responseObject objectForKey:@"posts"];
-        if (array.count<10*page) {
+        if (array.count<10) {
             _hasMore=YES;
         }else{
             _hasMore=NO;

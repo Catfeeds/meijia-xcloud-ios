@@ -46,6 +46,7 @@ appDelegate
     int wxID;
     NSDictionary *cGDic;
     CLLocationManager *_locationManager;
+    NSString *id3is;
     
 }
 @end
@@ -679,10 +680,16 @@ appDelegate
     int status = [[dict objectForKey:@"status"] intValue];
     NSDictionary *dataDic = [dict objectForKey:@"data"];
     NSLog(@"%@",dataDic);
+    
     //登陆后的信息
     if (status == 0) {
+       
         NSString *userid = [dataDic objectForKey:@"id"];
-        
+        if ([id3is isEqualToString:@""]) {
+            [MobClick profileSignInWithPUID:userid];
+        }else{
+            [MobClick profileSignInWithPUID:GeTuiSdk.clientId provider:id3is];
+        }
         //UITextField *textfield  = (UITextField *) [view viewWithTag:100];
         ISLoginManager *_logmanager = [ISLoginManager shareManager];
         _logmanager.isLogin = YES;
@@ -757,6 +764,7 @@ appDelegate
                 NSLog(@"username is %@, uid is %@, token is %@ url is %@",snsAccount.userName,snsAccount.usid,snsAccount.accessToken,snsAccount.iconURL);
                 NSLog(@"数组里都有啥啊？%@",snsAccount);
                 [self ThirdPartyLogSuccessWhitOpenID:snsAccount.openId type:@"qq" name:snsAccount.userName headImgUrl:snsAccount.iconURL];
+                id3is=@"QQ";
                 
             }});
         
@@ -773,7 +781,7 @@ appDelegate
                 
                 NSLog(@"username is %@, uid is %@, token is %@ url is %@",snsAccount.userName,snsAccount.usid,snsAccount.accessToken,snsAccount.iconURL);
                 [self ThirdPartyLogSuccessWhitOpenID:snsAccount.openId type:@"weixin" name:snsAccount.userName headImgUrl:snsAccount.iconURL];
-                
+                id3is=@"WX";
             }
             
         });
@@ -795,6 +803,7 @@ appDelegate
                 
                 NSLog(@"username is %@, uid is %@, token is %@ url is %@",snsAccount.userName,snsAccount.usid,snsAccount.accessToken,snsAccount.iconURL);
                 [self ThirdPartyLogSuccessWhitOpenID:snsAccount.usid type:@"weibo" name:snsAccount.userName headImgUrl:snsAccount.iconURL];
+                id3is=@"WB";
                 
             }});
         

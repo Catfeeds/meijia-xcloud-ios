@@ -57,7 +57,7 @@ WholeViewController *wholeViewController;
 //        dragHeaderView = [[Pull2RefreshView alloc]initWithFrame:frame type:kPull2RefreshViewTypeHeader];
 //        [self addSubview:dragHeaderView];}
 //}
-- (void)viewDidAppear:(BOOL)animated
+- (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
     [MobClick endLogPageView:@"发现"];
@@ -314,6 +314,7 @@ WholeViewController *wholeViewController;
 }
 -(void)tabbarButton:(UIButton *)sender
 {
+    
     butID=(int)sender.tag-1000;
     int huang=0,kuan=0;
      int width=[[W objectAtIndex:(sender.tag-1000)]intValue];

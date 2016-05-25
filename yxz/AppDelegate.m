@@ -243,10 +243,7 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
 //    }
     
     
-    UMConfigInstance.appKey = YMAPPKEY;
-    UMConfigInstance.channelId = @"appmarket-main";
-    UMConfigInstance.eSType = E_UM_GAME;
-    UMConfigInstance.ePolicy=REALTIMEs;
+    
     
     NSFileManager *fileManager = [NSFileManager defaultManager];
     
@@ -412,9 +409,16 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     [self registerRemoteNotification];
     
     [UMSocialData setAppKey:YMAPPKEY];
+    
     [UMFeedback setAppkey:YMAPPKEY];
-    [MobClick setCrashReportEnabled:NO];
+    [MobClick setCrashReportEnabled:YES];
 //    [MobClick startWithAppkey:YMAPPKEY reportPolicy:BATCH   channelId:@"appmarket-main"];
+    UMConfigInstance.appKey = YMAPPKEY;
+    UMConfigInstance.token=YMAPPKEY;
+    UMConfigInstance.channelId = @"appmarket-main";
+//    UMConfigInstance.eSType = E_UM_GAME;
+    UMConfigInstance.ePolicy=SEND_INTERVALs;
+    [MobClick startWithConfigure:UMConfigInstance];
     NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
     [MobClick setAppVersion:version];
     [MobClick setLogEnabled:YES];

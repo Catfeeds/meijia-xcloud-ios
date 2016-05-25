@@ -91,7 +91,7 @@ float lastContentOffset;
         _needRefresh = NO;
     }
 
-    [MobClick beginLogPageView:@"首页"];
+    [MobClick beginLogPageView:@"日程"];
     
     if (vc.L==1) {
         _tableView.scrollEnabled =NO;
@@ -102,7 +102,7 @@ float lastContentOffset;
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    [MobClick endLogPageView:@"首页"];
+    [MobClick endLogPageView:@"日程"];
     
 }
 
@@ -652,7 +652,7 @@ float lastContentOffset;
         numberArray=nil;
     }else{
         NSArray *array=[sender objectForKey:@"data"];
-        if (array.count<10*page) {
+        if (array.count<10) {
             _hasMore=YES;
             [_refreshHeader performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
             [_moreFooter performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];

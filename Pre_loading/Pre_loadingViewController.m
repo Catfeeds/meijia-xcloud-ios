@@ -31,13 +31,13 @@
     }
     // Do any additional setup after loading the view.
 }
--(void)preLoadingImage:(NSString *)channel_id page:(NSString *)page post_or_get:(NSString *)InterfaceStr
+-(void)preLoadingImage:(NSString *)op_adSql page:(NSString *)page post_or_get:(NSString *)InterfaceStr
 {
     int pa=[page intValue];
     for (int i=0; i<3; i++) {
         DownloadManager *_download = [[DownloadManager alloc]init];
         NSString *pageStr=[NSString stringWithFormat:@"%d",pa];
-        NSDictionary *dict=@{@"channel_id":channel_id,@"page":pageStr};
+        NSDictionary *dict=@{@"channel_id":op_adSql,@"page":pageStr};
         [_download requestWithUrl:InterfaceStr dict:dict view:self.view delegate:self finishedSEL:@selector(ChannelSuccess:) isPost:NO failedSEL:@selector(ChannelFailure:)];
         pa++;
     }

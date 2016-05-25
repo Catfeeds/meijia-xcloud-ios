@@ -122,7 +122,7 @@
 //    array=[sender objectForKey:@"data"];
     NSLog(@"数组个数%lu",(unsigned long)array.count);
     NSArray *arraySS=[sender objectForKey:@"data"];
-    if (arraySS.count<10*page) {
+    if (arraySS.count<10) {
         _hasMore=YES;
     }else{
         _hasMore=NO;

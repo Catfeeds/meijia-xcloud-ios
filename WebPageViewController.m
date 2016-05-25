@@ -100,6 +100,7 @@
     
     NSString *clickStr;
     FatherViewController *fatherVc;
+    UILabel *labelASS;
 }
 @end
 
@@ -222,7 +223,7 @@
             myWebView= [[UIWebView alloc]initWithFrame:FRAME(0, 64, WIDTH, HEIGHT-114)];
             plView.hidden=NO;
         }else{
-            myWebView= [[UIWebView alloc]initWithFrame:FRAME(0, 0, WIDTH, HEIGHT)];
+            myWebView= [[UIWebView alloc]initWithFrame:FRAME(0, 64, WIDTH, HEIGHT)];
             plView.hidden=YES;
         }
         
@@ -381,6 +382,7 @@
 -(void)loadGoogle
 {
     NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@",webURL]];
+    NSLog(@"%@",webURL);
     //NSLog(@"gourl  =  %@",_imgurl);
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     [myWebView loadRequest:request];
@@ -393,8 +395,8 @@
     [self.navigationController.navigationBar addSubview:_progressView];
     if(fatherVc.loginYesOrNo==YES)
     {
-        [self listLayout];
-        [self diazanLayout];
+//        [self listLayout];
+//        [self diazanLayout];
     }
     
 }
@@ -791,7 +793,7 @@
         }
 //        NSLog(@"数据%@",responseObject);
         NSArray *array=[source objectForKey:@"data"];
-        if (array.count<10*page) {
+        if (array.count<10) {
             _hasMore=YES;
         }else{
             _hasMore=NO;

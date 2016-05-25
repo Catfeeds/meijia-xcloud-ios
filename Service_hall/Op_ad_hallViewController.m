@@ -70,9 +70,9 @@
                 char *t_id = (char *)sqlite3_column_text(dbps, 0);
                 NSString *t_idStr = [[NSString alloc] initWithUTF8String:t_id];
                 
-                char *update_time = (char *)sqlite3_column_text(dbps, 19);
+                char *update_time = (char *)sqlite3_column_text(dbps, 9);
                 NSString *update_timeStr = [[NSString alloc] initWithUTF8String:update_time];
-                NSString *imageStr=[NSString stringWithFormat:@"op_ad_%@_%@",t_idStr,update_timeStr];
+                NSString *imageStr=[NSString stringWithFormat:@"opad_%@_%@",t_idStr,update_timeStr];
                 
                 image =[self loadLocalImage:imageStr];
                 filePath = [self imageFilePath:imageStr];
@@ -123,7 +123,7 @@
     NSString *imageUrl=[NSString stringWithFormat:@"%@",[dict objectForKey:@"img_url"]];
     NSString *t_idStr=[NSString stringWithFormat:@"%@",[dict objectForKey:@"id"]];
     NSString *update_timeStr=[NSString stringWithFormat:@"%@",[dict objectForKey:@"update_time"]];
-    NSString *imageStr=[NSString stringWithFormat:@"op_ad_%@_%@",t_idStr,update_timeStr];
+    NSString *imageStr=[NSString stringWithFormat:@"opad_%@_%@",t_idStr,update_timeStr];
     UIImage * image = [self loadLocalImage:imageStr];
     
     

@@ -100,7 +100,7 @@
         _userview.userInteractionEnabled = YES;
     }else{
         
-        [btn setImage:[UIImage imageNamed:@"bianji"] forState:UIControlStateNormal];
+        
 
         NSString *name;
         NSString *phone;
@@ -137,6 +137,8 @@
             [self showHint:@"手机号不能为空哦"];
             return;
         }
+        [btn setImage:[UIImage imageNamed:@"bianji"] forState:UIControlStateNormal];
+        _userview.userInteractionEnabled = NO;
         ISLoginManager *_manager = [ISLoginManager shareManager];
         
         DownloadManager *_download = [[DownloadManager alloc]init];

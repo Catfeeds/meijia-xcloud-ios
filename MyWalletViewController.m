@@ -190,7 +190,7 @@
     NSLog(@"我的钱包返回方法%@",sender);
 //        tableArray=[sender objectForKey:@"data"];
     NSArray *array=[sender objectForKey:@"data"];
-    if (array.count<10*page) {
+    if (array.count<10) {
         _hasMore=YES;
     }else{
         _hasMore=NO;
@@ -246,7 +246,10 @@
 #pragma mark 余额显示方法
 -(void)moneyLayout
 {
-    moneyLabel.text=[NSString stringWithFormat:@"%@",[balanceDic objectForKey:@"rest_money"]];
+    NSString *string=[NSString stringWithFormat:@"%@",[balanceDic objectForKey:@"rest_money"]];
+    float foat=[string floatValue];
+    moneyLabel.text=[NSString stringWithFormat:@"%0.2f",foat];
+    NSLog(@"%@",[balanceDic objectForKey:@"rest_money"]);
     moneyLabel.textAlignment=NSTextAlignmentLeft;
     moneyLabel.textColor=[UIColor whiteColor];
     moneyLabel.font=[UIFont fontWithName:@"Heiti SC" size:13];

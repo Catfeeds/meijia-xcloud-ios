@@ -203,6 +203,7 @@
 }
 -(void)tabbarButton:(UIButton *)sender
 {
+    page=1;
     int huang=0,kuan=0;
     int width=[[W objectAtIndex:(sender.tag-1000)]intValue];
     for (int i=0; i<(sender.tag-1000); i++) {
@@ -323,37 +324,37 @@
     switch (scrollID) {
         case 0:
         {
-            page=1;
+//            page=1;
             urlStr=@"http://51xingzheng.cn/?json=get_tag_posts&count=10&order=DESC&slug=%E9%A6%96%E9%A1%B5%E7%B2%BE%E9%80%89&include=id,title,modified,url,thumbnail,custom_fields";
         }
             break;
         case 1:
         {
-            page=1;
+//            page=1;
             urlStr=@"http://51xingzheng.cn/?json=get_category_posts&count=10&order=DESC&id=3&include=id,title,modified,url,thumbnail,custom_fields";
         }
             break;
         case 2:
         {
-            page=1;
+//            page=1;
             urlStr=@"http://51xingzheng.cn/?json=get_category_posts&count=10&order=DESC&id=50&include=id,title,modified,url,thumbnail,custom_fields";
         }
             break;
         case 3:
         {
-            page=1;
+//            page=1;
             urlStr=@"http://51xingzheng.cn/?json=get_category_posts&count=10&order=DESC&id=2&include=id,title,modified,url,thumbnail,custom_fields";
         }
             break;
         case 4:
         {
-            page=1;
+//            page=1;
             urlStr=@"http://51xingzheng.cn/?json=get_category_posts&count=10&order=DESC&id=39&include=id,title,modified,url,thumbnail,custom_fields";
         }
             break;
         case 5:
         {
-            page=1;
+//            page=1;
             urlStr=@"http://51xingzheng.cn/?json=get_category_posts&count=10&order=DESC&id=5&include=id,title,modified,url,thumbnail,custom_fields";
         }
             break;
@@ -371,7 +372,7 @@
         }
         NSLog(@"数据%@",responseObject);
         NSArray *array=[responseObject objectForKey:@"posts"];
-        if (array.count<10*page) {
+        if (array.count<10) {
             _hasMore=YES;
         }else{
             _hasMore=NO;

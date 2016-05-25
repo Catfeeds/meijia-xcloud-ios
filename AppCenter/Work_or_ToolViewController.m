@@ -389,7 +389,7 @@
                                 addButton.enabled=TRUE;
                             }else{
                                 [addButton setTitle:@"已添加" forState:UIControlStateNormal];
-                                [addButton setTitleColor:[UIColor colorWithRed:232/255.0f green:232/255.0f blue:232/255.0f alpha:1] forState:UIControlStateNormal];
+                                [addButton setTitleColor:[UIColor colorWithRed:0/255.0f green:208/255.0f blue:110/255.0f alpha:1] forState:UIControlStateNormal];
                                 addButton.enabled=FALSE;
                             }
                             
@@ -428,7 +428,7 @@
                     addButton.enabled=TRUE;
                 }else{
                     [addButton setTitle:@"已添加" forState:UIControlStateNormal];
-                    [addButton setTitleColor:[UIColor colorWithRed:232/255.0f green:232/255.0f blue:232/255.0f alpha:1] forState:UIControlStateNormal];
+                    [addButton setTitleColor:[UIColor colorWithRed:0/255.0f green:208/255.0f blue:110/255.0f alpha:1] forState:UIControlStateNormal];
                     addButton.enabled=FALSE;
                 }
                 
@@ -465,7 +465,7 @@
                 addButton.enabled=TRUE;
             }else{
                 [addButton setTitle:@"已添加" forState:UIControlStateNormal];
-                [addButton setTitleColor:[UIColor colorWithRed:232/255.0f green:232/255.0f blue:232/255.0f alpha:1] forState:UIControlStateNormal];
+                [addButton setTitleColor:[UIColor colorWithRed:0/255.0f green:208/255.0f blue:110/255.0f alpha:1] forState:UIControlStateNormal];
                 addButton.enabled=FALSE;
             }
             

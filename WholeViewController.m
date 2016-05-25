@@ -72,7 +72,7 @@
     sqlite3_open([path UTF8String], &simi);
     
     sqlite3_stmt *statement;
-    NSString *sql =[NSString stringWithFormat:@"SELECT * FROM op_ad where ad_type=99 order by id"];
+    NSString *sql =[NSString stringWithFormat:@"SELECT * FROM op_ad where ad_type like '%%99%%' order by id"];
     
     if (sqlite3_prepare_v2(simi, [sql UTF8String], -1, &statement, nil) == SQLITE_OK) {
         while (sqlite3_step(statement) == SQLITE_ROW) {
@@ -110,7 +110,7 @@
             NSString *update_timeStr = [[NSString alloc] initWithUTF8String:update_time];
             
             NSDictionary *dic=@{@"ad_type":add_typeStr,@"add_time":add_timeStr,@"enable":enableStr,@"goto_type":goto_typeStr,@"goto_url":goto_urlStr,@"id":op_idStr,@"img_url":img_urlStr,@"no":nolStr,@"service_type_ids":service_type_idsStr,@"title":titleStr,@"update_time":update_timeStr};
-            
+            NSLog(@"字典数据:::::%@",dic);
             if ([dataSourceArray containsObject:dic]) {
                 
             }else{
@@ -175,7 +175,7 @@
 - (NSString *)imageFilePath:(NSString *)imageUrl
 {
     NSString *pathDocuments = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-    createPath = [NSString stringWithFormat:@"%@/Servicr_HallImage", pathDocuments];
+    createPath = [NSString stringWithFormat:@"%@/Op_ad_hallImage", pathDocuments];
     //    NSArray *file = [[[NSFileManager alloc] init] subpathsAtPath:createPath];
     //    //NSLog(@"%d",[file count]);
     //    NSLog(@"%@",file);
@@ -224,11 +224,13 @@
     NSString *nameStr=[NSString stringWithFormat:@"%@",[dataDic objectForKey:@"title"]];
    
    
-    NSString *imageUrl=[NSString stringWithFormat:@"op_ad_%@_%@",[dataDic objectForKey:@"id"],[dataDic objectForKey:@"update_time"]];
+    NSString *imageUrl=[NSString stringWithFormat:@"opad_%@_%@",[dataDic objectForKey:@"id"],[dataDic objectForKey:@"update_time"]];
     UIImage * image =[self loadLocalImage:imageUrl];
     if (image==nil) {
-         NSString *imageUrls=[NSString stringWithFormat:@"%@",[dataDic objectForKey:@"img_url"]];
-        [cell.lconImageView setImageWithURL:[NSURL URLWithString:imageUrls]placeholderImage:nil];
+//         NSString *imageUrls=[NSString stringWithFormat:@"%@",[dataDic objectForKey:@"img_url"]];
+//        [cell.lconImageView setImageWithURL:[NSURL URLWithString:imageUrls]placeholderImage:nil];
+        NSString *imageUrls=[NSString stringWithFormat:@"opad_%@",[dataDic objectForKey:@"id"]];
+        cell.lconImageView.image=[UIImage imageNamed:imageUrls];
     }else{
         cell.lconImageView.image=image;
     }

@@ -91,7 +91,7 @@
     }else{
         
         NSArray *array=[dataSource objectForKey:@"data"];
-        if (array.count<10*page) {
+        if (array.count<10) {
             _hasMore=YES;
         }else{
             _hasMore=NO;

@@ -16,9 +16,11 @@
     NSString *bundleID = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleIdentifier"];
     if ([bundleID isEqualToString:@"com.easemob.enterprise.demo.ui"]) {
         UMConfigInstance.appKey = YMAPPKEY;
-        UMConfigInstance.channelId = Nil;
-        UMConfigInstance.eSType = E_UM_GAME;
+        UMConfigInstance.token=YMAPPKEY;
+        UMConfigInstance.channelId = @"appmarket-main";
+//        UMConfigInstance.eSType = E_UM_GAME;
         UMConfigInstance.ePolicy=REALTIMEs;
+        [MobClick startWithConfigure:UMConfigInstance];
 #if DEBUG
         [MobClick setLogEnabled:YES];
 #else

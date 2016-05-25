@@ -303,7 +303,7 @@
             seekArray=nil;
         }else{
             NSArray *array=[sender objectForKey:@"data"];
-            if (array.count<10*page) {
+            if (array.count<10) {
                 _hasMore=YES;
                 [_refreshHeader performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
                 [_moreFooter performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];

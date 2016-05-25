@@ -279,7 +279,7 @@
         
     }else{
         NSArray *array=[sender objectForKey:@"data"];
-        if (array.count<10*page) {
+        if (array.count<10) {
             _hasMore=YES;
         }else{
             _hasMore=NO;
@@ -304,6 +304,7 @@
 }
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
+    
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 //制定个性标题，这里通过UIview来设计标题，功能上丰富，变化多。
