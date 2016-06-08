@@ -13,7 +13,8 @@ NSString *const kUSERINFODataSeniorRange = @"senior_range";
 NSString *const kUSERINFODataMobile = @"mobile";
 NSString *const kUSERINFODataUserId = @"user_id";
 NSString *const kUSERINFODataScore = @"score";
-
+NSString *const KUSERINFODataCompanyName = @"company_name";
+NSString *const KUSERINFODataJobName = @"job_name";
 
 
 @interface USERINFOData ()
@@ -29,7 +30,7 @@ NSString *const kUSERINFODataScore = @"score";
 @synthesize mobile = _mobile;
 @synthesize userId = _userId;
 @synthesize score = _score;
-@synthesize userName,gender;
+@synthesize userName,gender,companyName,job_Name;
 
 
 + (instancetype)modelObjectWithDictionary:(NSDictionary *)dict
@@ -52,6 +53,8 @@ NSString *const kUSERINFODataScore = @"score";
         
         self.userName = [self objectOrNilForKey:@"name" fromDictionary:dict];
         self.gender = [self objectOrNilForKey:@"sex" fromDictionary:dict];
+        self.companyName =[self objectOrNilForKey:@"company_name" fromDictionary:dict];
+        self.job_Name =[self objectOrNilForKey:@"job_name" fromDictionary:dict];
 
 
     }

@@ -151,7 +151,18 @@
     [MobClick beginLogPageView:self.navlabel.text];
     pushID=1000;
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
-    [self defaultInterfaceLayout];
+    if (self.loginYesOrNo) {
+        [self defaultInterfaceLayout];
+    }else{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            MyLogInViewController *loginViewController = [[MyLogInViewController alloc] init];
+            loginViewController.vCYMID=1000;
+            UMComNavigationController *navigationController = [[UMComNavigationController alloc] initWithRootViewController:loginViewController];
+            [self presentViewController:navigationController animated:YES completion:^{
+            }];
+        });
+    }
+    
 }
 - (void)viewWillDisappear:(BOOL)animated
 {

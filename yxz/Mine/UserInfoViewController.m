@@ -32,6 +32,8 @@
     NSData *data;
     NSDictionary *headeDic;
     int headeImageID;
+    UIScrollView *myScrollView;
+     int _lastPosition;
 }
 
 @end
@@ -54,14 +56,18 @@
 }
 - (void)viewDidLoad {
     
+    myScrollView=[[UIScrollView alloc]initWithFrame:FRAME(0, 64, WIDTH, 54*7+9)];
+    myScrollView.delegate=self;
+    myScrollView.contentSize=CGSizeMake(WIDTH, 54*7+10);
+    [self.view addSubview:myScrollView];
     [super viewDidLoad];
     headeImageID=0;
     self.navlabel.text = @"账号信息";
     
-    _userview = [[UserinfoView alloc]initWithFrame:FRAME(0, 64, _WIDTH, 54*5+10)];
+    _userview = [[UserinfoView alloc]initWithFrame:FRAME(0,0, _WIDTH, 54*7+10)];
     _userview.delegate = self;
     _userview.userInteractionEnabled = NO;
-    [self.view addSubview:_userview];
+    [myScrollView addSubview:_userview];
     
     UIButton *bttn = [UIButton buttonWithType:UIButtonTypeCustom];
     bttn.frame = FRAME(14, SELF_VIEW_HEIGHT-14-41, WIDTH-28, 41);
@@ -105,7 +111,9 @@
         NSString *name;
         NSString *phone;
         NSString *sex;
-        for (int i = 0; i < 5; i++) {
+        NSString *company;
+        NSString *position;
+        for (int i = 0; i < 7; i++) {
             UITextField *textfield = (UITextField *)[_userview viewWithTag:1000+i];
             
             switch (i) {
@@ -122,6 +130,12 @@
                     sex = textfield.text;
                     break;
                 case 4:
+                    company = textfield.text;
+                    break;
+                case 5:
+                    position = textfield.text;
+                    break;
+                case 6:
                     
                     break;
                     
@@ -137,6 +151,7 @@
             [self showHint:@"手机号不能为空哦"];
             return;
         }
+        [btn setTitle:@" " forState:UIControlStateNormal];
         [btn setImage:[UIImage imageNamed:@"bianji"] forState:UIControlStateNormal];
         _userview.userInteractionEnabled = NO;
         ISLoginManager *_manager = [ISLoginManager shareManager];
@@ -269,10 +284,20 @@
         _userview.mydata = _base.data;
     }
 }
+
+- (void) dimissAlert:(UIAlertView *)alert {
+    if(alert)     {
+        [alert dismissWithClickedButtonIndex:[alert cancelButtonIndex] animated:YES];
+    }
+}
+
 #pragma mark 修改成功
 -(void)ModifySuccess:(id)sender
 {
-    [self showAlertViewWithTitle:@"修改成功" message:nil];
+//    [self showAlertViewWithTitle:@"修改成功" message:nil];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"修改成功" message:nil  delegate:nil cancelButtonTitle:nil otherButtonTitles:nil];
+    [alert show];
+    [self performSelector:@selector(dimissAlert:) withObject:alert afterDelay:1];
 }
 #pragma mark 下载失败
 - (void)ModifyFailure:(id)error
@@ -313,6 +338,10 @@
     switch (btntag) {
         case 0:
         {
+            [UIView beginAnimations: @"Animation" context:nil];
+            [UIView setAnimationDuration:0.3];
+            myScrollView.contentOffset=CGPointMake(0 , 0);
+            [UIView commitAnimations];
             NSLog(@"头像");
 //            MyAccountController *account = [[MyAccountController alloc]init];
 //            [self.navigationController pushViewController:account animated:YES];
@@ -328,12 +357,19 @@
 
         case 1:
             NSLog(@"昵称");
-
+            [UIView beginAnimations: @"Animation" context:nil];
+            [UIView setAnimationDuration:0.3];
+            myScrollView.contentOffset=CGPointMake(0 , 0);
+            [UIView commitAnimations];
             break;
 
         case 3:
             NSLog(@"性别");
         {
+            [UIView beginAnimations: @"Animation" context:nil];
+            [UIView setAnimationDuration:0.3];
+            myScrollView.contentOffset=CGPointMake(0 , 0);
+            [UIView commitAnimations];
             UIActionSheet *sheet = [[UIActionSheet alloc]initWithTitle:nil
                                                               delegate:self
                                                      cancelButtonTitle:@"取消"
@@ -345,6 +381,22 @@
             break;
         }
         case 4:
+        {
+            [UIView beginAnimations: @"Animation" context:nil];
+            [UIView setAnimationDuration:0.3];
+            myScrollView.contentOffset=CGPointMake(0 , 54*2);
+            [UIView commitAnimations];
+        }
+            break;
+        case 5:
+        {
+            [UIView beginAnimations: @"Animation" context:nil];
+            [UIView setAnimationDuration:0.3];
+            myScrollView.contentOffset=CGPointMake(0 , 54*2);
+            [UIView commitAnimations];
+        }
+            break;
+        case 6:
         {
             NSLog(@"私秘卡");
 //            AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication] delegate];
@@ -364,6 +416,19 @@
             
         default:
             break;
+    }
+}
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    int currentPostion = scrollView.contentOffset.y;
+    if (currentPostion - _lastPosition > 25) {
+        _lastPosition = currentPostion;
+        NSLog(@"ScrollUp now");
+    }
+    else if (_lastPosition - currentPostion > 25)
+    {
+        [self.view endEditing:YES];
+        _lastPosition = currentPostion;
+        NSLog(@"ScrollDown now");
     }
 }
 -(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex

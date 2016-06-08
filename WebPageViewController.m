@@ -223,7 +223,7 @@
             myWebView= [[UIWebView alloc]initWithFrame:FRAME(0, 64, WIDTH, HEIGHT-114)];
             plView.hidden=NO;
         }else{
-            myWebView= [[UIWebView alloc]initWithFrame:FRAME(0, 64, WIDTH, HEIGHT)];
+            myWebView= [[UIWebView alloc]initWithFrame:FRAME(0, 64, WIDTH, HEIGHT-64)];
             plView.hidden=YES;
         }
         

@@ -86,15 +86,15 @@ DynamicViewController *dynamicViewController;
     tabBarView=[[UIView alloc]initWithFrame:CGRectMake((WIDTH-120)/2, 20, 120, 44)];
     [self.view addSubview:tabBarView];
     
-/*   好友页面右上角的发布动态入口按钮  被注释掉了
+//   好友页面右上角的发布动态入口按钮  被注释掉了
      addBut=[[UIButton alloc]initWithFrame:FRAME(WIDTH-40, 20, 40, 44)];
 //    [addBut setTitle:@"添加" forState:UIControlStateNormal];
     [addBut addTarget:self action:@selector(addBUtAction:) forControlEvents:UIControlEventTouchUpInside];
 //    addBut.backgroundColor=[UIColor redColor];
-    [self.view addSubview:addBut];
+//    [self.view addSubview:addBut];
     UIImageView *addImageView=[[UIImageView alloc]initWithFrame:FRAME(10, 10, 20, 20)];
     addImageView.image=[UIImage imageNamed:@"iconfont-xinjian"];
-    [addBut addSubview:addImageView]; */
+//    [addBut addSubview:addImageView];
     
     lineView=[[UIView alloc]init];
 //    if (_friendVcID==100) {
@@ -256,7 +256,7 @@ DynamicViewController *dynamicViewController;
 //            break;
         case 1000:
         {
-            addBut.hidden=YES;
+//            addBut.hidden=YES;
             [self transitionFromViewController:currentViewController toViewController:secAccessController duration:0.5 options:0 animations:^{
             }  completion:^(BOOL finished) {
                 if(finished){
@@ -272,7 +272,7 @@ DynamicViewController *dynamicViewController;
             break;
         case 1001:
         {
-            addBut.hidden=YES;
+//            addBut.hidden=YES;
             [self transitionFromViewController:currentViewController toViewController:newsViewController duration:0.5 options:0 animations:^{
             }  completion:^(BOOL finished) {
                 if(finished){

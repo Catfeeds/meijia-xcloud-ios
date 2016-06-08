@@ -107,6 +107,7 @@
     [butView addSubview:referBut];
     // Do any additional setup after loading the view.
 }
+
 -(void)butAction:(UIButton *)button
 {
     if (button.tag==1001) {
@@ -244,7 +245,18 @@
     [self.navigationController setNavigationBarHidden:YES animated:YES];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
     pushID=1000;
-    [self defaultInterfaceLayout];
+    if (self.loginYesOrNo) {
+        [self defaultInterfaceLayout];
+    }else{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            MyLogInViewController *loginViewController = [[MyLogInViewController alloc] init];
+            loginViewController.vCYMID=1000;
+            UMComNavigationController *navigationController = [[UMComNavigationController alloc] initWithRootViewController:loginViewController];
+            [self presentViewController:navigationController animated:YES completion:^{
+            }];
+        });
+    }
+    
 }
 - (void)viewWillDisappear:(BOOL)animated
 {

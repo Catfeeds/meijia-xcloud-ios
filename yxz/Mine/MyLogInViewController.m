@@ -245,7 +245,7 @@ appDelegate
     
 }
 - (void)viewDidLoad {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(urlAction:) name:@"URLOPEN" object:nil];
+    
     [super viewDidLoad];
     wxID=0;
     self.navigationController.navigationBarHidden=YES;
@@ -1310,6 +1310,30 @@ appDelegate
              }
          } onQueue:nil];
 
+    }else if (_vCYMID==1000){
+        [self dismissViewControllerAnimated:YES completion:^{
+            [[EaseMob sharedInstance].chatManager asyncLogoffWithUnbindDeviceToken:YES completion:^(NSDictionary *info, EMError *error)
+             {
+                 if (error && error.errorCode != EMErrorServerNotLogin)
+                 {
+                     
+                 }else{
+                     SettingsViewController *set = [[SettingsViewController alloc]init];
+                     [set logoutAction];
+                     NSUserDefaults *_default = [NSUserDefaults standardUserDefaults];
+                     [_default removeObjectForKey:@"telephone"];
+                     [_default removeObjectForKey:@"islogin"];
+                     [_default synchronize];
+                     UIViewController *origin = self.presentingViewController.presentingViewController;
+                     if([origin isMemberOfClass:[RootViewController class]]){
+                         origin = self.presentingViewController.presentingViewController.presentingViewController;
+                     }
+                     [origin dismissViewControllerAnimated:NO completion:nil];
+                 }
+             } onQueue:nil];
+        }];
+
+        
     }else{
         [self.navigationController popViewControllerAnimated:YES];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"RETURN_POP" object:nil];

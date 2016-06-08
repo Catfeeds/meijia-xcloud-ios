@@ -443,7 +443,8 @@
         }else{
             for (int i=0; i<array.count; i++) {
                 if ([plArray containsObject:array[i]]) {
-                    
+                    [plArray removeObject:array[i]];
+                    [plArray addObject:array[i]];
                 }else{
                     [plArray addObject:array[i]];
                 }

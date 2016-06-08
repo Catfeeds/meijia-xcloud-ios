@@ -33,19 +33,31 @@
     [super viewWillAppear:YES];
     [self.navigationController setNavigationBarHidden:YES animated:YES];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
-    if (_details_ID!=2) {
-        DownloadManager *_download = [[DownloadManager alloc]init];
-        NSDictionary *dic=@{@"user_id":_user_ID,@"order_id":_order_ID};
-        [_download requestWithUrl:ORDER_DDXQ dict:dic view:self.view delegate:self finishedSEL:@selector(ORder_GetUserInfo:) isPost:NO failedSEL:@selector(ORder_FailDownload:)];
+    if(self.loginYesOrNo){
+        if (_details_ID!=2) {
+            ISLoginManager *_manager = [ISLoginManager shareManager];
+            DownloadManager *_download = [[DownloadManager alloc]init];
+            NSDictionary *dic=@{@"user_id":_manager.telephone,@"order_id":_order_ID};
+            [_download requestWithUrl:ORDER_DDXQ dict:dic view:self.view delegate:self finishedSEL:@selector(ORder_GetUserInfo:) isPost:NO failedSEL:@selector(ORder_FailDownload:)];
+        }else{
+            NSString *str=[NSString stringWithFormat:@"%@",[_dic objectForKey:@"order_id"]];
+            ISLoginManager *_manager = [ISLoginManager shareManager];
+            
+            DownloadManager *_download = [[DownloadManager alloc]init];
+            NSDictionary *dic=@{@"user_id":_manager.telephone,@"order_id":str};
+            [_download requestWithUrl:ORDER_DDXQ dict:dic view:self.view delegate:self finishedSEL:@selector(ORder_GetUserInfo:) isPost:NO failedSEL:@selector(ORder_FailDownload:)];
+        }
+        [self postLayout];
     }else{
-        NSString *str=[NSString stringWithFormat:@"%@",[_dic objectForKey:@"order_id"]];
-        ISLoginManager *_manager = [ISLoginManager shareManager];
-        
-        DownloadManager *_download = [[DownloadManager alloc]init];
-        NSDictionary *dic=@{@"user_id":_manager.telephone,@"order_id":str};
-        [_download requestWithUrl:ORDER_DDXQ dict:dic view:self.view delegate:self finishedSEL:@selector(ORder_GetUserInfo:) isPost:NO failedSEL:@selector(ORder_FailDownload:)];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            MyLogInViewController *loginViewController = [[MyLogInViewController alloc] init];
+            loginViewController.vCYMID=1000;
+            UMComNavigationController *navigationController = [[UMComNavigationController alloc] initWithRootViewController:loginViewController];
+            [self presentViewController:navigationController animated:YES completion:^{
+            }];
+        });
     }
-    [self postLayout];
+   
 }
 -(void)postLayout
 {
@@ -176,7 +188,7 @@
             if (i==1) {
                 view.frame=FRAME(0, 30+51*(i-1), WIDTH, 51);
                 UIImageView *headImageView=[[UIImageView alloc]initWithFrame:FRAME(10, 10, 30, 30)];
-                headImageView.image=[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[orderDic objectForKey:@"partner_user_head_img"]]]];
+                headImageView.image=[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[orderDic objectForKey:@"service_type_img"]]]];
                 headImageView.layer.cornerRadius=headImageView.frame.size.width/2;
                 headImageView.clipsToBounds = YES;
                 [view addSubview:headImageView];
@@ -440,7 +452,7 @@
             imageView.layer.cornerRadius=20/2;
             imageView.clipsToBounds=YES;
             imageView.image=[UIImage imageNamed:@"checked"];
-            xiaLineView.frame=FRAME(24, 25, 1, scroView.frame.size.height-25);
+            xiaLineView.frame=FRAME(24, 35, 1, scroView.frame.size.height-35);
             xiaLineView.backgroundColor=[UIColor colorWithRed:100/255.0f green:178/255.0f blue:41/255.0f alpha:1];
             
             timeLabel.frame=FRAME(68, 15, WIDTH-88, 15);

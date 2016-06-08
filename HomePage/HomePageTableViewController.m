@@ -19,7 +19,10 @@
 #import "SearchVoiceViewController.h"
 #import "ArticleWEBViewController.h"
 #import <objc/message.h>
-static CGFloat const imageBGHeight = 363; // 背景图片的高度
+#import "AddLabelCollectionViewCell.h"
+#import "Workplace_askViewController.h"
+#import "ToolListViewController.h"
+static CGFloat const imageBGHeight = 373; // 背景图片的高度
 @interface HomePageTableViewController ()
 {
     CycleScrollView *adView;
@@ -55,16 +58,65 @@ static CGFloat const imageBGHeight = 363; // 背景图片的高度
     BOOL _hasMore;
     int   page;
     UIButton *mySearchBar;
+    
+    UIView *addView;
+    UICollectionViewFlowLayout *flowView;
+    NSArray *addArray;
+    NSArray *subscribeAry;
+    NSMutableArray *textArray;
 }
 @end
 
 @implementation HomePageTableViewController
+#pragma mark 获取默认订阅文章标签
+-(void)user_default
+{
+    DownloadManager *_download = [[DownloadManager alloc]init];
+    [_download requestWithUrl:[NSString stringWithFormat:@"%@",SUBSCRIBE_DEFAULT] dict:nil view:self.view delegate:self finishedSEL:@selector(DefaultSuccess:) isPost:YES failedSEL:@selector(DefaultFail:)];
+}
+#pragma mark 获取默认订阅文章标签成功返回
+-(void)DefaultSuccess:(id)sender
+{
+    NSLog(@"获取默认订阅文章标签成功返回%@",sender);
+    NSString *string=[NSString stringWithFormat:@"%@",[sender objectForKey:@"data"]];
+    addArray= [string componentsSeparatedByString:@","];
+    [_collectionView reloadData];
+}
+#pragma mark 获取默认订阅文章标签失败返回
+-(void)DefaultFail:(id)sender
+{
+    NSLog(@"获取默认订阅文章标签失败返回%@",sender);
+}
+#pragma mark获取用户订阅的文章标签接口
+-(void)subscribe
+{
+    ISLoginManager *_manager = [ISLoginManager shareManager];
+    DownloadManager *_download = [[DownloadManager alloc]init];
+    NSDictionary *dict=@{@"user_id":_manager.telephone};
+    [_download requestWithUrl:[NSString stringWithFormat:@"%@",SUBSCRIBE_USER] dict:dict view:self.view delegate:self finishedSEL:@selector(SubscribeSuccess:) isPost:NO failedSEL:@selector(subscribeFail:)];
+}
+#pragma mark获取用户订阅的文章标签接口成功返回
+-(void)SubscribeSuccess:(id)sender
+{
+    NSLog(@"获取用户订阅的文章标签接口成功返回%@",sender);
+    NSString *string=[NSString stringWithFormat:@"%@",[sender objectForKey:@"data"]];
+    subscribeAry =[string componentsSeparatedByString:@","];
+    [self getLayout];
+    [_collectionView reloadData];
+}
+#pragma mark获取用户订阅的文章标签接口失败返回
+-(void)subscribeFail:(id)sender
+{
+    NSLog(@"获取用户订阅的文章标签接口失败返回%@",sender);
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    textArray=[[NSMutableArray alloc]init];
+    [self user_default];
     W=[[NSMutableArray alloc]init];
     page=1;
-    arraY=@[@"精选",@"管理",@"职场",@"创业",@"动态",@"认证"];
+    arraY=@[@"精选",@"职场",@"案例",@"招聘",@"薪资",@"行政",@"培训",@"绩效",@"员工关系",@"人资规划",@"行业"];
     [self.navigationController setNavigationBarHidden:NO animated:NO];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(SignFication:) name:@"SIGNSS" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getLayout) name:@"HOMERefresh" object:nil];
@@ -73,11 +125,13 @@ static CGFloat const imageBGHeight = 363; // 背景图片的高度
     selectedPage=1;
     sourceArray=[[NSMutableArray alloc]init];
     expData=[[NSMutableData alloc]init];
-    headeView=[[UIView alloc]initWithFrame:FRAME(0, 0, WIDTH, 363)];
+    headeView=[[UIView alloc]initWithFrame:FRAME(0, 0, WIDTH, 373)];
     headeView.backgroundColor=[UIColor whiteColor];
-    NSArray *butImageArray=@[@"index-tonghangreliao.jpg",@"index-jingpinkecheng.jpg",@"index-zhishixueyuan.jpg",@"index-qiandaoyouli.jpg",@"index-shangjinlieren.jpg",@"index-jianlijiaohuan.jpg",@"index-fuwudating.jpg",@"index-fulishangcheng.jpg"];
+//    NSArray *butImageArray=@[@"index-tonghangreliao.jpg",@"index-jingpinkecheng.jpg",@"index-zhishixueyuan.jpg",@"index-qiandaoyouli.jpg",@"index-shangjinlieren.jpg",@"index-jianlijiaohuan.jpg",@"index-fuwudating.jpg",@"index-fulishangcheng.jpg"];
+    NSArray *butImageArray=@[@"index-fulishangcheng.jpg",@"index-tonghangreliao.jpg",@"index-zhishixueyuan.jpg",@"index-fuwudating.jpg"];
 //    NSArray *butArray=@[@"知识学院",@"服务大厅",@"微社区",@"签到有礼"];
-    NSArray *butArray=@[@"同行热聊",@"精品课程",@"知识学院",@"签到有礼",@"赏金猎人",@"简历交换",@"找服务商",@"福利商城"];
+//    NSArray *butArray=@[@"同行热聊",@"精品课程",@"知识学院",@"签到有礼",@"内推悬赏",@"简历交换",@"找服务商",@"福利商城"];
+    NSArray *butArray=@[@"内推悬赏",@"同行热聊",@"常用工具",@"找服务商"/*@"知识学院",@"签到有礼",@"简历交换",@"找服务商",@"福利商城"*/];
     int x=0;
     for (int i=0; i<butArray.count; i++) {
         if (i<4) {
@@ -112,6 +166,56 @@ static CGFloat const imageBGHeight = 363; // 背景图片的高度
         }
         
     }
+    UIView *lineViews=[[UIView alloc]initWithFrame:FRAME(0, 288, WIDTH, 0.5)];
+    lineViews.backgroundColor=[UIColor colorWithRed:220/255.0f green:220/255.0f blue:220/255.0f alpha:1];
+    [headeView addSubview:lineViews];
+    
+    UIView *view=[[UIView alloc]initWithFrame:FRAME(0, headeView.frame.size.height-10, WIDTH, 10)];
+    view.backgroundColor=[UIColor colorWithRed:220/255.0f green:220/255.0f blue:220/255.0f alpha:1];
+    [headeView addSubview:view];
+    
+    UIButton *headLiftBut=[[UIButton alloc]initWithFrame:FRAME(0, 289, WIDTH/2-0.5, 74)];
+    [headLiftBut addTarget:self action:@selector(ButAction:) forControlEvents:UIControlEventTouchUpInside];
+    headLiftBut.tag=4;
+    [headeView addSubview:headLiftBut];
+    
+    UILabel *liftNameLabel=[[UILabel alloc]initWithFrame:FRAME((WIDTH-240)/4/2, 15, WIDTH/2-0.5-64, 20)];
+    liftNameLabel.text=@"问答互助";
+    liftNameLabel.textColor=[UIColor colorWithRed:70/255.0f green:144/255.0f blue:255/255.0f alpha:1];
+    liftNameLabel.font=[UIFont fontWithName:@"Heiti SC" size:13];
+    [headLiftBut addSubview:liftNameLabel];
+    UILabel *liftTextLabel=[[UILabel alloc]initWithFrame:FRAME((WIDTH-240)/4/2, 45, WIDTH/2-0.5-64, 14)];
+    liftTextLabel.text=@"最专业的解答都在这";
+    liftTextLabel.font=[UIFont fontWithName:@"Heiti SC" size:10];
+    [headLiftBut addSubview:liftTextLabel];
+    UIImageView *liftImage=[[UIImageView alloc]initWithFrame:FRAME(WIDTH/2-0.5-((WIDTH-240)/4/2+30), 15, 34, 34)];
+    liftImage.image=[UIImage imageNamed:@"index_wenda"];
+    [headLiftBut addSubview:liftImage];
+    
+    UIView *verticalView=[[UIView alloc]initWithFrame:FRAME(WIDTH/2-0.5, 294, 0.5, 64)];
+    verticalView.backgroundColor=[UIColor colorWithRed:220/255.0f green:220/255.0f blue:220/255.0f alpha:1];
+    [headeView addSubview:verticalView];
+    
+    UIButton *headrightBut=[[UIButton alloc]initWithFrame:FRAME(WIDTH/2+0.5, 289, WIDTH/2-0.5, 74)];
+    [headrightBut addTarget:self action:@selector(ButAction:) forControlEvents:UIControlEventTouchUpInside];
+    headrightBut.tag=5;
+    [headeView addSubview:headrightBut];
+    
+    
+    
+    UILabel *rightNameLabel=[[UILabel alloc]initWithFrame:FRAME((WIDTH-240)/4/2, 15, WIDTH/2-0.5-64, 20)];
+    rightNameLabel.text=@"签到惊喜";
+    rightNameLabel.textColor=[UIColor colorWithRed:243/255.0f green:128/255.0f blue:16/255.0f alpha:1];
+    rightNameLabel.font=[UIFont fontWithName:@"Heiti SC" size:13];
+    [headrightBut addSubview:rightNameLabel];
+    UILabel *rightTextLabel=[[UILabel alloc]initWithFrame:FRAME((WIDTH-240)/4/2, 45, WIDTH/2-0.5-64, 14)];
+    rightTextLabel.text=@"送完金币还送经验值";
+    rightTextLabel.font=[UIFont fontWithName:@"Heiti SC" size:10];
+    [headrightBut addSubview:rightTextLabel];
+    
+    UIImageView *rightImage=[[UIImageView alloc]initWithFrame:FRAME(WIDTH/2-0.5-((WIDTH-240)/4/2+30), 15, 34, 34)];
+    rightImage.image=[UIImage imageNamed:@"index_qiandao"];
+    [headrightBut addSubview:rightImage];
     
     myTableView=[[UITableView alloc]initWithFrame:FRAME(0, 0, WIDTH, HEIGHT-49)];
     myTableView.delegate=self;
@@ -165,12 +269,13 @@ static CGFloat const imageBGHeight = 363; // 背景图片的高度
     searchImage.image=[UIImage imageNamed:@"search_@2x"];
     [mySearchBar addSubview:searchImage];
     
-    csView=[[UIView alloc]initWithFrame:FRAME(0, 363, WIDTH, 38)];
+    csView=[[UIView alloc]initWithFrame:FRAME(0, 373, WIDTH, 38)];
     csView.backgroundColor=[UIColor blackColor];
     [self.view addSubview:csView];
     [rootView removeFromSuperview];
+    
     [W removeAllObjects];
-    rootView=[[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, WIDTH, 38)];
+    rootView=[[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, WIDTH-40, 38)];
     rootView.backgroundColor=[UIColor whiteColor];
     //    rootView.contentSize=CGSizeMake(WIDTH/4*array.count, 37);
     rootView.showsVerticalScrollIndicator = FALSE;
@@ -180,11 +285,19 @@ static CGFloat const imageBGHeight = 363; // 背景图片的高度
     rootView.delegate=self;
     [csView addSubview:rootView];
     
-    UIView *lineView1=[[UIView alloc]initWithFrame:FRAME(0, 0, WIDTH, 1)];
+    UIButton *addButton=[[UIButton alloc]initWithFrame:FRAME(WIDTH-50, 0, 50, 38)];
+    //    addButton.backgroundColor=[UIColor whiteColor];
+    [addButton addTarget:self action:@selector(addButAction) forControlEvents:UIControlEventTouchUpInside];
+    [csView addSubview:addButton];
+    UIImageView *addImage=[[UIImageView alloc]initWithFrame:FRAME(0, 0, 50, 38)];
+    addImage.image=[UIImage imageNamed:@"加号"];
+    [addButton addSubview:addImage];
+    
+    UIView *lineView1=[[UIView alloc]initWithFrame:FRAME(0, 0, WIDTH, 0.5)];
     lineView1.backgroundColor=[UIColor colorWithRed:220/255.0f green:220/255.0f blue:220/255.0f alpha:1];
     [csView addSubview:lineView1];
     
-    UIView *lineView=[[UIView alloc]initWithFrame:FRAME(0, 38, WIDTH, 1)];
+    UIView *lineView=[[UIView alloc]initWithFrame:FRAME(0, 38.5, WIDTH, 0.5)];
     lineView.backgroundColor=[UIColor colorWithRed:220/255.0f green:220/255.0f blue:220/255.0f alpha:1];
     [csView addSubview:lineView];
     
@@ -264,8 +377,63 @@ static CGFloat const imageBGHeight = 363; // 背景图片的高度
     UIEdgeInsets inset = rootView.contentInset;
     currentOffset = rootView.contentOffset.x+bounds.size.width - inset.bottom;
     int s=[[W objectAtIndex:0]intValue];
-    lineImageView.frame=CGRectMake(0, 35, s, 2);
+    lineImageView.frame=CGRectMake(0, 36, s, 2);
 
+    
+    addView =[[UIView alloc]initWithFrame:FRAME(WIDTH/2, HEIGHT/2, 0, 0)];
+    addView.backgroundColor=[UIColor colorWithRed:245/255.0f green:246/255.0f blue:248/255.0f alpha:1];
+    UIWindow *window = [[UIApplication sharedApplication].windows lastObject];
+    addView.hidden=YES;
+    [window addSubview:addView];
+    
+    
+    UIButton *cancelBut=[[UIButton alloc]initWithFrame:FRAME(WIDTH-50, 24, 40, 40)];
+    [cancelBut addTarget:self action:@selector(cancelButAction) forControlEvents:UIControlEventTouchUpInside];
+    [addView addSubview:cancelBut];
+    UIImageView *cacelImage=[[UIImageView alloc]initWithFrame:FRAME(10, 10, 20, 20)];
+    cacelImage.image=[UIImage imageNamed:@"取消"];
+    [cancelBut addSubview:cacelImage];
+    
+    flowView=[[UICollectionViewFlowLayout alloc]init];
+    [flowView setScrollDirection:UICollectionViewScrollDirectionVertical];
+    flowView.headerReferenceSize=CGSizeMake(WIDTH, 80);
+    
+    //    [_collectionView removeFromSuperview];
+    _collectionView=[[UICollectionView alloc]initWithFrame:FRAME(0, 64, WIDTH, HEIGHT-64)collectionViewLayout:flowView];
+    _collectionView.delegate=self;
+    _collectionView.dataSource=self;
+    
+    _collectionView.backgroundColor=[UIColor colorWithRed:245/255.0f green:246/255.0f blue:248/255.0f alpha:1];
+    [addView addSubview:_collectionView];
+    
+    
+    [_collectionView registerClass:[AddLabelCollectionViewCell class] forCellWithReuseIdentifier:@"cell"];
+    [_collectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"ReusableView"];
+    [_collectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:@"FooterReusableView"];
+    
+}
+-(void)cancelButAction
+{
+    
+    addView.frame=FRAME(WIDTH/2, HEIGHT/2, 0, 0);
+    addView.hidden=YES;
+}
+-(void)addButAction
+{
+    if(fatherVc.loginYesOrNo){
+        addView.hidden=NO;
+        addView.frame=FRAME(0, 0, WIDTH, HEIGHT);
+    }else{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            MyLogInViewController *loginViewController = [[MyLogInViewController alloc] init];
+            loginViewController.vCYMID=100;
+            UMComNavigationController *navigationController = [[UMComNavigationController alloc] initWithRootViewController:loginViewController];
+            [self presentViewController:navigationController animated:YES completion:^{
+            }];
+        });
+    }
+
+    
 }
 #pragma mark 搜索按钮点击方法
 -(void)searchButAction
@@ -297,6 +465,10 @@ static CGFloat const imageBGHeight = 363; // 背景图片的高度
         [UIView commitAnimations];
     }
     
+
+    CGRect bounds = scrollView.bounds;
+    UIEdgeInsets inset = scrollView.contentInset;
+    currentOffset = scrollView.contentOffset.x+bounds.size.width - inset.bottom;
 }
 #pragma mark - 返回一张纯色图片
 /** 返回一张纯色图片 */
@@ -323,6 +495,11 @@ static CGFloat const imageBGHeight = 363; // 背景图片的高度
     [super viewWillAppear:animated];
     [MobClick beginLogPageView:@"首页"];
     [self imageLayout];
+    
+    
+    if(fatherVc.loginYesOrNo){
+        [self subscribe];
+    }
     [self getLayout];
 }
 - (void)viewWillDisappear:(BOOL)animated
@@ -347,7 +524,7 @@ static CGFloat const imageBGHeight = 363; // 背景图片的高度
     [pushEjectView removeFromSuperview];
     pushEjectView = [EjectAlertView new];
     pushEjectView.frame=FRAME(0, 0, WIDTH, HEIGHT);
-    pushEjectView.backgroundColor = [UIColor redColor];
+    pushEjectView.backgroundColor = [UIColor blueColor];
     [pushEjectView setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleLeftMargin];
     [self.view addSubview:pushEjectView];
     UIView *grayView=[[UIView alloc]initWithFrame:FRAME(0, 0, WIDTH, HEIGHT)];
@@ -362,49 +539,72 @@ static CGFloat const imageBGHeight = 363; // 背景图片的高度
     [pushEjectView addSubview:view];
     
     UIImageView *headeImageView=[[UIImageView alloc]initWithFrame:FRAME(0, 0, WIDTH*0.72, WIDTH*0.72*0.70)];
-    headeImageView.backgroundColor=[UIColor whiteColor];
+//    headeImageView.backgroundColor=[UIColor whiteColor];
+     headeImageView.image=[UIImage imageNamed:@"banner"];
     [view addSubview:headeImageView];
-    UIImageView *imageView=[[UIImageView alloc]initWithFrame:FRAME((headeImageView.frame.size.width-100)/2, (headeImageView.frame.size.height-100)/2+20, 100, 100)];
-    imageView.image=[UIImage imageNamed:@"iconfont-qiandao"];
-    [headeImageView addSubview:imageView];
+//    UIImageView *imageView=[[UIImageView alloc]initWithFrame:FRAME((headeImageView.frame.size.width-100)/2, (headeImageView.frame.size.height-100)/2+20, 100, 100)];
+//    imageView.image=[UIImage imageNamed:@"banner"];
+//    [headeImageView addSubview:imageView];
     
-    UILabel *titleLabel=[[UILabel alloc]init];
-    titleLabel.text=[NSString stringWithFormat:@"%@!",[signDic objectForKey:@"msg"]];
-    titleLabel.textColor=[UIColor colorWithRed:102/255.0f green:102/255.0f blue:102/255.0f alpha:1];
-    titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:28];
-    [titleLabel setNumberOfLines:1];
-    [titleLabel sizeToFit];
-    titleLabel.frame=FRAME((WIDTH*0.72-titleLabel.frame.size.width)/2, WIDTH*0.72*0.70+10, titleLabel.frame.size.width, 30);
-    [view addSubview:titleLabel];
+//    UILabel *titleLabel=[[UILabel alloc]init];
+//    titleLabel.text=[NSString stringWithFormat:@"%@!",[signDic objectForKey:@"msg"]];
+//    titleLabel.textColor=[UIColor colorWithRed:102/255.0f green:102/255.0f blue:102/255.0f alpha:1];
+//    titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:28];
+//    [titleLabel setNumberOfLines:1];
+//    [titleLabel sizeToFit];
+//    titleLabel.frame=FRAME((WIDTH*0.72-titleLabel.frame.size.width)/2, WIDTH*0.72*0.70+10, titleLabel.frame.size.width, 30);
+//    [view addSubview:titleLabel];
+//    
+//    UILabel *textLabel=[[UILabel alloc]init];
+//    textLabel.text=[NSString stringWithFormat:@"%@",[signDic objectForKey:@"data"]];
+//    UIFont *font=[UIFont fontWithName:@"Georgia-Bold" size:30];
+//    textLabel.textColor=[UIColor colorWithRed:247/255.0f green:202/255.0f blue:44/255.0f alpha:1];
+//    textLabel.font=font;
+//    [textLabel setNumberOfLines:1];
+//    [textLabel sizeToFit];
+//    [view addSubview:textLabel];
+//    
+//    UILabel *liftLabel=[[UILabel alloc]init];
+//    liftLabel.text=@"恭喜获得";
+//    liftLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
+//    [liftLabel setNumberOfLines:1];
+//    [liftLabel sizeToFit];
+//    liftLabel.textColor=[UIColor colorWithRed:102/255.0f green:102/255.0f blue:102/255.0f alpha:1];
+//    [view addSubview:liftLabel];
+//    
+//    UILabel *rightLabel=[[UILabel alloc]init];
+//    rightLabel.text=@"金币";
+//    rightLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
+//    [rightLabel setNumberOfLines:1];
+//    [rightLabel sizeToFit];
+//    rightLabel.textColor=[UIColor colorWithRed:102/255.0f green:102/255.0f blue:102/255.0f alpha:1];
+//    [view addSubview:rightLabel];
+//    
+//    liftLabel.frame=FRAME((WIDTH*0.72-liftLabel.frame.size.width-rightLabel.frame.size.width-textLabel.frame.size.width-10)/2, WIDTH*0.72*0.70+75, liftLabel.frame.size.width, 15);
+//    textLabel.frame=FRAME(liftLabel.frame.size.width+liftLabel.frame.origin.x+5, WIDTH*0.72*0.70+60, textLabel.frame.size.width, 30);
+//    rightLabel.frame=FRAME(textLabel.frame.size.width+textLabel.frame.origin.x+5, WIDTH*0.72*0.70+75, rightLabel.frame.size.width, 15);
     
-    UILabel *textLabel=[[UILabel alloc]init];
-    textLabel.text=[NSString stringWithFormat:@"%@",[signDic objectForKey:@"data"]];
-    UIFont *font=[UIFont fontWithName:@"Georgia-Bold" size:30];
-    textLabel.textColor=[UIColor colorWithRed:247/255.0f green:202/255.0f blue:44/255.0f alpha:1];
-    textLabel.font=font;
-    [textLabel setNumberOfLines:1];
-    [textLabel sizeToFit];
-    [view addSubview:textLabel];
+    UIImageView *goldImage=[[UIImageView alloc]initWithFrame:FRAME((WIDTH*0.72-100)/4, WIDTH*0.72*0.70+23, 50, 50)];
+    goldImage.image=[UIImage imageNamed:@"金币"];
+    [view addSubview:goldImage];
     
-    UILabel *liftLabel=[[UILabel alloc]init];
-    liftLabel.text=@"恭喜获得";
-    liftLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
-    [liftLabel setNumberOfLines:1];
-    [liftLabel sizeToFit];
-    liftLabel.textColor=[UIColor colorWithRed:102/255.0f green:102/255.0f blue:102/255.0f alpha:1];
-    [view addSubview:liftLabel];
+    UIImageView *valueImage=[[UIImageView alloc]initWithFrame:FRAME((WIDTH*0.72-100)/4*3+50, WIDTH*0.72*0.70+23, 50, 50)];
+    valueImage.image=[UIImage imageNamed:@"经验值"];
+    [view addSubview:valueImage];
     
-    UILabel *rightLabel=[[UILabel alloc]init];
-    rightLabel.text=@"金币";
-    rightLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
-    [rightLabel setNumberOfLines:1];
-    [rightLabel sizeToFit];
-    rightLabel.textColor=[UIColor colorWithRed:102/255.0f green:102/255.0f blue:102/255.0f alpha:1];
-    [view addSubview:rightLabel];
+    UILabel *goldLabel=[[UILabel alloc]initWithFrame:FRAME(0, WIDTH*0.72*0.70+83, (WIDTH*0.72)/2, 20)];
+    goldLabel.font=[UIFont fontWithName:@"Georgia-Bold" size:15];
+    goldLabel.text=[NSString stringWithFormat:@"金币+%@",[signDic objectForKey:@"data"]];
+    goldLabel.textColor=[UIColor colorWithRed:255/255.0f green:157/255.0f blue:48/255.0f alpha:1];
+    goldLabel.textAlignment=NSTextAlignmentCenter;
+    [view addSubview:goldLabel];
     
-    liftLabel.frame=FRAME((WIDTH*0.72-liftLabel.frame.size.width-rightLabel.frame.size.width-textLabel.frame.size.width-10)/2, WIDTH*0.72*0.70+75, liftLabel.frame.size.width, 15);
-    textLabel.frame=FRAME(liftLabel.frame.size.width+liftLabel.frame.origin.x+5, WIDTH*0.72*0.70+60, textLabel.frame.size.width, 30);
-    rightLabel.frame=FRAME(textLabel.frame.size.width+textLabel.frame.origin.x+5, WIDTH*0.72*0.70+75, rightLabel.frame.size.width, 15);
+    UILabel *valueLabel=[[UILabel alloc]initWithFrame:FRAME((WIDTH*0.72)/2, WIDTH*0.72*0.70+83, (WIDTH*0.72)/2, 20)];
+    valueLabel.font=[UIFont fontWithName:@"Georgia-Bold" size:15];
+    valueLabel.text=[NSString stringWithFormat:@"经验值+%@",[signDic objectForKey:@"data"]];
+    valueLabel.textColor=[UIColor colorWithRed:191/255.0f green:127/255.0f blue:127/255.0f alpha:1];
+    valueLabel.textAlignment=NSTextAlignmentCenter;
+    [view addSubview:valueLabel];
     
     UIView *hengView=[[UIView alloc]initWithFrame:FRAME(0, WIDTH*0.72*0.70+127, WIDTH*0.72, 1)];
     hengView.backgroundColor=[UIColor colorWithRed:232/255.0f green:232/255.0f blue:232/255.0f alpha:1];
@@ -457,53 +657,7 @@ static CGFloat const imageBGHeight = 363; // 背景图片的高度
 //            webPageVC.barIDS=100;
 //            webPageVC.webURL=[NSString stringWithFormat:@"http://51xingzheng.cn"];
 //            [self.navigationController pushViewController:webPageVC animated:YES];
-            UINavigationController *communityViewController = [UMCommunity getFeedsModalViewController];
-            [self presentViewController:communityViewController animated:YES completion:nil];
-            
-        }
-            break;
-        case 1:
-        {
-            
-            WebPageViewController *webPageVC=[[WebPageViewController alloc]init];
-            webPageVC.barIDS=100;
-            webPageVC.webURL=[NSString stringWithFormat:@"http://edu.51xingzheng.cn"];
-            [self.navigationController pushViewController:webPageVC animated:YES];
-            
-        }
-            break;
-        case 2:
-        {
-            
-            SchoolViewController *schoolVC=[[SchoolViewController alloc]init];
-            [self.navigationController pushViewController:schoolVC animated:YES];
            
-            
-        }
-            break;
-        case 3:
-        {
-//            ISLoginManager *_manager = [ISLoginManager shareManager];
-//            NSString *url=[NSString stringWithFormat:@"http://123.57.173.36/simi/app/user/score_shop.json?user_id=%@",_manager.telephone];
-//            CreditWebViewController *web=[[CreditWebViewController alloc]initWithUrl:url];//实际中需要改为带签名的地址
-//            //如果已经有UINavigationContoller了，就 创建出一个 CreditWebViewController 然后 push 进去
-//            [self.navigationController pushViewController:web animated:YES];
-            if(fatherVc.loginYesOrNo){
-                [self SignLayout];
-            }else{
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    MyLogInViewController *loginViewController = [[MyLogInViewController alloc] init];
-                    loginViewController.vCYMID=100;
-                    UMComNavigationController *navigationController = [[UMComNavigationController alloc] initWithRootViewController:loginViewController];
-                    [self presentViewController:navigationController animated:YES completion:^{
-                    }];
-                });
-            }
-            
-        }
-            break;
-        case 4:
-        {
             ISLoginManager *_manager = [ISLoginManager shareManager];
             WebPageViewController *webPageVC=[[WebPageViewController alloc]init];
             webPageVC.barIDS=100;
@@ -516,26 +670,87 @@ static CGFloat const imageBGHeight = 363; // 背景图片的高度
             [self.navigationController pushViewController:webPageVC animated:YES];
         }
             break;
+        case 1:
+        {
+            
+            UINavigationController *communityViewController = [UMCommunity getFeedsModalViewController];
+            [self presentViewController:communityViewController animated:YES completion:nil];
+//            WebPageViewController *webPageVC=[[WebPageViewController alloc]init];
+//            webPageVC.barIDS=100;
+//            webPageVC.webURL=[NSString stringWithFormat:@"http://edu.51xingzheng.cn"];
+//            [self.navigationController pushViewController:webPageVC animated:YES];
+            
+        }
+            break;
+        case 2:
+        {
+            
+            ToolListViewController *schoolVC=[[ToolListViewController alloc]init];
+            [self.navigationController pushViewController:schoolVC animated:YES];
+//            ISLoginManager *_manager = [ISLoginManager shareManager];
+//            NSString *url=[NSString stringWithFormat:@"http://123.57.173.36/simi/app/user/score_shop.json?user_id=%@",_manager.telephone];
+//            CreditWebViewController *web=[[CreditWebViewController alloc]initWithUrl:url];//实际中需要改为带签名的地址
+//            //如果已经有UINavigationContoller了，就 创建出一个 CreditWebViewController 然后 push 进去
+//            [self.navigationController pushViewController:web animated:YES];
+            
+        }
+            break;
+        case 3:
+        {
+            
+            WholeViewController *wholeViewController=[[WholeViewController alloc]init];
+            wholeViewController.channel_id=[NSString stringWithFormat:@"99"];
+            wholeViewController.whoVCID=101;
+            [self.navigationController pushViewController:wholeViewController animated:YES];
+            
+        }
+            break;
+        case 4:
+        {
+//            if (fatherVc.loginYesOrNo) {
+                Workplace_askViewController *askVC=[[Workplace_askViewController alloc]init];
+                [self.navigationController pushViewController:askVC animated:YES];
+//            }else{
+//                dispatch_async(dispatch_get_main_queue(), ^{
+//                    MyLogInViewController *loginViewController = [[MyLogInViewController alloc] init];
+//                    loginViewController.vCYMID=100;
+//                    UMComNavigationController *navigationController = [[UMComNavigationController alloc] initWithRootViewController:loginViewController];
+//                    [self presentViewController:navigationController animated:YES completion:^{
+//                    }];
+//                });
+//            }
+           
+        }
+            break;
         case 5:
         {
-            ISLoginManager *_manager = [ISLoginManager shareManager];
-            WebPageViewController *webPageVC=[[WebPageViewController alloc]init];
-            webPageVC.barIDS=100;
-            if (fatherVc.loginYesOrNo) {
-                webPageVC.webURL=[NSString stringWithFormat:@"http://123.57.173.36/simi-h5/show/cv-switch-list.html?user_id=%@",_manager.telephone];
+            if(fatherVc.loginYesOrNo){
+                [self SignLayout];
             }else{
-                webPageVC.webURL=[NSString stringWithFormat:@"http://123.57.173.36/simi-h5/show/cv-switch-list.html?user_id=0"];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    MyLogInViewController *loginViewController = [[MyLogInViewController alloc] init];
+                    loginViewController.vCYMID=100;
+                    UMComNavigationController *navigationController = [[UMComNavigationController alloc] initWithRootViewController:loginViewController];
+                    [self presentViewController:navigationController animated:YES completion:^{
+                    }];
+                });
             }
-            [self.navigationController pushViewController:webPageVC animated:YES];
+
+//            ISLoginManager *_manager = [ISLoginManager shareManager];
+//            WebPageViewController *webPageVC=[[WebPageViewController alloc]init];
+//            webPageVC.barIDS=100;
+//            if (fatherVc.loginYesOrNo) {
+//                webPageVC.webURL=[NSString stringWithFormat:@"http://123.57.173.36/simi-h5/show/cv-switch-list.html?user_id=%@",_manager.telephone];
+//            }else{
+//                webPageVC.webURL=[NSString stringWithFormat:@"http://123.57.173.36/simi-h5/show/cv-switch-list.html?user_id=0"];
+//            }
+//            [self.navigationController pushViewController:webPageVC animated:YES];
             
         }
             break;
         case 6:
         {
-            WholeViewController *wholeViewController=[[WholeViewController alloc]init];
-            wholeViewController.channel_id=[NSString stringWithFormat:@"99"];
-            wholeViewController.whoVCID=101;
-            [self.navigationController pushViewController:wholeViewController animated:YES];
+            
         }
             break;
         case 7:
@@ -850,8 +1065,8 @@ static CGFloat const imageBGHeight = 363; // 背景图片的高度
         kuan+=t;
     }
     int _offSet=(int)(sender.tag-1000);
-    if (kuan>WIDTH) {
-        if (_offSet>2&&_offSet!=arraY.count-1&&_offSet>scrollID) {
+    if (kuan>WIDTH-40) {
+        if (_offSet>2&&_offSet/*!=arraY.count-1*/&&_offSet>scrollID) {
             buttID=1;
             [UIView beginAnimations: @"Animation" context:nil];
             [UIView setAnimationDuration:1];
@@ -864,24 +1079,26 @@ static CGFloat const imageBGHeight = 363; // 背景图片的高度
                 }else if (maximumOffset-currentOffset<width){
                     rootView.contentOffset=CGPointMake(rootView.contentOffset.x+maximumOffset-currentOffset, 0);
                     widths=maximumOffset-currentOffset;
-                }else{
+                }else if(maximumOffset-currentOffset>0){
                     rootView.contentOffset=CGPointMake(rootView.contentOffset.x+width, 0);
                     widths=width;
+                }else{
+                    
                 }
             }
             [UIView commitAnimations];
             
         }else if (buttID==1&&_offSet<scrollID){
-            if (currentOffset==WIDTH) {
+            if (currentOffset==WIDTH-40) {
                 
             }else{
                 [UIView beginAnimations: @"Animation" context:nil];
                 [UIView setAnimationDuration:1];
-                if (currentOffset-WIDTH==width) {
+                if (currentOffset-(WIDTH-40)==width) {
                     rootView.contentOffset=CGPointMake(rootView.contentOffset.x-width, 0);
                     widths=width;
-                }else if (currentOffset-WIDTH<width){
-                    rootView.contentOffset=CGPointMake(rootView.contentOffset.x-(currentOffset-WIDTH), 0);
+                }else if (currentOffset-(WIDTH-40)<width){
+                    rootView.contentOffset=CGPointMake(rootView.contentOffset.x-(currentOffset-(WIDTH-40)), 0);
                     widths=maximumOffset-currentOffset;
                 }else{
                     rootView.contentOffset=CGPointMake(rootView.contentOffset.x-width, 0);
@@ -905,7 +1122,7 @@ static CGFloat const imageBGHeight = 363; // 背景图片的高度
     [UIView beginAnimations: @"Animation" context:nil];
     [UIView setAnimationDuration:0.3];
     
-    lineImageView.frame=CGRectMake(huang, 35, width, 2);
+    lineImageView.frame=CGRectMake(huang, 36, width, 2);
     [UIView commitAnimations];
     scrollID=(int)(sender.tag-1000);
     [self getLayout];
@@ -916,38 +1133,77 @@ static CGFloat const imageBGHeight = 363; // 背景图片的高度
     switch (scrollID) {
         case 0:
         {
-           
-            urlStr=@"http://51xingzheng.cn/?json=get_tag_posts&count=10&order=DESC&slug=%E9%A6%96%E9%A1%B5%E7%B2%BE%E9%80%89&include=id,title,modified,url,thumbnail,custom_fields";
+            if (fatherVc.loginYesOrNo) {
+                
+                NSString *textStr= [subscribeAry componentsJoinedByString:@","];
+                if (textStr==nil||textStr==NULL||[textStr isEqualToString:@""]) {
+                     urlStr=@"http://51xingzheng.cn/?json=get_tag_posts&count=10&order=DESC&slug=%E9%A6%96%E9%A1%B5%E7%B2%BE%E9%80%89&include=id,title,modified,url,thumbnail,custom_fields";
+                }else{
+                    NSString *string=[NSString stringWithFormat:@"http://51xingzheng.cn/api/tags/get_tag_posts/?slug=%@&count=10&order=DESC&include=id,title,url,thumbnail,custom_fields",textStr];
+                    urlStr=[string stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+                    NSLog(@"%@",urlStr);
+                }
+                
+
+            }else{
+                urlStr=@"http://51xingzheng.cn/?json=get_tag_posts&count=10&order=DESC&slug=%E9%A6%96%E9%A1%B5%E7%B2%BE%E9%80%89&include=id,title,modified,url,thumbnail,custom_fields";
+            }
+            
         }
             break;
         case 1:
         {
            
-            urlStr=@"http://51xingzheng.cn/?json=get_category_posts&count=10&order=DESC&id=3&include=id,title,modified,url,thumbnail,custom_fields";
+            urlStr=@"http://51xingzheng.cn/?json=get_category_posts&count=10&order=DESC&id=50&include=id,title,modified,url,thumbnail,custom_fields";
         }
             break;
         case 2:
         {
             
-            urlStr=@"http://51xingzheng.cn/?json=get_category_posts&count=10&order=DESC&id=50&include=id,title,modified,url,thumbnail,custom_fields";
+            urlStr=@"http://51xingzheng.cn/?json=get_category_posts&count=10&order=DESC&id=69&include=id,title,modified,url,thumbnail,custom_fields";
         }
             break;
         case 3:
         {
             
-            urlStr=@"http://51xingzheng.cn/?json=get_category_posts&count=10&order=DESC&id=2&include=id,title,modified,url,thumbnail,custom_fields";
+            urlStr=@"http://51xingzheng.cn/?json=get_category_posts&count=10&order=DESC&id=62&include=id,title,modified,url,thumbnail,custom_fields";
         }
             break;
         case 4:
         {
             
-            urlStr=@"http://51xingzheng.cn/?json=get_category_posts&count=10&order=DESC&id=39&include=id,title,modified,url,thumbnail,custom_fields";
+            urlStr=@"http://51xingzheng.cn/?json=get_category_posts&count=10&order=DESC&id=64&include=id,title,modified,url,thumbnail,custom_fields";
         }
             break;
         case 5:
         {
         
-            urlStr=@"http://51xingzheng.cn/?json=get_category_posts&count=10&order=DESC&id=5&include=id,title,modified,url,thumbnail,custom_fields";
+            urlStr=@"http://51xingzheng.cn/?json=get_category_posts&count=10&order=DESC&id=21&include=id,title,modified,url,thumbnail,custom_fields";
+        }
+            break;
+        case 6:
+        {
+            urlStr=@"http://51xingzheng.cn/?json=get_category_posts&count=10&order=DESC&id=63&include=id,title,modified,url,thumbnail,custom_fields";
+        }
+            break;
+        case 7:
+        {
+            urlStr=@"http://51xingzheng.cn/?json=get_category_posts&count=10&order=DESC&id=65&include=id,title,modified,url,thumbnail,custom_fields";
+        }
+            break;
+        case 8:
+        {
+            urlStr=@"http://51xingzheng.cn/?json=get_category_posts&count=10&order=DESC&id=66&include=id,title,modified,url,thumbnail,custom_fields";
+        }
+            break;
+        case 9:
+        {
+            urlStr=@"http://51xingzheng.cn/?json=get_category_posts&count=10&order=DESC&id=67&include=id,title,modified,url,thumbnail,custom_fields";
+        }
+            break;
+        case 10:
+        {
+            urlStr=@"http://51xingzheng.cn/?json=get_category_posts&count=10&order=DESC&id=70&include=id,title,modified,url,thumbnail,custom_fields";
         }
             break;
         default:
@@ -1064,5 +1320,132 @@ static CGFloat const imageBGHeight = 363; // 背景图片的高度
     
 }
 #pragma mark 表格刷新相关
+
+
+#pragma mark  add页面相关
+- (void)registerClass:(Class)cellClass forCellWithReuseIdentifier:(NSString *)identifier
+{
+    
+}
+-(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+{
+    return addArray.count;
+}
+-(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
+{
+    return 1;
+}
+-(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSString *identify=@"cell";//[NSString stringWithFormat:@"cell%ld%ld",(long)indexPath.section,(long)indexPath.row];
+//    NSDictionary *dataDic=plusArray[indexPath.row];
+    AddLabelCollectionViewCell *cell=[collectionView dequeueReusableCellWithReuseIdentifier:identify forIndexPath:indexPath];
+    [cell sizeToFit];
+    if (!cell) {
+        NSLog(@"无法创建CollectionViewCell时打印，自定义cell就不可能进来了");
+    }
+    NSString *string=[NSString stringWithFormat:@"%@",addArray[indexPath.row]];
+    if ([subscribeAry containsObject:string]) {
+        cell.nameLabel.textColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
+        
+        if ([textArray containsObject:string]) {
+            
+        }else{
+            [textArray addObject:string];
+        }
+    }else{
+        cell.nameLabel.textColor=[UIColor blackColor];
+    }
+    cell.nameLabel.text=[NSString stringWithFormat:@"%@",addArray[indexPath.row]];
+    cell.nameLabel.textAlignment=NSTextAlignmentCenter;
+    cell.backgroundColor=[UIColor colorWithRed:255/255.0f green:255/255.0f blue:255/255.0f alpha:1];
+    return cell;
+}
+-(UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
+{
+    
+//    NSString *reuseIdentifier;
+    if ([kind isEqualToString: UICollectionElementKindSectionFooter ]){
+        UICollectionReusableView *headerView=[collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:@"FooterReusableView" forIndexPath:indexPath];
+        UIView *view=[[UIView alloc]initWithFrame:FRAME(0, 0, WIDTH, 40)];
+        [headerView addSubview:view];
+        UILabel *label=[[UILabel alloc]initWithFrame:FRAME(5, 20, WIDTH-10, 20)];
+        label.text=@"轻点标签，即可在首页看到自己感兴趣的内容";
+        label.font=[UIFont fontWithName:@"Heiti SC" size:12];
+        label.textAlignment=NSTextAlignmentCenter;
+        label.textColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
+        [view addSubview:label];
+        return headerView;
+
+    }else{
+        UICollectionReusableView *headerView=[collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"ReusableView" forIndexPath:indexPath];
+        UIView *view=[[UIView alloc]initWithFrame:FRAME(0, 0, WIDTH, 40)];
+        [headerView addSubview:view];
+        UILabel *label=[[UILabel alloc]initWithFrame:FRAME(5, 10, 100, 20)];
+        label.text=@"我的订阅";
+        label.font=[UIFont fontWithName:@"Heiti SC" size:15];
+        [view addSubview:label];
+        return headerView;
+
+    }
+}
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    return CGSizeMake((WIDTH-25)/4, 40);
+}
+-(UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
+{
+    return UIEdgeInsetsMake(5, 5, 5, 5);
+}
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section
+{
+    return 5.0f;
+}
+
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section
+{
+    return 0.0f;
+}
+//返回头footerView的大小
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section
+{
+    CGSize size={WIDTH,40};
+    return size;
+}
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section
+{
+    return CGSizeMake(WIDTH, 40);
+}
+-(BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(nonnull NSIndexPath *)indexPath
+{
+    return YES;
+}
+-(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    ISLoginManager *_manager = [ISLoginManager shareManager];
+    DownloadManager *_download = [[DownloadManager alloc]init];
+    NSString *indexStr=[NSString stringWithFormat:@"%@",addArray[indexPath.row]];
+    if([textArray containsObject:indexStr]){
+        [textArray removeObject:indexStr];
+    }else{
+        [textArray addObject:indexStr];
+    }
+    NSString *textStr= [textArray componentsJoinedByString:@","];
+   
+    NSDictionary *dict=@{@"user_id":_manager.telephone,@"subscribe_tags":textStr};
+    [_download requestWithUrl:[NSString stringWithFormat:@"%@",SUBSCRIBE_SET_UP] dict:dict view:self.view delegate:self finishedSEL:@selector(Set_UpSuccess:) isPost:YES failedSEL:@selector(Set_UpFail:)];
+}
+#pragma mark设置用户订阅的文章标签接口成功返回
+-(void)Set_UpSuccess:(id)sender
+{
+    NSLog(@"设置用户订阅的文章标签接口成功返回%@",sender);
+    [textArray removeAllObjects];
+    [self subscribe];
+}
+#pragma mark设置用户订阅的文章标签接口失败返回
+-(void)Set_UpFail:(id)sender
+{
+    NSLog(@"设置用户订阅的文章标签接口失败返回%@",sender);
+}
 
 @end

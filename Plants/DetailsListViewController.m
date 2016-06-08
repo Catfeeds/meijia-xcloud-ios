@@ -608,6 +608,16 @@ int heights,Y,processIDs=0;
             
         }
             break;
+        case 0:
+        {
+            timeLabel.hidden=NO;
+            remindLabel.hidden=NO;
+            addressLabel.hidden=YES;
+            flightLabel.hidden=YES;
+            frame=remindLabel.frame.origin.y+remindLabel.frame.size.height+10;
+            
+        }
+            break;
             
         default:
             break;

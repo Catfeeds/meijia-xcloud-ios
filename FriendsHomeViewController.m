@@ -34,10 +34,7 @@ ShopViewController *shopViewController;
     [super viewDidLoad];
     self.navlabel.text=@"好友主页";
     self.view.backgroundColor=[UIColor colorWithRed:200/255.0f green:200/255.0f blue:200/255.0f alpha:1];
-    ISLoginManager *_manager = [ISLoginManager shareManager];
-    DownloadManager *_download = [[DownloadManager alloc]init];
-    NSDictionary *_dic = @{@"user_id":_manager.telephone,@"view_user_id":_view_user_id};
-    [_download requestWithUrl:USER_GRZY dict:_dic view:self.view delegate:self finishedSEL:@selector(HomeSuccess:) isPost:NO failedSEL:@selector(HomeFailure:)];
+    
     mainView = [[UIView alloc]initWithFrame:CGRectMake(0, HEIGHT*0.43+116,SELF_VIEW_WIDTH, HEIGHT-(HEIGHT*0.43+116))];
     mainView.backgroundColor=[UIColor blackColor];
     [self.view addSubview:mainView];
@@ -54,6 +51,23 @@ ShopViewController *shopViewController;
     currentViewController = shopViewController;
 
         // Do any additional setup after loading the view.
+}
+-(void)viewWillAppear:(BOOL)animated
+{
+    if (self.loginYesOrNo) {
+        ISLoginManager *_manager = [ISLoginManager shareManager];
+        DownloadManager *_download = [[DownloadManager alloc]init];
+        NSDictionary *_dic = @{@"user_id":_manager.telephone,@"view_user_id":_view_user_id};
+        [_download requestWithUrl:USER_GRZY dict:_dic view:self.view delegate:self finishedSEL:@selector(HomeSuccess:) isPost:NO failedSEL:@selector(HomeFailure:)];
+    }else{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            MyLogInViewController *loginViewController = [[MyLogInViewController alloc] init];
+            loginViewController.vCYMID=1000;
+            UMComNavigationController *navigationController = [[UMComNavigationController alloc] initWithRootViewController:loginViewController];
+            [self presentViewController:navigationController animated:YES completion:^{
+            }];
+        });
+    }
 }
 #pragma mark 获取好友个人主页成功接口返回数据
 -(void)HomeSuccess:(id)sender

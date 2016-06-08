@@ -8,6 +8,6 @@
 
 #import "FatherViewController.h"
 
-@interface UserInfoViewController : FatherViewController<UIImagePickerControllerDelegate,UINavigationControllerDelegate>
+@interface UserInfoViewController : FatherViewController<UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIScrollViewDelegate>
 
 @end

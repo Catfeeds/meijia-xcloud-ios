@@ -75,7 +75,18 @@ float lastContentOffset;
     [MobClick beginLogPageView:self.navlabel.text];
     numberArray=[[NSMutableArray alloc]init];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
-    [self PLJKLayout];
+    if (self.loginYesOrNo) {
+        [self PLJKLayout];
+    }else{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            MyLogInViewController *loginViewController = [[MyLogInViewController alloc] init];
+            loginViewController.vCYMID=1000;
+            UMComNavigationController *navigationController = [[UMComNavigationController alloc] initWithRootViewController:loginViewController];
+            [self presentViewController:navigationController animated:YES completion:^{
+            }];
+        });
+    }
+    
    
 }
 - (void)viewWillDisappear:(BOOL)animated
@@ -377,7 +388,7 @@ float lastContentOffset;
         [actView setHidesWhenStopped:YES]; //当旋转结束时隐藏
         //        [self adViewLayout];
     }
-    [self PLJKLayout];
+//    [self PLJKLayout];
 }
 -(void)PLJKLayout
 {
@@ -492,7 +503,8 @@ float lastContentOffset;
         }else{
             for (int i=0; i<array.count; i++) {
                 if ([numberArray containsObject:array[i]]) {
-                    
+                    [numberArray removeObject:array[i]];
+                    [numberArray addObject:array[i]];
                 }else{
                     [numberArray addObject:array[i]];
                 }

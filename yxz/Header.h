@@ -192,4 +192,13 @@
 #define WATER_SETUP                      @"simi/app/op/get_apptools_status.json"        //用户-应用列表配置接口
 #define ORDER_schedule                   @"simi/app/order/get_log.json"                 //订单日志/进度接口
 #define ARTICLE_CLICK_BOOL               @"simi/app/feed/get_zan.json"                  //获取当前动态是否点赞接口
+#define SUBSCRIBE_DEFAULT                @"simi/app/user/get_default_subscribe_tags.json"      //获取默认订阅文章标签
+#define SUBSCRIBE_SET_UP                 @"simi/app/user/set_user_subscribe_tags.json"   //设置用户订阅的文章标签接口
+#define SUBSCRIBE_USER                   @"simi/app/user/get_user_subscribe_tags.json"   //获取用户订阅的文章标签接口
+#define REMIND_COMMON                    @"simi/app/user/get_alarm.json"                 //获取常用提醒接口
+#define SETUP_REMIND                     @"simi/app/user/set_alarm.json"                 //设置常用提醒接口
+#define ASK_TAB_LABEL                    @"simi/app/dict/get_tag_list.json"              //问答获取标签列表接口
+#define COMMENT_ADOPY                    @"simi/app/feed/post_done.json"                 //动态采纳接口
+#define COMMENT_CLOSE                    @"simi/app/feed/post_close.json"                //动态关闭接口
+#define TOOL_ROMM                       @"simi/app/user/get_setting.json"               //获取配置信息接口
 #endif

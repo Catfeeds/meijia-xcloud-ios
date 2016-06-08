@@ -1151,6 +1151,33 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     dateDic=dic;
     NSLog(@"%@",dateDic);
     NSLog(@"remind_time%@",timeStr);
+    if ([[dic objectForKey:@"ac"] isEqualToString:@"m"]) {
+        NSString *url;
+        if ([[dic objectForKey:@"ca"] isEqualToString:@"app"]) {
+            if ([[dic objectForKey:@"pa"] isEqualToString:@""]) {
+                url=[NSString stringWithFormat:@"http://www.51xingzheng.cn/d/open.html?category=%@&action=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"]];
+            }else if([[dic objectForKey:@"ca"] isEqualToString:@"h5"]){
+                url=[NSString stringWithFormat:@"http://www.51xingzheng.cn/d/open.html?category=%@&action=%@&params=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"],[dic objectForKey:@"pa"]];
+            }
+            
+        }else{
+            url=[NSString stringWithFormat:@"%@",[dic objectForKey:@"go"]];
+        }
+
+        NSString *ca=[NSString stringWithFormat:@"%@",[dic objectForKey:@"ca"]];
+        NSString *aj=[NSString stringWithFormat:@"%@",[dic objectForKey:@"aj"]];
+        NSString *pa=[NSString stringWithFormat:@"%@",[dic objectForKey:@"pa"]];
+        NSString *go=[NSString stringWithFormat:@"%@",[dic objectForKey:@"go"]];
+        if ((ca==nil||ca==NULL||[ca isEqualToString:@"(null)"])&&(aj==nil||aj==NULL||[aj isEqualToString:@"(null)"])&&(pa==nil||pa==NULL||[pa isEqualToString:@"(null)"])&&(go==nil||go==NULL||[go isEqualToString:@"(null)"])) {
+            
+        }else{
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"URLOPEN" object:url];
+        }
+
+//        [[NSNotificationCenter defaultCenter] postNotificationName:@"URLOPEN" object:url];
+        //        return;
+    }
+
     if ([[dic objectForKey:@"ac"] isEqualToString:@"a"]) {
         badge=100;
     }
@@ -1271,6 +1298,28 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
         }
     NSString *actionStr=[NSString stringWithFormat:@"%@",[dic objectForKey:@"ac"]];
     if ([actionStr isEqualToString:@"m"]) {
+        NSString *url;
+       
+        if ([[dic objectForKey:@"ca"] isEqualToString:@"app"]) {
+            if ([[dic objectForKey:@"pa"] isEqualToString:@""]) {
+                url=[NSString stringWithFormat:@"http://www.51xingzheng.cn/d/open.html?category=%@&action=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"]];
+            }else{
+                url=[NSString stringWithFormat:@"http://www.51xingzheng.cn/d/open.html?category=%@&action=%@&params=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"],[dic objectForKey:@"pa"]];
+            }
+            
+        }else if([[dic objectForKey:@"ca"] isEqualToString:@"h5"]){
+            url=[NSString stringWithFormat:@"%@",[dic objectForKey:@"go"]];
+        }
+
+        NSString *ca=[NSString stringWithFormat:@"%@",[dic objectForKey:@"ca"]];
+        NSString *aj=[NSString stringWithFormat:@"%@",[dic objectForKey:@"aj"]];
+        NSString *pa=[NSString stringWithFormat:@"%@",[dic objectForKey:@"pa"]];
+        NSString *go=[NSString stringWithFormat:@"%@",[dic objectForKey:@"go"]];
+        if ((ca==nil||ca==NULL||[ca isEqualToString:@"(null)"])&&(aj==nil||aj==NULL||[aj isEqualToString:@"(null)"])&&(pa==nil||pa==NULL||[pa isEqualToString:@"(null)"])&&(go==nil||go==NULL||[go isEqualToString:@"(null)"])) {
+            
+        }else{
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"URLOPEN" object:url];
+        }
         
 //        return;
     }
@@ -1329,7 +1378,10 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
                 
             }else if([actionStr isEqualToString:@"m"]){
                 if (pushIDs!=1000) {
-                    [[NSNotificationCenter defaultCenter] postNotificationName:@"Newinformation" object:dic];
+                    if ([[dic objectForKey:@"ca"] isEqualToString:@""]&&[[dic objectForKey:@"pa"] isEqualToString:@""]&&[[dic objectForKey:@"aj"] isEqualToString:@""]&&[[dic objectForKey:@"go"] isEqualToString:@""]) {
+                        [[NSNotificationCenter defaultCenter] postNotificationName:@"Newinformation" object:dic];
+                    }
+                    
                 }
             }else{
                 if (pushIDs!=1000) {
@@ -1368,11 +1420,8 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     
 }
 - (void)GeTuiSDkDidNotifySdkState:(SdkStatus)aStatus {
-    
     // [EXT]:通知SDK运行状态
-    
     _sdkStatus = aStatus;
-    
 }
 
 #pragma mark--------------------APN-----------------
@@ -1578,8 +1627,8 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
             [splashView addSubview:_adView];
             splashView.userInteractionEnabled=YES;
             _adView.userInteractionEnabled=YES;
-            UITapGestureRecognizer *imageTap=[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(imgTap)];
-            [_adView addGestureRecognizer:imageTap];
+//            UITapGestureRecognizer *imageTap=[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(imgTap)];
+//            [_adView addGestureRecognizer:imageTap];
             
             [self performSelector:@selector(showWord) withObject:nil afterDelay:3.0f];
             

@@ -232,15 +232,26 @@
             plView.hidden=YES;
         }
         myWebView.scalesPageToFit = NO;
+        [myWebView setOpaque:YES];
+//        myWebView.backgroundColor=[UIColor whiteColor];
         myWebView.delegate=self;
         //self.meWebView.hidden=YES;
+//        for (UIScrollView* view in myWebView.subviews)
+//        {
+//            if ([view isKindOfClass:[UIScrollView class]])
+//            {
+//                view.bounces = NO;
+//            }
+//        }
+        myWebView.backgroundColor = [UIColor clearColor];
+        myWebView.scrollView.backgroundColor=[UIColor clearColor];
+        [myWebView setOpaque:NO];
         myWebView.scrollView.delegate=self;
         [self.view addSubview:myWebView];
         [self.navigationController.navigationBar.backItem setHidesBackButton:YES];
         [self.navigationController.navigationItem setHidesBackButton:YES];
         [self.navigationItem setHidesBackButton:YES];
         
-       
         
         //        [myWebView loadHTMLString:htmlURlStr baseURL:nil];
         
@@ -274,7 +285,7 @@
        
         webTitleLabel.textAlignment=NSTextAlignmentCenter;
         webTitleLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
-        self.navigationItem.titleView =webTitleLabel;
+//        self.navigationItem.titleView =webTitleLabel;
         
         UIButton *rightButton=[[UIButton alloc]initWithFrame:FRAME(WIDTH-70, 0, 50, 40)];
         //        rightButton.backgroundColor=[UIColor blackColor];
@@ -362,6 +373,7 @@
 
 -(void) loadMyWebView{
     NSString *urlString = [NSString stringWithFormat:@"http://51xingzheng.cn/?json=get_post&post_id=%@&include=id,title,modified,url,thumbnail,custom_fields,content",_listID];
+    NSLog(@"%@",urlString);
     AFHTTPRequestOperationManager *mymanager = [AFHTTPRequestOperationManager manager];
     
     [mymanager GET:[NSString stringWithFormat:@"%@",urlString] parameters:nil success:^(AFHTTPRequestOperation *opretion, id responseObject){
@@ -369,8 +381,16 @@
         
         NSString *title=[NSString stringWithFormat:@"%@",[dataDict objectForKey:@"title"]];
         NSString *linkStr=[NSString stringWithFormat:@"%@",[dataDict objectForKey:@"content"]];
+        NSLog(@"%@",linkStr);
         //初始化和html字符串
-        webURLSSS=[NSString stringWithFormat:@"<body style='background-color:#EBEBF3'><h2>%@</h2><p>%@</p>>",title,linkStr];
+        if(WIDTH==320){
+            webURLSSS=[NSString stringWithFormat:@"<head><style>img{max-width:310px !important;}</style></head><body style='background-color:#f8f8f8'><h2>%@</h2><p>%@</p>",title,linkStr];
+        }else if (WIDTH==375){
+            webURLSSS=[NSString stringWithFormat:@"<head><style>img{max-width:365px !important;}</style></head><body style='background-color:#f8f8f8'><h2>%@</h2><p>%@</p>",title,linkStr];
+        }else if (WIDTH==540){
+            webURLSSS=[NSString stringWithFormat:@"<head><style>img{max-width:530px !important;}</style></head><body style='background-color:#f8f8f8'><h2>%@</h2><p>%@</p>",title,linkStr];
+        }
+         
         webTitleLabel.text=title;
         [self loadGoogle];
         
@@ -527,6 +547,12 @@
     }
     
 }
+#pragma mark - UIAlertViewDelegate
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    [self.myTimer invalidate];
+    [self.navigationController popViewControllerAnimated:YES];
+}
 -(void)liftButAction
 {
     [myTextView resignFirstResponder];
@@ -559,6 +585,7 @@
             if (webDJID==0) {
                 webDJID++;
             }
+//            return NO;
             
         }
             break;
@@ -626,6 +653,50 @@
     [webActivityView setHidesWhenStopped:YES]; //当旋转结束时隐藏
 //    webTitleLabel.text = [webView stringByEvaluatingJavaScriptFromString:@"document.title"];
     refreshURL=webView.request.URL.absoluteString;
+    if(WIDTH==320){
+        [webView stringByEvaluatingJavaScriptFromString:
+         @"var script = document.createElement('script');"
+         "script.type = 'text/javascript';"
+         "script.text = \"function ResizeImages() { "
+         "var myimg,oldwidth,oldheight;"
+         "var maxwidth=310px;"// 图片宽度
+         "for(i=0;i  maxwidth){"
+         "myimg.width = maxwidth;"
+         "}"
+         "}"
+         "}\";"
+         "document.getElementsByTagName('head')[0].appendChild(script);"];
+        [webView stringByEvaluatingJavaScriptFromString:@"ResizeImages();"];
+    }else if (WIDTH==375){
+        [webView stringByEvaluatingJavaScriptFromString:
+         @"var script = document.createElement('script');"
+         "script.type = 'text/javascript';"
+         "script.text = \"function ResizeImages() { "
+         "var myimg,oldwidth,oldheight;"
+         "var maxwidth=365px;"// 图片宽度
+         "for(i=0;i  maxwidth){"
+         "myimg.width = maxwidth;"
+         "}"
+         "}"
+         "}\";"
+         "document.getElementsByTagName('head')[0].appendChild(script);"];
+        [webView stringByEvaluatingJavaScriptFromString:@"ResizeImages();"];
+    }else if (WIDTH==540){
+        [webView stringByEvaluatingJavaScriptFromString:
+         @"var script = document.createElement('script');"
+         "script.type = 'text/javascript';"
+         "script.text = \"function ResizeImages() { "
+         "var myimg,oldwidth,oldheight;"
+         "var maxwidth=530px;"// 图片宽度
+         "for(i=0;i  maxwidth){"
+         "myimg.width = maxwidth;"
+         "}"
+         "}"
+         "}\";"
+         "document.getElementsByTagName('head')[0].appendChild(script);"];
+        [webView stringByEvaluatingJavaScriptFromString:@"ResizeImages();"];
+    }
+    
     NSLog(@"%@",webView.request.URL.absoluteString);
     
 }
@@ -737,7 +808,7 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    if (myTableView) {
+    if (tableView==myTableView) {
         switch (indexPath.row) {
             case 0:
             {
@@ -784,15 +855,37 @@
 #pragma mark 发布按钮点击方法
 -(void)publishBut
 {
-    [myTextView resignFirstResponder];
+    
+    
     DownloadManager *_download = [[DownloadManager alloc]init];
     ISLoginManager *_manager = [ISLoginManager shareManager];
     NSDictionary *_dict=@{@"fid":_listID,@"user_id":_manager.telephone,@"comment":myTextView.text};
     [_download requestWithUrl:[NSString stringWithFormat:@"%@",DYNAMIC_COMMENT] dict:_dict view:self.view delegate:self finishedSEL:@selector(publishSuccess:) isPost:YES failedSEL:@selector(publishFail:)];
+    myTextView.text=NULL;
+    [myTextView resignFirstResponder];
 }
+- (void) dimissAlert:(UIAlertView *)alert {
+    if(alert)     {
+        [alert dismissWithClickedButtonIndex:[alert cancelButtonIndex] animated:YES];
+    }
+}
+
 -(void)publishSuccess:(id)source
 {
+    [[[UIApplication sharedApplication] keyWindow] endEditing:YES];
+    
+    _myTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(popAlertView) userInfo:nil repeats:NO];
+    
+   
     [self listLayout];
+}
+-(void)popAlertView{
+    
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"评论成功" message:nil  delegate:self cancelButtonTitle:nil otherButtonTitles:nil];
+    alert.tag=199;
+    [alert show];
+    [self performSelector:@selector(dimissAlert:) withObject:alert afterDelay:0.5];
+    
 }
 -(void)publishFail:(id)source
 {
@@ -905,7 +998,8 @@
         for (int i=0; i<array.count; i++) {
             NSDictionary *dict=array[i];
             if ([listArray containsObject:dict]) {
-                
+                [listArray removeObject:dict];
+                [listArray addObject:dict];
             }else{
                 [listArray addObject:dict];
             }
@@ -990,6 +1084,8 @@
     
     
 }
+
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

@@ -81,6 +81,17 @@ MYApprovalViewController *myApprovalViewController;
     [super viewWillAppear:animated];
     [MobClick beginLogPageView:self.navlabel.text];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault animated:NO];
+    if (self.loginYesOrNo) {
+        
+    }else{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            MyLogInViewController *loginViewController = [[MyLogInViewController alloc] init];
+            loginViewController.vCYMID=1000;
+            UMComNavigationController *navigationController = [[UMComNavigationController alloc] initWithRootViewController:loginViewController];
+            [self presentViewController:navigationController animated:YES completion:^{
+            }];
+        });
+    }
 }
 - (void)viewWillDisappear:(BOOL)animated
 {

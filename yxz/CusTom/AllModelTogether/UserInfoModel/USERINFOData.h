@@ -18,6 +18,8 @@
 @property (nonatomic, assign) double score;
 @property (nonatomic, strong) NSString *userName;
 @property (nonatomic, strong) NSString *gender;//性别
+@property (nonatomic, strong) NSString *companyName;
+@property (nonatomic, strong) NSString *job_Name;;
 
 
 

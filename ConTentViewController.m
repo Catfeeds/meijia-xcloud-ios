@@ -64,13 +64,7 @@
     
     if (range.location>=200)
     {
-//        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil
-//                                                        message:@"超过最大字数不能输入了"
-//                                                       delegate:nil
-//                                              cancelButtonTitle:@"Ok"
-//                                              otherButtonTitles:nil, nil];
-//        [alert show];
-        //[self.view endEditing:YES];
+
         textViewNum=0;
         return  NO;
     }

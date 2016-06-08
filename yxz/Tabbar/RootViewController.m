@@ -55,6 +55,12 @@
 #import "BlankViewController.h"
 
 #import "ExprViewController.h"
+
+
+#import "FriendsHomeViewController.h"
+#import "Order_ListViewController.h"
+#import "ApplyFriendsListViewController.h"
+#import "Order_DetailsViewController.h"
 @interface RootViewController ()<UIAlertViewDelegate, IChatManagerDelegate,UIAlertViewDelegate>
 {
     UIView *mainView;
@@ -88,6 +94,7 @@
     
     FatherViewController *fatherVc;
     NSString *createPath;
+    NSString *msNameString;
 }
 @end
 #pragma mark - View lifecycle
@@ -120,6 +127,28 @@ MyselfViewController *thirdViewController;
     @finally {
         
     }
+    if (fatherVc.loginYesOrNo) {
+        [self getUserInfo];
+    }
+    [self msLayout];
+}
+-(void)msLayout
+{
+    DownloadManager *_download = [[DownloadManager alloc]init];
+    NSDictionary *_dict=@{@"user_id":@"366"};
+    [_download requestWithUrl:USER_INFO dict:_dict view:self.view delegate:self finishedSEL:@selector(MsFinish:) isPost:NO failedSEL:@selector(MsFail:)];
+}
+#pragma mark 获取秘书信息接口成功返回
+-(void)MsFinish:(id)source
+{
+    NSLog(@"获取秘书信息接口成功返回%@",source);
+    NSDictionary *nameDic=[source objectForKey:@"data"];
+    msNameString=[NSString stringWithFormat:@"%@",[nameDic objectForKey:@"name"]];
+}
+#pragma mark 获取秘书信息接口失败返回
+-(void)MsFail:(id)source
+{
+    NSLog(@"获取秘书信息接口失败返回%@",source);
 }
 -(void)plusLAyout
 {
@@ -205,7 +234,198 @@ MyselfViewController *thirdViewController;
     webPageVC.webURL=[NSString stringWithFormat:@"https://www.baidu.com"];
     [self.navigationController pushViewController:webPageVC animated:YES];
 }
+-(void)urlAction:(NSNotification *)sender
+{
+    NSLog(@"我去  我去 我去 ！");
+    NSDictionary *helpDic;
+    NSURL *url=sender.object;
+    NSString *stringUrl=[NSString stringWithFormat:@"%@",url];
+    if([stringUrl rangeOfString:@"http://www.51xingzheng.cn/d/open.html?"].location ==NSNotFound)
+    {
+        WebPageViewController *webVc=[[WebPageViewController alloc]init];
+        webVc.barIDS=100;
+        webVc.webURL=[NSString stringWithFormat:@"%@",url];
+        [self.navigationController pushViewController:webVc animated:YES];
+        return;
+    }
+    NSArray *array=[stringUrl componentsSeparatedByString:@"?"];
+    NSString *urlStr=[NSString stringWithFormat:@"%@",array[1]];
+     NSLog(@"%@",urlStr);
+    NSArray *urlArray = [urlStr componentsSeparatedByString:@"&"];
+    
+    NSMutableDictionary *tempDic = [NSMutableDictionary dictionaryWithCapacity:4];
+    for (int i=0; i<urlArray.count; i++) {
+        NSArray *dicArray = [urlArray[i] componentsSeparatedByString:@"="];
+        [tempDic setObject:dicArray[1] forKey:dicArray[0]];
+    }
+    
+    if ([[tempDic objectForKey:@"category"] isEqualToString:@"app"]) {
+        if ([[tempDic objectForKey:@"action"] isEqualToString:@"alarm"]) {
+            
+            helpDic=@{@"action":@"alarm"};
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"HELP" object:helpDic];
+            CardPageViewController *pageViewVC=[[CardPageViewController alloc]init];
+            pageViewVC.tyPeStr=urlStr;
+            pageViewVC.navlabelName=@"事务提醒";
+            //                UIStoryboard *storys  = [UIStoryboard storyboardWithName:@"PageStoryboard" bundle:nil];
+            //                pageViewVC=[storys instantiateInitialViewController];
+            pageViewVC.vcID=1003;
+            [self.navigationController pushViewController:pageViewVC animated:YES];
+            
+        }else if ([[tempDic objectForKey:@"action"] isEqualToString:@"meeting"]){
+            
+            helpDic=@{@"action":@"meeting"};
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"HELP" object:helpDic];
+            CardPageViewController *pageViewVC=[[CardPageViewController alloc]init];
+            pageViewVC.tyPeStr=urlStr;
+            pageViewVC.navlabelName=@"会议安排";
+            //                UIStoryboard *storys  = [UIStoryboard storyboardWithName:@"PageStoryboard" bundle:nil];
+            //                pageViewVC=[storys instantiateInitialViewController];
+            pageViewVC.vcID=1001;
+            [self.navigationController pushViewController:pageViewVC animated:YES];
+            
+            
+        }else if ([[tempDic objectForKey:@"action"] isEqualToString:@"notice"]){
+            
+            helpDic=@{@"action":@"notice"};
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"HELP" object:helpDic];
+            CardPageViewController *pageViewVC=[[CardPageViewController alloc]init];
+            pageViewVC.tyPeStr=urlStr;
+            pageViewVC.navlabelName=@"通知公告";
+            //                UIStoryboard *storys  = [UIStoryboard storyboardWithName:@"PageStoryboard" bundle:nil];
+            //                pageViewVC=[storys instantiateInitialViewController];
+            pageViewVC.vcID=1002;
+            [self.navigationController pushViewController:pageViewVC animated:YES];
+            
+            
+        }else if ([[tempDic objectForKey:@"action"] isEqualToString:@"interview"]){
+            
+            helpDic=@{@"action":@"interview"};
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"HELP" object:helpDic];
+            CardPageViewController *pageViewVC=[[CardPageViewController alloc]init];
+            pageViewVC.tyPeStr=urlStr;
+            pageViewVC.navlabelName=@"面试邀约";
+            //                UIStoryboard *storys  = [UIStoryboard storyboardWithName:@"PageStoryboard" bundle:nil];
+            //                pageViewVC=[storys instantiateInitialViewController];
+            pageViewVC.vcID=1004;
+            [self.navigationController pushViewController:pageViewVC animated:YES];
+            
+            
+        }else if ([[tempDic objectForKey:@"action"] isEqualToString:@"trip"]){
+            
+            helpDic=@{@"action":@"trip"};
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"HELP" object:helpDic];
+            CardPageViewController *pageViewVC=[[CardPageViewController alloc]init];
+            pageViewVC.tyPeStr=urlStr;
+            pageViewVC.navlabelName=@"差旅规划";
+            //                UIStoryboard *storys  = [UIStoryboard storyboardWithName:@"PageStoryboard" bundle:nil];
+            //                pageViewVC=[storys instantiateInitialViewController];
+            pageViewVC.vcID=1005;
+            [self.navigationController pushViewController:pageViewVC animated:YES];
+            
+            
+        }else if ([[tempDic objectForKey:@"action"] isEqualToString:@"feed_add"]){
+            
+            helpDic=@{@"action":@"punch_sign"};
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"HELP" object:helpDic];
+            CardPageViewController *pageViewVC=[[CardPageViewController alloc]init];
+            pageViewVC.tyPeStr=urlStr;
+            pageViewVC.navlabelName=@"发布动态";
+            //                UIStoryboard *storys  = [UIStoryboard storyboardWithName:@"PageStoryboard" bundle:nil];
+            //                pageViewVC=[storys instantiateInitialViewController];
+            pageViewVC.vcID=1006;
+            [self.navigationController pushViewController:pageViewVC animated:YES];
+            
+            
+        }else if ([[tempDic objectForKey:@"action"] isEqualToString:@"leave_pass"]){
+            helpDic=@{@"action":@"leave_pass"};
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"HELP" object:helpDic];
+            LeaveListViewController *leaveListVC=[[LeaveListViewController alloc]init];
+            leaveListVC.tyPeStr=urlStr;
+            [self.navigationController pushViewController:leaveListVC animated:YES];
+            
+            
+        }else if ([[tempDic objectForKey:@"action"] isEqualToString:@"feed_add"]){
+            
+            helpDic=@{@"action":@"feed_add"};
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"HELP" object:helpDic];
+            CardPageViewController *pageViewVC=[[CardPageViewController alloc]init];
+            pageViewVC.tyPeStr=urlStr;
+            pageViewVC.vcID=1008;
+            [self.navigationController pushViewController:pageViewVC animated:YES];
+            
+            
+        }else if([[tempDic objectForKey:@"action"] isEqualToString:@"water"]){
+            
+            WaterListViewController *plantsVc=[[WaterListViewController alloc]init];
+            plantsVc.tyPeStr=urlStr;
+            [self.navigationController pushViewController:plantsVc animated:YES];
+            
+        }else if([[tempDic objectForKey:@"action"] isEqualToString:@"recycle"]){
+            WasteRecoveryViewController *plantsVc=[[WasteRecoveryViewController alloc]init];
+            plantsVc.wasteID=100;
+            plantsVc.tyPeStr=urlStr;
+            [self.navigationController pushViewController:plantsVc animated:YES];
+            
+        }else if([[tempDic objectForKey:@"action"] isEqualToString:@"clean"]){
+            WasteRecoveryViewController *plantsVc=[[WasteRecoveryViewController alloc]init];
+            plantsVc.tyPeStr=urlStr;
+            plantsVc.wasteID=101;
+            [self.navigationController pushViewController:plantsVc animated:YES];
+            
+        }else if([[tempDic objectForKey:@"action"] isEqualToString:@"teamwork"]){
+            
+            WasteRecoveryViewController *plantsVc=[[WasteRecoveryViewController alloc]init];
+            plantsVc.tyPeStr=urlStr;
+            plantsVc.wasteID=102;
+            [self.navigationController pushViewController:plantsVc animated:YES];
+            
+        }else if([[tempDic objectForKey:@"action"] isEqualToString:@"express"]){
+            
+            WasteRecoveryViewController *plantsVc=[[WasteRecoveryViewController alloc]init];
+            plantsVc.tyPeStr=urlStr;
+            plantsVc.wasteID=103;
+            [self.navigationController pushViewController:plantsVc animated:YES];
+            
+        }else if ([[tempDic objectForKey:@"action"] isEqualToString:@"add_friend"]){
+            FriendsHomeViewController *vc = [FriendsHomeViewController new];
+            vc.friendsID=100;
+            vc.view_user_id=[NSString stringWithFormat:@"%@",[tempDic objectForKey:@"params"]];
+            [self.navigationController pushViewController:vc animated:YES];
+            
+        }else if ([[tempDic objectForKey:@"action"] isEqualToString:@"friend_req"]){
+            ApplyFriendsListViewController *applyVC=[[ApplyFriendsListViewController alloc]init];
+            [self.navigationController pushViewController:applyVC animated:YES];
+            
+        }else if ([[tempDic objectForKey:@"action"] isEqualToString:@"p_user_list"]){
+            ClerkViewController *clerkVC=[[ClerkViewController alloc]init];
+            clerkVC.pushIDS=100;
+            clerkVC.service_type_id=[NSString stringWithFormat:@"%@",[tempDic objectForKey:@"params"]];
+            [self.navigationController pushViewController:clerkVC animated:YES];
+            
+        }else if ([[tempDic objectForKey:@"action"] isEqualToString:@"order_detail"]){
+            Order_DetailsViewController *vc=[[Order_DetailsViewController alloc]init];
+            vc.order_ID=[NSString stringWithFormat:@"%@",[tempDic objectForKey:@"params"]];
+            vc.details_ID=1;
+            [self.navigationController pushViewController:vc animated:YES];
+            
+        }else if ([[tempDic objectForKey:@"action"] isEqualToString:@"order"]){
+            Order_ListViewController *orderVc=[[Order_ListViewController alloc]init];
+            [self.navigationController pushViewController:orderVc animated:YES];
+        }
+
+        
+    }else{
+        WebPageViewController *webVc=[[WebPageViewController alloc]init];
+        webVc.barIDS=100;
+        webVc.webURL=[NSString stringWithFormat:@"%@",url];
+        [self.navigationController pushViewController:webVc animated:YES];
+    }
+    //    }
+    
+}
 - (void)viewDidLoad {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(urlAction:) name:@"URLOPEN" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(imgTap:) name:@"IMGTAPP" object:nil];
     fatherVc=[[FatherViewController alloc]init];
     NSDictionary *helpDic;
@@ -1028,10 +1248,15 @@ MyselfViewController *thirdViewController;
 
 -(void)butAction:(UIButton *)sender
 {
-    _manager = [ISLoginManager shareManager];
-    DownloadManager *_download = [[DownloadManager alloc]init];
-    NSDictionary *_dict = @{@"user_id":_manager.telephone};
-    [_download requestWithUrl:[NSString stringWithFormat:@"%@",USER_INFO] dict:_dict view:self.view delegate:self finishedSEL:@selector(DownloadFinish1:) isPost:NO failedSEL:@selector(FailDownload:)];
+//    _manager = [ISLoginManager shareManager];
+//    DownloadManager *_download = [[DownloadManager alloc]init];
+//    NSDictionary *_dict = @{@"user_id":_manager.telephone};
+//    [_download requestWithUrl:[NSString stringWithFormat:@"%@",USER_INFO] dict:_dict view:self.view delegate:self finishedSEL:@selector(DownloadFinish1:) isPost:NO failedSEL:@selector(FailDownload:)];
+//    NSDictionary *dic=[sender objectForKey:@"data"];
+    ChatViewController *vcr=[[ChatViewController alloc]initWithChatter:@"simi-user-366" isGroup:NO];
+    vcr.title=[NSString stringWithFormat:msNameString];
+    [vcr.navigationController setNavigationBarHidden:NO];
+    [self.navigationController pushViewController:vcr animated:YES];
 }
 -(void)DownloadFinish1:(id)sender
 {
@@ -1415,4 +1640,59 @@ MyselfViewController *thirdViewController;
     }
     
 }
+
+- (void)getUserInfo
+{
+    ISLoginManager *logManager = [[ISLoginManager alloc]init];
+    NSDictionary *mobelDic = [[NSDictionary alloc]initWithObjectsAndKeys:logManager.telephone,@"user_id", nil];
+    DownloadManager *_download = [[DownloadManager alloc]init];
+    //    [_download requestWithUrl:[NSString stringWithFormat:@"%@",USERINFO_API] dict:mobelDic view:self.view delegate:self finishedSEL:@selector(DownlLoadFinish:)];
+    [_download requestWithUrl:[NSString stringWithFormat:@"%@",USERINFO_API]  dict:mobelDic view:self.view delegate:self finishedSEL:@selector(getUserInfoSuccess:) isPost:NO failedSEL:@selector(getUserInfoFail:)];
+    [self hideHud];
+    
+}
+- (void)getUserInfoSuccess:(id)dic
+{
+    NSDictionary *dict = [dic objectForKey:@"data"];
+    //    if (wxID==1) {
+    //        [[NSNotificationCenter defaultCenter]postNotificationName:@"MylogVcBack" object:nil];
+    //    }
+    NSString *clientId=GeTuiSdk.clientId;
+    if (clientId==nil||clientId==NULL) {
+        return;
+    }
+    if ([dict objectForKey:@"client_id"]==nil||[dict objectForKey:@"client_id"]==NULL) {
+        ISLoginManager *_managers = [ISLoginManager shareManager];
+        DownloadManager *_download = [[DownloadManager alloc]init];
+        NSDictionary *_dict = @{@"user_id":_managers.telephone,@"device_type":@"ios",@"client_id":clientId};
+        NSLog(@"用户名%@",_dict);
+        [_download requestWithUrl:LOGIN_GTJK dict:_dict view:self.view delegate:self finishedSEL:@selector(GTDownLoadFinish:) isPost:YES failedSEL:@selector(GTDownFail:)];
+    }else{
+        if ([dict objectForKey:@"client_id"]==clientId) {
+            
+        }else{
+            ISLoginManager *_managers = [ISLoginManager shareManager];
+            DownloadManager *_download = [[DownloadManager alloc]init];
+            NSLog(@"为什么是空的呢？？？？？%@,%@",_managers.telephone,clientId);
+            NSDictionary *_dict = @{@"user_id":_managers.telephone,@"device_type":@"ios",@"client_id":clientId};
+            NSLog(@"用户名12131314%@",_dict);
+            [_download requestWithUrl:LOGIN_GTJK dict:_dict view:self.view delegate:self finishedSEL:@selector(GTDownLoadFinish:) isPost:YES failedSEL:@selector(GTDownFail:)];
+        }
+    }
+    
+}
+- (void)getUserInfoFail:(id)error
+{
+    NSLog(@"%@",error);
+}
+-(void)GTDownLoadFinish:(id)sender
+{
+    NSLog(@"成功");
+}
+-(void)GTDownFail:(id)sender
+{
+    NSLog(@"失败");
+}
+
+
 @end

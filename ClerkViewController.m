@@ -73,7 +73,12 @@
     {
         dispatch_async(dispatch_get_main_queue(), ^{
             MyLogInViewController *loginViewController = [[MyLogInViewController alloc] init];
-            loginViewController.vCYMID=100;
+            if (_pushIDS==100) {
+                loginViewController.vCYMID=1000;
+            }else{
+                loginViewController.vCYMID=100;
+            }
+            
             UMComNavigationController *navigationController = [[UMComNavigationController alloc] initWithRootViewController:loginViewController];
             [self presentViewController:navigationController animated:YES completion:^{
             }];
@@ -101,7 +106,10 @@
         is_senior=[[delegate.globalDic objectForKey:@"is_senior"]intValue];
         [self tableViewSource];
     }else{
-        [self.navigationController popViewControllerAnimated:YES];
+        if (_pushIDS!=100) {
+            [self.navigationController popViewControllerAnimated:YES];
+        }
+        
     }
     
 }

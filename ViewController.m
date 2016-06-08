@@ -32,6 +32,8 @@
 #import "Order_DetailsViewController.h"
 
 #import "UMCommunityViewController.h"
+#import "Set_Up_ScheduleViewController.h"
+#import "ask_listDetailsViewController.h"
 @interface ViewController (){
     NSMutableDictionary *eventsByDate;
     UILabel *timeLabel;
@@ -172,7 +174,7 @@ float lastContentOffset;
     [self.view addSubview:eyeButton];
     
     UIImageView *eyeImage=[[UIImageView alloc]initWithFrame:FRAME(15, 10, 20, 20)];
-    eyeImage.image=[UIImage imageNamed:@"iconfont-saoma"];//EYE_BT
+    eyeImage.image=[UIImage imageNamed:@"提醒"];//EYE_BT
     [eyeButton addSubview:eyeImage];
     
     AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication] delegate];
@@ -382,16 +384,18 @@ float lastContentOffset;
 #pragma mark 首页右上按钮点击方法
 -(void)eyeButtonAction:(UIButton *)button
 {
-    NSArray *arrayItems = @[@[@"模拟qq扫码界面",@"qqStyle"]];
-    NSArray* array = arrayItems[0];
-    NSString *methodName = [array lastObject];
-    
-    SEL normalSelector = NSSelectorFromString(methodName);
-    if ([self respondsToSelector:normalSelector]) {
-        
-        ((void (*)(id, SEL))objc_msgSend)(self, normalSelector);
-    }
+//    NSArray *arrayItems = @[@[@"模拟qq扫码界面",@"qqStyle"]];
+//    NSArray* array = arrayItems[0];
+//    NSString *methodName = [array lastObject];
+//    
+//    SEL normalSelector = NSSelectorFromString(methodName);
+//    if ([self respondsToSelector:normalSelector]) {
+//        
+//        ((void (*)(id, SEL))objc_msgSend)(self, normalSelector);
+//    }
 
+    Set_Up_ScheduleViewController *setVC=[[Set_Up_ScheduleViewController alloc]init];
+    [self.navigationController pushViewController:setVC animated:YES];
 }
 #pragma mark -模仿qq界面
 - (void)qqStyle
@@ -716,6 +720,7 @@ float lastContentOffset;
     NSString *  locationString=[dateformatter stringFromDate:date];
     timeString=locationString;
     NSLog(@"Date: %@ events", locationString);
+    page=1;
     [self PLJKLayout];
 }
 
@@ -959,8 +964,9 @@ float lastContentOffset;
         }else if ([actionStr isEqualToString:@"feed"]){
             
             [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
-            Dynamic_DetailsViewController *dyVC=[[Dynamic_DetailsViewController alloc]init];
-            dyVC.dyNamicID=[NSString stringWithFormat:@"%@",[dataDic objectForKey:@"params"]];
+            ask_listDetailsViewController *dyVC=[[ask_listDetailsViewController alloc]init];
+            dyVC.msg_id=[NSString stringWithFormat:@"%@",[dataDic objectForKey:@"params"]];
+            dyVC.vcID=100;
             [self.navigationController pushViewController:dyVC animated:YES];
 
         }else if ([actionStr isEqualToString:@"checkin"]){

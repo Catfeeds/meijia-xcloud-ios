@@ -18,6 +18,7 @@
 @property(nonatomic ,assign)int is_senior;
 @property(nonatomic ,assign)int height;
 @property(nonatomic ,assign)int Y;
+@property(nonatomic ,assign)int pushIDS;
 
 
 

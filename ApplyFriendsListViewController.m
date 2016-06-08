@@ -56,7 +56,18 @@
 }
 -(void)viewWillAppear:(BOOL)animated{
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault animated:NO];
-    [self dataLayout];
+    if (self.loginYesOrNo) {
+        [self dataLayout];
+    }else{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            MyLogInViewController *loginViewController = [[MyLogInViewController alloc] init];
+            loginViewController.vCYMID=1000;
+            UMComNavigationController *navigationController = [[UMComNavigationController alloc] initWithRootViewController:loginViewController];
+            [self presentViewController:navigationController animated:YES completion:^{
+            }];
+        });
+    }
+    
 }
 #pragma mark - MJRefreshBaseViewDelegate
 - (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView

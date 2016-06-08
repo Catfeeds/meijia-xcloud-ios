@@ -33,7 +33,7 @@
 //    imageArray=[[NSMutableArray alloc]init];
     self.view.backgroundColor=[UIColor colorWithRed:231/255.0f green:231/255.0f blue:231/255.0f alpha:1];
     self.navlabel.text=@"订单";
-   [self PLJKLayout];
+   
     [self tableViewLayout];
     // Do any additional setup after loading the view.
 }
@@ -52,6 +52,17 @@
     if (_needRefresh) {
         [_refreshHeader beginRefreshing];
         _needRefresh = NO;
+    }
+    if (self.loginYesOrNo) {
+        [self PLJKLayout];
+    }else{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            MyLogInViewController *loginViewController = [[MyLogInViewController alloc] init];
+            loginViewController.vCYMID=1000;
+            UMComNavigationController *navigationController = [[UMComNavigationController alloc] initWithRootViewController:loginViewController];
+            [self presentViewController:navigationController animated:YES completion:^{
+            }];
+        });
     }
     indicatorView=[[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     indicatorView.center = CGPointMake(WIDTH/2, HEIGHT/2);
@@ -217,7 +228,10 @@
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *orderDic=orderArray[indexPath.row];
-    static NSString *identifier = @"cell";
+    if (indexPath.row==7) {
+        NSLog(@"%@",orderDic);
+    }
+     NSString *identifier = [NSString stringWithFormat:@"cell%ld",(long)indexPath.row];
     UIImageView *heagImageView=[[UIImageView alloc]init];
     UILabel *cateGroyLabel=[[UILabel alloc]init];
     UIImageView *timeImageView=[[UIImageView alloc]init];
@@ -231,48 +245,6 @@
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault   reuseIdentifier:identifier];
         
         
-        heagImageView.frame=FRAME(10, 10, 40, 40);
-        heagImageView.layer.cornerRadius=heagImageView.frame.size.width/2;
-        heagImageView.clipsToBounds = YES;
-        //heagImageView.backgroundColor=[UIColor redColor];
-        [cell addSubview:heagImageView];
-        
-        cateGroyLabel.frame=FRAME(heagImageView.frame.size.width+heagImageView.frame.origin.x+5, 10, WIDTH-125, 16);
-        //cateGroyLabel.backgroundColor=[UIColor redColor];
-        [cell addSubview:cateGroyLabel];
-        
-        timeImageView.frame=FRAME(10+25/2, heagImageView.frame.origin.y+heagImageView.frame.size.height+5, 15, 15);
-        timeImageView.image=[UIImage imageNamed:@"iconfont-time"];
-        [cell addSubview:timeImageView];
-        
-        timeLabel.frame=FRAME(timeImageView.frame.size.width+timeImageView.frame.origin.x+10, timeImageView.frame.origin.y, WIDTH-55, 15);
-        //timeLabel.backgroundColor=[UIColor redColor];
-        [cell addSubview:timeLabel];
-        
-        addressImageView.frame=FRAME(timeImageView.frame.origin.x, timeImageView.frame.origin.y+20, 15, 15);
-        addressImageView.image=[UIImage imageNamed:@"iconfont-jikediancanicon28"];
-        [cell addSubview:addressImageView];
-        
-        addressLabel.frame=FRAME(addressImageView.frame.origin.x+addressImageView.frame.size
-                                 .width+10, addressImageView.frame.origin.y, WIDTH-55, 15);
-        //addressLabel.backgroundColor=[UIColor redColor];
-        [cell addSubview:addressLabel];
-        
-        stateButton.frame=FRAME(WIDTH-70, 10+15/2, 60, 25);
-        //stateButton.backgroundColor=[UIColor redColor];
-        [stateButton.layer setMasksToBounds:YES];
-        
-        [stateButton.layer setCornerRadius:5.0]; //设置矩形四个圆角半径
-        
-        [stateButton.layer setBorderWidth:1.0];   //边框宽度
-        
-        CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-        
-        CGColorRef colorref = CGColorCreate(colorSpace,(CGFloat[]){ 1, 0, 0, 1 });
-        stateButton.tag=indexPath.row;
-        [stateButton addTarget:self action:@selector(stateButAction:) forControlEvents:UIControlEventTouchUpInside];
-        [stateButton.layer setBorderColor:colorref];//边框颜色
-        [cell addSubview:stateButton];
         
     }else{
         while ([cell.contentView.subviews lastObject] != nil)
@@ -280,8 +252,51 @@
             [(UIView*)[cell.contentView.subviews lastObject] removeFromSuperview];
         }
     }
+    heagImageView.frame=FRAME(10, 10, 40, 40);
+    heagImageView.layer.cornerRadius=heagImageView.frame.size.width/2;
+    heagImageView.clipsToBounds = YES;
+    //heagImageView.backgroundColor=[UIColor redColor];
+    [cell addSubview:heagImageView];
     
-    NSString *imageUrl=[NSString stringWithFormat:@"%@",[orderDic objectForKey:@"partner_user_head_img"]];
+    cateGroyLabel.frame=FRAME(heagImageView.frame.size.width+heagImageView.frame.origin.x+5, 10, WIDTH-125, 16);
+    //cateGroyLabel.backgroundColor=[UIColor redColor];
+    [cell addSubview:cateGroyLabel];
+    
+    timeImageView.frame=FRAME(10+25/2, heagImageView.frame.origin.y+heagImageView.frame.size.height+5, 15, 15);
+    timeImageView.image=[UIImage imageNamed:@"iconfont-time"];
+    [cell addSubview:timeImageView];
+    
+    timeLabel.frame=FRAME(timeImageView.frame.size.width+timeImageView.frame.origin.x+10, timeImageView.frame.origin.y, WIDTH-55, 15);
+    //timeLabel.backgroundColor=[UIColor redColor];
+    [cell addSubview:timeLabel];
+    
+    addressImageView.frame=FRAME(timeImageView.frame.origin.x, timeImageView.frame.origin.y+20, 15, 15);
+    addressImageView.image=[UIImage imageNamed:@"iconfont-jikediancanicon28"];
+    [cell addSubview:addressImageView];
+    
+    addressLabel.frame=FRAME(addressImageView.frame.origin.x+addressImageView.frame.size
+                             .width+10, addressImageView.frame.origin.y, WIDTH-55, 15);
+    //addressLabel.backgroundColor=[UIColor redColor];
+    [cell addSubview:addressLabel];
+    
+    stateButton.frame=FRAME(WIDTH-70, 10+15/2, 60, 25);
+    //stateButton.backgroundColor=[UIColor redColor];
+    [stateButton.layer setMasksToBounds:YES];
+    
+    [stateButton.layer setCornerRadius:5.0]; //设置矩形四个圆角半径
+    
+    [stateButton.layer setBorderWidth:1.0];   //边框宽度
+    
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    
+    CGColorRef colorref = CGColorCreate(colorSpace,(CGFloat[]){ 1, 0, 0, 1 });
+    stateButton.tag=indexPath.row;
+    [stateButton addTarget:self action:@selector(stateButAction:) forControlEvents:UIControlEventTouchUpInside];
+    [stateButton.layer setBorderColor:colorref];//边框颜色
+    [cell addSubview:stateButton];
+
+    
+    NSString *imageUrl=[NSString stringWithFormat:@"%@",[orderDic objectForKey:@"service_type_img"]];
     [heagImageView setImageWithURL:[NSURL URLWithString:imageUrl]placeholderImage:nil];
 //    heagImageView.image=imageArray[indexPath.row];
     NSString *service_type_name=[NSString stringWithFormat:@"%@",[orderDic objectForKey:@"service_type_name"]];
@@ -337,6 +352,7 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    NSLog(@"%ld",(long)indexPath.row);
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     NSDictionary *dic=orderArray[indexPath.row];
     Order_DetailsViewController *vc=[[Order_DetailsViewController alloc]init];
