@@ -22,6 +22,7 @@
 #import "AddLabelCollectionViewCell.h"
 #import "Workplace_askViewController.h"
 #import "ToolListViewController.h"
+#import "FountWebViewController.h"
 static CGFloat const imageBGHeight = 373; // 背景图片的高度
 @interface HomePageTableViewController ()
 {
@@ -171,7 +172,7 @@ static CGFloat const imageBGHeight = 373; // 背景图片的高度
     [headeView addSubview:lineViews];
     
     UIView *view=[[UIView alloc]initWithFrame:FRAME(0, headeView.frame.size.height-10, WIDTH, 10)];
-    view.backgroundColor=[UIColor colorWithRed:220/255.0f green:220/255.0f blue:220/255.0f alpha:1];
+    view.backgroundColor=[UIColor colorWithRed:240/255.0f green:240/255.0f blue:240/255.0f alpha:1];
     [headeView addSubview:view];
     
     UIButton *headLiftBut=[[UIButton alloc]initWithFrame:FRAME(0, 289, WIDTH/2-0.5, 74)];
@@ -270,7 +271,7 @@ static CGFloat const imageBGHeight = 373; // 背景图片的高度
     [mySearchBar addSubview:searchImage];
     
     csView=[[UIView alloc]initWithFrame:FRAME(0, 373, WIDTH, 38)];
-    csView.backgroundColor=[UIColor blackColor];
+//    csView.backgroundColor=[UIColor blackColor];
     [self.view addSubview:csView];
     [rootView removeFromSuperview];
     
@@ -447,10 +448,10 @@ static CGFloat const imageBGHeight = 373; // 背景图片的高度
     CGFloat alpha = offsetY / 299;
     navView.alpha=alpha;
     if (imageBGHeight-offsetY>64&&imageBGHeight-offsetY>0 ) {
-        csView.frame=FRAME(0, imageBGHeight-offsetY, WIDTH, 39);
+        csView.frame=FRAME(0, imageBGHeight-offsetY, WIDTH, 38);
     }else{
         
-        csView.frame=FRAME(0, 64, WIDTH, 39);
+        csView.frame=FRAME(0, 64, WIDTH, 38);
     }
     if (alpha>=1) {
         [UIView beginAnimations: @"Animation" context:nil];
@@ -832,9 +833,9 @@ static CGFloat const imageBGHeight = 373; // 背景图片的高度
 #pragma mark  列表数据请求
 -(void)imageLayout
 {
-    NSDictionary *_dict = @{@"ad_type":@"0"};
+    NSDictionary *_dict = @{@"channel_id":@"0"};
     DownloadManager *_download = [[DownloadManager alloc]init];
-    [_download requestWithUrl:[NSString stringWithFormat:@"%@",BASICE_GENERAL_ADVERTISING] dict:_dict view:self.view delegate:self finishedSEL:@selector(AdvertisingSuccess:) isPost:NO failedSEL:@selector(AdvertisingFail:)];
+    [_download requestWithUrl:[NSString stringWithFormat:@"%@",CHANNEL_CARD] dict:_dict view:self.view delegate:self finishedSEL:@selector(AdvertisingSuccess:) isPost:NO failedSEL:@selector(AdvertisingFail:)];
 }
 -(void)AdvertisingSuccess:(id)source
 {
@@ -890,10 +891,12 @@ static CGFloat const imageBGHeight = 373; // 背景图片的高度
 -(void)imageButAction:(int)button
 {
     NSDictionary *dic=imageArray[button];
-    WebPageViewController *webPageVC=[[WebPageViewController alloc]init];
-    webPageVC.barIDS=100;
-    webPageVC.webURL=[NSString stringWithFormat:@"%@",[dic objectForKey:@"goto_url"]];
-    [self.navigationController pushViewController:webPageVC animated:YES];
+    FountWebViewController *fountVC=[[FountWebViewController alloc]init];
+    fountVC.goto_type=[NSString stringWithFormat:@"%@",[dic objectForKey:@"goto_type"]];
+    fountVC.imgurl=[NSString stringWithFormat:@"%@",[dic objectForKey:@"goto_url"]];
+    fountVC.service_type_id=[NSString stringWithFormat:@"%@",[dic objectForKey:@"service_type_ids"]];
+    fountVC.titleName=[NSString stringWithFormat:@"%@",[dic objectForKey:@"title"]];
+    [self.navigationController pushViewController:fountVC animated:YES];
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

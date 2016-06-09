@@ -1287,6 +1287,9 @@ appDelegate
 {
     if (_vCYMID==100) {
         [self dismissViewControllerAnimated:YES completion:nil];
+        if (_vcIDsss==1000) {
+            [self.navigationController setNavigationBarHidden:NO animated:NO];
+        }
         [[NSNotificationCenter defaultCenter] postNotificationName:@"LOGOUT" object:nil];
         [[UMComSession sharedInstance] userLogout];
         [[NSNotificationCenter defaultCenter] postNotificationName:kUserLogoutSucceedNotification object:nil];
@@ -1311,6 +1314,7 @@ appDelegate
          } onQueue:nil];
 
     }else if (_vCYMID==1000){
+       
         [self dismissViewControllerAnimated:YES completion:^{
             [[EaseMob sharedInstance].chatManager asyncLogoffWithUnbindDeviceToken:YES completion:^(NSDictionary *info, EMError *error)
              {

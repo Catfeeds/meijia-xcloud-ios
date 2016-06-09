@@ -61,6 +61,8 @@
 #import "Order_ListViewController.h"
 #import "ApplyFriendsListViewController.h"
 #import "Order_DetailsViewController.h"
+
+#import "EnterpriseViewController.h"
 @interface RootViewController ()<UIAlertViewDelegate, IChatManagerDelegate,UIAlertViewDelegate>
 {
     UIView *mainView;
@@ -95,6 +97,8 @@
     FatherViewController *fatherVc;
     NSString *createPath;
     NSString *msNameString;
+    NSURL *url;
+    NSString *stringUrl;
 }
 @end
 #pragma mark - View lifecycle
@@ -234,12 +238,9 @@ MyselfViewController *thirdViewController;
     webPageVC.webURL=[NSString stringWithFormat:@"https://www.baidu.com"];
     [self.navigationController pushViewController:webPageVC animated:YES];
 }
--(void)urlAction:(NSNotification *)sender
+-(void)todoSomething
 {
-    NSLog(@"我去  我去 我去 ！");
     NSDictionary *helpDic;
-    NSURL *url=sender.object;
-    NSString *stringUrl=[NSString stringWithFormat:@"%@",url];
     if([stringUrl rangeOfString:@"http://www.51xingzheng.cn/d/open.html?"].location ==NSNotFound)
     {
         WebPageViewController *webVc=[[WebPageViewController alloc]init];
@@ -250,7 +251,7 @@ MyselfViewController *thirdViewController;
     }
     NSArray *array=[stringUrl componentsSeparatedByString:@"?"];
     NSString *urlStr=[NSString stringWithFormat:@"%@",array[1]];
-     NSLog(@"%@",urlStr);
+    NSLog(@"%@",urlStr);
     NSArray *urlArray = [urlStr componentsSeparatedByString:@"&"];
     
     NSMutableDictionary *tempDic = [NSMutableDictionary dictionaryWithCapacity:4];
@@ -413,7 +414,7 @@ MyselfViewController *thirdViewController;
             Order_ListViewController *orderVc=[[Order_ListViewController alloc]init];
             [self.navigationController pushViewController:orderVc animated:YES];
         }
-
+        
         
     }else{
         WebPageViewController *webVc=[[WebPageViewController alloc]init];
@@ -421,7 +422,19 @@ MyselfViewController *thirdViewController;
         webVc.webURL=[NSString stringWithFormat:@"%@",url];
         [self.navigationController pushViewController:webVc animated:YES];
     }
-    //    }
+
+}
+
+-(void)urlAction:(NSNotification *)sender
+{
+    [[self class] cancelPreviousPerformRequestsWithTarget:self selector:@selector(todoSomething) object:nil];
+    [self performSelector:@selector(todoSomething) withObject:nil afterDelay:1.0f];
+
+    NSLog(@"我去  我去 我去 ！");
+   
+    url=sender.object;
+    stringUrl=[NSString stringWithFormat:@"%@",url];
+        //    }
     
 }
 - (void)viewDidLoad {
@@ -1627,6 +1640,18 @@ MyselfViewController *thirdViewController;
             plantsVc.tyPeStr=action;
             [self.navigationController pushViewController:plantsVc animated:YES];
             
+        }else if([action isEqualToString:@"company"]){
+            EnterpriseViewController *enterVc=[[EnterpriseViewController alloc]init];
+            enterVc.vcIDs=100;
+            AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication] delegate];
+            NSString *has_company=[NSString stringWithFormat:@"%@",[delegate.globalDic objectForKey:@"has_company"]];
+            int has=[has_company intValue];
+            if (has==0) {
+                enterVc.webId=0;
+            }else{
+                enterVc.webId=1;
+            }
+            [self.navigationController pushViewController:enterVc animated:YES];
         }else{
             AppCenterViewController *appCenterVC=[[AppCenterViewController alloc]init];
             appCenterVC.titleName=nameStr;

@@ -45,7 +45,6 @@
        
         _headeImage=[[UIImageView alloc]initWithFrame:FRAME(10, _timelabel.frame.origin.y+21, 30, 30)];
         _headeImage.tag=102;
-        _headeImage.backgroundColor=[UIColor redColor];
         _headeImage.layer.cornerRadius=_headeImage.frame.size.width/2;
         _headeImage.clipsToBounds=YES;
         [self addSubview:_headeImage];

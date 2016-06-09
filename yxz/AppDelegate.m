@@ -75,10 +75,13 @@
     //NSDictionary *dic;
     NSDictionary *dataDic;
     int pushIDs;
+    int push_IDs;
     EjectAlertView *pushEjectView;
     NSDictionary *pushDic;
     
     EjectAlertView *newinFormationView;
+    NSString *urlw;
+    NSString *urlSrt;
 }
 
 @end
@@ -1135,6 +1138,7 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
 {
     NSLog(@"我就看看你走没走--5");
     pushIDs=1000;
+    push_IDs+=1;
     NSLog(@"%ld",(long)application.applicationState);
 
     completionHandler(UIBackgroundFetchResultNewData);
@@ -1152,16 +1156,16 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     NSLog(@"%@",dateDic);
     NSLog(@"remind_time%@",timeStr);
     if ([[dic objectForKey:@"ac"] isEqualToString:@"m"]) {
-        NSString *url;
+//        NSString *url;
         if ([[dic objectForKey:@"ca"] isEqualToString:@"app"]) {
             if ([[dic objectForKey:@"pa"] isEqualToString:@""]) {
-                url=[NSString stringWithFormat:@"http://www.51xingzheng.cn/d/open.html?category=%@&action=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"]];
+                urlw=[NSString stringWithFormat:@"http://www.51xingzheng.cn/d/open.html?category=%@&action=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"]];
             }else if([[dic objectForKey:@"ca"] isEqualToString:@"h5"]){
-                url=[NSString stringWithFormat:@"http://www.51xingzheng.cn/d/open.html?category=%@&action=%@&params=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"],[dic objectForKey:@"pa"]];
+                urlw=[NSString stringWithFormat:@"http://www.51xingzheng.cn/d/open.html?category=%@&action=%@&params=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"],[dic objectForKey:@"pa"]];
             }
             
         }else{
-            url=[NSString stringWithFormat:@"%@",[dic objectForKey:@"go"]];
+            urlw=[NSString stringWithFormat:@"%@",[dic objectForKey:@"go"]];
         }
 
         NSString *ca=[NSString stringWithFormat:@"%@",[dic objectForKey:@"ca"]];
@@ -1171,7 +1175,16 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
         if ((ca==nil||ca==NULL||[ca isEqualToString:@"(null)"])&&(aj==nil||aj==NULL||[aj isEqualToString:@"(null)"])&&(pa==nil||pa==NULL||[pa isEqualToString:@"(null)"])&&(go==nil||go==NULL||[go isEqualToString:@"(null)"])) {
             
         }else{
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"URLOPEN" object:url];
+            if([UIApplication sharedApplication].applicationState ==UIApplicationStateBackground)
+            {
+                
+            }else if ([UIApplication sharedApplication].applicationState ==UIApplicationStateActive){
+                NSLog(@"前台");
+            }else{
+                [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(popAlertViewssss) userInfo:nil repeats:NO];
+            }
+
+            
         }
 
 //        [[NSNotificationCenter defaultCenter] postNotificationName:@"URLOPEN" object:url];
@@ -1224,7 +1237,10 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     
     
 }
-
+-(void)popAlertViewssss
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"URLOPEN" object:urlw];
+}
 // 在 iOS8 系统中，还需要添加这个方法。通过新的 API 注册推送服务
 - (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings
 {
@@ -1260,6 +1276,11 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
         
     }
 }
+
+-(void)popAlertView{
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"URLOPEN" object:urlSrt];
+}
+
 -(void)GeTuiSdkDidReceivePayload:(NSString*)payloadId andTaskId:(NSString*)taskId andMessageId:(NSString *)aMsgId fromApplication:(NSString *)appId
 
 {
@@ -1298,17 +1319,17 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
         }
     NSString *actionStr=[NSString stringWithFormat:@"%@",[dic objectForKey:@"ac"]];
     if ([actionStr isEqualToString:@"m"]) {
-        NSString *url;
+        
        
         if ([[dic objectForKey:@"ca"] isEqualToString:@"app"]) {
             if ([[dic objectForKey:@"pa"] isEqualToString:@""]) {
-                url=[NSString stringWithFormat:@"http://www.51xingzheng.cn/d/open.html?category=%@&action=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"]];
+                urlSrt=[NSString stringWithFormat:@"http://www.51xingzheng.cn/d/open.html?category=%@&action=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"]];
             }else{
-                url=[NSString stringWithFormat:@"http://www.51xingzheng.cn/d/open.html?category=%@&action=%@&params=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"],[dic objectForKey:@"pa"]];
+                urlSrt=[NSString stringWithFormat:@"http://www.51xingzheng.cn/d/open.html?category=%@&action=%@&params=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"],[dic objectForKey:@"pa"]];
             }
             
         }else if([[dic objectForKey:@"ca"] isEqualToString:@"h5"]){
-            url=[NSString stringWithFormat:@"%@",[dic objectForKey:@"go"]];
+            urlSrt=[NSString stringWithFormat:@"%@",[dic objectForKey:@"go"]];
         }
 
         NSString *ca=[NSString stringWithFormat:@"%@",[dic objectForKey:@"ca"]];
@@ -1318,7 +1339,10 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
         if ((ca==nil||ca==NULL||[ca isEqualToString:@"(null)"])&&(aj==nil||aj==NULL||[aj isEqualToString:@"(null)"])&&(pa==nil||pa==NULL||[pa isEqualToString:@"(null)"])&&(go==nil||go==NULL||[go isEqualToString:@"(null)"])) {
             
         }else{
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"URLOPEN" object:url];
+            if(pushIDs!=1000){
+                [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(popAlertView) userInfo:nil repeats:NO];
+                
+            }
         }
         
 //        return;

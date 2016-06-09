@@ -70,6 +70,7 @@
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:TableSampleIdentifier];
     }
     cell.textLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"name"]];
+    cell.textLabel.font=[UIFont fontWithName:@"" size:15];
     UIView *view=[[UIView alloc]initWithFrame:FRAME(0, 40, WIDTH, 1)];
     view.backgroundColor=[UIColor colorWithRed:220/255.0f green:220/255.0f blue:220/255.0f alpha:1];
     [cell addSubview:view];

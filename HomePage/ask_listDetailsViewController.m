@@ -24,6 +24,7 @@
     UIButton *closeBut;
     NSDictionary *detailsDic;
     UIButton *askBut;
+    NSDictionary *cellDic;
 }
 @end
 
@@ -33,18 +34,45 @@
 {
     NSString* msg = [[NSString alloc] initWithFormat:@"%ld",(long)buttonIndex];
     
-    if ([msg isEqualToString:@"0"]) {
-        ISLoginManager *_manager = [ISLoginManager shareManager];
-        DownloadManager *_download = [[DownloadManager alloc]init];
-        NSString *fidStr=[NSString stringWithFormat:@"%@",[_dataDic objectForKey:@"fid"]];
-        NSDictionary *dic=@{@"user_id":_manager.telephone,@"fid":fidStr,@"feed_type":@"2"};
-        [_download requestWithUrl:[NSString stringWithFormat:@"%@",COMMENT_CLOSE] dict:dic view:self.view delegate:self finishedSEL:@selector(CloseSuccess:) isPost:YES failedSEL:@selector(CloseFail:)];
+    if (alertView.tag==1101) {
+        if ([msg isEqualToString:@"0"]) {
+            ISLoginManager *_manager = [ISLoginManager shareManager];
+            DownloadManager *_download = [[DownloadManager alloc]init];
+            NSString *fidStr=[NSString stringWithFormat:@"%@",[_dataDic objectForKey:@"fid"]];
+            NSDictionary *dic=@{@"user_id":_manager.telephone,@"fid":fidStr,@"feed_type":@"2"};
+            [_download requestWithUrl:[NSString stringWithFormat:@"%@",COMMENT_CLOSE] dict:dic view:self.view delegate:self finishedSEL:@selector(CloseSuccess:) isPost:YES failedSEL:@selector(CloseFail:)];
+        }
+
+    }else if (alertView.tag==1102){
+        if ([msg isEqualToString:@"0"]) {
+            if (self.loginYesOrNo) {
+                //            NSDictionary *dic=dataArray[button.tag];
+                ISLoginManager *_manager = [ISLoginManager shareManager];
+                DownloadManager *_download = [[DownloadManager alloc]init];
+                NSString *fidStr=[NSString stringWithFormat:@"%@",[_dataDic objectForKey:@"fid"]];
+                NSString *comment_id=[NSString stringWithFormat:@"%@",[cellDic objectForKey:@"id"]];
+                NSDictionary *dict=@{@"user_id":_manager.telephone,@"fid":fidStr,@"feed_type":@"2",@"comment_id":comment_id};
+                [_download requestWithUrl:[NSString stringWithFormat:@"%@",COMMENT_ADOPY] dict:dict view:self.view delegate:self finishedSEL:@selector(AdoptSuccess:) isPost:YES failedSEL:@selector(AdoptZanFail:)];
+            }else{
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    MyLogInViewController *loginViewController = [[MyLogInViewController alloc] init];
+                    loginViewController.vCYMID=100;
+                    UMComNavigationController *navigationController = [[UMComNavigationController alloc] initWithRootViewController:loginViewController];
+                    [self presentViewController:navigationController animated:YES completion:^{
+                    }];
+                });
+            }
+
+        }
+        
     }
+        
 }
 -(void)closeAction
 {
     
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"确定关闭此问题？（问题关闭之后将不会收到新的答案）"  delegate:self cancelButtonTitle:@"确认" otherButtonTitles:@"返回",nil];
+    alert.tag=1101;
     [alert show];
     
 }
@@ -81,15 +109,13 @@
     _moreFooter.delegate = self;
     _moreFooter.scrollView = myTableView;
     
-    tableHeaderView=[[UIView alloc]init];
-    tableHeaderView.backgroundColor=[UIColor whiteColor];
-    [self.view addSubview:tableHeaderView];
     
-    if (_vcID==100) {
-        
-    }else{
-        [self headeView];
-    }
+    
+//    if (_vcID==100) {
+//        
+//    }else{
+//        [self headeView];
+//    }
     
     askBut=[[UIButton alloc]initWithFrame:FRAME(14, HEIGHT-44, WIDTH-28, 40)];
     askBut.backgroundColor=[UIColor colorWithRed:35/255.0f green:140/255.0f blue:253/255.0f alpha:1];
@@ -103,6 +129,7 @@
 }
 -(void)commentLayout
 {
+    
 //    ISLoginManager *_manager = [ISLoginManager shareManager];
     DownloadManager *_download = [[DownloadManager alloc]init];
     NSString *fidStr;
@@ -118,8 +145,12 @@
 {
     if (_vcID==100) {
         _dataDic=detailsDic;
-        self.navlabel.text=[NSString stringWithFormat:@"%@的提问",[_dataDic objectForKey:@"name"]];
+        self.navlabel.text=[NSString stringWithFormat:@"%@的提问",[detailsDic objectForKey:@"name"]];
     }
+    [tableHeaderView removeFromSuperview];
+    tableHeaderView=[[UIView alloc]init];
+    tableHeaderView.backgroundColor=[UIColor whiteColor];
+    [self.view addSubview:tableHeaderView];
     UILabel *askLabbel=[[UILabel alloc]init];
     askLabbel.text=@"问：";
     askLabbel.font=[UIFont fontWithName:@"Heiti SC" size:15];
@@ -128,7 +159,7 @@
     [askLabbel sizeToFit];
     askLabbel.frame=FRAME(10, 10, askLabbel.frame.size.width, 20);
     [tableHeaderView addSubview:askLabbel];
-    NSString *feed_extra=[NSString stringWithFormat:@"%@",[_dataDic objectForKey:@"feed_extra"]];
+    NSString *feed_extra=[NSString stringWithFormat:@"%@",[detailsDic objectForKey:@"feed_extra"]];
     UIImageView *goleImageView;
     UILabel *goleLabel;
     if (feed_extra==nil||feed_extra==NULL||[feed_extra isEqualToString:@""]||[feed_extra isEqualToString:@"0"]) {
@@ -138,29 +169,29 @@
         goleImageView.image=[UIImage imageNamed:@"金币(1)"];
         [tableHeaderView addSubview:goleImageView];
         goleLabel=[[UILabel alloc]init];
-        goleLabel.text=[NSString stringWithFormat:@"%@",[_dataDic objectForKey:@"feed_extra"]];
+        goleLabel.text=[NSString stringWithFormat:@"%@",[detailsDic objectForKey:@"feed_extra"]];
         goleLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
         goleLabel.textColor=[UIColor colorWithRed:234/255.0f green:149/255.0f blue:24/255.0f alpha:1];
         [goleLabel setNumberOfLines:1];
         [goleLabel sizeToFit];
-        goleLabel.frame=FRAME(30+goleImageView.frame.size.width, 10, goleLabel.frame.size.width, 20);
+        goleLabel.frame=FRAME(goleImageView.frame.origin.x+goleImageView.frame.size.width+5, 10, goleLabel.frame.size.width, 20);
         [tableHeaderView addSubview:goleLabel];
     }
     
     UILabel *titleLabel=[[UILabel alloc]init];
-    titleLabel.text=[NSString stringWithFormat:@"%@",[_dataDic objectForKey:@"title"]];
+    titleLabel.text=[NSString stringWithFormat:@"%@",[detailsDic objectForKey:@"title"]];
     titleLabel.textColor=[UIColor colorWithRed:51/255.0f green:51/255.0f blue:51/255.0f alpha:1];
     titleLabel.font=[UIFont fontWithName:@"Helvetica-Bold" size:15];
     
     UIFont *font=[UIFont fontWithName:@"Helvetica-Bold" size:15];
     NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:font,NSFontAttributeName, nil];
-    CGSize size = [titleLabel.text boundingRectWithSize:CGSizeMake(WIDTH-(10+askLabbel.frame.size.width+goleLabel.frame.size.width+10), 100000) options:NSStringDrawingUsesLineFragmentOrigin attributes:dict context:nil].size;
+    CGSize size = [titleLabel.text boundingRectWithSize:CGSizeMake(WIDTH-(goleLabel.frame.origin.x+goleLabel.frame.size.width+10), 100000) options:NSStringDrawingUsesLineFragmentOrigin attributes:dict context:nil].size;
     [titleLabel setNumberOfLines:0];
     [titleLabel sizeToFit];
     if (feed_extra==nil||feed_extra==NULL||[feed_extra isEqualToString:@""]||[feed_extra isEqualToString:@"0"]) {
         titleLabel.frame=FRAME(10+askLabbel.frame.size.width, 10, WIDTH-(10+askLabbel.frame.size.width+10), size.height);
     }else{
-        titleLabel.frame=FRAME(goleLabel.frame.origin.x+goleLabel.frame.size.width+10, 10, WIDTH-(goleLabel.frame.origin.x+goleLabel.frame.size.width+10), size.height);
+        titleLabel.frame=FRAME(goleLabel.frame.origin.x+goleLabel.frame.size.width+5, 10, WIDTH-(goleLabel.frame.origin.x+goleLabel.frame.size.width+10), size.height);
     }
     //    titleLabel.backgroundColor=[UIColor redColor];
     [tableHeaderView addSubview:titleLabel];
@@ -169,7 +200,7 @@
     
     
     UILabel *timeLabel=[[UILabel alloc]init];
-    timeLabel.text=[NSString stringWithFormat:@"%@",[_dataDic objectForKey:@"add_time_str"]];
+    timeLabel.text=[NSString stringWithFormat:@"%@",[detailsDic objectForKey:@"add_time_str"]];
     timeLabel.font=[UIFont fontWithName:@"Heiti SC" size:12];
     timeLabel.textColor=[UIColor colorWithRed:157/255.0f green:157/255.0f blue:157/255.0f alpha:1];
     [timeLabel setNumberOfLines:1];
@@ -178,7 +209,7 @@
     [tableHeaderView addSubview:timeLabel];
     
     UILabel *answerLabel=[[UILabel alloc]init];
-    answerLabel.text=[NSString stringWithFormat:@"%@个答案",[_dataDic objectForKey:@"total_comment"]];
+    answerLabel.text=[NSString stringWithFormat:@"%@个答案",[detailsDic objectForKey:@"total_comment"]];
     answerLabel.font=[UIFont fontWithName:@"Heiti SC" size:12];
     answerLabel.textColor=[UIColor colorWithRed:157/255.0f green:157/255.0f blue:157/255.0f alpha:1];
     [answerLabel setNumberOfLines:1];
@@ -226,9 +257,9 @@
         }
         closeBut.hidden=YES;
     }
-    if (_vcID==100) {
+//    if (_vcID==100) {
         [self headeView];
-    }
+//    }
     [self interfaceLayout];
 }
 -(void)DetailseFail:(id)source
@@ -371,7 +402,7 @@
         cell.adoptLabel.hidden=YES;
     }else{
         if (status==0) {
-            
+            cell.adoptLabel.layer.borderColor=[[UIColor colorWithRed:255/255.0f green:255/255.0f blue:255/255.0f alpha:1]CGColor];
         }else{
             cell.adoptLabel.hidden=NO;
             cell.adoptLabel.text=@"已采纳";
@@ -398,7 +429,7 @@
             
             cell.adoptBut.hidden=YES;
             if (status==0) {
-                
+                cell.adoptLabel.layer.borderColor=[[UIColor colorWithRed:255/255.0f green:255/255.0f blue:255/255.0f alpha:1]CGColor];
             }else{
                 cell.adoptLabel.hidden=NO;
                 cell.adoptLabel.text=@"已采纳";
@@ -480,23 +511,10 @@
 #pragma mark 问答答案采纳点击方法
 -(void)adoptButAction:(UIButton *)button
 {
-    if (self.loginYesOrNo) {
-        NSDictionary *dic=dataArray[button.tag];
-        ISLoginManager *_manager = [ISLoginManager shareManager];
-        DownloadManager *_download = [[DownloadManager alloc]init];
-        NSString *fidStr=[NSString stringWithFormat:@"%@",[_dataDic objectForKey:@"fid"]];
-        NSString *comment_id=[NSString stringWithFormat:@"%@",[dic objectForKey:@"id"]];
-        NSDictionary *dict=@{@"user_id":_manager.telephone,@"fid":fidStr,@"feed_type":@"2",@"comment_id":comment_id};
-        [_download requestWithUrl:[NSString stringWithFormat:@"%@",COMMENT_ADOPY] dict:dict view:self.view delegate:self finishedSEL:@selector(AdoptSuccess:) isPost:YES failedSEL:@selector(AdoptZanFail:)];
-    }else{
-        dispatch_async(dispatch_get_main_queue(), ^{
-            MyLogInViewController *loginViewController = [[MyLogInViewController alloc] init];
-            loginViewController.vCYMID=100;
-            UMComNavigationController *navigationController = [[UMComNavigationController alloc] initWithRootViewController:loginViewController];
-            [self presentViewController:navigationController animated:YES completion:^{
-            }];
-        });
-    }
+    cellDic=dataArray[button.tag];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"确认采纳此答案吗？"  delegate:self cancelButtonTitle:@"确认" otherButtonTitles:@"返回",nil];
+    alert.tag=1102;
+    [alert show];
     
 }
 #pragma mark 采纳成功

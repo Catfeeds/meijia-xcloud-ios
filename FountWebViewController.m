@@ -75,6 +75,7 @@
     NSArray *textArray;
     int tableID;
     NSString *refreshURL;
+    FatherViewController *fatherVc;
 }
 
 @end
@@ -84,6 +85,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     tableID=0;
+    fatherVc=[[FatherViewController alloc]init];
 //    self.view.backgroundColor=[UIColor whiteColor];
     myTableView=[[UITableView alloc]initWithFrame:FRAME(WIDTH*0.6, 64, WIDTH*0.4, 0)];
     myTableView.dataSource=self;
@@ -176,11 +178,24 @@
 }
 -(void)consultingAction:(UIButton *)sender
 {
-    ClerkViewController *clerkVC=[[ClerkViewController alloc]init];
-    //clerkVC.goto_type=[NSString stringWithFormat:@"%@",[dic objectForKey:@"goto_type"]];
-    clerkVC.service_type_id=_service_type_id;
-    //    clerkVC.imgurl=[NSString stringWithFormat:@"%@",[dic objectForKey:@"goto_url"]];
-    [self.navigationController pushViewController:clerkVC animated:YES];
+    if(fatherVc.loginYesOrNo){
+        ClerkViewController *clerkVC=[[ClerkViewController alloc]init];
+        //clerkVC.goto_type=[NSString stringWithFormat:@"%@",[dic objectForKey:@"goto_type"]];
+        clerkVC.service_type_id=_service_type_id;
+        //    clerkVC.imgurl=[NSString stringWithFormat:@"%@",[dic objectForKey:@"goto_url"]];
+        [self.navigationController pushViewController:clerkVC animated:YES];
+    }else{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            MyLogInViewController *loginViewController = [[MyLogInViewController alloc] init];
+            loginViewController.vCYMID=100;
+            loginViewController.vcIDsss=1000;
+            UMComNavigationController *navigationController = [[UMComNavigationController alloc] initWithRootViewController:loginViewController];
+            [self presentViewController:navigationController animated:YES completion:^{
+            }];
+        });
+
+    }
+    
 }
 
 -(void)loadGoogle
@@ -193,13 +208,14 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
+    [self.navigationController setNavigationBarHidden:NO animated:NO];
     [super viewWillAppear:animated];
     [self.navigationController.navigationBar addSubview:_progressView];
 }
 -(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    
+    [self.navigationController setNavigationBarHidden:YES animated:YES];
     // Remove progress view
     // because UINavigationBar is shared with other ViewControllers
     [self.navigationController.navigationBar removeFromSuperview];
