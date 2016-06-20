@@ -56,6 +56,9 @@
     self.clipsToBounds = YES;
     
     for(int i = 0; i < NUMBER_PAGES_LOADED; ++i){
+        if (i==1) {
+            
+        }
         JTCalendarMonthView *monthView = [JTCalendarMonthView new];
         [self addSubview:monthView];
         [monthsViews addObject:monthView];

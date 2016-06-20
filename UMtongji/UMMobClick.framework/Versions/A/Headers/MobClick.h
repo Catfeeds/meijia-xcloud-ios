@@ -13,10 +13,10 @@
   REALTIME只在“集成测试”设备的DEBUG模式下有效，其它情况下的REALTIME会改为使用BATCH策略。
  */
 typedef enum {
-    REALTIMEs = 0,       //实时发送              (只在“集成测试”设备的DEBUG模式下有效)
-    BATCHs = 1,          //启动发送
-    SEND_INTERVALs = 6,  //最小间隔发送           ([90-86400]s, default 90s)
-} ReportPolicys;
+    REALTIME = 0,       //实时发送              (只在“集成测试”设备的DEBUG模式下有效)
+    BATCH = 1,          //启动发送
+    SEND_INTERVAL = 6,  //最小间隔发送           ([90-86400]s, default 90s)
+} ReportPolicy;
 
 /**
  统计的场景类别，默认为普通统计；若使用游戏统计API，则需选择游戏场景类别，如E_UM_GAME。
@@ -45,7 +45,7 @@ typedef NS_ENUM (NSUInteger, eScenarioType)
 /** optional:  default: YES */
 @property(nonatomic) BOOL  bCrashReportEnabled;
 /** optional:  default: BATCH */
-@property(nonatomic) ReportPolicys   ePolicy;
+@property(nonatomic) ReportPolicy   ePolicy;
 /** optional:  default: E_UM_NORMAL */
 @property(nonatomic) eScenarioType  eSType;
 

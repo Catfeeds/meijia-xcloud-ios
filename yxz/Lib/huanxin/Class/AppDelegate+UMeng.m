@@ -17,9 +17,11 @@
     if ([bundleID isEqualToString:@"com.easemob.enterprise.demo.ui"]) {
         UMConfigInstance.appKey = YMAPPKEY;
         UMConfigInstance.token=YMAPPKEY;
+        UMConfigInstance.secret=@"secretstringaldfkals";
         UMConfigInstance.channelId = @"appmarket-main";
-//        UMConfigInstance.eSType = E_UM_GAME;
-        UMConfigInstance.ePolicy=REALTIMEs;
+        UMConfigInstance.bCrashReportEnabled=YES;
+        //    UMConfigInstance.eSType = E_UM_GAME;
+        UMConfigInstance.ePolicy=SEND_INTERVAL;
         [MobClick startWithConfigure:UMConfigInstance];
 #if DEBUG
         [MobClick setLogEnabled:YES];

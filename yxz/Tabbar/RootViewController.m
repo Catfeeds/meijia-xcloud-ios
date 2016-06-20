@@ -63,7 +63,10 @@
 #import "Order_DetailsViewController.h"
 
 #import "EnterpriseViewController.h"
-@interface RootViewController ()<UIAlertViewDelegate, IChatManagerDelegate,UIAlertViewDelegate>
+
+//#import "DisplayStarView.h"
+//#import "RatingBar.h"
+@interface RootViewController ()<UIAlertViewDelegate, IChatManagerDelegate,UIAlertViewDelegate/*,RatingBarDelegate*/>
 {
     UIView *mainView;
     UIViewController *currentViewController;
@@ -115,7 +118,24 @@ MyselfViewController *thirdViewController;
 
 -(void)viewWillAppear:(BOOL)animated
 {
-   
+//    NSArray *narry=[[UIApplication sharedApplication] scheduledLocalNotifications];
+//    NSUInteger acount=[narry count];
+//    if (acount>0)
+//    {// 遍历找到对应nfkey和notificationtag的通知
+//            for (int i=0; i<acount; i++)
+//            {
+//                    UILocalNotification *myUILocalNotification = [narry objectAtIndex:i];
+//                    NSDictionary *userInfo = myUILocalNotification.userInfo;
+//                    NSNumber *obj = [userInfo objectForKey:@"nfkey"];
+//                    int mytag=[obj intValue];
+////                    if (mytag==notificationtag)
+////                    {
+//                        // 删除本地通知
+//                    [[UIApplication sharedApplication] cancelLocalNotification:myUILocalNotification];
+////                            break;
+////                        }
+//                }
+//        }
 
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
     self.navigationController.navigationBarHidden=YES;
@@ -438,6 +458,11 @@ MyselfViewController *thirdViewController;
     
 }
 - (void)viewDidLoad {
+    
+  
+    
+    
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(urlAction:) name:@"URLOPEN" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(imgTap:) name:@"IMGTAPP" object:nil];
     fatherVc=[[FatherViewController alloc]init];
@@ -562,8 +587,21 @@ MyselfViewController *thirdViewController;
 
     }
 
-    
+//    DisplayStarView *sv = [[DisplayStarView alloc]initWithFrame:CGRectMake(90, 200, 200, 40)];
+//    [self.view addSubview:sv];
+//    sv.showStar = 4.2*20;
+//    
+//    RatingBar *ratingBar = [[RatingBar alloc] init];
+//    ratingBar.frame = CGRectMake(60, 240, 200, 50);
+//    
+//    [self.view addSubview:ratingBar];
+//    ratingBar.isIndicator = NO;//指示器，就不能滑动了，只显示评分结果
+//    [ratingBar setImageDeselected:@"星星 (1)" halfSelected:nil fullSelected:@"星星" andDelegate:self];
 //    [self plusLAyout];
+    
+    
+    
+    
 }
 #pragma mark用户信息详情获取成功方法
 -(void)QJDowLoadFinish:(id)sender

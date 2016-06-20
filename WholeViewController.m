@@ -10,6 +10,7 @@
 #import "WaterfallCollectionViewCell.h"
 #import "ClerkViewController.h"
 #import "FountWebViewController.h"
+#import "SearchVoiceViewController.h"
 @interface WholeViewController ()
 {
     UICollectionViewFlowLayout *flowView;
@@ -38,7 +39,19 @@
     //    [_collectionView removeFromSuperview];
     if (_whoVCID==101) {
         self.navlabel.text=@"找服务商";
-        _collectionView=[[UICollectionView alloc]initWithFrame:FRAME(0, 64, WIDTH, HEIGHT-64)collectionViewLayout:flowView];
+        _collectionView=[[UICollectionView alloc]initWithFrame:FRAME(0, 104, WIDTH, HEIGHT-104)collectionViewLayout:flowView];
+        UIButton *searchButton=[[UIButton alloc]initWithFrame:FRAME(20, 64+15/2, WIDTH-40, 25)];
+        searchButton.backgroundColor=[UIColor whiteColor];//colorWithRed:232/255.0f green:232/255.0f blue:232/255.0f alpha:1];
+        [searchButton addTarget:self action:@selector(searchButAction) forControlEvents:UIControlEventTouchUpInside];
+        [self.view addSubview:searchButton];
+        UIImageView *searchImage=[[UIImageView alloc]initWithFrame:FRAME(5, 5, 15, 15)];
+        searchImage.image=[UIImage imageNamed:@"search_@2x"];
+        [searchButton addSubview:searchImage];
+        UIImageView *voiceImage=[[UIImageView alloc]initWithFrame:FRAME(searchButton.frame.size.width-20, 5, 15, 15)];
+        voiceImage.image=[UIImage imageNamed:@"iconfont-yuyin-copy"];
+        [searchButton addSubview:voiceImage];
+        UILabel *searchLabel=[[UILabel alloc]initWithFrame:FRAME(45, 5, searchButton.frame.size.width-90, 15)];
+        searchLabel.text=@"点击搜索相关信息";
     }else{
         _collectionView=[[UICollectionView alloc]initWithFrame:FRAME(0, 0, WIDTH, HEIGHT-115)collectionViewLayout:flowView];
     }
@@ -59,6 +72,12 @@
         [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     }
     
+}
+#pragma mark 搜索按钮点击方法
+-(void)searchButAction
+{
+    SearchVoiceViewController *searchVC=[[SearchVoiceViewController alloc]init];
+    [self.navigationController pushViewController:searchVC animated:YES];
 }
 -(void)dataSourceLayout
 {

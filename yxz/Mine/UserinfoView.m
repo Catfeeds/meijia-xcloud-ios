@@ -31,13 +31,13 @@
         user_type=[type intValue];
         NSArray *_nameArr;
         if (user_type==1) {
-            _nameArr= @[@"头像",@"昵称：",@"手机：",@"性别：",@"公司：",@"职位：",@"封面相册："];
+            _nameArr= @[@"头像",@"昵称：",@"手机：",@"性别：",@"公司：",@"职位："/*,@"封面相册："*/];
         }else{
-            _nameArr= @[@"头像",@"昵称：",@"手机：",@"性别：",@"公司：",@"职位：",@"封面相册："];
+            _nameArr= @[@"头像",@"昵称：",@"手机：",@"性别：",@"公司：",@"职位："/*,@"封面相册："*/];
         }
         
         
-        for (int i = 0; i < 7; i ++) {
+        for (int i = 0; i < 6; i ++) {
             
             UILabel *_leftlabel = [[UILabel alloc]init];
             [self addSubview:_leftlabel];
@@ -86,7 +86,7 @@
             
         }
         
-        for (int i = 0; i < 8; i ++) {
+        for (int i = 0; i < 7; i ++) {
             UIImageView *_lineview = [[UIImageView alloc]initWithFrame:FRAME(0, 13+54*i, _CELL_WIDTH, 0.5)];
             _lineview.backgroundColor = COLOR_VAULE(211.0);
             _lineview.hidden = i == 0? YES : NO;
@@ -117,7 +117,7 @@
 }
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
-    for (int i = 0; i < 7; i++) {
+    for (int i = 0; i < 6; i++) {
         UITextField *_label = (UITextField *)[self viewWithTag:(1000+i)];
 
         switch (i) {
@@ -159,7 +159,7 @@
 
 - (void)setMydata:(USERINFOData *)mydata
 {
-    for (int i = 0; i < 7; i ++) {
+    for (int i = 0; i < 6; i ++) {
         UITextField *_label = (UITextField *)[self viewWithTag:(1000+i)];
         switch (i) {
             case 0:

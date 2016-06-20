@@ -395,6 +395,7 @@
     NSString *userId=_manager.telephone;
     NSString *cellUserId=[NSString stringWithFormat:@"%@",[_dataDic objectForKey:@"user_id"]];
     int user_id,celluser_id;
+    int cell_id=[[NSString stringWithFormat:@"%@",[dic objectForKey:@"user_id"]]intValue];
     user_id=[userId intValue];
     celluser_id=[cellUserId intValue];
     int details_id=[[NSString stringWithFormat:@"%@",[detailsDic objectForKey:@"status"]]intValue];
@@ -412,7 +413,12 @@
     }
     if (details_id==0) {
         if (user_id==celluser_id) {
-            cell.adoptBut.hidden=NO;
+            if (user_id==cell_id) {
+                cell.adoptBut.hidden=YES;
+            }else{
+                cell.adoptBut.hidden=NO;
+            }
+            
         }else{
             cell.adoptBut.hidden=YES;
         }

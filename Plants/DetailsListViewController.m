@@ -153,19 +153,54 @@ int heights,Y,processIDs=0;
     }
     NSLog(@"点击了处理流程");
 }
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    NSString* msg = [[NSString alloc] initWithFormat:@"%ld",(long)buttonIndex];
+    
+    if (alertView.tag==1101) {
+        if ([msg isEqualToString:@"0"]) {
+            ISLoginManager *_manager = [ISLoginManager shareManager];
+            DownloadManager *_download = [[DownloadManager alloc]init];
+            NSString *card_Id=[NSString stringWithFormat:@"%d",_card_ID];
+            NSLog(@"ID%@  %d",card_Id, _card_ID);
+            NSDictionary *_dict = @{@"user_id":_manager.telephone,@"card_id":card_Id,@"status":@"0"};
+            NSLog(@"字典数据%@",_dict);
+            [_download requestWithUrl:CARD_QXJK dict:_dict view:self.view delegate:self finishedSEL:@selector(QXFinish:) isPost:YES failedSEL:@selector(QXDownFail:)];
+        }
+    }
+}
 -(void)cancelBut
 {
-    ISLoginManager *_manager = [ISLoginManager shareManager];
-    DownloadManager *_download = [[DownloadManager alloc]init];
-    NSString *card_Id=[NSString stringWithFormat:@"%d",_card_ID];
-    NSLog(@"ID%@  %d",card_Id, _card_ID);
-    NSDictionary *_dict = @{@"user_id":_manager.telephone,@"card_id":card_Id,@"status":@"0"};
-    NSLog(@"字典数据%@",_dict);
-    [_download requestWithUrl:CARD_QXJK dict:_dict view:self.view delegate:self finishedSEL:@selector(QXFinish:) isPost:YES failedSEL:@selector(QXDownFail:)];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"确定要取消卡片吗？取消后会在日程中删除，并且所有提醒人员将收不到提醒。"  delegate:self cancelButtonTitle:@"确认" otherButtonTitles:@"返回",nil];
+    alert.tag=1101;
+    [alert show];
+    
 }
 //取消成功方法
 -(void)QXFinish:(id)sender
 {
+    NSDictionary *dict=[sender objectForKey:@"data"];
+    //删除原来的闹钟
+    NSArray *narry=[[UIApplication sharedApplication] scheduledLocalNotifications];
+    NSUInteger acount=[narry count];
+    if (acount>0)
+    {// 遍历找到对应nfkey和notificationtag的通知
+        for (int i=0; i<acount; i++)
+        {
+            UILocalNotification *myUILocalNotification = [narry objectAtIndex:i];
+            NSDictionary *userInfo = [myUILocalNotification.userInfo objectForKey:@"dic"];
+            NSNumber *obj = [userInfo objectForKey:@"ci"];
+            int mytag=[obj intValue];
+            NSString *card_id=[NSString stringWithFormat:@"%@",[sender objectForKey:@"data"]];
+            int notificationtag=[card_id intValue];
+            if (mytag==notificationtag)
+            {
+                //删除本地通知
+                [[UIApplication sharedApplication] cancelLocalNotification:myUILocalNotification];
+                break;
+            }
+        }
+    }//删除原来的闹钟
     [self.navigationController popViewControllerAnimated:YES];
 }
 //取消失败方法
@@ -413,20 +448,20 @@ int heights,Y,processIDs=0;
         if (statusID==1||statusID==2) {
             modifyBut.enabled=TRUE;
             [modifyBut setTitleColor:[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1] forState:UIControlStateNormal];//textColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
-            cancelBut.enabled=FALSE;
+            cancelBut.enabled=TRUE;
             [cancelBut setTitleColor:[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1] forState:UIControlStateNormal];
         }else{
             modifyBut.enabled=FALSE;
             [modifyBut setTitleColor:[UIColor colorWithRed:200/255.0f green:200/255.0f blue:200/255.0f alpha:1] forState:UIControlStateNormal];
             
-            cancelBut.enabled=TRUE;
+            cancelBut.enabled=FALSE;
             [cancelBut setTitleColor:[UIColor colorWithRed:200/255.0f green:200/255.0f blue:200/255.0f alpha:1] forState:UIControlStateNormal];
         }
     }else{
         modifyBut.enabled=FALSE;
         [modifyBut setTitleColor:[UIColor colorWithRed:200/255.0f green:200/255.0f blue:200/255.0f alpha:1] forState:UIControlStateNormal];
         
-        cancelBut.enabled=TRUE;
+        cancelBut.enabled=FALSE;
         [cancelBut setTitleColor:[UIColor colorWithRed:200/255.0f green:200/255.0f blue:200/255.0f alpha:1] forState:UIControlStateNormal];
     }
     NSString *titleStr=[NSString stringWithFormat:@"%@",[dic objectForKey:@"card_type_name"]];

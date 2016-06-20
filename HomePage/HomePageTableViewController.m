@@ -23,6 +23,7 @@
 #import "Workplace_askViewController.h"
 #import "ToolListViewController.h"
 #import "FountWebViewController.h"
+#import "Home_SearchVoiceViewController.h"
 static CGFloat const imageBGHeight = 373; // 背景图片的高度
 @interface HomePageTableViewController ()
 {
@@ -270,6 +271,15 @@ static CGFloat const imageBGHeight = 373; // 背景图片的高度
     searchImage.image=[UIImage imageNamed:@"search_@2x"];
     [mySearchBar addSubview:searchImage];
     
+    UILabel *searchLabel=[[UILabel alloc]initWithFrame:FRAME(30, 5, mySearchBar.frame.size.width-90, 15)];
+    searchLabel.text=@"招人秘籍、升职技巧一搜即有";
+    searchLabel.font=[UIFont fontWithName:@"Heiti SC" size:13];
+//    searchLabel.textAlignment=NSTextAlignmentCenter;
+    searchLabel.textColor=[UIColor colorWithRed:200/255.0f green:200/255.0f blue:200/255.0f alpha:1];
+    [mySearchBar addSubview:searchLabel];
+    
+    
+    
     csView=[[UIView alloc]initWithFrame:FRAME(0, 373, WIDTH, 38)];
 //    csView.backgroundColor=[UIColor blackColor];
     [self.view addSubview:csView];
@@ -439,7 +449,7 @@ static CGFloat const imageBGHeight = 373; // 背景图片的高度
 #pragma mark 搜索按钮点击方法
 -(void)searchButAction
 {
-    SearchVoiceViewController *searchVC=[[SearchVoiceViewController alloc]init];
+    Home_SearchVoiceViewController *searchVC=[[Home_SearchVoiceViewController alloc]init];
     [self.navigationController pushViewController:searchVC animated:YES];
 }
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
@@ -506,7 +516,7 @@ static CGFloat const imageBGHeight = 373; // 背景图片的高度
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    [MobClick endLogPageView:@"shouye"];
+    [MobClick endLogPageView:@"首页"];
 }
 -(void)qrCodeButAction:(UIButton *)button
 {
@@ -520,6 +530,7 @@ static CGFloat const imageBGHeight = 373; // 背景图片的高度
         ((void (*)(id, SEL))objc_msgSend)(self, normalSelector);
     }
 }
+
 -(void)SignPolite
 {
     [pushEjectView removeFromSuperview];

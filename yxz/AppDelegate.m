@@ -82,6 +82,7 @@
     EjectAlertView *newinFormationView;
     NSString *urlw;
     NSString *urlSrt;
+    UILocalNotification * localNotify;
 }
 
 @end
@@ -338,56 +339,132 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     NSURL *url = [launchOptions objectForKey:UIApplicationLaunchOptionsURLKey];
     if(url)
     {
+        UIView *view=[[UIView alloc]initWithFrame:FRAME(0, 0, WIDTH, HEIGHT)];
+        view.backgroundColor=[UIColor yellowColor];
+        [self.window addSubview:view];
+        UILabel *label=[[UILabel alloc]initWithFrame:FRAME(30, 100, WIDTH-60, 100)];
+        label.text=[NSString stringWithFormat:@"%@",launchOptions];
+        [view addSubview:label];
         NSLog(@"哦案发分不开：1");
         //badge=100;
     }
     NSString *bundleId = [launchOptions objectForKey:UIApplicationLaunchOptionsSourceApplicationKey];
     if(bundleId)
     {
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"ALERT" object:dateDic];
+//        [[NSNotificationCenter defaultCenter] postNotificationName:@"ALERT" object:dateDic];
         //badge=100;
+        UIView *view=[[UIView alloc]initWithFrame:FRAME(0, 0, WIDTH, HEIGHT)];
+        view.backgroundColor=[UIColor redColor];
+        [self.window addSubview:view];
+        UILabel *label=[[UILabel alloc]initWithFrame:FRAME(30, 100, WIDTH-60, 100)];
+        label.text=[NSString stringWithFormat:@"%@",launchOptions];
+        [view addSubview:label];
         NSLog(@"哦案发分不开：2");
     }
-    UILocalNotification * localNotify = [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
+#pragma mark  程序杀死点击通知进入app需要走的方法
+    localNotify = [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
     if(localNotify)
     {
-        NSLog(@"Recieved Notification %@",localNotify);
-        NSLog(@"哈哈:%@,%@,%@",localNotify.alertTitle,localNotify.alertBody,localNotify.fireDate);
-        titleLabelStr=localNotify.alertTitle;
-        textLabelStr=localNotify.alertBody;
-        NSArray *timeArrat=[textLabelStr componentsSeparatedByString:@" "];
-        NSString *timeStr=timeArrat[1];
-        NSString *str=[NSString stringWithFormat:@"%@",localNotify.fireDate];
-        NSArray *array=[str componentsSeparatedByString:@" "];
-        timeLabelStr=[timeStr substringToIndex:5];
-        dataLabelStr=array[0];
-        NSDictionary* infoDic = localNotify.userInfo;
-        NSLog(@"%@",infoDic);
-        badge=100;
+        NSDictionary *dict=localNotify.userInfo;
+        NSDictionary *dic=[dict objectForKey:@"dic"];
+        NSString *yes_or_no=[NSString stringWithFormat:@"%@",[dict objectForKey:@"yes_or_no"]];
+        
+        NSString *actionStr=[NSString stringWithFormat:@"%@",[dic objectForKey:@"ac"]];
+        
+        if ([yes_or_no isEqualToString:@"yes"]) {
+            NSString *trueStr=[dic objectForKey:@"is"];
+            if ([trueStr isEqual:@"true"]) {
+                if ([actionStr isEqualToString:@"a"]) {
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"ALERT" object:dic];
+                }else if ([actionStr isEqualToString:@"m"]){
+                    if ([[dic objectForKey:@"ca"] isEqualToString:@"app"]) {
+                        if ([[dic objectForKey:@"pa"] isEqualToString:@""]) {
+                            urlSrt=[NSString stringWithFormat:@"http://www.51xingzheng.cn/d/open.html?category=%@&action=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"]];
+                        }else{
+                            urlSrt=[NSString stringWithFormat:@"http://www.51xingzheng.cn/d/open.html?category=%@&action=%@&params=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"],[dic objectForKey:@"pa"]];
+                        }
+                        
+                    }else if([[dic objectForKey:@"ca"] isEqualToString:@"h5"]){
+                        urlSrt=[NSString stringWithFormat:@"%@",[dic objectForKey:@"go"]];
+                    }
+                    
+                    NSString *ca=[NSString stringWithFormat:@"%@",[dic objectForKey:@"ca"]];
+                    NSString *aj=[NSString stringWithFormat:@"%@",[dic objectForKey:@"aj"]];
+                    NSString *pa=[NSString stringWithFormat:@"%@",[dic objectForKey:@"pa"]];
+                    NSString *go=[NSString stringWithFormat:@"%@",[dic objectForKey:@"go"]];
+                    if ((ca==nil||ca==NULL||[ca isEqualToString:@"(null)"])&&(aj==nil||aj==NULL||[aj isEqualToString:@"(null)"])&&(pa==nil||pa==NULL||[pa isEqualToString:@"(null)"])&&(go==nil||go==NULL||[go isEqualToString:@"(null)"])) {
+                        
+                    }else{
+                        [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(popAlertView) userInfo:nil repeats:NO];
+                    }
+                    
+                }else{
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"NOTICEPUSH" object:dic];
+                }
+            }
+            
+            
+        }else{
+            pushEjectView.hidden=YES;
+            [pushEjectView removeFromSuperview];
+            if ([actionStr isEqualToString:@"s"]) {
+                //            badge=100;
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"ALERT" object:dic];
+                
+            }else if ([actionStr isEqualToString:@"m"]) {
+                
+                if ([[dic objectForKey:@"ca"] isEqualToString:@"app"]) {
+                    if ([[dic objectForKey:@"pa"] isEqualToString:@""]) {
+                        urlSrt=[NSString stringWithFormat:@"http://www.51xingzheng.cn/d/open.html?category=%@&action=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"]];
+                    }else{
+                        urlSrt=[NSString stringWithFormat:@"http://www.51xingzheng.cn/d/open.html?category=%@&action=%@&params=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"],[dic objectForKey:@"pa"]];
+                    }
+                    
+                }else if([[dic objectForKey:@"ca"] isEqualToString:@"h5"]){
+                    urlSrt=[NSString stringWithFormat:@"%@",[dic objectForKey:@"go"]];
+                }
+                
+                NSString *ca=[NSString stringWithFormat:@"%@",[dic objectForKey:@"ca"]];
+                NSString *aj=[NSString stringWithFormat:@"%@",[dic objectForKey:@"aj"]];
+                NSString *pa=[NSString stringWithFormat:@"%@",[dic objectForKey:@"pa"]];
+                NSString *go=[NSString stringWithFormat:@"%@",[dic objectForKey:@"go"]];
+                if ((ca==nil||ca==NULL||[ca isEqualToString:@"(null)"])&&(aj==nil||aj==NULL||[aj isEqualToString:@"(null)"])&&(pa==nil||pa==NULL||[pa isEqualToString:@"(null)"])&&(go==nil||go==NULL||[go isEqualToString:@"(null)"])) {
+                    
+                }else{
+                    [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(popAlertView) userInfo:nil repeats:NO];
+                }
+                
+                //        return;
+            }
+            
+        }
+        
         NSLog(@"哦案发分不开：3");
     }
     NSDictionary * userInfo = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
     if(userInfo) 
     {
+        UIView *view=[[UIView alloc]initWithFrame:FRAME(0, 0, WIDTH, HEIGHT)];
+        view.backgroundColor=[UIColor brownColor];
+        [self.window addSubview:view];
+        UILabel *label=[[UILabel alloc]initWithFrame:FRAME(30, 100, WIDTH-60, 100)];
+        label.text=[NSString stringWithFormat:@"%@",launchOptions];
+        [view addSubview:label];
 //        NSLog(@"哦案发分不开：4 ％@",launchOptions);
     }
-    Class cls = NSClassFromString(@"UMANUtil");
-    SEL deviceIDSelector = @selector(openUDIDString);
-    NSString *deviceID = nil;
-    if(cls && [cls respondsToSelector:deviceIDSelector]){
-        deviceID = [cls performSelector:deviceIDSelector];
-    }
-    NSData* jsonData = [NSJSONSerialization dataWithJSONObject:@{@"oid" : deviceID}
-                                                       options:NSJSONWritingPrettyPrinted
-                                                         error:nil];
     
-    NSLog(@"%@", [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding]);
     
     
     
     UILocalNotification *localNotif = [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
     if (localNotif)
     {
+        UIView *view=[[UIView alloc]initWithFrame:FRAME(0, 0, WIDTH, HEIGHT)];
+        view.backgroundColor=[UIColor grayColor];
+        [self.window addSubview:view];
+        UILabel *label=[[UILabel alloc]initWithFrame:FRAME(30, 100, WIDTH-60, 100)];
+        label.text=[NSString stringWithFormat:@"%@",launchOptions];
+        [view addSubview:label];
         NSLog(@"Recieved Notification %@",localNotif);
         NSDictionary* infoDic = localNotif.userInfo;
         NSLog(@"userInfo description=%@",[infoDic description]);
@@ -415,16 +492,31 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     
     [UMFeedback setAppkey:YMAPPKEY];
     [MobClick setCrashReportEnabled:YES];
+    [MobClick setLogEnabled:YES];
+    	
+    Class cls = NSClassFromString(@"UMANUtil");
+    SEL deviceIDSelector = @selector(openUDIDString);
+    NSString *deviceID = nil;
+    if(cls && [cls respondsToSelector:deviceIDSelector]){
+        deviceID = [cls performSelector:deviceIDSelector];
+    }
+    NSData* jsonData = [NSJSONSerialization dataWithJSONObject:@{@"oid" : deviceID}
+                                                       options:NSJSONWritingPrettyPrinted
+                                                         error:nil];
+    
+    NSLog(@"%@", [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding]);
 //    [MobClick startWithAppkey:YMAPPKEY reportPolicy:BATCH   channelId:@"appmarket-main"];
     UMConfigInstance.appKey = YMAPPKEY;
     UMConfigInstance.token=YMAPPKEY;
+    //UMConfigInstance.secret=nil;
     UMConfigInstance.channelId = @"appmarket-main";
+    UMConfigInstance.bCrashReportEnabled=YES;
+    UMConfigInstance.ePolicy=SEND_INTERVAL;
 //    UMConfigInstance.eSType = E_UM_GAME;
-    UMConfigInstance.ePolicy=SEND_INTERVALs;
     [MobClick startWithConfigure:UMConfigInstance];
     NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
     [MobClick setAppVersion:version];
-    [MobClick setLogEnabled:YES];
+    
     //设置微信AppId、appSecret，分享url
     [UMSocialWechatHandler setWXAppId:@"wx93aa45d30bf6cba3" appSecret:@"7a4ec42a0c548c6e39ce9ed25cbc6bd7" url:Handlers];
     [UMSocialQQHandler setQQWithAppId:@"1104934408" appKey:@"bRW2glhUCR6aJYIZ" url:QQHandlerss];
@@ -1054,6 +1146,15 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     CGColorRef colors = CGColorCreate(colorSpaceRefs, (CGFloat[]){1,0,0,1});
     [knowBut.layer setBorderColor:colors];
     [imageView addSubview:knowBut];
+    dateDic=dic;
+    
+//    UIView *view=[[UIView alloc]initWithFrame:FRAME(0, 0, WIDTH, HEIGHT)];
+//    view.backgroundColor=[UIColor blueColor];
+//    [self.window addSubview:view];
+//    UILabel *label=[[UILabel alloc]initWithFrame:FRAME(30, 100, WIDTH-60, 100)];
+//    label.text=[NSString stringWithFormat:@"%@",[localNotify.userInfo objectForKey:@"someKey"]];
+//    [view addSubview:label];
+//
 }
 -(void)seeButAction
 {
@@ -1134,6 +1235,7 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
 /**
  *百度推送
  **/
+#pragma mark  离线通知接收通知方法
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
     NSLog(@"我就看看你走没走--5");
@@ -1155,84 +1257,99 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     dateDic=dic;
     NSLog(@"%@",dateDic);
     NSLog(@"remind_time%@",timeStr);
-    if ([[dic objectForKey:@"ac"] isEqualToString:@"m"]) {
-//        NSString *url;
-        if ([[dic objectForKey:@"ca"] isEqualToString:@"app"]) {
-            if ([[dic objectForKey:@"pa"] isEqualToString:@""]) {
-                urlw=[NSString stringWithFormat:@"http://www.51xingzheng.cn/d/open.html?category=%@&action=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"]];
-            }else if([[dic objectForKey:@"ca"] isEqualToString:@"h5"]){
-                urlw=[NSString stringWithFormat:@"http://www.51xingzheng.cn/d/open.html?category=%@&action=%@&params=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"],[dic objectForKey:@"pa"]];
-            }
-            
-        }else{
-            urlw=[NSString stringWithFormat:@"%@",[dic objectForKey:@"go"]];
-        }
-
-        NSString *ca=[NSString stringWithFormat:@"%@",[dic objectForKey:@"ca"]];
-        NSString *aj=[NSString stringWithFormat:@"%@",[dic objectForKey:@"aj"]];
-        NSString *pa=[NSString stringWithFormat:@"%@",[dic objectForKey:@"pa"]];
-        NSString *go=[NSString stringWithFormat:@"%@",[dic objectForKey:@"go"]];
-        if ((ca==nil||ca==NULL||[ca isEqualToString:@"(null)"])&&(aj==nil||aj==NULL||[aj isEqualToString:@"(null)"])&&(pa==nil||pa==NULL||[pa isEqualToString:@"(null)"])&&(go==nil||go==NULL||[go isEqualToString:@"(null)"])) {
-            
-        }else{
-            if([UIApplication sharedApplication].applicationState ==UIApplicationStateBackground)
-            {
-                
-            }else if ([UIApplication sharedApplication].applicationState ==UIApplicationStateActive){
-                NSLog(@"前台");
-            }else{
-                [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(popAlertViewssss) userInfo:nil repeats:NO];
-            }
-
-            
-        }
-
-//        [[NSNotificationCenter defaultCenter] postNotificationName:@"URLOPEN" object:url];
-        //        return;
-    }
-
-    if ([[dic objectForKey:@"ac"] isEqualToString:@"a"]) {
-        badge=100;
-    }
-    int card_id=[[dic objectForKey:@"ci"]intValue];
-    int gTid=0;
-    long long time=[timeStr longLongValue];//因为时差问题要加8小时 == 28800 sec
-    NSDate *detaildate=[NSDate dateWithTimeIntervalSince1970:time];
-    NSLog(@"date:%@",[detaildate description]);
-    //实例化一个NSDateFormatter对象
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    //设定时间格式,这里可以设置成自己需要的格式
-    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+   
     
-    NSString *currentDateStr = [dateFormatter stringFromDate: detaildate];
     
-    NSLog(@"时间是啥%@",currentDateStr);
-    NSArray *nfArray=[[UIApplication sharedApplication]scheduledLocalNotifications];
-    NSUInteger acount=[nfArray count];
-    if (acount>0) {
-        for (int i=0; i<acount; i++) {
-            UILocalNotification *myUILocalNotification=[nfArray objectAtIndex:i];
-            NSDate *dictUser=myUILocalNotification.fireDate;
-            NSDictionary *userInfo=myUILocalNotification.userInfo;
-            NSNumber *obj=[userInfo objectForKey:@"someKey"];
-            
-            NSLog(@"都有嘛东西啊？%@",myUILocalNotification);
-            int mytag=[obj intValue];
-            if (mytag==card_id&&dictUser==detaildate) {
-                gTid=1;
-            }else{
-                gTid=10;
-            }
+    if([UIApplication sharedApplication].applicationState ==UIApplicationStateBackground)
+    {
+        NSString *strings=[NSString stringWithFormat:@"%@",[dic objectForKey:@"ac"]];
+        if ([strings isEqualToString:@"s"]) {
+            [self alarmClock:dic];
         }
-    }
-    NSString *trueStr=[dic objectForKey:@"is"];
-    if ([trueStr isEqual:@"true"]) {
-    }
-    
-    if (gTid!=1) {
-    }else{
         
+    }else if ([UIApplication sharedApplication].applicationState ==UIApplicationStateActive){
+        NSLog(@"前台");
+    }else{
+        NSString *strings=[NSString stringWithFormat:@"%@",[dic objectForKey:@"ac"]];
+        NSString *trueStr=[dic objectForKey:@"is"];
+        if ([trueStr isEqual:@"true"]) {
+            if ([strings isEqualToString:@"a"]) {
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"ALERT" object:dic];
+            }else if ([strings isEqualToString:@"m"]){
+                if ([[dic objectForKey:@"ca"] isEqualToString:@"app"]) {
+                    if ([[dic objectForKey:@"pa"] isEqualToString:@""]) {
+                        urlSrt=[NSString stringWithFormat:@"http://www.51xingzheng.cn/d/open.html?category=%@&action=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"]];
+                    }else{
+                        urlSrt=[NSString stringWithFormat:@"http://www.51xingzheng.cn/d/open.html?category=%@&action=%@&params=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"],[dic objectForKey:@"pa"]];
+                    }
+                    
+                }else if([[dic objectForKey:@"ca"] isEqualToString:@"h5"]){
+                    urlSrt=[NSString stringWithFormat:@"%@",[dic objectForKey:@"go"]];
+                }
+                
+                NSString *ca=[NSString stringWithFormat:@"%@",[dic objectForKey:@"ca"]];
+                NSString *aj=[NSString stringWithFormat:@"%@",[dic objectForKey:@"aj"]];
+                NSString *pa=[NSString stringWithFormat:@"%@",[dic objectForKey:@"pa"]];
+                NSString *go=[NSString stringWithFormat:@"%@",[dic objectForKey:@"go"]];
+                if ((ca==nil||ca==NULL||[ca isEqualToString:@"(null)"])&&(aj==nil||aj==NULL||[aj isEqualToString:@"(null)"])&&(pa==nil||pa==NULL||[pa isEqualToString:@"(null)"])&&(go==nil||go==NULL||[go isEqualToString:@"(null)"])) {
+                    
+                }else{
+                    [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(popAlertView) userInfo:nil repeats:NO];
+                }
+                
+            }else if ([strings isEqualToString:@"d"]){
+                [self Delete_alarm_clock:dic];
+            }else{
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"NOTICEPUSH" object:dic];
+            }
+        }
+
     }
+
+    
+    
+//    if ([[dic objectForKey:@"ac"] isEqualToString:@"a"]) {
+//        badge=100;
+//    }
+//    int card_id=[[dic objectForKey:@"ci"]intValue];
+//    int gTid=0;
+//    long long time=[timeStr longLongValue];//因为时差问题要加8小时 == 28800 sec
+//    NSDate *detaildate=[NSDate dateWithTimeIntervalSince1970:time];
+//    NSLog(@"date:%@",[detaildate description]);
+//    //实例化一个NSDateFormatter对象
+//    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+//    //设定时间格式,这里可以设置成自己需要的格式
+//    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+//    
+//    NSString *currentDateStr = [dateFormatter stringFromDate: detaildate];
+//    
+//    NSLog(@"时间是啥%@",currentDateStr);
+//    NSArray *nfArray=[[UIApplication sharedApplication]scheduledLocalNotifications];
+//    NSUInteger acount=[nfArray count];
+//    if (acount>0) {
+//        for (int i=0; i<acount; i++) {
+//            UILocalNotification *myUILocalNotification=[nfArray objectAtIndex:i];
+//            NSDate *dictUser=myUILocalNotification.fireDate;
+//            NSDictionary *userInfo=myUILocalNotification.userInfo;
+//            NSNumber *obj=[userInfo objectForKey:@"someKey"];
+//            
+//            NSLog(@"都有嘛东西啊？%@",myUILocalNotification);
+//            int mytag=[obj intValue];
+//            if (mytag==card_id&&dictUser==detaildate) {
+//                gTid=1;
+//            }else{
+//                gTid=10;
+//            }
+//        }
+//    }
+//    NSString *trueStr=[dic objectForKey:@"is"];
+//    if ([trueStr isEqual:@"true"]) {
+//    }
+//    
+//    if (gTid!=1) {
+//    }else{
+//        
+//    }
 
     
     
@@ -1280,7 +1397,7 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
 -(void)popAlertView{
     [[NSNotificationCenter defaultCenter] postNotificationName:@"URLOPEN" object:urlSrt];
 }
-
+#pragma  mark 在线接收推送通知
 -(void)GeTuiSdkDidReceivePayload:(NSString*)payloadId andTaskId:(NSString*)taskId andMessageId:(NSString *)aMsgId fromApplication:(NSString *)appId
 
 {
@@ -1307,9 +1424,17 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
         NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:jsonData
                                                             options:NSJSONReadingMutableContainers
                                                               error:&err];
-        NSLog(@"个推消息内容%@",dic);
+    NSLog(@"个推消息内容%@",dic);
     
     NSString *string=[NSString stringWithFormat:@"%@",[dic objectForKey:@"ac"]];
+    if ([string isEqualToString:@"s"]) {
+        if (pushIDs!=1000) {
+             [self alarmClock:dic];
+        }
+       
+    }else if ([string isEqualToString:@"d"]){
+        [self Delete_alarm_clock:dic];
+    }
     if ([string isEqualToString:@"car-msg"]) {
         [[NSNotificationCenter defaultCenter] postNotificationName:@"ASDEDSA" object:dic];
         return;
@@ -1317,109 +1442,143 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
         if (dic==nil||dic==NULL) {
             return;
         }
-    NSString *actionStr=[NSString stringWithFormat:@"%@",[dic objectForKey:@"ac"]];
-    if ([actionStr isEqualToString:@"m"]) {
-        
-       
-        if ([[dic objectForKey:@"ca"] isEqualToString:@"app"]) {
-            if ([[dic objectForKey:@"pa"] isEqualToString:@""]) {
-                urlSrt=[NSString stringWithFormat:@"http://www.51xingzheng.cn/d/open.html?category=%@&action=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"]];
-            }else{
-                urlSrt=[NSString stringWithFormat:@"http://www.51xingzheng.cn/d/open.html?category=%@&action=%@&params=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"],[dic objectForKey:@"pa"]];
-            }
-            
-        }else if([[dic objectForKey:@"ca"] isEqualToString:@"h5"]){
-            urlSrt=[NSString stringWithFormat:@"%@",[dic objectForKey:@"go"]];
-        }
-
-        NSString *ca=[NSString stringWithFormat:@"%@",[dic objectForKey:@"ca"]];
-        NSString *aj=[NSString stringWithFormat:@"%@",[dic objectForKey:@"aj"]];
-        NSString *pa=[NSString stringWithFormat:@"%@",[dic objectForKey:@"pa"]];
-        NSString *go=[NSString stringWithFormat:@"%@",[dic objectForKey:@"go"]];
-        if ((ca==nil||ca==NULL||[ca isEqualToString:@"(null)"])&&(aj==nil||aj==NULL||[aj isEqualToString:@"(null)"])&&(pa==nil||pa==NULL||[pa isEqualToString:@"(null)"])&&(go==nil||go==NULL||[go isEqualToString:@"(null)"])) {
-            
-        }else{
-            if(pushIDs!=1000){
-                [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(popAlertView) userInfo:nil repeats:NO];
-                
-            }
-        }
-        
-//        return;
-    }
-    if ([[dic objectForKey:@"ac"] isEqualToString:@"a"]) {
-        badge=100;
-        
-    }else{
-       
-    }
-        
-        NSString *timeStr=[NSString stringWithFormat:@"%@",[dic objectForKey:@"re"]];
-        NSLog(@"remind_time%@",timeStr);
-//        NSString *card_idStr=[dic objectForKey:@"card_id"];
-        int card_id=[[dic objectForKey:@"ci"]intValue];
-        int gTid;
-        long long time=[timeStr longLongValue];//因为时差问题要加8小时 == 28800 sec
-        NSDate *detaildate=[NSDate dateWithTimeIntervalSince1970:time];
-        NSLog(@"date:%@",[detaildate description]);
-        //实例化一个NSDateFormatter对象
-        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-        //设定时间格式,这里可以设置成自己需要的格式
-        [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-        
-        NSString *currentDateStr = [dateFormatter stringFromDate: detaildate];
-        
-        NSLog(@"时间是啥%@",currentDateStr);
-        NSArray *nfArray=[[UIApplication sharedApplication]scheduledLocalNotifications];
-        NSUInteger acount=[nfArray count];
-        if (acount>0) {
-            for (int i=0; i<acount; i++) {
-                UILocalNotification *myUILocalNotification=[nfArray objectAtIndex:i];
-                NSDate *dictUser=myUILocalNotification.fireDate;
-                NSDictionary *userInfo=myUILocalNotification.userInfo;
-                NSNumber *obj=[userInfo objectForKey:@"someKey"];
-                
-                NSLog(@"都有嘛东西啊？%@",myUILocalNotification);
-                int mytag=[obj intValue];
-                if (mytag==card_id&&dictUser==detaildate) {
-                    gTid=1;
-                }else{
-                    gTid=10;
-                }
-            }
-        }
-        NSString *trueStr=[dic objectForKey:@"is"];
-        if ([trueStr isEqual:@"true"]) {
-            NSString *actionStr=[NSString stringWithFormat:@"%@",[dic objectForKey:@"ac"]];
-            NSDateFormatter  *dateformatter=[[NSDateFormatter alloc] init];
-            
-            [dateformatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-            if ([actionStr isEqualToString:@"a"]) {
-                badge=100;
-                if (pushIDs!=1000) {
-                    [[NSNotificationCenter defaultCenter] postNotificationName:@"ALERT" object:dic];
-                }
-                
-            }else if([actionStr isEqualToString:@"m"]){
-                if (pushIDs!=1000) {
-                    if ([[dic objectForKey:@"ca"] isEqualToString:@""]&&[[dic objectForKey:@"pa"] isEqualToString:@""]&&[[dic objectForKey:@"aj"] isEqualToString:@""]&&[[dic objectForKey:@"go"] isEqualToString:@""]) {
-                        [[NSNotificationCenter defaultCenter] postNotificationName:@"Newinformation" object:dic];
+    NSString *trueStr=[dic objectForKey:@"is"];
+    if ([trueStr isEqual:@"true"]) {
+        if (pushIDs!=1000) {
+            if ([string isEqualToString:@"a"]) {
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"ALERT" object:dic];
+            }else if ([string isEqualToString:@"m"]){
+                if ([[dic objectForKey:@"ca"] isEqualToString:@"app"]) {
+                    if ([[dic objectForKey:@"pa"] isEqualToString:@""]) {
+                        urlSrt=[NSString stringWithFormat:@"http://www.51xingzheng.cn/d/open.html?category=%@&action=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"]];
+                    }else{
+                        urlSrt=[NSString stringWithFormat:@"http://www.51xingzheng.cn/d/open.html?category=%@&action=%@&params=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"],[dic objectForKey:@"pa"]];
                     }
                     
+                }else if([[dic objectForKey:@"ca"] isEqualToString:@"h5"]){
+                    urlSrt=[NSString stringWithFormat:@"%@",[dic objectForKey:@"go"]];
                 }
+                
+                NSString *ca=[NSString stringWithFormat:@"%@",[dic objectForKey:@"ca"]];
+                NSString *aj=[NSString stringWithFormat:@"%@",[dic objectForKey:@"aj"]];
+                NSString *pa=[NSString stringWithFormat:@"%@",[dic objectForKey:@"pa"]];
+                NSString *go=[NSString stringWithFormat:@"%@",[dic objectForKey:@"go"]];
+                if ((ca==nil||ca==NULL||[ca isEqualToString:@"(null)"])&&(aj==nil||aj==NULL||[aj isEqualToString:@"(null)"])&&(pa==nil||pa==NULL||[pa isEqualToString:@"(null)"])&&(go==nil||go==NULL||[go isEqualToString:@"(null)"])) {
+                    
+                }else{
+                    [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(popAlertView) userInfo:nil repeats:NO];
+                }
+            }else if ([string isEqualToString:@"d"]){
+                [self Delete_alarm_clock:dic];
             }else{
-                if (pushIDs!=1000) {
-                    [[NSNotificationCenter defaultCenter] postNotificationName:@"NOTICEPUSH" object:dic];
-                }
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"NOTICEPUSH" object:dic];
             }
-
         }
-        
-        if (gTid!=1) {
-        }else{
-            
-        }
+    }
     pushIDs=0;
+//    NSString *actionStr=[NSString stringWithFormat:@"%@",[dic objectForKey:@"ac"]];
+//    if ([actionStr isEqualToString:@"m"]) {
+//        
+//       
+//        if ([[dic objectForKey:@"ca"] isEqualToString:@"app"]) {
+//            if ([[dic objectForKey:@"pa"] isEqualToString:@""]) {
+//                urlSrt=[NSString stringWithFormat:@"http://www.51xingzheng.cn/d/open.html?category=%@&action=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"]];
+//            }else{
+//                urlSrt=[NSString stringWithFormat:@"http://www.51xingzheng.cn/d/open.html?category=%@&action=%@&params=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"],[dic objectForKey:@"pa"]];
+//            }
+//            
+//        }else if([[dic objectForKey:@"ca"] isEqualToString:@"h5"]){
+//            urlSrt=[NSString stringWithFormat:@"%@",[dic objectForKey:@"go"]];
+//        }
+//
+//        NSString *ca=[NSString stringWithFormat:@"%@",[dic objectForKey:@"ca"]];
+//        NSString *aj=[NSString stringWithFormat:@"%@",[dic objectForKey:@"aj"]];
+//        NSString *pa=[NSString stringWithFormat:@"%@",[dic objectForKey:@"pa"]];
+//        NSString *go=[NSString stringWithFormat:@"%@",[dic objectForKey:@"go"]];
+//        if ((ca==nil||ca==NULL||[ca isEqualToString:@"(null)"])&&(aj==nil||aj==NULL||[aj isEqualToString:@"(null)"])&&(pa==nil||pa==NULL||[pa isEqualToString:@"(null)"])&&(go==nil||go==NULL||[go isEqualToString:@"(null)"])) {
+//            
+//        }else{
+//            if(pushIDs!=1000){
+//                [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(popAlertView) userInfo:nil repeats:NO];
+//                
+//            }
+//        }
+//        
+////        return;
+//    }
+//    if ([[dic objectForKey:@"ac"] isEqualToString:@"a"]) {
+//        badge=100;
+//        
+//    }else{
+//       
+//    }
+//        
+//        NSString *timeStr=[NSString stringWithFormat:@"%@",[dic objectForKey:@"re"]];
+//        NSLog(@"remind_time%@",timeStr);
+////        NSString *card_idStr=[dic objectForKey:@"card_id"];
+//        int card_id=[[dic objectForKey:@"ci"]intValue];
+//        int gTid;
+//        long long time=[timeStr longLongValue];//因为时差问题要加8小时 == 28800 sec
+//        NSDate *detaildate=[NSDate dateWithTimeIntervalSince1970:time];
+//        NSLog(@"date:%@",[detaildate description]);
+//        //实例化一个NSDateFormatter对象
+//        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+//        //设定时间格式,这里可以设置成自己需要的格式
+//        [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+//        
+//        NSString *currentDateStr = [dateFormatter stringFromDate: detaildate];
+//        
+//        NSLog(@"时间是啥%@",currentDateStr);
+//        NSArray *nfArray=[[UIApplication sharedApplication]scheduledLocalNotifications];
+//        NSUInteger acount=[nfArray count];
+//        if (acount>0) {
+//            for (int i=0; i<acount; i++) {
+//                UILocalNotification *myUILocalNotification=[nfArray objectAtIndex:i];
+//                NSDate *dictUser=myUILocalNotification.fireDate;
+//                NSDictionary *userInfo=myUILocalNotification.userInfo;
+//                NSNumber *obj=[userInfo objectForKey:@"someKey"];
+//                
+//                NSLog(@"都有嘛东西啊？%@",myUILocalNotification);
+//                int mytag=[obj intValue];
+//                if (mytag==card_id&&dictUser==detaildate) {
+//                    gTid=1;
+//                }else{
+//                    gTid=10;
+//                }
+//            }
+//        }
+//        NSString *trueStr=[dic objectForKey:@"is"];
+//        if ([trueStr isEqual:@"true"]) {
+//            NSString *actionStr=[NSString stringWithFormat:@"%@",[dic objectForKey:@"ac"]];
+//            NSDateFormatter  *dateformatter=[[NSDateFormatter alloc] init];
+//            
+//            [dateformatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+//            if ([actionStr isEqualToString:@"a"]) {
+//                badge=100;
+//                if (pushIDs!=1000) {
+//                    [[NSNotificationCenter defaultCenter] postNotificationName:@"ALERT" object:dic];
+//                }
+//                
+//            }else if([actionStr isEqualToString:@"m"]){
+//                if (pushIDs!=1000) {
+//                    if ([[dic objectForKey:@"ca"] isEqualToString:@""]&&[[dic objectForKey:@"pa"] isEqualToString:@""]&&[[dic objectForKey:@"aj"] isEqualToString:@""]&&[[dic objectForKey:@"go"] isEqualToString:@""]) {
+//                        [[NSNotificationCenter defaultCenter] postNotificationName:@"Newinformation" object:dic];
+//                    }
+//                    
+//                }
+//            }else{
+//                if (pushIDs!=1000) {
+//                    [[NSNotificationCenter defaultCenter] postNotificationName:@"NOTICEPUSH" object:dic];
+//                }
+//            }
+//
+//        }
+//        
+//        if (gTid!=1) {
+//        }else{
+//            
+//        }
+//    pushIDs=0;
     
 }
 -(NSString*) formateTime:(NSDate*) date {
@@ -1834,6 +1993,7 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     NSLog(@"userinfo:%@",userInfo);
 }
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
+    NSLog(@"%@",notification.userInfo);
     NSLog(@"我就看看你走没走--10");
     if(application.applicationState == UIApplicationStateActive)
     {
@@ -1843,21 +2003,165 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
         NSLog(@"后台");
         
     }
+    
+#pragma mark程序在后台点击通知
     if (application.applicationState == UIApplicationStateInactive) {
-        timeLabelStr=notification.alertTitle;
-        textLabelStr=notification.alertBody;
-        NSDate *  senddate=[NSDate date];
-        NSDateFormatter  *dateformatter=[[NSDateFormatter alloc] init];
-        [dateformatter setDateFormat:@"yyyy-MM-dd"];
-        dataLabelStr=[dateformatter stringFromDate:senddate];
-        NSDateFormatter *timeformatter=[[NSDateFormatter alloc]init];
-        [timeformatter setDateFormat:@"HH:mm"];
-        timeLabelStr=[timeformatter stringFromDate:senddate];
+        NSDictionary *dict=notification.userInfo;
+        NSDictionary *dic=[dict objectForKey:@"dic"];
+        NSString *yes_or_no=[NSString stringWithFormat:@"%@",[dict objectForKey:@"yes_or_no"]];
         
-        badge=100;
+        NSString *actionStr=[NSString stringWithFormat:@"%@",[dic objectForKey:@"ac"]];
+        
+        if ([yes_or_no isEqualToString:@"yes"]) {
+            NSString *trueStr=[dic objectForKey:@"is"];
+            if ([trueStr isEqual:@"true"]) {
+                if ([actionStr isEqualToString:@"a"]) {
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"ALERT" object:dic];
+                }else if ([actionStr isEqualToString:@"m"]){
+                    if ([[dic objectForKey:@"ca"] isEqualToString:@"app"]) {
+                        if ([[dic objectForKey:@"pa"] isEqualToString:@""]) {
+                            urlSrt=[NSString stringWithFormat:@"http://www.51xingzheng.cn/d/open.html?category=%@&action=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"]];
+                        }else{
+                            urlSrt=[NSString stringWithFormat:@"http://www.51xingzheng.cn/d/open.html?category=%@&action=%@&params=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"],[dic objectForKey:@"pa"]];
+                        }
+                        
+                    }else if([[dic objectForKey:@"ca"] isEqualToString:@"h5"]){
+                        urlSrt=[NSString stringWithFormat:@"%@",[dic objectForKey:@"go"]];
+                    }
+                    
+                    NSString *ca=[NSString stringWithFormat:@"%@",[dic objectForKey:@"ca"]];
+                    NSString *aj=[NSString stringWithFormat:@"%@",[dic objectForKey:@"aj"]];
+                    NSString *pa=[NSString stringWithFormat:@"%@",[dic objectForKey:@"pa"]];
+                    NSString *go=[NSString stringWithFormat:@"%@",[dic objectForKey:@"go"]];
+                    if ((ca==nil||ca==NULL||[ca isEqualToString:@"(null)"])&&(aj==nil||aj==NULL||[aj isEqualToString:@"(null)"])&&(pa==nil||pa==NULL||[pa isEqualToString:@"(null)"])&&(go==nil||go==NULL||[go isEqualToString:@"(null)"])) {
+                        
+                    }else{
+                        [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(popAlertView) userInfo:nil repeats:NO];
+                    }
+                    
+                }else{
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"NOTICEPUSH" object:dic];
+                }
+            }
+            
+            
+        }else{
+            pushEjectView.hidden=YES;
+            [pushEjectView removeFromSuperview];
+            if ([actionStr isEqualToString:@"s"]) {
+                //            badge=100;
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"ALERT" object:dic];
+                
+            }else if ([actionStr isEqualToString:@"m"]) {
+                
+                if ([[dic objectForKey:@"ca"] isEqualToString:@"app"]) {
+                    if ([[dic objectForKey:@"pa"] isEqualToString:@""]) {
+                        urlSrt=[NSString stringWithFormat:@"http://www.51xingzheng.cn/d/open.html?category=%@&action=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"]];
+                    }else{
+                        urlSrt=[NSString stringWithFormat:@"http://www.51xingzheng.cn/d/open.html?category=%@&action=%@&params=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"],[dic objectForKey:@"pa"]];
+                    }
+                    
+                }else if([[dic objectForKey:@"ca"] isEqualToString:@"h5"]){
+                    urlSrt=[NSString stringWithFormat:@"%@",[dic objectForKey:@"go"]];
+                }
+                
+                NSString *ca=[NSString stringWithFormat:@"%@",[dic objectForKey:@"ca"]];
+                NSString *aj=[NSString stringWithFormat:@"%@",[dic objectForKey:@"aj"]];
+                NSString *pa=[NSString stringWithFormat:@"%@",[dic objectForKey:@"pa"]];
+                NSString *go=[NSString stringWithFormat:@"%@",[dic objectForKey:@"go"]];
+                if ((ca==nil||ca==NULL||[ca isEqualToString:@"(null)"])&&(aj==nil||aj==NULL||[aj isEqualToString:@"(null)"])&&(pa==nil||pa==NULL||[pa isEqualToString:@"(null)"])&&(go==nil||go==NULL||[go isEqualToString:@"(null)"])) {
+                    
+                }else{
+                    [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(popAlertView) userInfo:nil repeats:NO];
+                }
+                
+                //        return;
+            }
+
+        }
+        
+        
+      
+        
     }
     if (notification)
     {
+        NSDictionary *dict=notification.userInfo;
+        NSDictionary *dic=[dict objectForKey:@"dic"];
+        NSLog(@"%@",dic);
+        NSString *yes_or_no=[NSString stringWithFormat:@"%@",[dict objectForKey:@"yes_or_no"]];
+        
+        NSString *actionStr=[NSString stringWithFormat:@"%@",[dic objectForKey:@"ac"]];
+        
+        if ([yes_or_no isEqualToString:@"yes"]) {
+            NSString *trueStr=[dic objectForKey:@"is"];
+            if ([trueStr isEqual:@"true"]) {
+                if ([actionStr isEqualToString:@"a"]) {
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"ALERT" object:dic];
+                }else if ([actionStr isEqualToString:@"m"]){
+                    if ([[dic objectForKey:@"ca"] isEqualToString:@"app"]) {
+                        if ([[dic objectForKey:@"pa"] isEqualToString:@""]) {
+                            urlSrt=[NSString stringWithFormat:@"http://www.51xingzheng.cn/d/open.html?category=%@&action=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"]];
+                        }else{
+                            urlSrt=[NSString stringWithFormat:@"http://www.51xingzheng.cn/d/open.html?category=%@&action=%@&params=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"],[dic objectForKey:@"pa"]];
+                        }
+                        
+                    }else if([[dic objectForKey:@"ca"] isEqualToString:@"h5"]){
+                        urlSrt=[NSString stringWithFormat:@"%@",[dic objectForKey:@"go"]];
+                    }
+                    
+                    NSString *ca=[NSString stringWithFormat:@"%@",[dic objectForKey:@"ca"]];
+                    NSString *aj=[NSString stringWithFormat:@"%@",[dic objectForKey:@"aj"]];
+                    NSString *pa=[NSString stringWithFormat:@"%@",[dic objectForKey:@"pa"]];
+                    NSString *go=[NSString stringWithFormat:@"%@",[dic objectForKey:@"go"]];
+                    if ((ca==nil||ca==NULL||[ca isEqualToString:@"(null)"])&&(aj==nil||aj==NULL||[aj isEqualToString:@"(null)"])&&(pa==nil||pa==NULL||[pa isEqualToString:@"(null)"])&&(go==nil||go==NULL||[go isEqualToString:@"(null)"])) {
+                        
+                    }else{
+                        [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(popAlertView) userInfo:nil repeats:NO];
+                    }
+                    
+                }else{
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"NOTICEPUSH" object:dic];
+                }
+            }
+            
+            
+        }else{
+            pushEjectView.hidden=YES;
+            [pushEjectView removeFromSuperview];
+            if ([actionStr isEqualToString:@"s"]) {
+                //            badge=100;
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"ALERT" object:dic];
+                
+            }else if ([actionStr isEqualToString:@"m"]) {
+                
+                if ([[dic objectForKey:@"ca"] isEqualToString:@"app"]) {
+                    if ([[dic objectForKey:@"pa"] isEqualToString:@""]) {
+                        urlSrt=[NSString stringWithFormat:@"http://www.51xingzheng.cn/d/open.html?category=%@&action=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"]];
+                    }else{
+                        urlSrt=[NSString stringWithFormat:@"http://www.51xingzheng.cn/d/open.html?category=%@&action=%@&params=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"],[dic objectForKey:@"pa"]];
+                    }
+                    
+                }else if([[dic objectForKey:@"ca"] isEqualToString:@"h5"]){
+                    urlSrt=[NSString stringWithFormat:@"%@",[dic objectForKey:@"go"]];
+                }
+                
+                NSString *ca=[NSString stringWithFormat:@"%@",[dic objectForKey:@"ca"]];
+                NSString *aj=[NSString stringWithFormat:@"%@",[dic objectForKey:@"aj"]];
+                NSString *pa=[NSString stringWithFormat:@"%@",[dic objectForKey:@"pa"]];
+                NSString *go=[NSString stringWithFormat:@"%@",[dic objectForKey:@"go"]];
+                if ((ca==nil||ca==NULL||[ca isEqualToString:@"(null)"])&&(aj==nil||aj==NULL||[aj isEqualToString:@"(null)"])&&(pa==nil||pa==NULL||[pa isEqualToString:@"(null)"])&&(go==nil||go==NULL||[go isEqualToString:@"(null)"])) {
+                    
+                }else{
+                    [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(popAlertView) userInfo:nil repeats:NO];
+                }
+                
+                //        return;
+            }
+            
+        }
+        
+
     }
     
     application.applicationIconBadgeNumber = 0;
@@ -2336,8 +2640,146 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
 {
     return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
 }
+-(void)alarmClock:(NSDictionary *)dict;
+{
+    
+    NSString *timaString=[NSString stringWithFormat:@"%@",[dict objectForKey:@"re"]];
+//    NSDateFormatter *theTwoformatte1 = [[NSDateFormatter alloc] init];
+//    [theTwoformatte1 setDateStyle:NSDateFormatterMediumStyle];
+//    [theTwoformatte1 setTimeStyle:NSDateFormatterShortStyle];
+//    [theTwoformatte1 setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+//    NSDate* theTwotdate1 = [theTwoformatte1 dateFromString:timaString];
+    int theTwo1 = [timaString intValue];
+    
+    //获取当前时间
+    NSDate *  senddate=[NSDate date];
+    
+    NSDateFormatter  *dateformatter=[[NSDateFormatter alloc] init];
+    
+    [dateformatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    
+    NSString *  locationString=[dateformatter stringFromDate:senddate];
+    
+    NSLog(@"locationString:%@",locationString);
+    NSDateFormatter *formatte = [[NSDateFormatter alloc] init];
+    [formatte setDateStyle:NSDateFormatterMediumStyle];
+    [formatte setTimeStyle:NSDateFormatterShortStyle];
+    [formatte setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    NSDate* date = [formatte dateFromString:locationString];
+    int  _secondDate = [date timeIntervalSince1970];
+    NSLog(@"%d",theTwo1-_secondDate);
+    UILocalNotification *notification=[[UILocalNotification alloc] init];
+    if (notification!=nil) {
+        
+        //        NSDate *now=[NSDate new];
+        
+        notification.fireDate=[NSDate dateWithTimeIntervalSinceNow:(theTwo1-_secondDate)];//10秒后通知
+        
+        notification.repeatInterval=0;//循环次数，kCFCalendarUnitWeekday一周一次
+        
+        notification.timeZone=[NSTimeZone defaultTimeZone];
+        
+        notification.applicationIconBadgeNumber=1; //应用的红色数字
+        
+        
+        notification.soundName=@"simivoice.caf";//声音，可以换成alarm.soundName = @"myMusic.caf"
+        
+        //去掉下面2行就不会弹出提示框
+        notification.alertTitle=[NSString stringWithFormat:@"%@",[dict objectForKey:@"rt"]];
+        notification.alertBody=[NSString stringWithFormat:@"%@",[dict objectForKey:@"rc"]];//提示信息 弹出提示框
+        
+        notification.alertAction = @"打开";  //提示框按钮
+        
+        //notification.hasAction = NO; //是否显示额外的按钮，为no时alertAction消失
+        
+        
+        
+//        NSDictionary *infoDict = [NSDictionary dictionaryWithObject:@"someValue" forKey:@"someKey"];
+        NSDictionary *infoDict = @{@"dic":dict,@"yes_or_no":@"no"};
+        notification.userInfo = infoDict; //添加额外的信息
+        
+        
+        
+        [[UIApplication sharedApplication] scheduleLocalNotification:notification];
+        ISLoginManager *_manager = [ISLoginManager shareManager];
+        DownloadManager *_download = [[DownloadManager alloc]init];
+        NSDictionary *dics=@{@"user_id":_manager.telephone,@"card_id":[dict objectForKey:@"ci"]};
+        [_download requestWithUrl:PUSH_NOTICE dict:dics view:self.window delegate:self finishedSEL:@selector(Success:) isPost:YES failedSEL:@selector(Fail:)];
+    }
 
+}
+-(void)Success:(id)source
+{
+    
+}
+-(void)Fail:(id)source
+{
+    NSLog(@"%@",source);
+}
+-(void)rightOff:(NSDictionary *)dic
+{
+    UILocalNotification *notification=[[UILocalNotification alloc] init];
+    if (notification!=nil) {
+        
+        //        NSDate *now=[NSDate new];
+        
+        notification.fireDate=[NSDate dateWithTimeIntervalSinceNow:0];//10秒后通知
+        
+        notification.repeatInterval=0;//循环次数，kCFCalendarUnitWeekday一周一次
+        
+        notification.timeZone=[NSTimeZone defaultTimeZone];
+        
+        notification.applicationIconBadgeNumber=1; //应用的红色数字
+        
+        
+        notification.soundName=@"new-mail.caf";//声音，可以换成alarm.soundName = @"myMusic.caf"
+        
+        //去掉下面2行就不会弹出提示框
+        notification.alertTitle=[NSString stringWithFormat:@"%@",[dic objectForKey:@"rt"]];
+        notification.alertBody=[NSString stringWithFormat:@"%@",[dic objectForKey:@"rc"]];//提示信息 弹出提示框
+        
+        notification.alertAction = @"打开";  //提示框按钮
+        
+        //notification.hasAction = NO; //是否显示额外的按钮，为no时alertAction消失
+        
+        
+        
+        NSDictionary *infoDict = @{@"dic":dic,@"yes_or_no":@"yes"};//[NSDictionary dictionaryWithObject:@"someValue" forKey:@"someKey"];
+        
+        notification.userInfo = infoDict; //添加额外的信息
+        
+        
+        
+        [[UIApplication sharedApplication] scheduleLocalNotification:notification];
+        
+    }
 
+}
+-(void)Delete_alarm_clock:(NSDictionary *)dataDict
+{
+    //删除原来的闹钟
+    NSArray *narry=[[UIApplication sharedApplication] scheduledLocalNotifications];
+    NSUInteger acount=[narry count];
+    if (acount>0)
+    {// 遍历找到对应nfkey和notificationtag的通知
+        for (int i=0; i<acount; i++)
+        {
+            UILocalNotification *myUILocalNotification = [narry objectAtIndex:i];
+            NSDictionary *userInfo = [myUILocalNotification.userInfo objectForKey:@"dic"];
+            NSNumber *obj = [userInfo objectForKey:@"ci"];
+            int mytag=[obj intValue];
+            NSString *card_id=[NSString stringWithFormat:@"%@",[dataDict objectForKey:@"ci"]];
+            int notificationtag=[card_id intValue];
+            if (mytag==notificationtag)
+            {
+                //删除本地通知
+                [[UIApplication sharedApplication] cancelLocalNotification:myUILocalNotification];
+                break;
+            }
+        }
+    }//删除原来的闹钟
+
+}
 //- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url
 //  sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 //{

@@ -10,7 +10,7 @@
 #import "JTCalendar.h"
 #import "JTCalendarMenuMonthView.h"
 
-#define NUMBER_PAGES_LOADED 3 // Must be the same in JTCalendarView, JTCalendarMenuView, JTCalendarContentView
+#define NUMBER_PAGES_LOADED 1 // Must be the same in JTCalendarView, JTCalendarMenuView, JTCalendarContentView
 
 @interface JTCalendarMenuView(){
     NSMutableArray *monthsViews;
@@ -53,17 +53,18 @@
     self.pagingEnabled = YES;
     self.clipsToBounds = YES;
     
-    for(int i = 0; i < NUMBER_PAGES_LOADED; ++i){
+    for(int i = 0; i < NUMBER_PAGES_LOADED+2; ++i){
         JTCalendarMenuMonthView *monthView = [JTCalendarMenuMonthView new];
-        if (i!=1) {
-            monthView.alpha=0.0;
-        }else{
-            [UIView beginAnimations:nil context:nil];
-            //设置动画时长
-            [UIView setAnimationDuration:1];
-            monthView.alpha=1;
-            [UIView commitAnimations];
-        }
+        monthView.alpha=1;
+//        if (i!=1) {
+//            monthView.alpha=0.0;
+//        }else{
+//            [UIView beginAnimations:nil context:nil];
+//            //设置动画时长
+//            [UIView setAnimationDuration:1];
+//            monthView.alpha=1;
+//            [UIView commitAnimations];
+//        }
         [self addSubview:monthView];
         [monthsViews addObject:monthView];
     }
@@ -113,16 +114,19 @@
     NSDateComponents *dayComponent = [NSDateComponents new];
     
     for(int i = 0; i < NUMBER_PAGES_LOADED; ++i){
-        JTCalendarMenuMonthView *monthView = monthsViews[i];
-        if (i==1) {
+        JTCalendarMenuMonthView *monthView = monthsViews[1];
+//        if (i==1) {
 //            [UIView beginAnimations:nil context:nil];
 //            //设置动画时长
 //            [UIView setAnimationDuration:5];
+        for (int s=0; s<3; s++) {
             monthView.alpha=1;
+        }
+        
 //            [UIView commitAnimations];
 
-        }
-        dayComponent.month = i - (NUMBER_PAGES_LOADED / 2);
+//        }
+        dayComponent.month = 1- (3 / 2);
         NSDate *monthDate = [calendar dateByAddingComponents:dayComponent toDate:self.currentDate options:0];
         
         NSDateFormatter  *yerformatter=[[NSDateFormatter alloc] init];
@@ -131,10 +135,23 @@
         
         NSDateFormatter  *monthformatter=[[NSDateFormatter alloc] init];
         [monthformatter setDateFormat:@"MM"];
-        NSString *  monthStr=[monthformatter stringFromDate:monthDate];
+        NSString *motStr=[monthformatter stringFromDate:monthDate];
+//        int mot=[motStr intValue]-1;
+//        NSString *  monthStr;
+//        if (mot<10) {
+//            if (mot<0) {
+//                monthStr=[NSString stringWithFormat:@"12"];
+//            }else{
+//                monthStr=[NSString stringWithFormat:@"0%d",mot];
+//            }
+//        }else{
+//            monthStr=[NSString stringWithFormat:@"0%d",mot];
+//        }
+        
+        
         ISLoginManager *_manager = [ISLoginManager shareManager];
         DownloadManager *download = [[DownloadManager alloc]init];
-        NSDictionary *dict=@{@"user_id":_manager.telephone,@"year":yearStr,@"month":monthStr};
+        NSDictionary *dict=@{@"user_id":_manager.telephone,@"year":yearStr,@"month":motStr};
         UIView *view=[[UIView alloc]init];
         [download requestWithUrl:@"simi/app/user/msg/total_by_month.json"  dict:dict view:view delegate:self finishedSEL:@selector(RiLiSuccess:) isPost:NO failedSEL:@selector(RiLiFailure:)];
         [monthView setCurrentDate:monthDate];

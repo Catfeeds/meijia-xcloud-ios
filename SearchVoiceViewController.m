@@ -149,8 +149,13 @@
     
     //本底数据
     //    [_arrData addObjectsFromArray:[UIFont familyNames]];
+    if (searchStr==nil||searchStr==NULL||[searchStr isEqualToString:@""]) {
+        [_refreshHeader performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+        [_moreFooter performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+    }else{
+       [self handleSearchForTerm:searchStr];
+    }
     
-    [self handleSearchForTerm:searchStr];
     
     
     

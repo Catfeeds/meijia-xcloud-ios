@@ -243,8 +243,13 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
     if (cell == nil) {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault   reuseIdentifier:identifier];
-        
-        
+        [cell addSubview:heagImageView];
+        [cell addSubview:cateGroyLabel];
+        [cell addSubview:timeImageView];
+        [cell addSubview:timeLabel];
+        [cell addSubview:addressImageView];
+        [cell addSubview:addressLabel];
+        [cell addSubview:stateButton];
         
     }else{
         while ([cell.contentView.subviews lastObject] != nil)
@@ -256,28 +261,28 @@
     heagImageView.layer.cornerRadius=heagImageView.frame.size.width/2;
     heagImageView.clipsToBounds = YES;
     //heagImageView.backgroundColor=[UIColor redColor];
-    [cell addSubview:heagImageView];
+    
     
     cateGroyLabel.frame=FRAME(heagImageView.frame.size.width+heagImageView.frame.origin.x+5, 10, WIDTH-125, 16);
     //cateGroyLabel.backgroundColor=[UIColor redColor];
-    [cell addSubview:cateGroyLabel];
+    
     
     timeImageView.frame=FRAME(10+25/2, heagImageView.frame.origin.y+heagImageView.frame.size.height+5, 15, 15);
     timeImageView.image=[UIImage imageNamed:@"iconfont-time"];
-    [cell addSubview:timeImageView];
+    
     
     timeLabel.frame=FRAME(timeImageView.frame.size.width+timeImageView.frame.origin.x+10, timeImageView.frame.origin.y, WIDTH-55, 15);
     //timeLabel.backgroundColor=[UIColor redColor];
-    [cell addSubview:timeLabel];
+    
     
     addressImageView.frame=FRAME(timeImageView.frame.origin.x, timeImageView.frame.origin.y+20, 15, 15);
     addressImageView.image=[UIImage imageNamed:@"iconfont-jikediancanicon28"];
-    [cell addSubview:addressImageView];
+    
     
     addressLabel.frame=FRAME(addressImageView.frame.origin.x+addressImageView.frame.size
                              .width+10, addressImageView.frame.origin.y, WIDTH-55, 15);
     //addressLabel.backgroundColor=[UIColor redColor];
-    [cell addSubview:addressLabel];
+    
     
     stateButton.frame=FRAME(WIDTH-70, 10+15/2, 60, 25);
     //stateButton.backgroundColor=[UIColor redColor];
@@ -293,7 +298,7 @@
     stateButton.tag=indexPath.row;
     [stateButton addTarget:self action:@selector(stateButAction:) forControlEvents:UIControlEventTouchUpInside];
     [stateButton.layer setBorderColor:colorref];//边框颜色
-    [cell addSubview:stateButton];
+    
 
     
     NSString *imageUrl=[NSString stringWithFormat:@"%@",[orderDic objectForKey:@"service_type_img"]];

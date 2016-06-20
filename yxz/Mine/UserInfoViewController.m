@@ -56,15 +56,15 @@
 }
 - (void)viewDidLoad {
     
-    myScrollView=[[UIScrollView alloc]initWithFrame:FRAME(0, 64, WIDTH, 54*7+9)];
+    myScrollView=[[UIScrollView alloc]initWithFrame:FRAME(0, 64, WIDTH, 54*6+9)];
     myScrollView.delegate=self;
-    myScrollView.contentSize=CGSizeMake(WIDTH, 54*7+10);
+    myScrollView.contentSize=CGSizeMake(WIDTH, 54*6+10);
     [self.view addSubview:myScrollView];
     [super viewDidLoad];
     headeImageID=0;
     self.navlabel.text = @"账号信息";
     
-    _userview = [[UserinfoView alloc]initWithFrame:FRAME(0,0, _WIDTH, 54*7+10)];
+    _userview = [[UserinfoView alloc]initWithFrame:FRAME(0,0, _WIDTH, 54*6+10)];
     _userview.delegate = self;
     _userview.userInteractionEnabled = NO;
     [myScrollView addSubview:_userview];
@@ -113,7 +113,7 @@
         NSString *sex;
         NSString *company;
         NSString *position;
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < 6; i++) {
             UITextField *textfield = (UITextField *)[_userview viewWithTag:1000+i];
             
             switch (i) {
