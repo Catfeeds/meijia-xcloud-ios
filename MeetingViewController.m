@@ -312,7 +312,7 @@ int H = 0,time_ID;
     [self clientButtonLayout];
     if(_pushID==1){
         [self viewLayout];
-        push_IDSSS=100;
+       
     }
     
 }
@@ -424,6 +424,7 @@ int H = 0,time_ID;
     [self clientButtonLayout];
     if (_pushID!=1||push_IDSSS==100) {
        // ／ssss
+         push_IDSSS=1;
         [self viewLayout];
     }
     
@@ -1607,12 +1608,14 @@ int H = 0,time_ID;
     viewVC.dataIdArray=idArray;
     releID=100;
     [self.navigationController pushViewController:viewVC animated:YES];
+     push_IDSSS=100;
     
 }
 
 #pragma mark点击会议内容的响应方法
 -(void)tapContentAction
 {
+     push_IDSSS=100;
     [self meetingDateQuxiao];
     [self suanle];
     [UIView setAnimationDuration:0.5];
