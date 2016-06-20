@@ -508,6 +508,7 @@ int H = 0,time_ID;
         [UIView commitAnimations];
     }
 }
+//2.4.0
 #pragma mark 页面布局的方法
 -(void)viewLayout
 {
