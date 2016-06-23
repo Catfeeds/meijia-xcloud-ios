@@ -162,6 +162,7 @@
 {
     NSArray *array=[sender objectForKey:@"data"];
     AppDelegate *delegates=(AppDelegate*)[[UIApplication sharedApplication] delegate];
+    [delegates.riliArray removeAllObjects];
     for (int i=0; i<array.count; i++) {
         if([delegates.riliArray containsObject:array[i]])
         {

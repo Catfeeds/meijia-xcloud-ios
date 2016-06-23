@@ -202,4 +202,5 @@
 #define COMMENT_CLOSE                    @"simi/app/feed/post_close.json"                //动态关闭接口
 #define TOOL_ROMM                        @"simi/app/user/get_setting.json"               //获取配置信息接口
 #define PUSH_NOTICE                      @"simi/app/card/set_local_alarm.json"           //卡片设置本地闹钟状态接口
+#define REMIND_SPOT                      @"simi//app/user/get_msg.json"                  //日程红点显示
 #endif

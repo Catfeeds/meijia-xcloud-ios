@@ -589,7 +589,7 @@ float lastContentOffset;
         _promptlabel.textColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
     }else if (clID==0){
         _promptlabel.text=@"已取消";
-        _promptlabel.textColor=[UIColor colorWithRed:231/255.0f green:231/255.0f blue:231/255.0f alpha:1];
+        _promptlabel.textColor=[UIColor colorWithRed:102/255.0f green:102/255.0f blue:102/255.0f alpha:1];
     }
     _promptlabel.textAlignment = NSTextAlignmentRight;
     _promptlabel.font=[UIFont fontWithName:@"Heiti SC" size:14];
@@ -686,10 +686,10 @@ float lastContentOffset;
     
     NSDictionary *plDic=numberArray[indexPath.row];
     NSString *inforStr = [NSString stringWithFormat:@"%@",[plDic objectForKey:@"service_content"]];
-    UIFont *font = [UIFont systemFontOfSize:14];
+    UIFont *font = [UIFont systemFontOfSize:13];
     NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:font,NSFontAttributeName, nil];
     CGSize size = [inforStr boundingRectWithSize:CGSizeMake(WIDTH-20, 200) options:NSStringDrawingUsesLineFragmentOrigin attributes:dict context:nil].size;
-    return size.height+148;
+    return size.height+147;
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {

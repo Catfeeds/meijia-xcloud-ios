@@ -735,7 +735,7 @@ int y,x=0,time_ID;
     }
     
     msView.backgroundColor=[UIColor whiteColor];
-    [self.view addSubview:msView];
+//    [self.view addSubview:msView];
     
     msImageView=[[UIImageView alloc]init];
     msImageView.frame=CGRectMake(39/2, 29/2, 32/2, 32/2);

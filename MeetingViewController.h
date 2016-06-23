@@ -13,7 +13,7 @@
 @property (nonatomic ,assign)int time;
 @property (nonatomic ,assign)NSInteger vcID;
 
-
+@property (nonatomic ,assign)int detailID;
 
 @property (nonatomic, assign)int cardsID;
 

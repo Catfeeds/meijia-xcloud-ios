@@ -118,7 +118,13 @@
 
 -(void)todoSomething
 {
-    [self.navigationController popViewControllerAnimated:YES];
+    
+    if ([self.navigationController popViewControllerAnimated:YES]) {
+//        [self.navigationController popViewControllerAnimated:YES];
+        return;
+    }else{
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }
 }
 - (void)backAction
 {

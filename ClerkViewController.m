@@ -31,7 +31,12 @@
 @synthesize _tableView,seekArray,sec_Id,secID,is_senior,height,Y,service_type_id;
 - (void)LoginPopReturn:(NSNotification *)noti
 {
-    [self.navigationController popViewControllerAnimated:YES];
+    if (_detailID==1000) {
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }else{
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+    
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -88,7 +93,7 @@
 }
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:YES];
-    [self.navigationController setNavigationBarHidden:NO animated:NO];
+    [self.navigationController setNavigationBarHidden:YES animated:YES];
 }
 -(void)viewWillAppear:(BOOL)animated
 {
@@ -484,7 +489,12 @@
     NSDictionary *dic=seekArray[indexPath.row];
     BuySecretaryViewController *vc=[[BuySecretaryViewController alloc]init];
     vc.dic=dic;
-    [self.navigationController pushViewController:vc animated:YES];
+    if (_detailID==1000) {
+        [self presentViewController:vc animated:YES completion:nil];
+    }else{
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+    
 }
 
 - (void)didReceiveMemoryWarning {

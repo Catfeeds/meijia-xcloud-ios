@@ -251,6 +251,7 @@
 -(void)handleClick:(UIButton *)but
 {
     searchStr=[NSString stringWithFormat:@"%@",arr[but.tag]];
+    mySearchBar.text=searchStr;
     if(self.loginYesOrNo!=YES)
     {
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -275,12 +276,24 @@
 }
 -(void)handleSearchForTerm:(NSString *)string
 {
-    ISLoginManager *_manager = [ISLoginManager shareManager];
-    DownloadManager *_download = [[DownloadManager alloc]init];
-    NSString *user_ID=_manager.telephone;
-    NSDictionary *_dict = @{@"user_id":user_ID,@"keyword":string,@"page":@"1"};
-    NSLog(@"字典数据%@",_dict);
-    [_download requestWithUrl:SERVICE_SEARCH dict:_dict view:self.view delegate:self finishedSEL:@selector(SearchSuccess:) isPost:NO failedSEL:@selector(SearchFailure:)];
+    if (self.loginYesOrNo) {
+        ISLoginManager *_manager = [ISLoginManager shareManager];
+        DownloadManager *_download = [[DownloadManager alloc]init];
+        NSString *user_ID=_manager.telephone;
+        NSDictionary *_dict = @{@"user_id":user_ID,@"keyword":string,@"page":@"1"};
+        NSLog(@"字典数据%@",_dict);
+        [_download requestWithUrl:SERVICE_SEARCH dict:_dict view:self.view delegate:self finishedSEL:@selector(SearchSuccess:) isPost:NO failedSEL:@selector(SearchFailure:)];
+    }else{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            MyLogInViewController *loginViewController = [[MyLogInViewController alloc] init];
+            loginViewController.vCYMID=100;
+            UMComNavigationController *navigationController = [[UMComNavigationController alloc] initWithRootViewController:loginViewController];
+            [self presentViewController:navigationController animated:YES completion:^{
+            }];
+        });
+
+    }
+    
 }
 #pragma mark  获取关键字搜索结果成功
 -(void)SearchSuccess:(id)sender

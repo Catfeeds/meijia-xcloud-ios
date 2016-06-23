@@ -14,4 +14,5 @@
 }
 @property(nonatomic ,strong)NSMutableArray *collectData;
 @property(nonatomic ,strong)NSMutableArray *dataArray;
+@property(nonatomic ,strong)NSArray *collectArray;
 @end

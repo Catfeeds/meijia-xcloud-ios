@@ -134,6 +134,7 @@ int heights,Y,processIDs=0;
         }else{
             int vcId=[[dic objectForKey:@"card_type"]intValue];
             MeetingViewController *bookVc=[[MeetingViewController alloc]init];
+            bookVc.detailID=1000;
             bookVc.pushID=1;
             bookVc.cardString=[NSString stringWithFormat:@"%d",_card_ID];
             if (vcId==1) {
@@ -147,7 +148,7 @@ int heights,Y,processIDs=0;
             }
             
             //_card_ID
-            [self.navigationController pushViewController:bookVc animated:YES];
+            [self presentViewController:bookVc animated:YES completion:nil];
         }
         
     }
@@ -465,7 +466,7 @@ int heights,Y,processIDs=0;
         [cancelBut setTitleColor:[UIColor colorWithRed:200/255.0f green:200/255.0f blue:200/255.0f alpha:1] forState:UIControlStateNormal];
     }
     NSString *titleStr=[NSString stringWithFormat:@"%@",[dic objectForKey:@"card_type_name"]];
-    self.title=titleStr;
+    self.navigationController.title=titleStr;
     UIView *view=[[UIView alloc]initWithFrame:FRAME(0, 0, WIDTH, 6)];
     view.backgroundColor=[UIColor colorWithRed:241/255.0f green:241/255.0f blue:241/255.0f alpha:1];
     [myScrollView addSubview:view];
@@ -476,9 +477,19 @@ int heights,Y,processIDs=0;
     headeiamgeView.clipsToBounds=YES;
     [layoutView addSubview:headeiamgeView];
     
+    
+    UILabel *nameLabel=[[UILabel alloc]initWithFrame:FRAME(headeiamgeView.frame.origin.x+headeiamgeView.frame.size.width+10, 25/2, WIDTH-(headeiamgeView.frame.origin.x+headeiamgeView.frame.size.width+110), 15)];
+    nameLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"user_name"]];
+    nameLabel.textColor=[UIColor colorWithRed:51/255.0f green:51/255.0f blue:51/255.0f alpha:1];
+    nameLabel.font=[UIFont fontWithName:@"Heiti SC" size:14];
+    [layoutView addSubview:nameLabel];
+    
     UILabel *headeTime=[[UILabel alloc]init];
     headeTime.frame=CGRectMake(headeiamgeView.frame.origin.x+headeiamgeView.frame.size.width+10, 6+25/2+15/2, headeTime.frame.size.width, 15);
-    double inTime=[[dic objectForKey:@"service_time"] doubleValue];
+    int period=[[dic objectForKey:@"period"]intValue];
+    double inTime;
+    
+    inTime=[[dic objectForKey:@"service_time"] doubleValue];
     NSDateFormatter* inTimeformatter =[[NSDateFormatter alloc] init];
     inTimeformatter.timeZone = [NSTimeZone timeZoneWithName:@"shanghai"];
     [inTimeformatter setDateStyle:NSDateFormatterMediumStyle];
@@ -486,8 +497,13 @@ int heights,Y,processIDs=0;
     [inTimeformatter setDateFormat:@"HH:mm"];
     NSDate* inTimedate = [NSDate dateWithTimeIntervalSince1970:inTime];
     NSString* inTimeString = [inTimeformatter stringFromDate:inTimedate];
-    headeTime.text=inTimeString;
-    headeTime.font=[UIFont fontWithName:@"Heiti SC" size:14];
+    if (period==0) {
+        headeTime.text=inTimeString;
+    }else{
+        headeTime.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"period_name"]];
+    }
+    headeTime.textColor=[UIColor colorWithRed:153/255.0f green:153/255.0f blue:153/255.0f alpha:1];
+    headeTime.font=[UIFont fontWithName:@"Heiti SC" size:11];
     headeTime.lineBreakMode =NSLineBreakByTruncatingTail ;
     [headeTime setNumberOfLines:0];
     [headeTime sizeToFit];
@@ -507,7 +523,7 @@ int heights,Y,processIDs=0;
         stateLabel.textColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
     }else if (clID==0){
         stateLabel.text=@"已取消";
-        stateLabel.textColor=[UIColor colorWithRed:231/255.0f green:231/255.0f blue:231/255.0f alpha:1];
+        stateLabel.textColor=[UIColor colorWithRed:102/255.0f green:102/255.0f blue:102/255.0f alpha:1];
     }
     stateLabel.font=[UIFont fontWithName:@"Heiti SC" size:14];
     [stateLabel setNumberOfLines:0];
@@ -659,12 +675,15 @@ int heights,Y,processIDs=0;
     }
     UILabel *service_contentlabel=[[UILabel alloc]init];
     service_contentlabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"service_content"]];
-    NSDictionary *dicts = [NSDictionary dictionaryWithObjectsAndKeys:[UIFont systemFontOfSize:14],NSFontAttributeName, nil];
-    CGSize sizes = [service_contentlabel.text boundingRectWithSize:CGSizeMake(WIDTH-20, 200) options:NSStringDrawingUsesLineFragmentOrigin attributes:dicts context:nil].size;
     service_contentlabel.font=[UIFont fontWithName:@"Heiti SC" size:14];
+//    NSDictionary *dicts = [NSDictionary dictionaryWithObjectsAndKeys:[UIFont systemFontOfSize:14],NSFontAttributeName, nil];
+//    CGSize sizes = [service_contentlabel.text boundingRectWithSize:CGSizeMake(WIDTH-20, 1000) options:NSStringDrawingUsesLineFragmentOrigin attributes:dicts context:nil].size;
+    UIFont *fonts=[UIFont fontWithName:@"Heiti SC" size:14];
+    NSDictionary *dicts = [NSDictionary dictionaryWithObjectsAndKeys:fonts,NSFontAttributeName, nil];
+    CGSize sizes = [service_contentlabel.text boundingRectWithSize:CGSizeMake(WIDTH-40, 100000) options:NSStringDrawingUsesLineFragmentOrigin attributes:dicts context:nil].size;
     [service_contentlabel setNumberOfLines:0];
     [service_contentlabel sizeToFit];
-    service_contentlabel.frame=FRAME(10, frame+10, WIDTH-20, sizes.height);
+    service_contentlabel.frame=FRAME(20, frame+10, WIDTH-40, sizes.height);
     [layoutView addSubview:service_contentlabel];
 
     UIButton *zambiaButton=[[UIButton alloc]initWithFrame:CGRectMake(WIDTH-114, service_contentlabel.frame.origin.y+sizes.height+5, 30, 30)];

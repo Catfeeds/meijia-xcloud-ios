@@ -83,6 +83,7 @@
     NSString *urlw;
     NSString *urlSrt;
     UILocalNotification * localNotify;
+    UIBackgroundTaskIdentifier bgTask;
 }
 
 @end
@@ -1128,23 +1129,25 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     [seeBut.layer setCornerRadius:10];
     [seeBut.layer setBorderWidth:2];//设置边界的宽度
     //设置按钮的边界颜色
-    CGColorSpaceRef colorSpaceRef = CGColorSpaceCreateDeviceRGB();
-    CGColorRef color = CGColorCreate(colorSpaceRef, (CGFloat[]){1,0,0,1});
-    [seeBut.layer setBorderColor:color];
+//    CGColorSpaceRef colorSpaceRef = CGColorSpaceCreateDeviceRGB();
+//    CGColorRef color = CGColorCreate(colorSpaceRef, (CGFloat[]){232,55,74,1});
+//    [seeBut.layer setBorderColor:color];
+    seeBut.layer.borderColor=[[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1]CGColor];
     
     [imageView addSubview:seeBut];
     
     UIButton *knowBut=[[UIButton alloc]initWithFrame:FRAME((WIDTH-(WIDTH*0.36*2)-24)/2+24+WIDTH*0.36, HEIGHT-58, WIDTH*0.36, 38)];
     [knowBut setTitle:@"我知道了" forState:UIControlStateNormal];
-    knowBut.backgroundColor=[UIColor redColor];
+    knowBut.backgroundColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
     [knowBut addTarget:self action:@selector(knowButAction) forControlEvents:UIControlEventTouchUpInside];
     [knowBut.layer setMasksToBounds:YES];//设置按钮的圆角半径不会被遮挡
     [knowBut.layer setCornerRadius:10];
     [knowBut.layer setBorderWidth:2];//设置边界的宽度
     //设置按钮的边界颜色
-    CGColorSpaceRef colorSpaceRefs = CGColorSpaceCreateDeviceRGB();
-    CGColorRef colors = CGColorCreate(colorSpaceRefs, (CGFloat[]){1,0,0,1});
-    [knowBut.layer setBorderColor:colors];
+//    CGColorSpaceRef colorSpaceRefs = CGColorSpaceCreateDeviceRGB();
+//    CGColorRef colors = CGColorCreate(colorSpaceRefs, (CGFloat[]){232,55,74,1});
+//    [knowBut.layer setBorderColor:colors];
+    knowBut.layer.borderColor=[[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1]CGColor];
     [imageView addSubview:knowBut];
     dateDic=dic;
     
@@ -1971,8 +1974,8 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
         NSLog(@"URL query: %@", [url query]);
 //        NSURL *url=sender.object;
 //        [[NSNotificationCenter defaultCenter] postNotificationName:@"URLOPEN" object:url];
-         AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication] delegate];
-         delegate.pushURl=url;
+        AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication] delegate];
+        delegate.pushURl=url;
         [[NSNotificationCenter defaultCenter] postNotificationName:@"URLOPEN" object:delegate.pushURl];
       // 
     }
@@ -2183,11 +2186,50 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     pushIDs=0;
 #pragma mark--------APN  // [EXT] APP进入后台时，通知个推SDK进入后台
     [GeTuiSdk enterBackground];
+    bgTask=[application beginBackgroundTaskWithExpirationHandler:^{
+        // 10分钟后执行这里，应该进行一些清理工作，如断开和服务器的连接等
+        // ...
+        // stopped or ending the task outright.
+        [application endBackgroundTask:bgTask];
+        bgTask=UIBackgroundTaskInvalid;
+        }];
+    if (bgTask == UIBackgroundTaskInvalid){
+        NSLog(@"failed to start background task!");
+        }
+    // Start the long-running task and return immediately.
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        // Do the work associated with the task, preferably in chunks.
+        NSTimeInterval timeRemain = 0;
+        do{
+            [NSThread sleepForTimeInterval:5];
+            if(bgTask!=UIBackgroundTaskInvalid){
+                timeRemain = [application backgroundTimeRemaining];
+                NSLog(@"Time remaining: %f",timeRemain);
+                }
+            }while(bgTask!=UIBackgroundTaskInvalid&&timeRemain>0);// 如果改为timeRemain > 5*60,表示后台运行5分钟
+        // done!
+        // 如果没到10分钟，也可以主动关闭后台任务，但这需要在主线程中执行，否则会出错
+        dispatch_async(dispatch_get_main_queue(),^{
+            if(bgTask!=UIBackgroundTaskInvalid)
+            {
+                    // 和上面10分钟后执行的代码一样
+                    // ...
+                    // if you don't call endBackgroundTask, the OS will exit your app.
+                    [application endBackgroundTask:bgTask];
+                    bgTask=UIBackgroundTaskInvalid;
+                }
+        });
+    });
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
     NSLog(@"我就看看你走没走--12");
+    // 如果没到10分钟又打开了app,结束后台任务
+    if (bgTask!=UIBackgroundTaskInvalid) {
+        [application endBackgroundTask:bgTask];
+        bgTask = UIBackgroundTaskInvalid;
+    }
     [[EaseMob sharedInstance] applicationWillEnterForeground:application];
     badge=0;
 }

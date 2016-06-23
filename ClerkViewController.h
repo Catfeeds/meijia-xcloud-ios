@@ -20,6 +20,8 @@
 @property(nonatomic ,assign)int Y;
 @property(nonatomic ,assign)int pushIDS;
 
+@property(nonatomic ,assign)int detailID;
+
 
 
 @end

@@ -186,7 +186,7 @@ static CGFloat const imageBGHeight = 373; // 背景图片的高度
     liftNameLabel.textColor=[UIColor colorWithRed:70/255.0f green:144/255.0f blue:255/255.0f alpha:1];
     liftNameLabel.font=[UIFont fontWithName:@"Heiti SC" size:13];
     [headLiftBut addSubview:liftNameLabel];
-    UILabel *liftTextLabel=[[UILabel alloc]initWithFrame:FRAME((WIDTH-240)/4/2, 45, WIDTH/2-0.5-64, 14)];
+    UILabel *liftTextLabel=[[UILabel alloc]initWithFrame:FRAME((WIDTH-240)/4/2, 35, WIDTH/2-0.5-64, 14)];
     liftTextLabel.text=@"最专业的解答都在这";
     liftTextLabel.font=[UIFont fontWithName:@"Heiti SC" size:10];
     [headLiftBut addSubview:liftTextLabel];
@@ -210,7 +210,7 @@ static CGFloat const imageBGHeight = 373; // 背景图片的高度
     rightNameLabel.textColor=[UIColor colorWithRed:243/255.0f green:128/255.0f blue:16/255.0f alpha:1];
     rightNameLabel.font=[UIFont fontWithName:@"Heiti SC" size:13];
     [headrightBut addSubview:rightNameLabel];
-    UILabel *rightTextLabel=[[UILabel alloc]initWithFrame:FRAME((WIDTH-240)/4/2, 45, WIDTH/2-0.5-64, 14)];
+    UILabel *rightTextLabel=[[UILabel alloc]initWithFrame:FRAME((WIDTH-240)/4/2, 35, WIDTH/2-0.5-64, 14)];
     rightTextLabel.text=@"送完金币还送经验值";
     rightTextLabel.font=[UIFont fontWithName:@"Heiti SC" size:10];
     [headrightBut addSubview:rightTextLabel];
@@ -622,9 +622,22 @@ static CGFloat const imageBGHeight = 373; // 背景图片的高度
     hengView.backgroundColor=[UIColor colorWithRed:232/255.0f green:232/255.0f blue:232/255.0f alpha:1];
     [view addSubview:hengView];
     
-    UIButton *cancelBut=[[UIButton alloc]initWithFrame:FRAME(0, WIDTH*0.72*0.70+128, WIDTH*0.72, 40)];
+    UIButton *cancelBut1=[[UIButton alloc]initWithFrame:FRAME(0, WIDTH*0.72*0.70+128, (WIDTH*0.72)/2-0.5, 40)];
+    cancelBut1.backgroundColor=[UIColor whiteColor];
+    cancelBut1.tag=12;
+    [cancelBut1 addTarget:self action:@selector(SignAction:) forControlEvents:UIControlEventTouchUpInside];
+    cancelBut1.titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:16];
+    [cancelBut1 setTitle:@"成长等级" forState:UIControlStateNormal];
+    [cancelBut1 setTitleColor:[UIColor colorWithRed:17/255.0f green:150/255.0f blue:219/255.0f alpha:1] forState:UIControlStateNormal];
+    [view addSubview:cancelBut1];
+    
+    UILabel  *labble=[[UILabel alloc]initWithFrame:FRAME((WIDTH*0.72)/2-0.5, WIDTH*0.72*0.70+138, 1, 20)];
+    labble.backgroundColor=[UIColor colorWithRed:232/255.0f green:232/255.0f blue:232/255.0f alpha:1];
+    [view addSubview:labble];
+    
+    UIButton *cancelBut=[[UIButton alloc]initWithFrame:FRAME((WIDTH*0.72)/2+0.5, WIDTH*0.72*0.70+128, (WIDTH*0.72)/2-0.5, 40)];
     cancelBut.backgroundColor=[UIColor whiteColor];
-    cancelBut.tag=12;
+    cancelBut.tag=14;
     [cancelBut addTarget:self action:@selector(SignAction:) forControlEvents:UIControlEventTouchUpInside];
     cancelBut.titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:16];
     [cancelBut setTitle:@"我知道了" forState:UIControlStateNormal];
@@ -633,7 +646,16 @@ static CGFloat const imageBGHeight = 373; // 背景图片的高度
 }
 -(void)SignAction:(UIButton *)button
 {
-    pushEjectView.hidden=YES;
+    if (button.tag==12) {
+        ISLoginManager *_manager = [ISLoginManager shareManager];
+        WebPageViewController *webPageVC=[[WebPageViewController alloc]init];
+        webPageVC.barIDS=100;
+        webPageVC.webURL=[NSString stringWithFormat:@"http://123.57.173.36/simi-h5/show/level-my-index.html?user_id=%@",_manager.telephone];
+        [self.navigationController pushViewController:webPageVC animated:YES];
+    }else if (button.tag==14){
+        pushEjectView.hidden=YES;
+    }
+    
 }
 #pragma mark -模仿qq界面
 - (void)qqStyle

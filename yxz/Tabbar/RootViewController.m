@@ -102,6 +102,7 @@
     NSString *msNameString;
     NSURL *url;
     NSString *stringUrl;
+    UIView *remind_spotView;
 }
 @end
 #pragma mark - View lifecycle
@@ -463,11 +464,14 @@ MyselfViewController *thirdViewController;
     
     
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(remind_spot) name:@"REMIND_SPOT" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(urlAction:) name:@"URLOPEN" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(imgTap:) name:@"IMGTAPP" object:nil];
     fatherVc=[[FatherViewController alloc]init];
     NSDictionary *helpDic;
-    
+    if (fatherVc.loginYesOrNo) {
+        [self remind_spot];
+    }
     plusArray=[[NSMutableArray alloc]init];
     self.view.backgroundColor=[UIColor whiteColor];
     coreDic=@{@"name":@"应用中心",@"logo":@"http://img.51xingzheng.cn/437396cc0b49b04dc89a0552f7e90cae?p=0",@"action":@"asdsad",@"open_type":@"app"};
@@ -602,6 +606,40 @@ MyselfViewController *thirdViewController;
     
     
     
+}
+-(void)remind_spot
+{
+    if (fatherVc.loginYesOrNo==YES) {
+        NSDate *  senddate=[NSDate date];
+        
+        NSDateFormatter  *dateformatter=[[NSDateFormatter alloc] init];
+        
+        [dateformatter setDateFormat:@"yyyy-MM-dd"];
+        
+        NSString *  locationString=[dateformatter stringFromDate:senddate];
+        _manager = [ISLoginManager shareManager];
+        NSLog(@"有值么%@",_manager.telephone);
+        DownloadManager *_download = [[DownloadManager alloc]init];
+        NSDictionary *_dict=@{@"user_id":_manager.telephone,@"page":@"1",@"service_date":locationString};
+        [_download requestWithUrl:REMIND_SPOT dict:_dict view:self.view delegate:self finishedSEL:@selector(RemindFinish:) isPost:NO failedSEL:@selector(RemindFail:)];
+        
+    }
+}
+#pragma mark日程红点成功返回
+-(void)RemindFinish:(id)sourData
+{
+    NSLog(@"日程红点成功返回+++%@",sourData);
+    NSArray *sourDataArray=[sourData objectForKey:@"data"];
+    if (sourDataArray.count>0) {
+        remind_spotView.hidden=NO;
+    }else{
+        remind_spotView.hidden=YES;
+    }
+}
+#pragma mark日程红点失败返回
+-(void)RemindFail:(id)sourData
+{
+    NSLog(@"日程红点失败返回+++%@",sourData);
 }
 #pragma mark用户信息详情获取成功方法
 -(void)QJDowLoadFinish:(id)sender
@@ -780,6 +818,13 @@ MyselfViewController *thirdViewController;
                 friendLabel.textAlignment=NSTextAlignmentCenter;
                 friendLabel.font=[UIFont fontWithName:@"Heiti SC" size:10];
                 [tabBarBut addSubview:friendLabel];
+                
+                remind_spotView=[[UIView alloc]initWithFrame:FRAME((_btnwidth-23)/2+19, 2, 10, 10)];
+                remind_spotView.layer.masksToBounds=YES;
+                remind_spotView.layer.cornerRadius=remind_spotView.frame.size.width/2;
+                remind_spotView.backgroundColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
+                remind_spotView.hidden=YES;
+                [tabBarBut addSubview:remind_spotView];
                 
                 spotView=[[UIView alloc]initWithFrame:FRAME((_btnwidth-23)/2+19, 2, 10, 10)];
                 spotView.layer.masksToBounds=YES;

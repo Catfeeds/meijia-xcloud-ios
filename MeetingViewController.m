@@ -445,9 +445,12 @@ int H = 0,time_ID;
     if (upButInt%2==0) {
         UIView *vie=(UIView *)[self.view viewWithTag:10014];
         vie.hidden=NO;
+        UIView *vied=(UIView *)[self.view viewWithTag:10013];
+        vied.hidden=NO;
         upButInt++;
         upBUt.hidden=YES;
         upbutImage.hidden=YES;
+        meetingLabel.hidden=NO;
         if (_vcID==1003) {
             
             [UIView beginAnimations:@"Animation" context:nil];
@@ -476,7 +479,7 @@ int H = 0,time_ID;
         [UIView beginAnimations:@"Animation" context:nil];
         [UIView setAnimationDuration:0.3];
         secretaryView.frame=FRAME(0, backgroundView.frame.origin.y+backgroundView.frame.size.height+8, WIDTH, 84/2);
-        upBUt.frame=FRAME((WIDTH-110)/2, secretaryView.frame.origin.y+124/2, 110, 30);
+        upBUt.frame=FRAME((WIDTH-110)/2, secretaryView.frame.origin.y+124/2-41, 110, 30);
         upbutImage.frame=FRAME((WIDTH-15)/2, upBUt.frame.origin.y+30, 15, 30);
         UIView *view1=(UIView *)[self.view viewWithTag:1003];
         view1.hidden=NO;
@@ -506,7 +509,7 @@ int H = 0,time_ID;
             backgroundView.frame=FRAME(0, 15/2, WIDTH,H+(84/2*0)+86/2);
         }
         secretaryView.frame=FRAME(0, backgroundView.frame.origin.y+backgroundView.frame.size.height+8, WIDTH, 84/2);
-        upBUt.frame=FRAME((WIDTH-110)/2, secretaryView.frame.origin.y+124/2, 110, 30);
+        upBUt.frame=FRAME((WIDTH-110)/2, secretaryView.frame.origin.y+124/2-41, 110, 30);
         [UIView commitAnimations];
     }
 }
@@ -521,9 +524,9 @@ int H = 0,time_ID;
     
     secretaryView=[[UIView alloc]initWithFrame:FRAME(0, backgroundView.frame.origin.y+backgroundView.frame.size.height+8, WIDTH, 84/2)];
     secretaryView.backgroundColor=[UIColor whiteColor];
-    [selfView addSubview:secretaryView];
+//    [selfView addSubview:secretaryView];
     
-    upBUt=[[UIButton alloc]initWithFrame:FRAME((WIDTH-110)/2, secretaryView.frame.origin.y+124/2, 110, 30)];
+    upBUt=[[UIButton alloc]initWithFrame:FRAME((WIDTH-110)/2, secretaryView.frame.origin.y+124/2-41, 110, 30)];
     [upBUt addTarget:self action:@selector(upBUTAction) forControlEvents:UIControlEventTouchUpInside];
     [upBUt setTitle:@"显示完整设置" forState:UIControlStateNormal];
     if (_vcID==1003) {
@@ -542,7 +545,7 @@ int H = 0,time_ID;
     upBUt.clipsToBounds=YES;
     [upBUt setTitleColor:[UIColor colorWithRed:51/255.0f green:51/255.0f blue:51/255.0f alpha:1] forState:UIControlStateNormal];
     [selfView addSubview:upBUt];
-    upbutImage=[[UIImageView alloc]initWithFrame:FRAME((WIDTH-15)/2, upBUt.frame.origin.y+30, 10, 10)];
+    upbutImage=[[UIImageView alloc]initWithFrame:FRAME((WIDTH-10)/2, upBUt.frame.origin.y+35, 10, 10)];
     upbutImage.image=[UIImage imageNamed:@"xiangxiachakan50X58"];
     if (_vcID==1003) {
         if (upButInt%2==0) {
@@ -568,7 +571,7 @@ int H = 0,time_ID;
     label.lineBreakMode=NSLineBreakByTruncatingTail;
     [label setNumberOfLines:0];
     [label sizeToFit];
-    [secretaryView addSubview:label];
+//    [secretaryView addSubview:label];
     
     label1=[[UILabel alloc]init];
     label1.frame=CGRectMake(20, secretaryView.frame.size.height+secretaryView.frame.origin.y+74, WIDTH-40, 32/2);
@@ -608,7 +611,7 @@ int H = 0,time_ID;
     [switchBut addTarget:self action:@selector(switchAction:) forControlEvents:UIControlEventValueChanged];
     switchBut.onText = @"YES"; //NSLocalizedString(@"YES", @"");
     switchBut.offText = @"NO";//NSLocalizedString(@"NO", @"");
-    [secretaryView addSubview:switchBut];
+//    [secretaryView addSubview:switchBut];
     
     remarksView=[[UITextView alloc]initWithFrame:FRAME(0, secretaryView.frame.origin.y+secretaryView.frame.size.height+1, WIDTH, 84/2)];
     remarksView.backgroundColor=[UIColor colorWithRed:251/255.0f green:251/255.0f blue:251/255.0f alpha:1];
@@ -720,8 +723,24 @@ int H = 0,time_ID;
             lineView.frame=FRAME(35/2, H+84/2*a, WIDTH-35, 1);
             a++;
         }
-        if (i==4) {
-            lineView.hidden=YES;
+        if (_vcID==1003) {
+            if (i==3) {
+                if (upButInt%2!=0) {
+                    lineView.hidden=NO;
+                }else{
+                    lineView.hidden=YES;
+                }
+                
+            }
+
+        }
+               if (i==4) {
+            if (upButInt%2!=0) {
+                lineView.hidden=NO;
+            }else{
+                lineView.hidden=YES;
+            }
+            
         }
         [backgroundView addSubview:lineView];
         if (_vcID!=1003) {
@@ -1046,7 +1065,8 @@ int H = 0,time_ID;
             label.font=[UIFont fontWithName:@"Heiti SC" size:14];
             [labelView addSubview:label];
             if (i==2) {
-                contentLabel=[[UILabel alloc]initWithFrame:FRAME(label.frame.size.width+label.frame.origin.x+5,23/2, labelView.frame.size.width-(label.frame.size.width+label.frame.origin.x+5), labelView.frame.size.height-22)];
+                contentLabel=[[UILabel alloc]initWithFrame:FRAME(label.frame.size.width+label.frame.origin.x+5,23/2, labelView.frame.size.width-(label.frame.size.width+label.frame.origin.x+5)-20, labelView.frame.size.height-22)];
+                contentLabel.textAlignment=NSTextAlignmentRight;
                 //contentLabel.backgroundColor=[UIColor brownColor];
                 [labelView addSubview:contentLabel];
                 [self contentLabelLayout];
@@ -1060,6 +1080,15 @@ int H = 0,time_ID;
             }
             if (i==3) {
                 meetingLabel=[[UILabel alloc]init];
+                if (_vcID==1003) {
+                    if(upButInt%2==0){
+                        meetingLabel.hidden=YES;
+                    }else{
+                        meetingLabel.hidden=NO;
+                    }
+                }
+                
+                meetingLabel.textAlignment=NSTextAlignmentRight;
                 [self labelLayout];
                 UIImageView *labelImg=[[UIImageView alloc]initWithFrame:FRAME(labelView.frame.size.width-20, (42-15)/2, 15, 15)];
                 labelImg.image=[UIImage imageNamed:@"JH_JT_TB_@2x"];
@@ -1105,7 +1134,7 @@ int H = 0,time_ID;
                     labelImg.image=[UIImage imageNamed:@"JH_JT_TB_@2x"];
                     [labelView addSubview:labelImg];
                     loopLabel=[[UILabel alloc]initWithFrame:FRAME(label.frame.size.width+label.frame.origin.x, 23/2, labelView.frame.size.width-(label.frame.size.width+label.frame.origin.x+20), 32/2)];
-                    loopLabel.font=[UIFont fontWithName:@"Heiti SC" size:14];
+                    loopLabel.font=[UIFont fontWithName:@"Heiti SC" size:13];
                     loopLabel.textAlignment=NSTextAlignmentRight;
                     [labelView addSubview:loopLabel];
                     [self looplabelLayout];
@@ -1296,7 +1325,7 @@ int H = 0,time_ID;
             }
             
         }else{
-            UIAlertView *tsView=[[UIAlertView alloc]initWithTitle:@"提醒" message:@"只有单独给自己设置闹钟在可以设置重复周期哦！" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            UIAlertView *tsView=[[UIAlertView alloc]initWithTitle:@"提醒" message:@"为了加少对他人的干扰，目前只能给自己设置重复类提醒哦！" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
             [tsView show];
         }
         
@@ -1329,10 +1358,19 @@ int H = 0,time_ID;
 #pragma mark 开关按钮switchBut的点击相应事件方法
 -(void)switchAction:(id)sender
 {
+    
     if (periodID==0) {
+        push_IDSSS=100;
         ClerkViewController *seekVC=[[ClerkViewController alloc]init];
         seekVC.service_type_id=@"75";
-        [self.navigationController pushViewController:seekVC animated:YES];
+        if(_detailID==1000){
+            seekVC.detailID=1000;
+            [self presentViewController:seekVC animated:YES completion:nil];
+        }else{
+            seekVC.detailID=10;
+            [self.navigationController pushViewController:seekVC animated:YES];
+        }
+        
     }else{
         switchButton.ID=1;
         UISwitch *switchBuT=(UISwitch *)sender;
@@ -2422,7 +2460,7 @@ int H = 0,time_ID;
     int set_remind=[[[sender objectForKey:@"data"]objectForKey:@"set_remind"]intValue];
     if (set_remind!=0) {
         NSDate *  date=[NSDate date];
-        NSArray *weekdays = [NSArray arrayWithObjects: [NSNull null], @"Sunday", @"周一", @"周二", @"周三", @"周四", @"周五", @"周六", nil];
+        NSArray *weekdays = [NSArray arrayWithObjects: [NSNull null], @"周日", @"周一", @"周二", @"周三", @"周四", @"周五", @"周六", nil];
         
         NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
         
@@ -2460,7 +2498,25 @@ int H = 0,time_ID;
             }//删除原来的闹钟
             
             NSString *timaString=[NSString stringWithFormat:@"%@",[dict objectForKey:@"service_time"]];
-            int theTwo1 = [timaString intValue];
+            NSDateFormatter *formattetime = [[NSDateFormatter alloc] init];
+            [formattetime setDateStyle:NSDateFormatterMediumStyle];
+            [formattetime setTimeStyle:NSDateFormatterShortStyle];
+            [formattetime setDateFormat:@"yyyy-MM-dd HH:mm"];
+            int  timeint=[timaString intValue];
+            NSDate *confromTimesp = [NSDate dateWithTimeIntervalSince1970:timeint];
+            NSLog(@"1296035591  = %@",confromTimesp);
+            NSString *confromTimespStrs = [formattetime stringFromDate:confromTimesp];
+            
+            
+            NSDateFormatter *timeformatte = [[NSDateFormatter alloc] init];
+            [timeformatte setDateStyle:NSDateFormatterMediumStyle];
+            [timeformatte setTimeStyle:NSDateFormatterShortStyle];
+            [timeformatte setDateFormat:@"yyyy-MM-dd HH:mm"];
+            
+            NSDate* datetime = [timeformatte dateFromString:confromTimespStrs];
+            int theTwo1 = [datetime timeIntervalSince1970];
+            
+//            int theTwo1 = [timaString intValue];
             
             //获取当前时间
             NSDate *  senddate=[NSDate date];
@@ -2508,128 +2564,128 @@ int H = 0,time_ID;
             
             
             
-            if (period==0) {
-                fireDateTim=theTwo1-_secondDate;
-            }else if(period==1){
-                if (theTwo1-_secondDate>=0) {
-                    fireDateTim=_secondTime-_secondDate;
-                }else if (theTwo1-_secondDate<0){
-                    
-                    fireDateTim=_secondTime+24*3600-_secondDate;
-                }
-            }else if(period==2){
-                if (theTwo1-_secondDate>=0) {
-                    if (week>1) {
-                        fireDateTim=_secondTime-_secondDate;
-                    }else if (week==0){
-                        fireDateTim=_secondTime+24*2*3600-_secondDate;
-                    }else if(week==1){
-                        fireDateTim=_secondTime+24*3600-_secondDate;
-                    }
-                    
-                }else if (theTwo1-_secondDate<0){
-                    if (week<5&&week>1) {
-                        fireDateTim=_secondTime+24*3600-_secondDate;
-                    }else if (week==5){
-                        fireDateTim=_secondTime+24*3*3600-_secondDate;
-                    }else if (week==0){
-                        fireDateTim=_secondTime+24*2*3600-_secondDate;
-                    }else if (week==1){
-                        fireDateTim=_secondTime+24*3600-_secondDate;
-                    }
-                    
-                }
-            }else if(period==3){
-                //    int
-                NSDate *timedate = [NSDate dateWithTimeIntervalSince1970:[timaString intValue]];
-                
-                int  string=[self weekdayStringFromDate:timedate];
-                if (theTwo1-_secondDate>=0) {
-                    if (week==string) {
-                        fireDateTim=_secondTime-_secondDate;
-                    }else{
-                        fireDateTim=theTwo1-_secondDate;
-                    }
-                }else if(theTwo1-_secondDate<0){
-                    if (week==string) {
-                        fireDateTim=_secondTime+24*7*3600-_secondDate;
-                    }else{
-                        fireDateTim=theTwo1+24*7*3600-_secondDate;
-                    }
-                }
-                
-                //            notification.repeatInterval=kCFCalendarUnitWeek;//循环次数，kCFCalendarUnitWeekday一周一次
-            }else if(period==4){
-                if (theTwo1-_secondDate>=0) {
-                    fireDateTim=theTwo1-_secondDate;
-                }else if(theTwo1-_secondDate<0){
-                    NSDate *timedate = [NSDate dateWithTimeIntervalSince1970:[timaString intValue]];
-                    NSDateFormatter *format = [[NSDateFormatter alloc] init];
-                    [format setDateStyle:NSDateFormatterMediumStyle];
-                    [format setTimeStyle:NSDateFormatterShortStyle];
-                    [format setDateFormat:@"dd HH:mm:ss"];
-                    NSString *  timeStr=[format stringFromDate:timedate];
-                    NSDateFormatter  *dateform=[[NSDateFormatter alloc] init];
-                    [dateform setDateFormat:@"yyyy-MM"];
-                    NSString *  locationStr=[dateform stringFromDate:senddate];
-                    
-                    NSString *datyString=[NSString stringWithFormat:@"%@-%@",locationStr,timeStr];
-                    
-                    NSDateFormatter *formattesMM = [[NSDateFormatter alloc] init];
-                    [formattesMM setDateStyle:NSDateFormatterMediumStyle];
-                    [formattesMM setTimeStyle:NSDateFormatterShortStyle];
-                    [formattesMM setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-                    NSDate* dateMM = [formattesMM dateFromString:datyString];
-                    int  _secondMM = [dateMM timeIntervalSince1970];
-                    
-                    NSDate *now = [NSDate date];
-                    NSCalendar *calendar = [NSCalendar currentCalendar];
-                    NSUInteger unitFlags = NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit;
-                    NSDateComponents *dateComponent = [calendar components:unitFlags fromDate:now];
-                    if (_secondMM-_secondDate>=0) {
-                        fireDateTim=_secondMM-_secondDate;
-                    }else{
-                        NSCalendar *calendar = [NSCalendar currentCalendar];
-                        unsigned unitFlags = NSYearCalendarUnit | NSMonthCalendarUnit |  NSDayCalendarUnit;
-                        NSDateComponents *components = [calendar components:unitFlags fromDate:[NSDate date]];
-                        
-                        NSInteger iCurYear = [components year];  //当前的年份
-                        int iCurMonth = (int)[components month];  //当前的月份
-                        if (iCurMonth==1||iCurMonth==3||iCurMonth==5||iCurMonth==7||iCurMonth==8||iCurMonth==10||iCurMonth==12) {
-                            fireDateTim=_secondMM+30*24*3600-_secondDate;
-                        }else if(iCurMonth==2){
-                            if ((iCurYear%4==0 && iCurYear %100 !=0) || iCurYear%400==0) {
-                                fireDateTim=_secondMM+29*24*3600-_secondDate;
-                            }else {
-                                fireDateTim=_secondMM+28*24*3600-_secondDate;
-                            }
-                            
-                        }
-                    }
-                    
-                }
-                //            notification.repeatInterval=NSCalendarUnitMonth;//循环次数，NSCalendarUnitMonth一月一次
-            }else if(period==5){
-                
-                //            notification.repeatInterval=NSCalendarUnitYear;//循环次数，NSCalendarUnitYear一年一次
-            }
+//            if (period==0) {
+//                fireDateTim=theTwo1-_secondDate;
+//            }else if(period==1){
+//                if (theTwo1-_secondDate>=0) {
+//                    fireDateTim=_secondTime-_secondDate;
+//                }else if (theTwo1-_secondDate<0){
+//                    
+//                    fireDateTim=_secondTime+24*3600-_secondDate;
+//                }
+//            }else if(period==2){
+//                if (theTwo1-_secondDate>=0) {
+//                    if (week>1) {
+//                        fireDateTim=_secondTime-_secondDate;
+//                    }else if (week==0){
+//                        fireDateTim=_secondTime+24*2*3600-_secondDate;
+//                    }else if(week==1){
+//                        fireDateTim=_secondTime+24*3600-_secondDate;
+//                    }
+//                    
+//                }else if (theTwo1-_secondDate<0){
+//                    if (week<5&&week>1) {
+//                        fireDateTim=_secondTime+24*3600-_secondDate;
+//                    }else if (week==5){
+//                        fireDateTim=_secondTime+24*3*3600-_secondDate;
+//                    }else if (week==0){
+//                        fireDateTim=_secondTime+24*2*3600-_secondDate;
+//                    }else if (week==1){
+//                        fireDateTim=_secondTime+24*3600-_secondDate;
+//                    }
+//                    
+//                }
+//            }else if(period==3){
+//                //    int
+//                NSDate *timedate = [NSDate dateWithTimeIntervalSince1970:[timaString intValue]];
+//                
+//                int  string=[self weekdayStringFromDate:timedate];
+//                if (theTwo1-_secondDate>=0) {
+//                    if (week==string) {
+//                        fireDateTim=_secondTime-_secondDate;
+//                    }else{
+//                        fireDateTim=theTwo1-_secondDate;
+//                    }
+//                }else if(theTwo1-_secondDate<0){
+//                    if (week==string) {
+//                        fireDateTim=_secondTime+24*7*3600-_secondDate;
+//                    }else{
+//                        fireDateTim=theTwo1+24*7*3600-_secondDate;
+//                    }
+//                }
+//                
+//                //            notification.repeatInterval=kCFCalendarUnitWeek;//循环次数，kCFCalendarUnitWeekday一周一次
+//            }else if(period==4){
+//                if (theTwo1-_secondDate>=0) {
+//                    fireDateTim=theTwo1-_secondDate;
+//                }else if(theTwo1-_secondDate<0){
+//                    NSDate *timedate = [NSDate dateWithTimeIntervalSince1970:[timaString intValue]];
+//                    NSDateFormatter *format = [[NSDateFormatter alloc] init];
+//                    [format setDateStyle:NSDateFormatterMediumStyle];
+//                    [format setTimeStyle:NSDateFormatterShortStyle];
+//                    [format setDateFormat:@"dd HH:mm:ss"];
+//                    NSString *  timeStr=[format stringFromDate:timedate];
+//                    NSDateFormatter  *dateform=[[NSDateFormatter alloc] init];
+//                    [dateform setDateFormat:@"yyyy-MM"];
+//                    NSString *  locationStr=[dateform stringFromDate:senddate];
+//                    
+//                    NSString *datyString=[NSString stringWithFormat:@"%@-%@",locationStr,timeStr];
+//                    
+//                    NSDateFormatter *formattesMM = [[NSDateFormatter alloc] init];
+//                    [formattesMM setDateStyle:NSDateFormatterMediumStyle];
+//                    [formattesMM setTimeStyle:NSDateFormatterShortStyle];
+//                    [formattesMM setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+//                    NSDate* dateMM = [formattesMM dateFromString:datyString];
+//                    int  _secondMM = [dateMM timeIntervalSince1970];
+//                    
+//                    NSDate *now = [NSDate date];
+//                    NSCalendar *calendar = [NSCalendar currentCalendar];
+//                    NSUInteger unitFlags = NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit;
+//                    NSDateComponents *dateComponent = [calendar components:unitFlags fromDate:now];
+//                    if (_secondMM-_secondDate>=0) {
+//                        fireDateTim=_secondMM-_secondDate;
+//                    }else{
+//                        NSCalendar *calendar = [NSCalendar currentCalendar];
+//                        unsigned unitFlags = NSYearCalendarUnit | NSMonthCalendarUnit |  NSDayCalendarUnit;
+//                        NSDateComponents *components = [calendar components:unitFlags fromDate:[NSDate date]];
+//                        
+//                        NSInteger iCurYear = [components year];  //当前的年份
+//                        int iCurMonth = (int)[components month];  //当前的月份
+//                        if (iCurMonth==1||iCurMonth==3||iCurMonth==5||iCurMonth==7||iCurMonth==8||iCurMonth==10||iCurMonth==12) {
+//                            fireDateTim=_secondMM+30*24*3600-_secondDate;
+//                        }else if(iCurMonth==2){
+//                            if ((iCurYear%4==0 && iCurYear %100 !=0) || iCurYear%400==0) {
+//                                fireDateTim=_secondMM+29*24*3600-_secondDate;
+//                            }else {
+//                                fireDateTim=_secondMM+28*24*3600-_secondDate;
+//                            }
+//                            
+//                        }
+//                    }
+//                    
+//                }
+//                //            notification.repeatInterval=NSCalendarUnitMonth;//循环次数，NSCalendarUnitMonth一月一次
+//            }else if(period==5){
+//                
+//                //            notification.repeatInterval=NSCalendarUnitYear;//循环次数，NSCalendarUnitYear一年一次
+//            }
             
-            if([nameArray containsObject:@"自己"]&&nameArray.count==1){
+//            if([nameArray containsObject:@"自己"]&&nameArray.count==1){
                 NSLog(@"登录后信息：%@",sender);
                 
                 
                 UILocalNotification *notification=[[UILocalNotification alloc] init];
                 if (notification!=nil) {
-                    NSDate *timedate = [NSDate dateWithTimeIntervalSince1970:[timaString intValue]];
-                    
-                    NSDateFormatter *formattesMM = [[NSDateFormatter alloc] init];
-                    [formattesMM setDateStyle:NSDateFormatterMediumStyle];
-                    [formattesMM setTimeStyle:NSDateFormatterShortStyle];
-                    [formattesMM setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-                    NSString *  locationStr=[dateform stringFromDate:timedate];
+//                    NSDate *timedate = [NSDate dateWithTimeIntervalSince1970:[timaString intValue]];
+//                    
+//                    NSDateFormatter *formattesMM = [[NSDateFormatter alloc] init];
+//                    [formattesMM setDateStyle:NSDateFormatterMediumStyle];
+//                    [formattesMM setTimeStyle:NSDateFormatterShortStyle];
+//                    [formattesMM setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+//                    NSString *  locationStr=[dateform stringFromDate:timedate];
                     //        NSDate *now=[NSDate new];
                     
-                    notification.fireDate=[NSDate dateWithTimeIntervalSinceNow:fireDateTim];//10秒后通知
+                    notification.fireDate=[NSDate dateWithTimeIntervalSinceNow:theTwo1-_secondDate];//10秒后通知
                     
                     notification.timeZone=[NSTimeZone defaultTimeZone];
                     if (period==0) {
@@ -2653,7 +2709,7 @@ int H = 0,time_ID;
                     notification.soundName=@"simivoice.caf";//声音，可以换成alarm.soundName = @"myMusic.caf"
                     
                     //去掉下面2行就不会弹出提示框
-                    notification.alertTitle=/*@"明天会响么钱钱钱？";//*/[NSString stringWithFormat:@"事物提醒"];
+                    notification.alertTitle=/*@"明天会响么钱钱钱？";//*/[NSString stringWithFormat:@"%@",[dict objectForKey:@"card_type_name"]];
                     notification.alertBody=/*@"明天会响么清清浅浅？";//*/[NSString stringWithFormat:@"%@",[dict objectForKey:@"service_content"]];//提示信息 弹出提示框
                     
                     notification.alertAction = @"打开";  //提示框按钮
@@ -2662,7 +2718,7 @@ int H = 0,time_ID;
                     
                     
                     
-                    NSDictionary *dictts = @{@"ac":@"s",@"ci":[dict objectForKey:@"card_id"],@"rt":@"事物提醒",@"rc":[dict objectForKey:@"service_content"],@"re":timaString};
+                    NSDictionary *dictts = @{@"ac":@"s",@"ci":[dict objectForKey:@"card_id"],@"rt":[dict objectForKey:@"card_type_name"],@"rc":[dict objectForKey:@"service_content"],@"re":timaString};
                     NSDictionary *infoDict = @{@"dic":dictts,@"yes_or_no":@"no"};
                     notification.userInfo = infoDict; //添加额外的信息
                     
@@ -2675,20 +2731,30 @@ int H = 0,time_ID;
                     [_download requestWithUrl:PUSH_NOTICE dict:dics view:self.view delegate:self finishedSEL:@selector(Success:) isPost:YES failedSEL:@selector(Fail:)];
                 }
                 
-            }
+//            }
             
         }else{
-            if([nameArray containsObject:@"自己"]&&nameArray.count==1){
-                
+//            if([nameArray containsObject:@"自己"]&&nameArray.count==1){
+            
                 NSLog(@"登录后信息：%@",sender);
                 NSDictionary *dict=[sender objectForKey:@"data"];
                 NSString *timaString=[NSString stringWithFormat:@"%@",[dict objectForKey:@"service_time"]];
+            
+            NSDateFormatter *formattetime = [[NSDateFormatter alloc] init];
+            [formattetime setDateStyle:NSDateFormatterMediumStyle];
+            [formattetime setTimeStyle:NSDateFormatterShortStyle];
+            [formattetime setDateFormat:@"yyyy-MM-dd HH:mm"];
+            int  timeint=[timaString intValue];
+            NSDate *confromTimesp = [NSDate dateWithTimeIntervalSince1970:timeint];
+            NSLog(@"1296035591  = %@",confromTimesp);
+            NSString *confromTimespStr = [formattetime stringFromDate:confromTimesp];
+
                 //    NSDateFormatter *theTwoformatte1 = [[NSDateFormatter alloc] init];
                 //    [theTwoformatte1 setDateStyle:NSDateFormatterMediumStyle];
                 //    [theTwoformatte1 setTimeStyle:NSDateFormatterShortStyle];
                 //    [theTwoformatte1 setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
                 //    NSDate* theTwotdate1 = [theTwoformatte1 dateFromString:timaString];
-                int theTwo1 = [timaString intValue];
+            
                 
                 //获取当前时间
                 NSDate *  senddate=[NSDate date];
@@ -2706,6 +2772,16 @@ int H = 0,time_ID;
                 [formatte setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
                 NSDate* date = [formatte dateFromString:locationString];
                 int  _secondDate = [date timeIntervalSince1970];
+            
+            
+            NSDateFormatter *timeformatte = [[NSDateFormatter alloc] init];
+            [timeformatte setDateStyle:NSDateFormatterMediumStyle];
+            [timeformatte setTimeStyle:NSDateFormatterShortStyle];
+            [timeformatte setDateFormat:@"yyyy-MM-dd HH:mm"];
+
+            NSDate* datetime = [timeformatte dateFromString:confromTimespStr];
+                int theTwo1 = [datetime timeIntervalSince1970];
+            
                 NSLog(@"%d",theTwo1-_secondDate);
                 int period=[[NSString stringWithFormat:@"%@",[dict objectForKey:@"period"]]intValue];
                 UILocalNotification *notification=[[UILocalNotification alloc] init];
@@ -2737,7 +2813,7 @@ int H = 0,time_ID;
                     notification.soundName=@"simivoice.caf";//声音，可以换成alarm.soundName = @"myMusic.caf"
                     
                     //去掉下面2行就不会弹出提示框
-                    notification.alertTitle=/*@"明天会响么钱钱钱？";//*/[NSString stringWithFormat:@"事物提醒"];
+                    notification.alertTitle=/*@"明天会响么钱钱钱？";//*/[NSString stringWithFormat:@"%@",[dict objectForKey:@"card_type_name"]];
                     notification.alertBody=/*@"明天会响么清清浅浅？";//*/[NSString stringWithFormat:@"%@",[dict objectForKey:@"service_content"]];//提示信息 弹出提示框
                     
                     notification.alertAction = @"打开";  //提示框按钮
@@ -2752,7 +2828,7 @@ int H = 0,time_ID;
                     NSString *  locationStr=[formattesMM stringFromDate:timedate];
                     
                     
-                    NSDictionary *dictts = @{@"ac":@"s",@"ci":[dict objectForKey:@"card_id"],@"rt":@"事物提醒",@"rc":[dict objectForKey:@"service_content"],@"re":timaString};
+                    NSDictionary *dictts = @{@"ac":@"s",@"ci":[dict objectForKey:@"card_id"],@"rt":[dict objectForKey:@"card_type_name"],@"rc":[dict objectForKey:@"service_content"],@"re":timaString};
                     NSDictionary *infoDict = @{@"dic":dictts,@"yes_or_no":@"no"};
                     notification.userInfo = infoDict; //添加额外的信息
                     
@@ -2760,7 +2836,7 @@ int H = 0,time_ID;
                     
                 }
                 
-            }
+//            }
             
         }
         NSDictionary *dict=[sender objectForKey:@"data"];
@@ -2803,7 +2879,12 @@ int H = 0,time_ID;
 - (void)backAction
 {
     _backBtn.enabled = NO;
-    [self.navigationController popViewControllerAnimated:YES];
+    if (_detailID==1000) {
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }else{
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+    
     _backBtn.enabled = YES;
 }
 -(void)DownFail:(id)sender
@@ -2866,11 +2947,11 @@ int H = 0,time_ID;
         loopUpStr=@"1";
     }else if ([loopStr isEqualToString:@"工作日(周一至周五)"]){
         loopUpStr=@"2";
-    }else if ([loopStr isEqualToString:@"每周"]){
+    }else if ([loopStr rangeOfString:@"每周"].location !=NSNotFound){
         loopUpStr=@"3";
-    }else if ([loopStr isEqualToString:@"每月"]){
+    }else if ([loopStr rangeOfString:@"每月"].location !=NSNotFound){
         loopUpStr=@"4";
-    }else if ([loopStr isEqualToString:@"每年"]){
+    }else if ([loopStr rangeOfString:@"每年"].location !=NSNotFound){
         loopUpStr=@"5";
     }
 

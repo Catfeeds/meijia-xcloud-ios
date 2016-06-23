@@ -73,7 +73,7 @@
     NSDateFormatter *formatte = [[NSDateFormatter alloc] init];
     [formatte setDateStyle:NSDateFormatterMediumStyle];
     [formatte setTimeStyle:NSDateFormatterShortStyle];
-    [formatte setDateFormat:@"dd日 HH:mm:ss"];
+    [formatte setDateFormat:@"dd日"];
     NSString *confromTimespStr = [formatte stringFromDate:dayStr];
     return confromTimespStr;
 }
@@ -82,7 +82,7 @@
     NSDateFormatter *formatte = [[NSDateFormatter alloc] init];
     [formatte setDateStyle:NSDateFormatterMediumStyle];
     [formatte setTimeStyle:NSDateFormatterShortStyle];
-    [formatte setDateFormat:@"MM月dd日 HH:mm:ss"];
+    [formatte setDateFormat:@"MM月dd日"];
     NSString *confromTimespStr = [formatte stringFromDate:mouthStr];
     return confromTimespStr;
 }

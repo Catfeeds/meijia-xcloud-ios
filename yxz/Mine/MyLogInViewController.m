@@ -578,7 +578,7 @@ appDelegate
         [self AppdeleAction];
 //        [self userAddress];
         [self getUserInfo];//2
-        
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"REMIND_SPOT" object:nil];
         
     }
     //[self.navigationController popViewControllerAnimated:YES];

@@ -36,6 +36,7 @@
     // Do any additional setup after loading the view, typically from a nib.
 //    _leftTableSource =@[@"11",@"22",@"33",@"44",@"55",@"66"];
     _collectData=[[NSMutableArray alloc]init];
+    [_collectData addObjectsFromArray:_collectArray];
     _dataArray=[[NSMutableArray alloc]init];
     self.navlabel.text=@"资产类别";
     self.backlable.backgroundColor=HEX_TO_UICOLOR(0x11cd6e, 1.0);
@@ -468,7 +469,7 @@
             //之前在cell初始化时就将textfield的tag赋值比button大100，方便判断
             cell1.numLabel.text = [NSString stringWithFormat:@"%d",a];
             NSString *collectName=[NSString stringWithFormat:@"%@,%@",[_leftTableSource[s]objectForKey:@"name"],[[_rightTableSource[s]objectForKey:@"fiel"][n]objectForKey:@"name"]];
-            NSDictionary *dateDict=@{@"name":collectName,@"number":numberString};
+            NSDictionary *dateDict=@{@"name":collectName,@"number":cell1.numLabel.text};
             if ([_collectData containsObject:dateDict]) {
                 
             }else{

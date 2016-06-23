@@ -25,6 +25,7 @@
     UILabel *lineLabel;
     ConTentViewController *viewController;
     int _lastPosition;
+    NSArray *collectDataArray;
 }
 @end
 
@@ -37,9 +38,10 @@
         purposeString=viewController.textString;
         purposeLabel.text=purposeString;
     }
-    if (cateVC.collectData.count>0) {
+//    if (cateVC.collectData.count>0) {
+        collectDataArray=cateVC.collectData;
         [self purViewLayout];
-    }
+//    }
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -101,6 +103,7 @@
                 {
                     nameField=[[UITextField alloc]initWithFrame:FRAME(label.frame.size.width+20, 15, WIDTH-label.frame.size.width-40, 20)];
                     nameField.delegate=self;
+                    nameField.returnKeyType = UIReturnKeyDone;
                     nameField.textAlignment=NSTextAlignmentRight;
                     nameField.placeholder=@"请输入姓名!";
                     nameField.tag=i;
@@ -112,6 +115,7 @@
                 {
                     mobleField=[[UITextField alloc]initWithFrame:FRAME(label.frame.size.width+20, 15, WIDTH-label.frame.size.width-40, 20)];
                     mobleField.delegate=self;
+                    mobleField.returnKeyType = UIReturnKeyDone;
                     mobleField.textAlignment=NSTextAlignmentRight;
                     mobleField.placeholder=@"请输手机号!";
                     mobleField.tag=i;
@@ -194,6 +198,7 @@
 {
     if (button.tag==2) {
         cateVC=[[CollectCategoryViewController alloc]init];
+        cateVC.collectArray=collectDataArray;
         [self.navigationController pushViewController:cateVC animated:YES];
     }else{
         viewController=[[ConTentViewController alloc]init];
