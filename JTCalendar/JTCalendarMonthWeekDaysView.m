@@ -42,7 +42,7 @@ static NSArray *cacheDaysOfWeeks;
         
         view.font = self.calendarManager.calendarAppearance.weekDayTextFont;
         view.textColor = self.calendarManager.calendarAppearance.weekDayTextColor;
-//        view.backgroundColor=[UIColor redColor];
+        
         view.textAlignment = NSTextAlignmentCenter;
         view.text = day;
         
@@ -57,35 +57,39 @@ static NSArray *cacheDaysOfWeeks;
     }
     
     NSDateFormatter *dateFormatter = [NSDateFormatter new];
-    NSMutableArray *days = nil;
-    
-    switch(self.calendarManager.calendarAppearance.weekDayFormat) {
-        case JTCalendarWeekDayFormatSingle:
-            days = [[dateFormatter veryShortStandaloneWeekdaySymbols] mutableCopy];
-            break;
-    case JTCalendarWeekDayFormatShort:
-            days = [[dateFormatter shortStandaloneWeekdaySymbols] mutableCopy];
-            break;
-    case JTCalendarWeekDayFormatFull:
-            days = [[dateFormatter standaloneWeekdaySymbols] mutableCopy];
-            break;
-    }
-    
-    for(NSInteger i = 0; i < days.count; ++i){
-        NSString *day = days[i];
-        [days replaceObjectAtIndex:i withObject:[day uppercaseString]];
-    }
-    
+    NSMutableArray *days = [[dateFormatter standaloneWeekdaySymbols] mutableCopy];
+        
     // Redorder days for be conform to calendar
     {
         NSCalendar *calendar = self.calendarManager.calendarAppearance.calendar;
         NSUInteger firstWeekday = (calendar.firstWeekday + 6) % 7; // Sunday == 1, Saturday == 7
-        
+                
         for(int i = 0; i < firstWeekday; ++i){
             id day = [days firstObject];
             [days removeObjectAtIndex:0];
             [days addObject:day];
         }
+    }
+    
+    switch(self.calendarManager.calendarAppearance.weekDayFormat){
+        case JTCalendarWeekDayFormatSingle:
+            for(NSInteger i = 0; i < days.count; ++i){
+                NSString *day = days[i];
+                [days replaceObjectAtIndex:i withObject:[[day uppercaseString] substringToIndex:1]];
+            }
+            break;
+        case JTCalendarWeekDayFormatShort:
+            for(NSInteger i = 0; i < days.count; ++i){
+                NSString *day = days[i];
+                [days replaceObjectAtIndex:i withObject:[[day uppercaseString] substringToIndex:3]];
+            }
+            break;
+        case JTCalendarWeekDayFormatFull:
+            for(NSInteger i = 0; i < days.count; ++i){
+                NSString *day = days[i];
+                [days replaceObjectAtIndex:i withObject:[day uppercaseString]];
+            }
+            break;
     }
     
     cacheDaysOfWeeks = days;
@@ -98,18 +102,9 @@ static NSArray *cacheDaysOfWeeks;
     CGFloat width = self.frame.size.width / 7.;
     CGFloat height = self.frame.size.height;
     
-    if(self.calendarManager.calendarAppearance.readFromRightToLeft){
-        for(UIView *view in [[self.subviews reverseObjectEnumerator] allObjects]){
-            view.frame = CGRectMake(x, 0, width, height);
-            x = CGRectGetMaxX(view.frame);
-            
-        }
-    }
-    else{
-        for(UIView *view in self.subviews){
-            view.frame = CGRectMake(x, 0, width, height);
-            x = CGRectGetMaxX(view.frame);
-        }
+    for(UIView *view in self.subviews){
+        view.frame = CGRectMake(x, 0, width, height);
+        x = CGRectGetMaxX(view.frame);
     }
     
     // No need to call [super layoutSubviews]
@@ -122,15 +117,18 @@ static NSArray *cacheDaysOfWeeks;
 
 - (void)reloadAppearance
 {
-    NSArray *arr=[[NSMutableArray alloc]initWithObjects:@"一",@"二",@"三",@"四",@"五",@"六",@"日", nil];;
     for(int i = 0; i < self.subviews.count; ++i){
         UILabel *view = [self.subviews objectAtIndex:i];
         
         view.font = self.calendarManager.calendarAppearance.weekDayTextFont;
         view.textColor = self.calendarManager.calendarAppearance.weekDayTextColor;
         
-        view.text = [arr objectAtIndex:i];
+        view.text = [[self daysOfWeek] objectAtIndex:i];
     }
 }
 
 @end
+
+// 版权属于原作者
+// http://code4app.com (cn) http://code4app.net (en)
+// 发布代码于最专业的源码分享网站: Code4App.com 

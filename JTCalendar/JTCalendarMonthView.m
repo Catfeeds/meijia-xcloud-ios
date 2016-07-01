@@ -93,12 +93,8 @@
     
     for(int i = 0; i < self.subviews.count; ++i){
         UIView *view = self.subviews[i];
-        if (i==0) {
-            view.frame = CGRectMake(0, y, width, 27.5);
-        }else{
-            view.frame = CGRectMake(0, y, width, height);
-        }
         
+        view.frame = CGRectMake(0, y, width, height);
         y = CGRectGetMaxY(view.frame);
         
         if(cacheLastWeekMode && i == weeksToDisplay - 1){
@@ -156,11 +152,14 @@
 {
     for(JTCalendarWeekView *view in weeksViews){
         [view reloadData];
+        
+        // Doesn't need to do other weeks
         if(self.calendarManager.calendarAppearance.isWeekMode){
             break;
         }
     }
 }
+
 - (void)reloadAppearance
 {
     if(cacheLastWeekMode != self.calendarManager.calendarAppearance.isWeekMode){
@@ -177,3 +176,7 @@
 }
 
 @end
+
+// 版权属于原作者
+// http://code4app.com (cn) http://code4app.net (en)
+// 发布代码于最专业的源码分享网站: Code4App.com 

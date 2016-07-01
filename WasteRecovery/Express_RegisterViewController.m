@@ -460,9 +460,9 @@
     if (sVC.stringValue==nil||sVC.stringValue==NULL||[sVC.stringValue isEqualToString:@""]) {
         barcodeField.placeholder=@"请输入订单号!";
         if (barcodeField.text==nil) {
-            express_noStr=barcodeField.text;
-        }else{
             express_noStr=@"";
+        }else{
+            express_noStr=barcodeField.text;
         }
     }else{
         barcodeField.text=sVC.stringValue;

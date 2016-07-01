@@ -8,6 +8,7 @@
 
 #import "CollectCategoryViewController.h"
 #import "CollectCategoryTableViewCell.h"
+#import "CollectRegisterViewController.h"
 @interface CollectCategoryViewController ()
 {
     UITableView *_rightTableView;
@@ -99,7 +100,11 @@
 }
 -(void)buttonAction
 {
-    [self.navigationController popViewControllerAnimated:YES];
+    CollectRegisterViewController *collectVC=[[CollectRegisterViewController alloc]init];
+    collectVC.dataArray=_collectData;
+    [self.navigationController  pushViewController:collectVC animated:YES];
+
+//    [self.navigationController popViewControllerAnimated:YES];
 }
 -(void)collectCategory
 {
@@ -358,6 +363,13 @@
         return nil;
     }
 }
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+    if (tableView == _rightTableView) {
+        return 0.01;
+    } else {
+        return 0;
+    }
+}
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     if(tableView == _rightTableView){
@@ -412,20 +424,25 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [_leftTableView deselectRowAtIndexPath:indexPath animated:NO];
-    [_rightTableView deselectRowAtIndexPath:indexPath animated:NO];
+    [_rightTableView deselectRowAtIndexPath:indexPath animated:YES];
     if(tableView == _leftTableView){
         NSLog(@"%ld",(long)indexPath.row);
 //        NSArray *array=[_rightTableSource[indexPath.row]objectForKey:@"fiel"];
         if((_rightTableSource.count-1)<=indexPath.row){
             
         }else{
-            [_rightTableView selectRowAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:indexPath.row]animated:YES scrollPosition:UITableViewScrollPositionBottom];
+//            [_rightTableView selectRowAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:indexPath.row]animated:YES scrollPosition:UITableViewScrollPositionTop];
+            [_leftTableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionMiddle];
+            
+            //点击了左边的cell，让右边的tableView跟着滚动
+            [_rightTableView scrollToRowAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:indexPath.row] atScrollPosition:UITableViewScrollPositionTop animated:YES];
         }
         
     }else{
         CollectCategoryTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+        [_leftTableView selectRowAtIndexPath:[NSIndexPath indexPathForItem:indexPath.section inSection:0]animated:YES scrollPosition:UITableViewScrollPositionTop];
         NSLog(@"%@",cell.numLabel.text);
-            }
+    }
 
 }
 -(void)addBut:(UIButton *)button
@@ -615,9 +632,15 @@
 - (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
 {
     if(tableView == _rightTableView){
-        [_leftTableView selectRowAtIndexPath:[NSIndexPath indexPathForItem:section inSection:0]animated:YES scrollPosition:UITableViewScrollPositionNone];
+        [_leftTableView selectRowAtIndexPath:[NSIndexPath indexPathForItem:section inSection:0]animated:YES scrollPosition:UITableViewScrollPositionTop];
     }
     
+}
+- (void)tableView:(UITableView *)tableView didEndDisplayingHeaderView:(nonnull UIView *)view forSection:(NSInteger)section
+{
+    if(tableView == _rightTableView){
+        [_leftTableView selectRowAtIndexPath:[NSIndexPath indexPathForItem:section inSection:0]animated:YES scrollPosition:UITableViewScrollPositionTop];
+    }
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

@@ -10,7 +10,6 @@
 #import "JTCircleView.h"
 
 @interface JTCalendarDayView (){
-    UIView *backgroundView;
     JTCircleView *circleView;
     UILabel *textLabel;
     JTCircleView *dotView;
@@ -22,13 +21,13 @@
 }
 @end
 
-static NSString *const kJTCalendarDaySelected = @"kJTCalendarDaySelected";
+static NSString *kJTCalendarDaySelected = @"kJTCalendarDaySelected";
 
 @implementation JTCalendarDayView
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
-        self = [super initWithFrame:frame];
+    self = [super initWithFrame:frame];
     if(!self){
         return nil;
     }
@@ -59,16 +58,10 @@ static NSString *const kJTCalendarDaySelected = @"kJTCalendarDaySelected";
 {
     isSelected = NO;
     self.isOtherMonth = NO;
-
-    {
-        backgroundView = [UIView new];
-//        backgroundView.backgroundColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
-        [self addSubview:backgroundView];
-    }
     
     {
         circleView = [JTCircleView new];
-//        circleView.backgroundColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
+//        circleView.backgroundColor=[UIColor redColor];
         [self addSubview:circleView];
     }
     
@@ -79,7 +72,6 @@ static NSString *const kJTCalendarDaySelected = @"kJTCalendarDaySelected";
     
     {
         dotView = [JTCircleView new];
-//        dotView.backgroundColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
         [self addSubview:dotView];
         dotView.hidden = YES;
     }
@@ -107,11 +99,7 @@ static NSString *const kJTCalendarDaySelected = @"kJTCalendarDaySelected";
 - (void)configureConstraintsForSubviews
 {
     textLabel.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
-    backgroundView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
-//    backgroundView.backgroundColor=[UIColor redColor];
-//    backgroundView.alpha=0.1;
-
-
+    
     CGFloat sizeCircle = MIN(self.frame.size.width, self.frame.size.height);
     CGFloat sizeDot = sizeCircle;
     
@@ -136,7 +124,7 @@ static NSString *const kJTCalendarDaySelected = @"kJTCalendarDaySelected";
     if(!dateFormatter){
         dateFormatter = [NSDateFormatter new];
         dateFormatter.timeZone = self.calendarManager.calendarAppearance.calendar.timeZone;
-        [dateFormatter setDateFormat:self.calendarManager.calendarAppearance.dayFormat];
+        [dateFormatter setDateFormat:@"dd"];
     }
     
     self->_date = date;
@@ -156,7 +144,7 @@ static NSString *const kJTCalendarDaySelected = @"kJTCalendarDaySelected";
     
     [self.calendarManager.dataSource calendarDidDateSelected:self.calendarManager date:self.date];
     
-    if(!self.isOtherMonth || !self.calendarManager.calendarAppearance.autoChangeMonth){
+    if(!self.isOtherMonth){
         return;
     }
     
@@ -166,10 +154,10 @@ static NSString *const kJTCalendarDaySelected = @"kJTCalendarDaySelected";
     currentMonthIndex = currentMonthIndex % 12;
     
     if(currentMonthIndex == (calendarMonthIndex + 1) % 12){
-        [self.calendarManager loadNextPage];
+        [self.calendarManager loadNextMonth];
     }
     else if(currentMonthIndex == (calendarMonthIndex + 12 - 1) % 12){
-        [self.calendarManager loadPreviousPage];
+        [self.calendarManager loadPreviousMonth];
     }
 }
 
@@ -217,29 +205,23 @@ static NSString *const kJTCalendarDaySelected = @"kJTCalendarDaySelected";
     else if([self isToday]){
         if(!self.isOtherMonth){
             circleView.color = [self.calendarManager.calendarAppearance dayCircleColorToday];
-//            circleView.alpha=0.1;
             textLabel.textColor = [self.calendarManager.calendarAppearance dayTextColorToday];
             dotView.color = [self.calendarManager.calendarAppearance dayDotColorToday];
-//            dotView.alpha=0.1;
         }
         else{
             circleView.color = [self.calendarManager.calendarAppearance dayCircleColorTodayOtherMonth];
-//            circleView.alpha=0.1;
             textLabel.textColor = [self.calendarManager.calendarAppearance dayTextColorTodayOtherMonth];
             dotView.color = [self.calendarManager.calendarAppearance dayDotColorTodayOtherMonth];
-//            dotView.alpha=0.1;
         }
     }
     else{
         if(!self.isOtherMonth){
             textLabel.textColor = [self.calendarManager.calendarAppearance dayTextColor];
             dotView.color = [self.calendarManager.calendarAppearance dayDotColor];
-//            dotView.alpha=0.1;
         }
         else{
             textLabel.textColor = [self.calendarManager.calendarAppearance dayTextColorOtherMonth];
             dotView.color = [self.calendarManager.calendarAppearance dayDotColorOtherMonth];
-//            dotView.alpha=0.1;
         }
         
         opacity = 0.;
@@ -265,8 +247,8 @@ static NSString *const kJTCalendarDaySelected = @"kJTCalendarDaySelected";
 
 - (void)reloadData
 {
-   dotView.hidden = ![self.calendarManager.dataSource calendarHaveEvent:self.calendarManager date:self.date];
-    NSLog(@"这里是什么玩意啊%d",dotView.hidden);
+    dotView.hidden = ![self.calendarManager.dataSource calendarHaveEvent:self.calendarManager date:self.date];
+    
     BOOL selected = [self isSameDate:[self.calendarManager currentDateSelected]];
     [self setSelected:selected animated:NO];
 }
@@ -297,7 +279,7 @@ static NSString *const kJTCalendarDaySelected = @"kJTCalendarDaySelected";
     if(!dateFormatter){
         dateFormatter = [NSDateFormatter new];
         dateFormatter.timeZone = self.calendarManager.calendarAppearance.calendar.timeZone;
-        [dateFormatter setDateFormat:@"yyyy-MM-dd"];
+        [dateFormatter setDateFormat:@"dd-MM-yyyy"];
     }
     
     if(!cacheCurrentDateText){
@@ -324,12 +306,13 @@ static NSString *const kJTCalendarDaySelected = @"kJTCalendarDaySelected";
 {
     textLabel.textAlignment = NSTextAlignmentCenter;
     textLabel.font = self.calendarManager.calendarAppearance.dayTextFont;
-    backgroundView.backgroundColor = self.calendarManager.calendarAppearance.dayBackgroundColor;
-    backgroundView.layer.borderWidth = self.calendarManager.calendarAppearance.dayBorderWidth;
-    backgroundView.layer.borderColor = self.calendarManager.calendarAppearance.dayBorderColor.CGColor;
     
     [self configureConstraintsForSubviews];
     [self setSelected:isSelected animated:NO];
 }
 
 @end
+
+// 版权属于原作者
+// http://code4app.com (cn) http://code4app.net (en)
+// 发布代码于最专业的源码分享网站: Code4App.com 

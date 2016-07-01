@@ -11,7 +11,6 @@
 
 @interface JTCalendarWeekView (){
     NSArray *daysViews;
-    int  arrayID;
 };
 
 @end
@@ -20,19 +19,18 @@
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
-    //获取通知中心单例对象
-    NSNotificationCenter * center = [NSNotificationCenter defaultCenter];
-    [center addObserver:self selector:@selector(dataSourceACtion) name:@"RILIARRAY" object:nil];
-    
     self = [super initWithFrame:frame];
     if(!self){
         return nil;
     }
-    
+    //获取通知中心单例对象
+    NSNotificationCenter * center = [NSNotificationCenter defaultCenter];
+    [center addObserver:self selector:@selector(dataSourceACtion) name:@"RILIARRAY" object:nil];
     [self commonInit];
     
     return self;
 }
+
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
     self = [super initWithCoder:aDecoder];
@@ -65,17 +63,9 @@
     CGFloat width = self.frame.size.width / 7.;
     CGFloat height = self.frame.size.height;
     
-    if(self.calendarManager.calendarAppearance.readFromRightToLeft){
-        for(UIView *view in [[self.subviews reverseObjectEnumerator] allObjects]){
-            view.frame = CGRectMake(x, 0, width, height);
-            x = CGRectGetMaxX(view.frame);
-        }
-    }
-    else{
-        for(UIView *view in self.subviews){
-            view.frame = CGRectMake(x, 0, width, height);
-            x = CGRectGetMaxX(view.frame);
-        }
+    for(UIView *view in self.subviews){
+        view.frame = CGRectMake(x, 0, width, height);
+        x = CGRectGetMaxX(view.frame);
     }
     
     [super layoutSubviews];
@@ -118,24 +108,27 @@
 }
 -(void)dataSourceACtion
 {
-    arrayID+=1;
     for(JTCalendarDayView *view in daysViews){
         
         [view reloadData];
     }
 }
-
 - (void)reloadData
 {
-    
+    for(JTCalendarDayView *view in daysViews){
+        [view reloadData];
+    }
 }
--(void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
+
 - (void)reloadAppearance
 {
     for(JTCalendarDayView *view in daysViews){
         [view reloadAppearance];
     }
 }
+
 @end
+
+// 版权属于原作者
+// http://code4app.com (cn) http://code4app.net (en)
+// 发布代码于最专业的源码分享网站: Code4App.com 

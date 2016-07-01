@@ -9,6 +9,7 @@
 #import "CollectRegisterViewController.h"
 #import "CollectCategoryViewController.h"
 #import "ConTentViewController.h"
+#import "AssetsAdministrationViewController.h"
 @interface CollectRegisterViewController ()
 {
     CollectCategoryViewController *cateVC;
@@ -39,9 +40,7 @@
         purposeLabel.text=purposeString;
     }
 //    if (cateVC.collectData.count>0) {
-        collectDataArray=cateVC.collectData;
-        [self purViewLayout];
-//    }
+       //    }
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -63,6 +62,11 @@
     layoutView.backgroundColor=[UIColor whiteColor];
     [myScrollView addSubview:layoutView];
     
+    collectView=[[UIView alloc]init];
+    collectView.backgroundColor=[UIColor redColor];
+    collectView.backgroundColor=[UIColor whiteColor];
+    [myScrollView addSubview:collectView];
+    
     purposeBut=[[UIButton alloc]initWithFrame:FRAME(0, layoutView.frame.size.height-51, WIDTH, 51)];
     [layoutView addSubview:purposeBut];
     lineLabel=[[UILabel alloc]initWithFrame:FRAME(0, layoutView.frame.size.height-1, WIDTH, 1)];
@@ -76,19 +80,31 @@
     collectBut.layer.cornerRadius=5;
     collectBut.clipsToBounds=YES;
     [self.view addSubview:collectBut];
+    
+    
+    collectDataArray=_dataArray;
+    [self purViewLayout];
+
     [self viewLayput];
     // Do any additional setup after loading the view.
 }
 -(void)viewLayput
 {
-    NSArray *array=@[@"姓名:",@"手机号:",@"领用用品:",@"用途:"];
+    NSArray *array=@[@"领用用品:",@"姓名:",@"手机号:",@"用途:"];
+    
     for (int i=0; i<array.count; i++) {
         if (i!=3) {
             UIButton *button=[[UIButton alloc]initWithFrame:FRAME(0, 51*i, WIDTH, 50)];
+            if (i!=0) {
+                button.frame=FRAME(0, 51*i+collectView.frame.size.height+10, WIDTH, 50);
+            }
             button.tag=i;
             button.backgroundColor=[UIColor whiteColor];
             [layoutView addSubview:button];
             UIView *lineView=[[UIView alloc]initWithFrame:FRAME(0, 50+51*i, WIDTH, 1)];
+            if (i!=0) {
+                lineView.frame=FRAME(0, 50+51*i+collectView.frame.size.height+10, WIDTH, 1);
+            }
             lineView.backgroundColor=[UIColor colorWithRed:220/255.0f green:220/255.0f blue:220/255.0f alpha:1];
             [layoutView addSubview:lineView];
             UILabel *label=[[UILabel alloc]init];
@@ -101,6 +117,22 @@
             switch (i) {
                 case 0:
                 {
+                    
+                    [button addTarget:self action:@selector(collectAction:) forControlEvents:UIControlEventTouchUpInside];
+                    
+                    UILabel *textlab=[[UILabel alloc]initWithFrame:FRAME(label.frame.size.width+20, 15, WIDTH-label.frame.size.width-40, 20)];
+                    textlab.text=@"所领用物品列表";
+                    textlab.font=[UIFont fontWithName:@"Heiti SC" size:15];
+                    textlab.textColor=[UIColor colorWithRed:220/255.0f green:220/255.0f blue:220/255.0f alpha:1];
+                    [button addSubview:textlab];
+                   
+                }
+                    break;
+                case 1:
+                {
+                    UIView *view=[[UIView alloc]initWithFrame:FRAME(0, 51+collectView.frame.size.height, WIDTH, 10)];
+                    view.backgroundColor=[UIColor colorWithRed:236/255.0f green:240/255.0f blue:241/255.0f alpha:1];
+                    [layoutView addSubview:view];
                     nameField=[[UITextField alloc]initWithFrame:FRAME(label.frame.size.width+20, 15, WIDTH-label.frame.size.width-40, 20)];
                     nameField.delegate=self;
                     nameField.returnKeyType = UIReturnKeyDone;
@@ -111,7 +143,7 @@
                     [button addSubview:nameField];
                 }
                     break;
-                case 1:
+                case 2:
                 {
                     mobleField=[[UITextField alloc]initWithFrame:FRAME(label.frame.size.width+20, 15, WIDTH-label.frame.size.width-40, 20)];
                     mobleField.delegate=self;
@@ -121,21 +153,6 @@
                     mobleField.tag=i;
                     mobleField.font=[UIFont fontWithName:@"Heiti SC" size:15];
                     [button addSubview:mobleField];
-                }
-                    break;
-                case 2:
-                {
-                    [button addTarget:self action:@selector(collectAction:) forControlEvents:UIControlEventTouchUpInside];
-                    
-                    UILabel *textlab=[[UILabel alloc]initWithFrame:FRAME(label.frame.size.width+20, 15, WIDTH-label.frame.size.width-40, 20)];
-                    textlab.text=@"点击选择用品";
-                    textlab.font=[UIFont fontWithName:@"Heiti SC" size:15];
-                    textlab.textColor=[UIColor colorWithRed:220/255.0f green:220/255.0f blue:220/255.0f alpha:1];
-                    [button addSubview:textlab];
-                    collectView=[[UIView alloc]initWithFrame:FRAME(0, button.frame.size.width+button.frame.origin.y+1, WIDTH, 0)];
-                    collectView.backgroundColor=[UIColor redColor];
-                    collectView.backgroundColor=[UIColor whiteColor];
-                    [myScrollView addSubview:collectView];
                 }
                     break;
                 default:
@@ -160,36 +177,33 @@
         }
 
     }
-    layoutView.frame=FRAME(0, 0, WIDTH, 51*4+collectView.frame.size.height);
+    layoutView.frame=FRAME(0, 0, WIDTH, 51*4+collectView.frame.size.height+10);
     myScrollView.contentSize=CGSizeMake(WIDTH,layoutView.frame.size.height);
     
 }
 -(void)purViewLayout
 {
-    for (int i=0; i<cateVC.collectData.count; i++) {
-        NSDictionary *dic=cateVC.collectData[i];
-        UIButton *button=[[UIButton alloc]initWithFrame:FRAME(0, 51*i, WIDTH, 50)];
+    for (int i=0; i<collectDataArray.count; i++) {
+        GoodsModel *goods = [collectDataArray objectAtIndex:i];
+        UIButton *button=[[UIButton alloc]initWithFrame:FRAME(0,30*i, WIDTH, 30)];
         button.tag=i;
         button.backgroundColor=[UIColor whiteColor];
         [collectView addSubview:button];
-        UIView *lineView=[[UIView alloc]initWithFrame:FRAME(0, 50+51*i, WIDTH, 1)];
-        lineView.backgroundColor=[UIColor colorWithRed:220/255.0f green:220/255.0f blue:220/255.0f alpha:1];
-        [collectView addSubview:lineView];
         UILabel *label=[[UILabel alloc]init];
-        label.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"name"]];
+        label.text=[NSString stringWithFormat:@"%@",goods.name];
         label.font=[UIFont fontWithName:@"Heiti SC" size:15];
         [label setNumberOfLines:1];
         [label sizeToFit];
-        label.frame=FRAME(20, 15, WIDTH-100, 20);
+        label.frame=FRAME(20, 5, WIDTH-100, 20);
         [button addSubview:label];
-        UILabel *numLabel=[[UILabel alloc]initWithFrame:FRAME(WIDTH-80, 15, 60, 20)];
+        UILabel *numLabel=[[UILabel alloc]initWithFrame:FRAME(WIDTH-80, 5, 60, 20)];
         numLabel.textAlignment=NSTextAlignmentCenter;
-        numLabel.text=[NSString stringWithFormat:@"数量:%@",[dic objectForKey:@"number"]];
+        numLabel.text=[NSString stringWithFormat:@"数量:%d",goods.orderCount];
         numLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
         [button addSubview:numLabel];
     }
-    collectView.frame=FRAME(0, 51*3, WIDTH, 51*cateVC.collectData.count);
-    layoutView.frame=FRAME(0, 0, WIDTH, 51*4+collectView.frame.size.height);
+    collectView.frame=FRAME(0, 51*1, WIDTH, 30*collectDataArray.count);
+    layoutView.frame=FRAME(0, 0, WIDTH, 51*4+collectView.frame.size.height+10);
     purposeBut.frame=FRAME(0, layoutView.frame.size.height-51, WIDTH, 50);
     lineLabel.frame=FRAME(0, layoutView.frame.size.height-1, WIDTH, 1);
     myScrollView.contentSize=CGSizeMake(WIDTH,layoutView.frame.size.height);
@@ -197,9 +211,7 @@
 -(void)collectAction:(UIButton *)button
 {
     if (button.tag==2) {
-        cateVC=[[CollectCategoryViewController alloc]init];
-        cateVC.collectArray=collectDataArray;
-        [self.navigationController pushViewController:cateVC animated:YES];
+        
     }else{
         viewController=[[ConTentViewController alloc]init];
         viewController.textString=purposeString;
@@ -208,14 +220,26 @@
 }
 -(void)buttonAction:(UIButton *)button
 {
-    if (cateVC.collectData.count>0) {
+    if (collectDataArray.count>0) {
         if ((nameString==nil&&mobleString==nil)||(nameString==NULL&&mobleString==NULL)||([nameString isEqualToString:@""]&&[mobleString isEqualToString:@""])) {
             UIAlertView *tsView=[[UIAlertView alloc]initWithTitle:@"提醒" message:@"姓名和手机号不可同时为空！" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
             [tsView show];
         }else{
+            NSMutableArray *pusArray=[[NSMutableArray alloc]init];
+            for (int i=0; i<collectDataArray.count; i++) {
+                GoodsModel *goods = [collectDataArray objectAtIndex:i];
+                NSString *orderCount=[NSString stringWithFormat:@"%d",goods.orderCount];
+                NSDictionary *dict=@{@"asset_id":goods.asset_id,@"total":orderCount};
+                if ([pusArray containsObject:dict]) {
+                    [pusArray removeObject:dict];
+                    [pusArray addObject:dict];
+                }else{
+                    [pusArray addObject:dict];
+                }
+            }
             ISLoginManager *_manager = [ISLoginManager shareManager];
             NSError *error;
-            NSData *jsonData = [NSJSONSerialization dataWithJSONObject:cateVC.dataArray options:NSJSONWritingPrettyPrinted error:&error];
+            NSData *jsonData = [NSJSONSerialization dataWithJSONObject:pusArray options:NSJSONWritingPrettyPrinted error:&error];
             NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
             AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication] delegate];
             NSString *company_ID=[NSString stringWithFormat:@"%@",[delegate.globalDic objectForKey:@"company_id"]];
@@ -234,6 +258,13 @@
 -(void)waterOrderSuccess:(id)source
 {
     NSLog(@"%@",source);
+    for (UIViewController *controller in self.navigationController.viewControllers) {
+        if ([controller isKindOfClass:[AssetsAdministrationViewController class]])
+        {
+            [self.navigationController popToViewController:controller animated:YES];
+        }
+    }
+    
     [self.navigationController popViewControllerAnimated:YES];
 }
 -(void)waterOrderFail:(id)source
@@ -243,14 +274,14 @@
 -(void)textFieldDidEndEditing:(UITextField *)textField
 {
     switch (textField.tag) {
-        case 0:
+        case 1:
             if (nameField.text==nil) {
                 nameString=@"";
             }else{
                 nameString=nameField.text;
             }
             break;
-        case 1:
+        case 2:
             if (mobleField.text==nil) {
                 mobleString=@"";
             }else{

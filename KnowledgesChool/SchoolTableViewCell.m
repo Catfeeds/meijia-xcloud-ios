@@ -30,15 +30,15 @@
 
 -(void)initLayuot{
     
-    _text = [[UILabel alloc] initWithFrame:CGRectMake(20, 10, WIDTH-40 , 40)];
+    _text = [[UILabel alloc] initWithFrame:CGRectMake(15, 20, WIDTH-130 , 40)];
     
     [self addSubview:_text];
     
-    _myImageView = [[UIImageView alloc] initWithFrame:CGRectMake(20, 20, 80, 57)];
+    _myImageView = [[UIImageView alloc] initWithFrame:CGRectMake(20, 20, 95, 70)];
     
     [self addSubview:_myImageView];
     
-    _nameTime = [[UILabel alloc] initWithFrame:CGRectMake(20 , 20, WIDTH-40, 40)];
+    _nameTime = [[UILabel alloc] initWithFrame:CGRectMake(15 , 75, WIDTH-130, 10)];
     
     [self addSubview:_nameTime];
     
@@ -71,15 +71,15 @@
         
         NSString *imageUrl=[NSString stringWithFormat:@"%@",[text objectForKey:@"thumbnail"]];
         [_myImageView setImageWithURL:[NSURL URLWithString:imageUrl]placeholderImage:nil];
-        _myImageView.frame=FRAME(20, 20, 80, 57);
-        self.text.frame = CGRectMake(110, 20, WIDTH-130, labelSize.height);
+        _myImageView.frame=FRAME(WIDTH-110, 20, 95, 70);
+        self.text.frame = CGRectMake(15, 20, WIDTH-130, labelSize.height);
         _nameTime.font=[UIFont systemFontOfSize:12];
         _nameTime.textColor=[UIColor colorWithRed:200/255.0f green:200/255.0f blue:200/255.0f alpha:1];
-        self.nameTime.frame=FRAME(110, 30+_text.frame.size.height, WIDTH-130, 15);
+        self.nameTime.frame=FRAME(15, 30+_text.frame.size.height, WIDTH-130, 15);
 //        _nameTime.backgroundColor=[UIColor blackColor];
         //计算出自适应的高度
         
-        frame.size.height = labelSize.height+65;
+        frame.size.height = labelSize.height+40;
         
         
         
@@ -105,21 +105,21 @@
         
         NSString *imageUrl=[NSString stringWithFormat:@"%@",[text objectForKey:@"thumbnail"]];
         [_myImageView setImageWithURL:[NSURL URLWithString:imageUrl]placeholderImage:nil];
-        _myImageView.frame=FRAME(WIDTH-100, 20, 80, 57);
-        self.text.frame = CGRectMake(20, 20, WIDTH-130, labelSize.height);
+        _myImageView.frame=FRAME(WIDTH-110, 15, 95, 70);
+        self.text.frame = CGRectMake(15, 20, WIDTH-130, labelSize.height);
         NSArray *viewsArray=[[text objectForKey:@"custom_fields"]objectForKey:@"views"];
         self.nameTime.text=[NSString stringWithFormat:@"%@人已看过",viewsArray[0]];
         _nameTime.font=[UIFont systemFontOfSize:12];
-        self.nameTime.frame=FRAME(20, 30+_text.frame.size.height, WIDTH-130, 15);
+       
         _nameTime.textColor=[UIColor colorWithRed:200/255.0f green:200/255.0f blue:200/255.0f alpha:1];
 //        _nameTime.backgroundColor=[UIColor blackColor];
         //计算出自适应的高度
-        if ((labelSize.height+65)>120) {
-            frame.size.height = labelSize.height+65;
+        if ((labelSize.height+30)>100) {
+            frame.size.height = labelSize.height+40;
         }else{
-            frame.size.height = 120;
+            frame.size.height = 100;
         }
-        
+         self.nameTime.frame=FRAME(15, frame.size.height-30, WIDTH-130, 15);
         
         
         UIView *lineView=[[UIView alloc]initWithFrame:FRAME(20, frame.size.height-1, WIDTH-40, 0.5)];

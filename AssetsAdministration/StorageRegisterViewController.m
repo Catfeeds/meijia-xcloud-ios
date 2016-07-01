@@ -106,7 +106,7 @@
         ISLoginManager *_manager = [ISLoginManager shareManager];
         AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication] delegate];
         NSString *company_ID=[NSString stringWithFormat:@"%@",[delegate.globalDic objectForKey:@"company_id"]];
-        NSDictionary *_dict = @{@"user_id":_manager.telephone,@"company_id":company_ID,@"asset_type_id":categroyStr,@"name":nameStr,@"total":numberStr,@"price":priceStr,@"barcode":barCodeString,@"unit":standerdStr,@"place":numberingStr,@"seq":positionStr};
+        NSDictionary *_dict = @{@"user_id":_manager.telephone,@"company_id":company_ID,@"asset_type_id":categroyStr,@"name":nameStr,@"total":numberStr,@"price":priceStr,@"barcode":barCodeString,@"unit":standerdStr,@"place":positionStr,@"seq":numberingStr};
         DownloadManager *_download = [[DownloadManager alloc]init];
         [_download requestWithUrl:[NSString stringWithFormat:@"%@",COMPANY_STORAGE_REGISTER] dict:_dict view:self.view delegate:self finishedSEL:@selector(waterOrderSuccess:) isPost:YES failedSEL:@selector(waterOrderFail:)];
     }
@@ -144,6 +144,11 @@
                 categoryLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
                 categoryLabel.textAlignment=NSTextAlignmentRight;
                 [button addSubview:categoryLabel];
+                
+                UIImageView *timeImg=[[UIImageView alloc]initWithFrame:FRAME(button.frame.size.width-25, (50-15)/2, 15, 15)];
+                timeImg.image=[UIImage imageNamed:@"JH_JT_TB_@2x"];
+                [button addSubview:timeImg];
+
             }
                 break;
             case 1:

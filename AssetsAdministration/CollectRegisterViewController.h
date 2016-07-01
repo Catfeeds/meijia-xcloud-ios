@@ -9,5 +9,5 @@
 #import "FatherViewController.h"
 
 @interface CollectRegisterViewController : FatherViewController<UIScrollViewDelegate,UITextFieldDelegate>
-
+@property(nonatomic ,strong)NSArray *dataArray;
 @end

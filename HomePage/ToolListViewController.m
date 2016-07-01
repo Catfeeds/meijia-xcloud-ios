@@ -88,13 +88,13 @@
 {
     NSDictionary *dic=dataArray[indexPath.row];
     [myTableView deselectRowAtIndexPath:indexPath animated:NO];
-    if (indexPath.row==0) {
-        
+//    if (indexPath.row==0) {
+    
         WebPageViewController *webPageVC=[[WebPageViewController alloc]init];
         webPageVC.barIDS=100;
         webPageVC.webURL=[NSString stringWithFormat:@"%@",[dic objectForKey:@"setting_json"]];
         [self.navigationController pushViewController:webPageVC animated:YES];
-    }
+//    }
  
 }
 

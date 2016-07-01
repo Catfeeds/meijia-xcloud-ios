@@ -11,12 +11,15 @@
 #import "StorageRecordViewController.h"
 #import "CollectRegisterViewController.h"
 #import "StorageRegisterViewController.h"
+#import "CollectCategoryViewController.h"
+#import "ZXShopCartViewController.h"
 @interface AssetsAdministrationViewController ()
 {
     UIView *mainView;
     UIView *lineView;
     UIView *tabBarButView;
     UIViewController *currentViewController;
+    CollectCategoryViewController *cateVC;
 }
 @end
 CollectRecordsViewController *myLaunchViewController;
@@ -171,8 +174,14 @@ StorageRecordViewController *myApprovalViewController;
 -(void)butAction:(UIButton *)button
 {
     if (button.tag==1001) {
-        CollectRegisterViewController *collectVC=[[CollectRegisterViewController alloc]init];
-        [self.navigationController  pushViewController:collectVC animated:YES];
+        //领用登记点击方法
+        ZXShopCartViewController *shopCartVC = [[ZXShopCartViewController alloc] init];
+        [self.navigationController pushViewController:shopCartVC animated:YES];
+//        cateVC=[[CollectCategoryViewController alloc]init];
+////        cateVC.collectArray=collectDataArray;
+//        [self.navigationController pushViewController:cateVC animated:YES];
+//        CollectRegisterViewController *collectVC=[[CollectRegisterViewController alloc]init];
+//        [self.navigationController  pushViewController:collectVC animated:YES];
         
     }else{
         StorageRegisterViewController *storageVC=[[StorageRegisterViewController alloc]init];

@@ -24,7 +24,7 @@
 #import "ToolListViewController.h"
 #import "FountWebViewController.h"
 #import "Home_SearchVoiceViewController.h"
-static CGFloat const imageBGHeight = 373; // 背景图片的高度
+static CGFloat const imageBGHeight = 395; // 背景图片的高度
 @interface HomePageTableViewController ()
 {
     CycleScrollView *adView;
@@ -127,26 +127,28 @@ static CGFloat const imageBGHeight = 373; // 背景图片的高度
     selectedPage=1;
     sourceArray=[[NSMutableArray alloc]init];
     expData=[[NSMutableData alloc]init];
-    headeView=[[UIView alloc]initWithFrame:FRAME(0, 0, WIDTH, 373)];
+    headeView=[[UIView alloc]initWithFrame:FRAME(0, 0, WIDTH, 395)];
     headeView.backgroundColor=[UIColor whiteColor];
-//    NSArray *butImageArray=@[@"index-tonghangreliao.jpg",@"index-jingpinkecheng.jpg",@"index-zhishixueyuan.jpg",@"index-qiandaoyouli.jpg",@"index-shangjinlieren.jpg",@"index-jianlijiaohuan.jpg",@"index-fuwudating.jpg",@"index-fulishangcheng.jpg"];
-    NSArray *butImageArray=@[@"index-fulishangcheng.jpg",@"index-tonghangreliao.jpg",@"index-zhishixueyuan.jpg",@"index-fuwudating.jpg"];
+    NSArray *butImageArray=@[@"index-wenda",@"index-kecheng",@"index-gongju",@"index-fuwu"];
 //    NSArray *butArray=@[@"知识学院",@"服务大厅",@"微社区",@"签到有礼"];
 //    NSArray *butArray=@[@"同行热聊",@"精品课程",@"知识学院",@"签到有礼",@"内推悬赏",@"简历交换",@"找服务商",@"福利商城"];
-    NSArray *butArray=@[@"内推悬赏",@"同行热聊",@"常用工具",@"找服务商"/*@"知识学院",@"签到有礼",@"简历交换",@"找服务商",@"福利商城"*/];
+//    NSArray *butArray=@[@"内推悬赏",@"同行热聊",@"常用工具",@"找服务商"/*@"知识学院",@"签到有礼",@"简历交换",@"找服务商",@"福利商城"*/];
+    NSArray *butArray=@[@"互助问答",@"视听课程",@"常用工具",@"找服务商"/*@"知识学院",@"签到有礼",@"简历交换",@"找服务商",@"福利商城"*/];
     int x=0;
     for (int i=0; i<butArray.count; i++) {
         if (i<4) {
-            UIButton *button=[[UIButton alloc]initWithFrame:FRAME((WIDTH-160)/4/2+(40+(WIDTH-160)/4)*i, 213, 40, 40)];
+            UIButton *button=[[UIButton alloc]initWithFrame:FRAME((WIDTH-200)/5+(50+(WIDTH-200)/5)*i, 200+35/2, 50, 50)];
             [button setImage:[UIImage imageNamed:butImageArray[i]] forState:UIControlStateNormal];
             button.tag=i;
             [button addTarget:self action:@selector(ButAction:) forControlEvents:UIControlEventTouchUpInside];
-            button.layer.cornerRadius=20;
+//            button.layer.cornerRadius=20;
             button.clipsToBounds=YES;
             [headeView addSubview:button];
             
-            UILabel *butNameLabel=[[UILabel alloc]initWithFrame:FRAME((WIDTH-240)/4/2+(60+(WIDTH-240)/4)*i, button.frame.origin.y+button.frame.size.height+10, 60, 15)];
+            UILabel *butNameLabel=[[UILabel alloc]initWithFrame:FRAME(button.frame.origin.x-5, button.frame.origin.y+button.frame.size.height+10, 60, 15)];
             butNameLabel.text=[NSString stringWithFormat:@"%@",butArray[i]];
+//            butNameLabel.backgroundColor=[UIColor redColor];
+            butNameLabel.textColor=[UIColor colorWithRed:102/255.0f green:102/255.0f blue:102/255.0f alpha:1];
             butNameLabel.textAlignment=NSTextAlignmentCenter;
             butNameLabel.font=[UIFont fontWithName:@"Heiti SC" size:13];
             [headeView addSubview:butNameLabel];
@@ -168,55 +170,57 @@ static CGFloat const imageBGHeight = 373; // 背景图片的高度
         }
         
     }
-    UIView *lineViews=[[UIView alloc]initWithFrame:FRAME(0, 288, WIDTH, 0.5)];
-    lineViews.backgroundColor=[UIColor colorWithRed:220/255.0f green:220/255.0f blue:220/255.0f alpha:1];
+    UIView *lineViews=[[UIView alloc]initWithFrame:FRAME(0, 305, WIDTH, 10)];
+    lineViews.backgroundColor=[UIColor colorWithRed:240/255.0f green:240/255.0f blue:240/255.0f alpha:1];
     [headeView addSubview:lineViews];
     
     UIView *view=[[UIView alloc]initWithFrame:FRAME(0, headeView.frame.size.height-10, WIDTH, 10)];
     view.backgroundColor=[UIColor colorWithRed:240/255.0f green:240/255.0f blue:240/255.0f alpha:1];
     [headeView addSubview:view];
     
-    UIButton *headLiftBut=[[UIButton alloc]initWithFrame:FRAME(0, 289, WIDTH/2-0.5, 74)];
+    UIButton *headLiftBut=[[UIButton alloc]initWithFrame:FRAME(0, 315, WIDTH/2-0.5, 79)];
     [headLiftBut addTarget:self action:@selector(ButAction:) forControlEvents:UIControlEventTouchUpInside];
     headLiftBut.tag=4;
     [headeView addSubview:headLiftBut];
     
-    UILabel *liftNameLabel=[[UILabel alloc]initWithFrame:FRAME((WIDTH-240)/4/2, 15, WIDTH/2-0.5-64, 20)];
-    liftNameLabel.text=@"问答互助";
-    liftNameLabel.textColor=[UIColor colorWithRed:70/255.0f green:144/255.0f blue:255/255.0f alpha:1];
-    liftNameLabel.font=[UIFont fontWithName:@"Heiti SC" size:13];
+    UILabel *liftNameLabel=[[UILabel alloc]initWithFrame:FRAME((WIDTH-240)/4/2, 34/2, WIDTH/2-0.5-64, 20)];
+    liftNameLabel.text=@"同行交流";
+    liftNameLabel.textColor=[UIColor colorWithRed:255/255.0f green:93/255.0f blue:88/255.0f alpha:1];
+    liftNameLabel.font=[UIFont fontWithName:@"Heiti SC" size:16.5];
     [headLiftBut addSubview:liftNameLabel];
-    UILabel *liftTextLabel=[[UILabel alloc]initWithFrame:FRAME((WIDTH-240)/4/2, 35, WIDTH/2-0.5-64, 14)];
-    liftTextLabel.text=@"最专业的解答都在这";
-    liftTextLabel.font=[UIFont fontWithName:@"Heiti SC" size:10];
+    UILabel *liftTextLabel=[[UILabel alloc]initWithFrame:FRAME((WIDTH-240)/4/2, 52/2+20, WIDTH/2-0.5-64, 14)];
+    liftTextLabel.text=@"分享经验交流心得";
+    liftTextLabel.textColor=[UIColor colorWithRed:153/255.0f green:153/255.0f blue:153/255.0f alpha:1];
+    liftTextLabel.font=[UIFont fontWithName:@"Heiti SC" size:12];
     [headLiftBut addSubview:liftTextLabel];
-    UIImageView *liftImage=[[UIImageView alloc]initWithFrame:FRAME(WIDTH/2-0.5-((WIDTH-240)/4/2+30), 15, 34, 34)];
-    liftImage.image=[UIImage imageNamed:@"index_wenda"];
+    UIImageView *liftImage=[[UIImageView alloc]initWithFrame:FRAME(WIDTH/2-0.5-((WIDTH-240)/4/2+30), (79-34)/2, 34, 34)];
+    liftImage.image=[UIImage imageNamed:@"index-tonghangjiaoliu"];
     [headLiftBut addSubview:liftImage];
     
-    UIView *verticalView=[[UIView alloc]initWithFrame:FRAME(WIDTH/2-0.5, 294, 0.5, 64)];
+    UIView *verticalView=[[UIView alloc]initWithFrame:FRAME(WIDTH/2-0.5, 325, 0.5, 49)];
     verticalView.backgroundColor=[UIColor colorWithRed:220/255.0f green:220/255.0f blue:220/255.0f alpha:1];
     [headeView addSubview:verticalView];
     
-    UIButton *headrightBut=[[UIButton alloc]initWithFrame:FRAME(WIDTH/2+0.5, 289, WIDTH/2-0.5, 74)];
+    UIButton *headrightBut=[[UIButton alloc]initWithFrame:FRAME(WIDTH/2+0.5, 315, WIDTH/2-0.5, 79)];
     [headrightBut addTarget:self action:@selector(ButAction:) forControlEvents:UIControlEventTouchUpInside];
     headrightBut.tag=5;
     [headeView addSubview:headrightBut];
     
     
     
-    UILabel *rightNameLabel=[[UILabel alloc]initWithFrame:FRAME((WIDTH-240)/4/2, 15, WIDTH/2-0.5-64, 20)];
+    UILabel *rightNameLabel=[[UILabel alloc]initWithFrame:FRAME((WIDTH-240)/4/2, 34/2, WIDTH/2-0.5-64, 20)];
     rightNameLabel.text=@"签到惊喜";
-    rightNameLabel.textColor=[UIColor colorWithRed:243/255.0f green:128/255.0f blue:16/255.0f alpha:1];
-    rightNameLabel.font=[UIFont fontWithName:@"Heiti SC" size:13];
+    rightNameLabel.textColor=[UIColor colorWithRed:180/255.0f green:131/255.0f blue:255/255.0f alpha:1];
+    rightNameLabel.font=[UIFont fontWithName:@"Heiti SC" size:16.5];
     [headrightBut addSubview:rightNameLabel];
-    UILabel *rightTextLabel=[[UILabel alloc]initWithFrame:FRAME((WIDTH-240)/4/2, 35, WIDTH/2-0.5-64, 14)];
+    UILabel *rightTextLabel=[[UILabel alloc]initWithFrame:FRAME((WIDTH-240)/4/2, 52/2+20, WIDTH/2-0.5-64, 14)];
     rightTextLabel.text=@"送完金币还送经验值";
-    rightTextLabel.font=[UIFont fontWithName:@"Heiti SC" size:10];
+    rightTextLabel.textColor=[UIColor colorWithRed:153/255.0f green:153/255.0f blue:153/255.0f alpha:1];
+    rightTextLabel.font=[UIFont fontWithName:@"Heiti SC" size:12];
     [headrightBut addSubview:rightTextLabel];
     
-    UIImageView *rightImage=[[UIImageView alloc]initWithFrame:FRAME(WIDTH/2-0.5-((WIDTH-240)/4/2+30), 15, 34, 34)];
-    rightImage.image=[UIImage imageNamed:@"index_qiandao"];
+    UIImageView *rightImage=[[UIImageView alloc]initWithFrame:FRAME(WIDTH/2-0.5-((WIDTH-240)/4/2+30), (79-34)/2, 34, 34)];
+    rightImage.image=[UIImage imageNamed:@"index-qiandaoyouli"];
     [headrightBut addSubview:rightImage];
     
     myTableView=[[UITableView alloc]initWithFrame:FRAME(0, 0, WIDTH, HEIGHT-49)];
@@ -280,7 +284,7 @@ static CGFloat const imageBGHeight = 373; // 背景图片的高度
     
     
     
-    csView=[[UIView alloc]initWithFrame:FRAME(0, 373, WIDTH, 38)];
+    csView=[[UIView alloc]initWithFrame:FRAME(0, imageBGHeight, WIDTH, 38)];
 //    csView.backgroundColor=[UIColor blackColor];
     [self.view addSubview:csView];
     [rootView removeFromSuperview];
@@ -338,7 +342,7 @@ static CGFloat const imageBGHeight = 373; // 背景图片的高度
         if (i==0) {
             [button setTitleColor:[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1] forState:UIControlStateNormal];
         }else{
-            [button setTitleColor:[UIColor colorWithRed:100/255.0f green:100/255.0f blue:100/255.0f alpha:1]forState:UIControlStateNormal];
+            [button setTitleColor:[UIColor colorWithRed:153/255.0f green:153/255.0f blue:153/255.0f alpha:1]forState:UIControlStateNormal];
         }
         
         [button setTag:1000+i];
@@ -554,47 +558,6 @@ static CGFloat const imageBGHeight = 373; // 背景图片的高度
 //    headeImageView.backgroundColor=[UIColor whiteColor];
      headeImageView.image=[UIImage imageNamed:@"banner"];
     [view addSubview:headeImageView];
-//    UIImageView *imageView=[[UIImageView alloc]initWithFrame:FRAME((headeImageView.frame.size.width-100)/2, (headeImageView.frame.size.height-100)/2+20, 100, 100)];
-//    imageView.image=[UIImage imageNamed:@"banner"];
-//    [headeImageView addSubview:imageView];
-    
-//    UILabel *titleLabel=[[UILabel alloc]init];
-//    titleLabel.text=[NSString stringWithFormat:@"%@!",[signDic objectForKey:@"msg"]];
-//    titleLabel.textColor=[UIColor colorWithRed:102/255.0f green:102/255.0f blue:102/255.0f alpha:1];
-//    titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:28];
-//    [titleLabel setNumberOfLines:1];
-//    [titleLabel sizeToFit];
-//    titleLabel.frame=FRAME((WIDTH*0.72-titleLabel.frame.size.width)/2, WIDTH*0.72*0.70+10, titleLabel.frame.size.width, 30);
-//    [view addSubview:titleLabel];
-//    
-//    UILabel *textLabel=[[UILabel alloc]init];
-//    textLabel.text=[NSString stringWithFormat:@"%@",[signDic objectForKey:@"data"]];
-//    UIFont *font=[UIFont fontWithName:@"Georgia-Bold" size:30];
-//    textLabel.textColor=[UIColor colorWithRed:247/255.0f green:202/255.0f blue:44/255.0f alpha:1];
-//    textLabel.font=font;
-//    [textLabel setNumberOfLines:1];
-//    [textLabel sizeToFit];
-//    [view addSubview:textLabel];
-//    
-//    UILabel *liftLabel=[[UILabel alloc]init];
-//    liftLabel.text=@"恭喜获得";
-//    liftLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
-//    [liftLabel setNumberOfLines:1];
-//    [liftLabel sizeToFit];
-//    liftLabel.textColor=[UIColor colorWithRed:102/255.0f green:102/255.0f blue:102/255.0f alpha:1];
-//    [view addSubview:liftLabel];
-//    
-//    UILabel *rightLabel=[[UILabel alloc]init];
-//    rightLabel.text=@"金币";
-//    rightLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
-//    [rightLabel setNumberOfLines:1];
-//    [rightLabel sizeToFit];
-//    rightLabel.textColor=[UIColor colorWithRed:102/255.0f green:102/255.0f blue:102/255.0f alpha:1];
-//    [view addSubview:rightLabel];
-//    
-//    liftLabel.frame=FRAME((WIDTH*0.72-liftLabel.frame.size.width-rightLabel.frame.size.width-textLabel.frame.size.width-10)/2, WIDTH*0.72*0.70+75, liftLabel.frame.size.width, 15);
-//    textLabel.frame=FRAME(liftLabel.frame.size.width+liftLabel.frame.origin.x+5, WIDTH*0.72*0.70+60, textLabel.frame.size.width, 30);
-//    rightLabel.frame=FRAME(textLabel.frame.size.width+textLabel.frame.origin.x+5, WIDTH*0.72*0.70+75, rightLabel.frame.size.width, 15);
     
     UIImageView *goldImage=[[UIImageView alloc]initWithFrame:FRAME((WIDTH*0.72-100)/4, WIDTH*0.72*0.70+23, 50, 50)];
     goldImage.image=[UIImage imageNamed:@"金币"];
@@ -687,73 +650,46 @@ static CGFloat const imageBGHeight = 373; // 背景图片的高度
     switch (button.tag) {
         case 0:
         {
+            Workplace_askViewController *askVC=[[Workplace_askViewController alloc]init];
+            [self.navigationController pushViewController:askVC animated:YES];
+//            ISLoginManager *_manager = [ISLoginManager shareManager];
 //            WebPageViewController *webPageVC=[[WebPageViewController alloc]init];
 //            webPageVC.barIDS=100;
-//            webPageVC.webURL=[NSString stringWithFormat:@"http://51xingzheng.cn"];
+//            
+//            if (fatherVc.loginYesOrNo) {
+//                webPageVC.webURL=[NSString stringWithFormat:@"http://123.57.173.36/simi-h5/show/job-reward-list.html?user_id=%@",_manager.telephone];
+//            }else{
+//                webPageVC.webURL=[NSString stringWithFormat:@"http://123.57.173.36/simi-h5/show/job-reward-list.html?user_id=0"];
+//            }
 //            [self.navigationController pushViewController:webPageVC animated:YES];
-           
-            ISLoginManager *_manager = [ISLoginManager shareManager];
-            WebPageViewController *webPageVC=[[WebPageViewController alloc]init];
-            webPageVC.barIDS=100;
-            
-            if (fatherVc.loginYesOrNo) {
-                webPageVC.webURL=[NSString stringWithFormat:@"http://123.57.173.36/simi-h5/show/job-reward-list.html?user_id=%@",_manager.telephone];
-            }else{
-                webPageVC.webURL=[NSString stringWithFormat:@"http://123.57.173.36/simi-h5/show/job-reward-list.html?user_id=0"];
-            }
-            [self.navigationController pushViewController:webPageVC animated:YES];
         }
             break;
         case 1:
         {
-            
-            UINavigationController *communityViewController = [UMCommunity getFeedsModalViewController];
-            [self presentViewController:communityViewController animated:YES completion:nil];
-//            WebPageViewController *webPageVC=[[WebPageViewController alloc]init];
-//            webPageVC.barIDS=100;
-//            webPageVC.webURL=[NSString stringWithFormat:@"http://edu.51xingzheng.cn"];
-//            [self.navigationController pushViewController:webPageVC animated:YES];
-            
+            SchoolViewController *schViewVC=[[SchoolViewController alloc]init];
+            [self.navigationController pushViewController:schViewVC animated:YES];
         }
             break;
         case 2:
         {
-            
             ToolListViewController *schoolVC=[[ToolListViewController alloc]init];
             [self.navigationController pushViewController:schoolVC animated:YES];
-//            ISLoginManager *_manager = [ISLoginManager shareManager];
-//            NSString *url=[NSString stringWithFormat:@"http://123.57.173.36/simi/app/user/score_shop.json?user_id=%@",_manager.telephone];
-//            CreditWebViewController *web=[[CreditWebViewController alloc]initWithUrl:url];//实际中需要改为带签名的地址
-//            //如果已经有UINavigationContoller了，就 创建出一个 CreditWebViewController 然后 push 进去
-//            [self.navigationController pushViewController:web animated:YES];
-            
         }
             break;
         case 3:
         {
-            
             WholeViewController *wholeViewController=[[WholeViewController alloc]init];
             wholeViewController.channel_id=[NSString stringWithFormat:@"99"];
             wholeViewController.whoVCID=101;
             [self.navigationController pushViewController:wholeViewController animated:YES];
-            
         }
             break;
         case 4:
         {
-//            if (fatherVc.loginYesOrNo) {
-                Workplace_askViewController *askVC=[[Workplace_askViewController alloc]init];
-                [self.navigationController pushViewController:askVC animated:YES];
-//            }else{
-//                dispatch_async(dispatch_get_main_queue(), ^{
-//                    MyLogInViewController *loginViewController = [[MyLogInViewController alloc] init];
-//                    loginViewController.vCYMID=100;
-//                    UMComNavigationController *navigationController = [[UMComNavigationController alloc] initWithRootViewController:loginViewController];
-//                    [self presentViewController:navigationController animated:YES completion:^{
-//                    }];
-//                });
-//            }
-           
+            
+            UINavigationController *communityViewController = [UMCommunity getFeedsModalViewController];
+            [self presentViewController:communityViewController animated:YES completion:nil];
+
         }
             break;
         case 5:
@@ -769,16 +705,6 @@ static CGFloat const imageBGHeight = 373; // 背景图片的高度
                     }];
                 });
             }
-
-//            ISLoginManager *_manager = [ISLoginManager shareManager];
-//            WebPageViewController *webPageVC=[[WebPageViewController alloc]init];
-//            webPageVC.barIDS=100;
-//            if (fatherVc.loginYesOrNo) {
-//                webPageVC.webURL=[NSString stringWithFormat:@"http://123.57.173.36/simi-h5/show/cv-switch-list.html?user_id=%@",_manager.telephone];
-//            }else{
-//                webPageVC.webURL=[NSString stringWithFormat:@"http://123.57.173.36/simi-h5/show/cv-switch-list.html?user_id=0"];
-//            }
-//            [self.navigationController pushViewController:webPageVC animated:YES];
             
         }
             break;
@@ -1148,7 +1074,7 @@ static CGFloat const imageBGHeight = 373; // 背景图片的高度
     static int previousSelectButtonIndex=1000;
     currentSelectButtonIndex=(int)sender.tag;
     UIButton *previousBtn=(UIButton *)[self.view viewWithTag:previousSelectButtonIndex];
-    [previousBtn setTitleColor:[UIColor colorWithRed:120/255.0f green:120/255.0f blue:120/255.0f alpha:1] forState:UIControlStateNormal];
+    [previousBtn setTitleColor:[UIColor colorWithRed:153/255.0f green:153/255.0f blue:153/255.0f alpha:1] forState:UIControlStateNormal];
     previousBtn.titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
     UIButton *currentBtn = (UIButton *)[self.view viewWithTag:currentSelectButtonIndex];;
     [currentBtn setTitleColor:[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1] forState:UIControlStateNormal];

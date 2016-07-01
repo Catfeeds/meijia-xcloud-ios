@@ -38,7 +38,7 @@
     [super viewDidLoad];
     page=1;
     W=[[NSMutableArray alloc]init];
-    arraY=@[@"精选",@"管理",@"职场",@"创业",@"动态",@"认证"];
+    arraY=@[@"精选",@"人力",@"行政",@"企管",@"考证",@"技能"];
     sourceArray=[[NSMutableArray alloc]init];
     UIView *reView=[[UIView alloc]initWithFrame:FRAME(0, 0, WIDTH, 64)];
     reView.backgroundColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
@@ -325,37 +325,43 @@
         case 0:
         {
 //            page=1;
-            urlStr=@"http://51xingzheng.cn/?json=get_tag_posts&count=10&order=DESC&slug=%E9%A6%96%E9%A1%B5%E7%B2%BE%E9%80%89&include=id,title,modified,url,thumbnail,custom_fields";
+            NSString *string=[NSString stringWithFormat:@"http://51xingzheng.cn/?json=get_tag_posts&count=10&order=DESC&slug=精选课程&include=id,title,modified,url,thumbnail,custom_fields"];
+            urlStr=[string stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
         }
             break;
         case 1:
         {
 //            page=1;
-            urlStr=@"http://51xingzheng.cn/?json=get_category_posts&count=10&order=DESC&id=3&include=id,title,modified,url,thumbnail,custom_fields";
+            NSString *string=@"http://51xingzheng.cn/?json=get_tag_posts&count=10&order=DESC&slug=人力课程&include=id,title,modified,url,thumbnail,custom_fields";
+            urlStr=[string stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
         }
             break;
         case 2:
         {
 //            page=1;
-            urlStr=@"http://51xingzheng.cn/?json=get_category_posts&count=10&order=DESC&id=50&include=id,title,modified,url,thumbnail,custom_fields";
+            NSString *string=@"http://51xingzheng.cn/?json=get_tag_posts&count=10&order=DESC&slug=行政课程&include=id,title,modified,url,thumbnail,custom_fields";
+            urlStr=[string stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
         }
             break;
         case 3:
         {
 //            page=1;
-            urlStr=@"http://51xingzheng.cn/?json=get_category_posts&count=10&order=DESC&id=2&include=id,title,modified,url,thumbnail,custom_fields";
+            NSString *string=@"http://51xingzheng.cn/?json=get_tag_posts&count=10&order=DESC&slug=企管课程&include=id,title,modified,url,thumbnail,custom_fields";
+            urlStr=[string stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
         }
             break;
         case 4:
         {
 //            page=1;
-            urlStr=@"http://51xingzheng.cn/?json=get_category_posts&count=10&order=DESC&id=39&include=id,title,modified,url,thumbnail,custom_fields";
+            NSString *string=@"http://51xingzheng.cn/?json=get_tag_posts&count=10&order=DESC&slug=考证课程&include=id,title,modified,url,thumbnail,custom_fields";
+            urlStr=[string stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
         }
             break;
         case 5:
         {
 //            page=1;
-            urlStr=@"http://51xingzheng.cn/?json=get_category_posts&count=10&order=DESC&id=5&include=id,title,modified,url,thumbnail,custom_fields";
+            NSString *string=@"http://51xingzheng.cn/?json=get_tag_posts&count=10&order=DESC&slug=技能课程&include=id,title,modified,url,thumbnail,custom_fields";
+            urlStr=[string stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
         }
             break;
         default:

@@ -25,6 +25,13 @@
     textViewNum=200-existTextNum;
     [self stringLayout];
 }
+-(void)KeyBoardLayout
+{
+    [_textView resignFirstResponder];
+}
+
+
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     textViewNum=200;
@@ -34,6 +41,7 @@
 }
 -(void)textViewLayout
 {
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(KeyBoardLayout) name:@"KEYBOARD" object:nil];
     view =[[UIView alloc]init];
     view.backgroundColor=[UIColor colorWithRed:231/255.0f green:231/255.0f blue:231/255.0f alpha:1];
     _textView=[[UITextView alloc]initWithFrame:FRAME(10, 32/2, WIDTH-20, 150)];
@@ -100,7 +108,11 @@
     [UIView commitAnimations];
     _textString=_textView.text;
     NSLog( @"%@",_textString);
-    [self.navigationController popViewControllerAnimated:YES];
+    if ([self.navigationController popViewControllerAnimated:YES]) {
+        
+    }else{
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }
 }
 - (void)backAction
 {
@@ -110,7 +122,11 @@
     [_textView resignFirstResponder];
     [UIView commitAnimations];
     _backBtn.enabled = NO;
-    [self.navigationController popViewControllerAnimated:YES];
+    if ([self.navigationController popViewControllerAnimated:YES]) {
+        
+    }else{
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }
     _backBtn.enabled = YES;
 }
 - (void)didReceiveMemoryWarning {

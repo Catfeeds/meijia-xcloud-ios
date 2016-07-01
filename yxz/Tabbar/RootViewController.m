@@ -630,7 +630,7 @@ MyselfViewController *thirdViewController;
 {
     NSLog(@"日程红点成功返回+++%@",sourData);
     NSArray *sourDataArray=[sourData objectForKey:@"data"];
-    if (sourDataArray.count>0) {
+    if (sourDataArray.count>1) {
         remind_spotView.hidden=NO;
     }else{
         remind_spotView.hidden=YES;

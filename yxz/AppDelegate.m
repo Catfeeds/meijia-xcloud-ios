@@ -319,7 +319,8 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     [_download requestWithUrl:APP_BASIC_DATA dict:_dict view:self.window delegate:self finishedSEL:@selector(Basic_dataSuccess:) isPost:NO failedSEL:@selector(Basic_dataFail:)];
     [self deleteFileAtPath:[self readyDatabase:@"simi.db"]];
     
-    
+    self.eventsByDate = [NSMutableDictionary new];
+    self.monthsViews = [NSMutableArray new];
     self.riliArray=[[NSMutableArray alloc]init];
 //    NSArray *path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 //    NSString *documentDirectory = [path objectAtIndex:0];
@@ -508,7 +509,7 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     NSLog(@"%@", [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding]);
 //    [MobClick startWithAppkey:YMAPPKEY reportPolicy:BATCH   channelId:@"appmarket-main"];
     UMConfigInstance.appKey = YMAPPKEY;
-    UMConfigInstance.token=YMAPPKEY;
+//    UMConfigInstance.token=YMAPPKEY;
     //UMConfigInstance.secret=nil;
     UMConfigInstance.channelId = @"appmarket-main";
     UMConfigInstance.bCrashReportEnabled=YES;
@@ -792,6 +793,7 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
 }
 -(void)noticeLayout:(NSNotification *)dataSource
 {
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"KEYBOARD" object:nil];
     NSDictionary *dic=dataSource.object;
     NSLog(@"%@",dic);
     pushDic=dic;
@@ -1017,10 +1019,18 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
 }
 -(void)imageLayout:(NSNotification *)sender
 {
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"KEYBOARD" object:nil];
     NSLog(@"可以传递过来么:%@",sender);
     [imageView removeFromSuperview];
     NSDictionary *dic=sender.object;
-    NSString *timeStr=[NSString stringWithFormat:@"%@",[dic objectForKey:@"re"]];
+    NSString *period_name=[NSString stringWithFormat:@"%@",[dic objectForKey:@"period_name"]];
+    int period_name_id;
+    if (period_name==nil||period_name==NULL||[period_name isEqualToString:@"(null)"]) {
+        period_name_id=10;
+    }else{
+        period_name_id=11;
+    }
+    NSString *timeStr=[NSString stringWithFormat:@"%@",[dic objectForKey:@"st"]];
     NSLog(@"remind_time%@",timeStr);
     long long time=[timeStr longLongValue];//因为时差问题要加8小时 == 28800 sec
     NSDate *detaildate=[NSDate dateWithTimeIntervalSince1970:time];
@@ -1032,8 +1042,16 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     
     NSString *currentDateStr = [dateFormatter stringFromDate: detaildate];
     NSArray *array = [currentDateStr componentsSeparatedByString:@" "];
-    NSString *timeString=array[1];
-    NSString *dataString=array[0];
+    NSString *timeString;
+    NSString *dataString;
+    if (period_name_id==10) {
+        timeString=array[1];
+        dataString=array[0];
+    }else{
+        timeString=[period_name substringFromIndex:period_name.length-5];
+        dataString=[period_name substringToIndex:period_name.length-5];;
+    }
+   
     imageView=[[UIView alloc]initWithFrame:FRAME(0, 0, WIDTH, HEIGHT)];
     imageView.backgroundColor=[UIColor whiteColor];
     imageView.userInteractionEnabled=YES;
@@ -1268,6 +1286,8 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
         NSString *strings=[NSString stringWithFormat:@"%@",[dic objectForKey:@"ac"]];
         if ([strings isEqualToString:@"s"]) {
             [self alarmClock:dic];
+        }else if ([string isEqualToString:@"d"]){
+            [self Delete_alarm_clock:dic];
         }
         
     }else if ([UIApplication sharedApplication].applicationState ==UIApplicationStateActive){
@@ -1795,7 +1815,7 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
             
             splashView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, self.window.bounds.size.width, self.window.bounds.size.height)];
             
-            [splashView setImage:[UIImage imageNamed:@"1242X2208启动页"]];
+            [splashView setImage:[UIImage imageNamed:@"1242X2208"]];
             
             [self.window addSubview:splashView];
             
@@ -2206,7 +2226,7 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
                 timeRemain = [application backgroundTimeRemaining];
                 NSLog(@"Time remaining: %f",timeRemain);
                 }
-            }while(bgTask!=UIBackgroundTaskInvalid&&timeRemain>0);// 如果改为timeRemain > 5*60,表示后台运行5分钟
+            }while(bgTask!=UIBackgroundTaskInvalid&&timeRemain>10*60);// 如果改为timeRemain > 5*60,表示后台运行5分钟
         // done!
         // 如果没到10分钟，也可以主动关闭后台任务，但这需要在主线程中执行，否则会出错
         dispatch_async(dispatch_get_main_queue(),^{
@@ -2320,6 +2340,7 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
 }
 -(void)viewShowcase:(NSNotification *)sender
 {
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"KEYBOARD" object:nil];
     NSDictionary *dic=sender.object;
     UIView *view=[[UIView alloc]initWithFrame:FRAME(0, 0, WIDTH, HEIGHT)];
     view.backgroundColor=[UIColor whiteColor];
@@ -2685,6 +2706,28 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
 -(void)alarmClock:(NSDictionary *)dict;
 {
     
+    //删除原来的闹钟
+    NSArray *narry=[[UIApplication sharedApplication] scheduledLocalNotifications];
+    NSUInteger acount=[narry count];
+    if (acount>0)
+    {// 遍历找到对应nfkey和notificationtag的通知
+        for (int i=0; i<acount; i++)
+        {
+            UILocalNotification *myUILocalNotification = [narry objectAtIndex:i];
+            NSDictionary *userInfo = [myUILocalNotification.userInfo objectForKey:@"dic"];
+            NSNumber *obj = [userInfo objectForKey:@"ci"];
+            int mytag=[obj intValue];
+            NSString *card_id=[NSString stringWithFormat:@"%@",[dict objectForKey:@"ci"]];
+            int notificationtag=[card_id intValue];
+            if (mytag==notificationtag)
+            {
+                //删除本地通知
+                [[UIApplication sharedApplication] cancelLocalNotification:myUILocalNotification];
+                break;
+            }
+        }
+    }//删除原来的闹钟
+    
     NSString *timaString=[NSString stringWithFormat:@"%@",[dict objectForKey:@"re"]];
 //    NSDateFormatter *theTwoformatte1 = [[NSDateFormatter alloc] init];
 //    [theTwoformatte1 setDateStyle:NSDateFormatterMediumStyle];
@@ -2706,7 +2749,7 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     NSDateFormatter *formatte = [[NSDateFormatter alloc] init];
     [formatte setDateStyle:NSDateFormatterMediumStyle];
     [formatte setTimeStyle:NSDateFormatterShortStyle];
-    [formatte setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    [formatte setDateFormat:@"yyyy-MM-dd HH:mm"];
     NSDate* date = [formatte dateFromString:locationString];
     int  _secondDate = [date timeIntervalSince1970];
     NSLog(@"%d",theTwo1-_secondDate);
@@ -2760,6 +2803,10 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
 }
 -(void)rightOff:(NSDictionary *)dic
 {
+    
+    
+    
+    
     UILocalNotification *notification=[[UILocalNotification alloc] init];
     if (notification!=nil) {
         

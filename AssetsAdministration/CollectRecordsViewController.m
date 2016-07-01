@@ -198,22 +198,7 @@
 }
 -(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 120;
-}
-- (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
     NSDictionary *dic=dataSourceArray[indexPath.row];
-    NSString *TableSampleIdentifier = [NSString stringWithFormat:@"cell%ld",(long)indexPath.row];
-    UITableViewCell *Cell = [tableView cellForRowAtIndexPath:indexPath];
-    if (Cell == nil) {
-        Cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:TableSampleIdentifier];
-    }
-    UILabel *nameLabel=[[UILabel alloc]initWithFrame:FRAME(20, 20, WIDTH-40, 20)];
-    nameLabel.text=[NSString stringWithFormat:@"领用人名称:%@",[dic objectForKey:@"name"]];
-    nameLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
-    [Cell addSubview:nameLabel];
-    
-    UILabel *numBerLabel=[[UILabel alloc]initWithFrame:FRAME(20, 50, WIDTH-40, 20)];
     NSString *jsonstring=[NSString stringWithFormat:@"%@",[dic objectForKey:@"asset_json"]];
     NSData *data = [jsonstring   dataUsingEncoding:NSUTF8StringEncoding];
     NSError *err;
@@ -223,17 +208,197 @@
     NSArray *nameArray =(NSArray *)cityDic;
     NSMutableArray *nameArr=[[NSMutableArray alloc]init];
     for (int i=0; i<nameArray.count; i++) {
-        NSString *nameString=[NSString stringWithFormat:@"%@",[nameArray[i] objectForKey:@"name"]];
-        [nameArr addObject:nameString];
+        //        NSString *nameString=[NSString stringWithFormat:@"%@",[nameArray[i] objectForKey:@"name"]];
+        NSDictionary *personDic=@{@"name":[nameArray[i] objectForKey:@"name"],@"total":[nameArray[i] objectForKey:@"total"]};
+        [nameArr addObject:personDic];
     }
-    NSString*personnel =[nameArr componentsJoinedByString:@","];
-    numBerLabel.text=[NSString stringWithFormat:@"%@",personnel];
-    numBerLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
-    [Cell addSubview:numBerLabel];
+    int head=0;
+    if (nameArr.count>3) {
+        head=60;
+    }else{
+        head=20*(int)nameArr.count;
+    }
+    return 80+head;
+}
+- (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSDictionary *dic=dataSourceArray[indexPath.row];
+    NSString *TableSampleIdentifier = [NSString stringWithFormat:@"cell%ld",(long)indexPath.row];
+    UITableViewCell *Cell = [tableView cellForRowAtIndexPath:indexPath];
+    if (Cell == nil) {
+        Cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:TableSampleIdentifier];
+    }
+    UILabel *nameLabel=[[UILabel alloc]initWithFrame:FRAME(20, 10, WIDTH-40, 20)];
+    nameLabel.text=[NSString stringWithFormat:@"%@领用",[dic objectForKey:@"name"]];
+    nameLabel.textColor=[UIColor colorWithRed:0/255.0f green:0/255.0f blue:0/255.0f alpha:1];
+    nameLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
+    [Cell addSubview:nameLabel];
     
-    UILabel *peopleName=[[UILabel alloc]initWithFrame:FRAME(20, 80, WIDTH-40, 20)];
-    peopleName.text=[NSString stringWithFormat:@"用途:%@",[dic objectForKey:@"purpose"]];
-    peopleName.font=[UIFont fontWithName:@"Heiti SC" size:15];
+    NSString *remind_time=[NSString stringWithFormat:@"%@",[dic objectForKey:@"add_time"]];
+    NSDateFormatter *formattetime = [[NSDateFormatter alloc] init];
+    [formattetime setDateStyle:NSDateFormatterMediumStyle];
+    [formattetime setTimeStyle:NSDateFormatterShortStyle];
+    [formattetime setDateFormat:@"yyyy-MM-dd"];
+    int  timeint=[remind_time intValue];
+    NSDate *confromTimesp = [NSDate dateWithTimeIntervalSince1970:timeint];
+    NSLog(@"1296035591  = %@",confromTimesp);
+    NSString *confromTimespStrs = [formattetime stringFromDate:confromTimesp];
+    UILabel *timeLabel=[[UILabel alloc]init];
+    timeLabel.text=[NSString stringWithFormat:@"%@",confromTimespStrs];
+    timeLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
+    timeLabel.textAlignment=NSTextAlignmentRight;
+    timeLabel.textColor=[UIColor colorWithRed:153/255.0f green:153/255.0f blue:153/255.0f alpha:1];
+    [timeLabel setNumberOfLines:1];
+    [timeLabel sizeToFit];
+    timeLabel.frame=FRAME(WIDTH-10-timeLabel.frame.size.width, 10, timeLabel.frame.size.width, 20);
+    [Cell addSubview:timeLabel];
+    
+    NSString *jsonstring=[NSString stringWithFormat:@"%@",[dic objectForKey:@"asset_json"]];
+    NSData *data = [jsonstring   dataUsingEncoding:NSUTF8StringEncoding];
+    NSError *err;
+    NSDictionary *cityDic = [NSJSONSerialization JSONObjectWithData:data
+                                                            options:NSJSONReadingMutableContainers
+                                                              error:&err];
+    NSArray *nameArray =(NSArray *)cityDic;
+    NSMutableArray *nameArr=[[NSMutableArray alloc]init];
+    for (int i=0; i<nameArray.count; i++) {
+//        NSString *nameString=[NSString stringWithFormat:@"%@",[nameArray[i] objectForKey:@"name"]];
+        NSDictionary *personDic=@{@"name":[nameArray[i] objectForKey:@"name"],@"total":[nameArray[i] objectForKey:@"total"]};
+        [nameArr addObject:personDic];
+    }
+    if (nameArr.count>3) {
+        for (int i=0; i<3; i++) {
+            NSDictionary*dicts=nameArr[i];
+            switch (i) {
+                case 0:
+                {
+                    
+                    UILabel *numBerLabel=[[UILabel alloc]initWithFrame:FRAME(20, 40+20*i, WIDTH-80, 20)];
+                    numBerLabel.text=[NSString stringWithFormat:@"%@",[dicts objectForKey:@"name"]];
+                    numBerLabel.textColor=[UIColor colorWithRed:102/255.0f green:102/255.0f blue:102/255.0f alpha:1];
+                    numBerLabel.font=[UIFont fontWithName:@"Heiti SC" size:14];
+                    [Cell addSubview:numBerLabel];
+                    UILabel *numLabel=[[UILabel alloc]initWithFrame:FRAME(WIDTH-60, 40+20*i, 50, 20)];
+                    numLabel.text=[NSString stringWithFormat:@"X%@",[dicts objectForKey:@"total"]];
+                    numLabel.textColor=[UIColor colorWithRed:102/255.0f green:102/255.0f blue:102/255.0f alpha:1];
+                    numLabel.textAlignment=NSTextAlignmentRight;
+                    numLabel.font=[UIFont fontWithName:@"Heiti SC" size:14];
+                    [Cell addSubview:numLabel];
+                }
+                    break;
+                case 1:
+                {
+                    
+                    UILabel *numBerLabel=[[UILabel alloc]initWithFrame:FRAME(20, 40+20*i, WIDTH-80, 20)];
+                    numBerLabel.text=[NSString stringWithFormat:@"%@",[dicts objectForKey:@"name"]];
+                    numBerLabel.textColor=[UIColor colorWithRed:102/255.0f green:102/255.0f blue:102/255.0f alpha:1];
+                    numBerLabel.font=[UIFont fontWithName:@"Heiti SC" size:14];
+                    [Cell addSubview:numBerLabel];
+                    UILabel *numLabel=[[UILabel alloc]initWithFrame:FRAME(WIDTH-60,40+20*i, 50, 20)];
+                    numLabel.text=[NSString stringWithFormat:@"X%@",[dicts objectForKey:@"total"]];
+                    numLabel.textColor=[UIColor colorWithRed:102/255.0f green:102/255.0f blue:102/255.0f alpha:1];
+                    numLabel.textAlignment=NSTextAlignmentRight;
+                    numLabel.font=[UIFont fontWithName:@"Heiti SC" size:14];
+                    [Cell addSubview:numLabel];
+                }
+                    break;
+                case 2:
+                {
+                    
+                    UILabel *numBerLabel=[[UILabel alloc]initWithFrame:FRAME(20, 40+20*i, WIDTH-80, 20)];
+                    numBerLabel.text=[NSString stringWithFormat:@"..."];
+                    numBerLabel.textColor=[UIColor colorWithRed:102/255.0f green:102/255.0f blue:102/255.0f alpha:1];
+                    numBerLabel.font=[UIFont fontWithName:@"Heiti SC" size:14];
+                    [Cell addSubview:numBerLabel];
+                    UILabel *numLabel=[[UILabel alloc]initWithFrame:FRAME(WIDTH-60, 40+20*i, 50, 20)];
+                    numLabel.text=[NSString stringWithFormat:@"X%@",[dicts objectForKey:@"total"]];
+                    numLabel.textColor=[UIColor colorWithRed:102/255.0f green:102/255.0f blue:102/255.0f alpha:1];
+                    numLabel.textAlignment=NSTextAlignmentRight;
+                    numLabel.font=[UIFont fontWithName:@"Heiti SC" size:14];
+                    [Cell addSubview:numLabel];
+                }
+                    break;
+                    
+                default:
+                    break;
+            }
+        }
+        
+    }else{
+        for (int i=0; i<nameArr.count; i++) {
+            NSDictionary*dicts=nameArr[i];
+            switch (i) {
+                case 0:
+                {
+                    
+                    UILabel *numBerLabel=[[UILabel alloc]initWithFrame:FRAME(20, 40+20*i, WIDTH-80, 20)];
+                    numBerLabel.text=[NSString stringWithFormat:@"%@",[dicts objectForKey:@"name"]];
+                    numBerLabel.textColor=[UIColor colorWithRed:102/255.0f green:102/255.0f blue:102/255.0f alpha:1];
+                    numBerLabel.font=[UIFont fontWithName:@"Heiti SC" size:14];
+                    [Cell addSubview:numBerLabel];
+                    UILabel *numLabel=[[UILabel alloc]initWithFrame:FRAME(WIDTH-60, 40+20*i, 50, 20)];
+                    numLabel.text=[NSString stringWithFormat:@"X%@",[dicts objectForKey:@"total"]];
+                    numLabel.textColor=[UIColor colorWithRed:102/255.0f green:102/255.0f blue:102/255.0f alpha:1];
+                    numLabel.textAlignment=NSTextAlignmentRight;
+                    numLabel.font=[UIFont fontWithName:@"Heiti SC" size:14];
+                    [Cell addSubview:numLabel];
+                }
+                    break;
+                case 1:
+                {
+                    
+                    UILabel *numBerLabel=[[UILabel alloc]initWithFrame:FRAME(20, 40+20*i, WIDTH-80, 20)];
+                    numBerLabel.text=[NSString stringWithFormat:@"%@",[dicts objectForKey:@"name"]];
+                    numBerLabel.textColor=[UIColor colorWithRed:102/255.0f green:102/255.0f blue:102/255.0f alpha:1];
+                    numBerLabel.font=[UIFont fontWithName:@"Heiti SC" size:14];
+                    [Cell addSubview:numBerLabel];
+                    UILabel *numLabel=[[UILabel alloc]initWithFrame:FRAME(WIDTH-60, 40+20*i, 50, 20)];
+                    numLabel.text=[NSString stringWithFormat:@"X%@",[dicts objectForKey:@"total"]];
+                    numLabel.textColor=[UIColor colorWithRed:102/255.0f green:102/255.0f blue:102/255.0f alpha:1];
+                    numLabel.textAlignment=NSTextAlignmentRight;
+                    numLabel.font=[UIFont fontWithName:@"Heiti SC" size:14];
+                    [Cell addSubview:numLabel];
+                }
+                    break;
+                case 2:
+                {
+                    
+                    UILabel *numBerLabel=[[UILabel alloc]initWithFrame:FRAME(20, 40+20*i, WIDTH-80, 20)];
+                    numBerLabel.text=[NSString stringWithFormat:@"%@",[dicts objectForKey:@"name"]];
+                    numBerLabel.textColor=[UIColor colorWithRed:102/255.0f green:102/255.0f blue:102/255.0f alpha:1];
+                    numBerLabel.font=[UIFont fontWithName:@"Heiti SC" size:14];
+                    [Cell addSubview:numBerLabel];
+                    UILabel *numLabel=[[UILabel alloc]initWithFrame:FRAME(WIDTH-60, 40+20*i, 50, 20)];
+                    numLabel.text=[NSString stringWithFormat:@"X%@",[dicts objectForKey:@"total"]];
+                    numLabel.textColor=[UIColor colorWithRed:102/255.0f green:102/255.0f blue:102/255.0f alpha:1];
+                    numLabel.textAlignment=NSTextAlignmentRight;
+                    numLabel.font=[UIFont fontWithName:@"Heiti SC" size:14];
+                    [Cell addSubview:numLabel];
+                }
+                    break;
+                    
+                default:
+                    break;
+            }
+        }
+
+    }
+    int totalInt=0;
+    for (int i=0; i<nameArr.count; i++) {
+        NSDictionary *dict=nameArr[i];
+        int  total=[[dict objectForKey:@"total"]intValue];
+        totalInt+=total;
+    }
+    int head=0;
+    if (nameArr.count>3) {
+        head=60;
+    }else{
+        head=20*(int)nameArr.count;
+    }
+    UILabel *peopleName=[[UILabel alloc]initWithFrame:FRAME(20, 50+head, WIDTH-40, 20)];
+    peopleName.text=[NSString stringWithFormat:@"等 %d 件",totalInt];
+    peopleName.textColor=[UIColor colorWithRed:0/255.0f green:0/255.0f blue:0/255.0f alpha:1];
+    peopleName.font=[UIFont fontWithName:@"Heiti SC" size:12];
     [Cell addSubview:peopleName];
 
     [Cell setSelectionStyle:UITableViewCellSelectionStyleNone];

@@ -12,6 +12,8 @@
 #import "WasteRecoveryListViewController.h"
 #import "OrderPayViewController.h"
 #import "DCRoundSwitch.h"
+#import "CUSTOMDRESSBaseClass.h"
+#import "CUSTOMDRESSData.h"
 @interface WasteRecoveryOrderViewController ()
 {
     UILabel *waterName;
@@ -39,6 +41,43 @@
 @end
 
 @implementation WasteRecoveryOrderViewController
+- (void)GetDataDress
+{
+    ISLoginManager *islog=[[ISLoginManager alloc]init];
+    DownloadManager *_download = [[DownloadManager alloc]init];
+    NSDictionary *_dict = @{@"user_id":islog.telephone};
+    
+    [_download requestWithUrl:MY_DRESSLIST dict:_dict view:self.view delegate:self finishedSEL:@selector(GetDressListSucess:) isPost:NO failedSEL:@selector(DownloadFail:)];
+    
+}
+
+#pragma mark 获得地址列表成功
+- (void)GetDressListSucess:(id)responsobject
+{
+    NSMutableArray *dataArray=[[NSMutableArray alloc]init];
+    NSLog(@"object is %@",responsobject);
+    CUSTOMDRESSBaseClass *_base = [[CUSTOMDRESSBaseClass alloc]initWithDictionary:responsobject];
+    for (int i = 0; i < _base.data.count; i ++) {
+        
+        [dataArray addObject:[_base.data objectAtIndex:i]];
+        
+    }
+    for (int a=0; a<dataArray.count; a++) {
+        CUSTOMDRESSData *mydata = (CUSTOMDRESSData *)[dataArray objectAtIndex:a];
+        if(mydata.isDefault == 1){
+            addressString =  [NSString stringWithFormat:@"%@%@",mydata.name,mydata.addr];
+            [self addressLayout];
+            return;
+        }
+    }
+    
+}
+
+#pragma mark 下载失败
+- (void)DownloadFail:(id)error
+{
+    
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -57,6 +96,7 @@
     submitBut.layer.cornerRadius=5;
     submitBut.clipsToBounds=YES;
     [self.view addSubview:submitBut];
+    [self GetDataDress];
     // Do any additional setup after loading the view.
 }
 #pragma mark 联系方式判断

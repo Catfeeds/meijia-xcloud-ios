@@ -16,7 +16,7 @@
     NSString *bundleID = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleIdentifier"];
     if ([bundleID isEqualToString:@"com.easemob.enterprise.demo.ui"]) {
         UMConfigInstance.appKey = YMAPPKEY;
-        UMConfigInstance.token=YMAPPKEY;
+//        UMConfigInstance.token=YMAPPKEY;
         UMConfigInstance.secret=@"secretstringaldfkals";
         UMConfigInstance.channelId = @"appmarket-main";
         UMConfigInstance.bCrashReportEnabled=YES;

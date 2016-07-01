@@ -191,31 +191,7 @@
     plTextField.text=@"写评论...";
     plTextField.textColor=[UIColor colorWithRed:153/255.0f green:153/255.0f blue:153/255.0f alpha:1];
     [fieldView addSubview:plTextField];
-    NSArray *imageArray=@[@"评论 (1)",@"点赞 (1)",@"分享"];
-    for (int  i=0; i<3; i++) {
-        UIButton *button=[[UIButton alloc]initWithFrame:FRAME(WIDTH-309/2+i*(309/2/3), 0, 309/2/3, 50)];
-        [plView addSubview:button];
-        button.tag=i;
-        [button addTarget:self action:@selector(ButAction:) forControlEvents:UIControlEventTouchUpInside];
-        if (i==0) {
-            plImageView=[[UIImageView alloc]initWithFrame:FRAME((button.frame.size.width-22)/2, 28/2, 22, 22)];
-            plImageView.tag=10+i;
-            plImageView.image=[UIImage imageNamed:imageArray[i]];
-            [button addSubview:plImageView];
-        }else if (i==1){
-            clickImageView=[[UIImageView alloc]initWithFrame:FRAME((button.frame.size.width-22)/2, 28/2, 22, 22)];
-            clickImageView.tag=10+i;
-            clickImageView.image=[UIImage imageNamed:imageArray[i]];
-            [button addSubview:clickImageView];
-        }else{
-            fxImageView=[[UIImageView alloc]initWithFrame:FRAME((button.frame.size.width-22)/2, 28/2, 22, 22)];
-            fxImageView.tag=10+i;
-            fxImageView.image=[UIImage imageNamed:imageArray[i]];
-            [button addSubview:fxImageView];
-        }
-       
-        
-    }
+
     if (_barIDS==100) {
         [self.navigationController setNavigationBarHidden:NO animated:NO];
 //        [myWebView removeFromSuperview];
@@ -311,12 +287,6 @@
     _moreFooter.delegate = self;
     _moreFooter.scrollView = myListTableView;
     
-    keypadView=[[UIView alloc]initWithFrame:FRAME(0, HEIGHT, WIDTH, 145)];
-    keypadView.backgroundColor=[UIColor colorWithRed:243/255.0f green:246/255.0f blue:246/255.0f alpha:1];
-//    [self.view addSubview:keypadView];
-//    UIWindow *window = [UIApplication sharedApplication].keyWindow;
-   [self.view addSubview:keypadView];
-    
     myTextView=[[UITextView alloc]initWithFrame:FRAME(9, 9, WIDTH-18, 90)];
     myTextView.backgroundColor=[UIColor whiteColor];
     myTextView.layer.cornerRadius=8;
@@ -324,27 +294,12 @@
     myTextView.delegate=self;
     [keypadView addSubview:myTextView];
     
-    viewLabel = [[UILabel alloc]initWithFrame:CGRectMake(3, 3, 200, 20)];
-    viewLabel.enabled = NO;
-    viewLabel.text = @"写下您的看法与见解...";
-    viewLabel.font =  [UIFont systemFontOfSize:15];
-    viewLabel.textColor = [UIColor lightGrayColor];
-    [myTextView addSubview:viewLabel];
     
-    publishButton=[[UIButton alloc]initWithFrame:FRAME(WIDTH-57, 108, 48, 28)];
-    publishButton.backgroundColor=[UIColor colorWithRed:202/255.0f green:202/255.0f blue:202/255.0f alpha:1];
-    [publishButton setTitle:@"发布" forState:UIControlStateNormal];
-    publishButton.enabled=FALSE;
-    [publishButton addTarget:self action:@selector(publishBut) forControlEvents:UIControlEventTouchUpInside];
-    publishButton.layer.cornerRadius=5;
-    publishButton.clipsToBounds=YES;
-    [keypadView addSubview:publishButton];
-    
-    blackBut=[[UIButton alloc]initWithFrame:FRAME(0, HEIGHT, WIDTH, HEIGHT-(keypadHight+145))];
-    blackBut.backgroundColor=[UIColor colorWithRed:51/255.0f green:51/255.0f blue:51/255.0f alpha:1];
-    [blackBut addTarget:self action:@selector(blackButAction) forControlEvents:UIControlEventTouchUpInside];
-    blackBut.alpha=0.6;
-    [self.view addSubview:blackBut];
+//    blackBut=[[UIButton alloc]initWithFrame:FRAME(0, HEIGHT, WIDTH, HEIGHT-(keypadHight+145))];
+//    blackBut.backgroundColor=[UIColor colorWithRed:51/255.0f green:51/255.0f blue:51/255.0f alpha:1];
+//    [blackBut addTarget:self action:@selector(blackButAction) forControlEvents:UIControlEventTouchUpInside];
+//    blackBut.alpha=0.6;
+//    [self.view addSubview:blackBut];
     
     if(fatherVc.loginYesOrNo!=YES)
     {

@@ -34,6 +34,9 @@
 #import "UMCommunityViewController.h"
 #import "Set_Up_ScheduleViewController.h"
 #import "ask_listDetailsViewController.h"
+
+#import "JTCalendarMenuMonthView.h"
+#import "MeetingViewController.h"
 @interface ViewController (){
     NSMutableDictionary *eventsByDate;
     UILabel *timeLabel;
@@ -75,6 +78,7 @@
     int  upID;
     int  downID;
     UIView *viewLine;
+    NSMutableArray *monthsViews;
 
 }
 
@@ -171,11 +175,22 @@ float lastContentOffset;
     
     UIButton *eyeButton=[[UIButton alloc]initWithFrame:FRAME(WIDTH-50, 25, 50, 40)];
     [eyeButton addTarget:self action:@selector(eyeButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    eyeButton.tag=1101;
     [self.view addSubview:eyeButton];
     
     UIImageView *eyeImage=[[UIImageView alloc]initWithFrame:FRAME(15, 10, 20, 20)];
     eyeImage.image=[UIImage imageNamed:@"提醒"];//EYE_BT
     [eyeButton addSubview:eyeImage];
+    
+    
+    UIButton *addBut=[[UIButton alloc]initWithFrame:FRAME(WIDTH-100, 25, 50, 40)];
+    addBut.tag=1102;
+    [addBut addTarget:self action:@selector(eyeButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:addBut];
+    
+    UIImageView *addImage=[[UIImageView alloc]initWithFrame:FRAME(15, 10, 20, 20)];
+    addImage.image=[UIImage imageNamed:@"快速提醒"];//EYE_BT
+    [addBut addSubview:addImage];
     
     AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication] delegate];
     riliArray=delegate.riliArray;
@@ -207,6 +222,26 @@ float lastContentOffset;
             [delegates.riliArray addObject:array[i]];
         }
     }
+    [delegates.eventsByDate removeAllObjects];
+    for(int i = 0; i <delegates.riliArray.count; ++i){
+        NSDictionary *dic=delegates.riliArray[i];
+        NSString *riliStr=[NSString stringWithFormat:@"%@ 07:10:00",[dic objectForKey:@"service_date"]];
+        NSString *theFirstTime1=[NSString stringWithFormat:@"%@",riliStr];
+        NSDateFormatter *theFirstformatte1 = [[NSDateFormatter alloc] init];
+        [theFirstformatte1 setDateStyle:NSDateFormatterMediumStyle];
+        [theFirstformatte1 setTimeStyle:NSDateFormatterShortStyle];
+        [theFirstformatte1 setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+        NSDate* theFirstdate1 = [theFirstformatte1 dateFromString:theFirstTime1];
+        //        NSDate *randomDate = [theFirstformatte1 dateFromString:theFirstTime1];//[NSDate dateWithTimeInterval:(rand() % (3600 * 24 * 60)) sinceDate:[NSDate date]];
+        NSString *key = [[self dateFormatter] stringFromDate:theFirstdate1];
+        
+        if(!delegates.eventsByDate[key]){
+            delegates.eventsByDate[key] = [NSMutableArray new];
+        }
+        
+        [delegates.eventsByDate[key] addObject:theFirstdate1];
+    }
+
     
 }
 -(void)RiLiFailure:(id)sender
@@ -225,6 +260,10 @@ float lastContentOffset;
                                    selector:@selector(viewLayout:)
                                    userInfo:alertLabel
                                     repeats:NO];
+}
+-(void)viewLayout:(UILabel *)albel
+{
+    
 }
 #pragma mark 表格刷新相关
 #pragma mark 刷新
@@ -293,33 +332,18 @@ float lastContentOffset;
 {
     
     self.calendar = [JTCalendar new];
+    
+    // All modifications on calendarAppearance have to be done before setMenuMonthsView and setContentView
+    // Or you will have to call reloadAppearance
     {
         self.calendar.calendarAppearance.calendar.firstWeekday = 2; // Sunday == 1, Saturday == 7
         self.calendar.calendarAppearance.dayCircleRatio = 9. / 10.;
-        self.calendar.calendarAppearance.ratioContentMenu = 2.;
-        self.calendar.calendarAppearance.focusSelectedDayChangeMode = YES;
-        
-        // Customize the text for each month
-        self.calendar.calendarAppearance.monthBlock = ^NSString *(NSDate *date, JTCalendar *jt_calendar){
-            NSCalendar *calendar = jt_calendar.calendarAppearance.calendar;
-            NSDateComponents *comps = [calendar components:NSCalendarUnitYear|NSCalendarUnitMonth fromDate:date];
-            NSInteger currentMonthIndex = comps.month;
-            
-            static NSDateFormatter *dateFormatter;
-            if(!dateFormatter){
-                dateFormatter = [NSDateFormatter new];
-                dateFormatter.timeZone = jt_calendar.calendarAppearance.calendar.timeZone;
-            }
-            
-            while(currentMonthIndex <= 0){
-                currentMonthIndex += 12;
-            }
-            
-            NSString *monthText = [[dateFormatter standaloneMonthSymbols][currentMonthIndex - 1] capitalizedString];
-            
-            return [NSString stringWithFormat:@"%ld\n%@", (long)comps.year, monthText];
-        };
+        self.calendar.calendarAppearance.ratioContentMenu = 1.;
     }
+    
+//    [self.calendar setMenuMonthsView:self.calendarMenuView];
+//    [self.calendar setContentView:self.calendarContentView];
+//    [self.calendar setDataSource:self];
     OcclusionView=[[UIView alloc]initWithFrame:FRAME(0, 0, WIDTH, _tableView.frame.size.height)];
     OcclusionView.backgroundColor=[UIColor blueColor];
     OcclusionView.userInteractionEnabled=YES;
@@ -394,9 +418,15 @@ float lastContentOffset;
 //        
 //        ((void (*)(id, SEL))objc_msgSend)(self, normalSelector);
 //    }
-
-    Set_Up_ScheduleViewController *setVC=[[Set_Up_ScheduleViewController alloc]init];
-    [self.navigationController pushViewController:setVC animated:YES];
+    if (button.tag==1101) {
+        Set_Up_ScheduleViewController *setVC=[[Set_Up_ScheduleViewController alloc]init];
+        [self.navigationController pushViewController:setVC animated:YES];
+    }else if (button.tag==1102){
+        MeetingViewController *meetVC=[[MeetingViewController alloc]init];
+        meetVC.vcID=1003;
+        [self.navigationController pushViewController:meetVC animated:YES];
+    }
+    
 }
 #pragma mark -模仿qq界面
 - (void)qqStyle
@@ -697,7 +727,7 @@ float lastContentOffset;
 
 - (void)viewDidLayoutSubviews
 {
-    [self.calendar repositionViews];
+//    [self.calendar repositionViews];
 }
 
 #pragma mark - Buttons callback
@@ -722,6 +752,25 @@ float lastContentOffset;
     timeString=locationString;
     NSLog(@"Date: %@ events", locationString);
     page=1;
+    monthsViews = [NSMutableArray new];
+    AppDelegate *delegates=(AppDelegate*)[[UIApplication sharedApplication] delegate];
+    monthsViews=delegates.monthsViews;
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"yyyy-MM-dd"]; // ----------设置你想要的格式,hh与HH的区别:分别表示12小时制,24小时制
+    
+    NSDate* dates = [formatter dateFromString:timeString];
+    JTCalendarMenuMonthView *monthView = [monthsViews lastObject];
+    
+    [monthsViews removeLastObject];
+    [monthsViews insertObject:monthView atIndex:1];
+    
+    // Update monthView
+    {
+        [monthView setMonthIndex:dates];
+    }
+    
+    [monthView reloadAppearance];
+    [self.calendarMenuView reloadAppearance];
     [self PLJKLayout];
 }
 
@@ -825,26 +874,8 @@ float lastContentOffset;
 {
     eventsByDate = [NSMutableDictionary new];
     AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication] delegate];
-    riliArray=delegate.riliArray;
-    for(int i = 0; i < riliArray.count; ++i){
-        NSDictionary *dic=riliArray[i];
-        NSString *riliStr=[NSString stringWithFormat:@"%@ 07:10:00",[dic objectForKey:@"service_date"]];
-        NSString *theFirstTime1=[NSString stringWithFormat:@"%@",riliStr];
-        NSDateFormatter *theFirstformatte1 = [[NSDateFormatter alloc] init];
-        [theFirstformatte1 setDateStyle:NSDateFormatterMediumStyle];
-        [theFirstformatte1 setTimeStyle:NSDateFormatterShortStyle];
-        [theFirstformatte1 setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-        NSDate* theFirstdate1 = [theFirstformatte1 dateFromString:theFirstTime1];
-        //        NSDate *randomDate = [theFirstformatte1 dateFromString:theFirstTime1];//[NSDate dateWithTimeInterval:(rand() % (3600 * 24 * 60)) sinceDate:[NSDate date]];
-        NSString *key = [[self dateFormatter] stringFromDate:theFirstdate1];
-        
-        if(!eventsByDate[key]){
-            eventsByDate[key] = [NSMutableArray new];
-        }
-        
-        [eventsByDate[key] addObject:theFirstdate1];
-    }
-
+    eventsByDate=delegate.eventsByDate;
+   
     NSString *key = [[self dateFormatter] stringFromDate:date];
     
     if(eventsByDate[key] && [eventsByDate[key] count] > 0){

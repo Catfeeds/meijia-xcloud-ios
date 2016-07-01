@@ -78,6 +78,8 @@ typedef enum {
 @property (strong,nonatomic)NSString *defaultDBPath;
 @property (nonatomic ,strong) NSDictionary *globalDic;
 @property (nonatomic ,strong) NSMutableArray *riliArray;
+@property (nonatomic ,strong) NSMutableDictionary *eventsByDate;
+@property (nonatomic ,strong) NSMutableArray *monthsViews;
 - (void)startSdkWith:(NSString *)appID appKey:(NSString *)appKey appSecret:(NSString *)appSecret;
 - (void)saveContext;
 - (NSURL *)applicationDocumentsDirectory;

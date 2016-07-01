@@ -29,7 +29,7 @@
         _titleLabel=[[UILabel alloc]initWithFrame:FRAME(0, 0, WIDTH-70, 20)];
         _titleLabel.tag=1102;
         _titleLabel.textColor=[UIColor colorWithRed:51/255.0f green:51/255.0f blue:51/255.0f alpha:1];
-        _titleLabel.font=[UIFont fontWithName:@"Helvetica-Bold" size:15];
+        _titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
         [self addSubview:_titleLabel];
         
         _timelabel=[[UILabel alloc]initWithFrame:FRAME(10, _titleLabel.frame.size.height+20, WIDTH-20, 15)];

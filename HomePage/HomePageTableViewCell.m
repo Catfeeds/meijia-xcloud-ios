@@ -13,7 +13,7 @@
 {
     self=[super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self){
-        _headeImageVIew=[[UIImageView alloc]initWithFrame:FRAME(15, 15, 95, 70)];
+        _headeImageVIew=[[UIImageView alloc]initWithFrame:FRAME(WIDTH-110, 15, 95, 70)];
         [self addSubview:_headeImageVIew];
         
 //        //添加边框
@@ -26,13 +26,14 @@
         _headeImageVIew.layer.shadowOpacity = 0.3;
 //        _headeImageVIew.layer.shadowRadius = 10.0;
         
-        _titleLabel=[[UILabel alloc]initWithFrame:FRAME(_headeImageVIew.frame.size.width+25, 20, WIDTH-(_headeImageVIew.frame.size.width+35), 55)];
+        _titleLabel=[[UILabel alloc]initWithFrame:FRAME(15, 20, WIDTH-(_headeImageVIew.frame.size.width+35), 55)];
+        _titleLabel.textColor=[UIColor colorWithRed:51/255.0f green:51/255.0f blue:51/255.0f alpha:1];
         _titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:16];
 //        _titleLabel.backgroundColor=[UIColor blueColor];
         [self addSubview:_titleLabel];
-        _subTitleLabel=[[UILabel alloc]initWithFrame:FRAME(_headeImageVIew.frame.size.width+25, 75, WIDTH-(_headeImageVIew.frame.size.width+35), 10)];
+        _subTitleLabel=[[UILabel alloc]initWithFrame:FRAME(15, 75, WIDTH-(_headeImageVIew.frame.size.width+35), 10)];
         _subTitleLabel.font=[UIFont fontWithName:@"Heiti SC" size:10];
-        _subTitleLabel.textColor=[UIColor colorWithRed:200/255.0f green:200/255.0f blue:200/255.0f alpha:1];
+        _subTitleLabel.textColor=[UIColor colorWithRed:153/255.0f green:153/255.0f blue:153/255.0f alpha:1];
         [self addSubview:_subTitleLabel];
         UIView *lineView=[[UIView alloc]initWithFrame:FRAME(15, 99.5, WIDTH-30, 0.5)];
         lineView.backgroundColor=[UIColor colorWithRed:215/255.0f green:215/255.0f blue:215/255.0f alpha:1];

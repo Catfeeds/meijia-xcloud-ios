@@ -9,9 +9,9 @@
 #import <CoreText/CoreText.h>
 @interface JTCalendarMenuMonthView(){
     UILabel *textLabel;
-    UILabel *monthLabel;
-    UILabel *yearLabel;
-    UILabel *weekLabel;
+//    UILabel *monthLabel;
+//    UILabel *yearLabel;
+//    UILabel *weekLabel;
 }
 
 @end
@@ -45,27 +45,16 @@
 - (void)commonInit
 {
     {
-        textLabel = [UILabel new];
+        [textLabel removeFromSuperview];
+        textLabel = [[UILabel alloc]init];
         [self addSubview:textLabel];
-       
         
-        textLabel.textAlignment = NSTextAlignmentLeft;
-//        textLabel.backgroundColor=[UIColor whiteColor];
-        textLabel.numberOfLines = 1;
-        
-        
+        textLabel.textAlignment = NSTextAlignmentCenter;
     }
 }
 
-- (void)setCurrentDate:(NSDate *)currentDate
+- (void)setMonthIndex:(NSDate *)monthIndex
 {
-    
-//    NSDateFormatter  *dateformatter=[[NSDateFormatter alloc] init];
-//    
-//    [dateformatter setDateFormat:@"YYYY-MM-dd"];
-//    
-//    NSString *  locationString=[dateformatter stringFromDate:currentDate];
-    
     NSArray *weekdays = [NSArray arrayWithObjects: [NSNull null], @"周日", @"周一", @"周二", @"周三", @"周四", @"周五", @"周六", nil];
     
     NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
@@ -76,30 +65,37 @@
     
     NSCalendarUnit calendarUnit = NSWeekdayCalendarUnit;
     
-    NSDateComponents *theComponents = [calendar components:calendarUnit fromDate:currentDate];
+    NSDateComponents *theComponents = [calendar components:calendarUnit fromDate:monthIndex];
     
     NSDateFormatter  *yearformatter=[[NSDateFormatter alloc] init];
     
-    [yearformatter setDateFormat:@"YYYY"];
+    [yearformatter setDateFormat:@"yyyy"];
     
-    NSString *  yearString=[yearformatter stringFromDate:currentDate];
+    NSString *  yearString=[yearformatter stringFromDate:monthIndex];
     
     NSDateFormatter  *monthformatter=[[NSDateFormatter alloc] init];
     
     [monthformatter setDateFormat:@"MM"];
     
-    NSString *  monthString=[monthformatter stringFromDate:currentDate];
-//    NSLog(@"时间%@",locationString);
-    [monthLabel removeFromSuperview];
-    [yearLabel removeFromSuperview];
-    [weekLabel removeFromSuperview];
+    NSString *  monthString=[monthformatter stringFromDate:monthIndex];
+    
+    NSDateFormatter  *dayformatter=[[NSDateFormatter alloc] init];
+    
+    [dayformatter setDateFormat:@"dd"];
+    NSString *  dayString=[dayformatter stringFromDate:monthIndex];
+    //    NSLog(@"时间%@",locationString);
+    [textLabel removeFromSuperview];
+    textLabel = [[UILabel alloc]init];
+    [self addSubview:textLabel];
+    
+    textLabel.textAlignment = NSTextAlignmentCenter;
     int month=[monthString intValue];
-    monthLabel = [UILabel new];
+    UILabel *monthLabel = [[UILabel alloc]init];
     monthLabel.text=[NSString stringWithFormat:@"%d月",month];
     monthLabel.textColor=[UIColor whiteColor];
     monthLabel.textAlignment = NSTextAlignmentLeft;
     monthLabel.font=[UIFont fontWithName:@"Heiti SC" size:30];
-   NSMutableAttributedString *attributedString =[[NSMutableAttributedString alloc]initWithString:monthLabel.text];
+    NSMutableAttributedString *attributedString =[[NSMutableAttributedString alloc]initWithString:monthLabel.text];
     long number = 0.1f;//间距
     CFNumberRef num = CFNumberCreate(kCFAllocatorDefault,kCFNumberSInt8Type,&number);
     [attributedString addAttribute:(id)kCTKernAttributeName value:(__bridge id)num range:NSMakeRange(0,[attributedString length])];
@@ -113,7 +109,7 @@
     
     
     
-    yearLabel = [UILabel new];
+    UILabel *yearLabel = [[UILabel alloc]init];
     yearLabel.text=[NSString stringWithFormat:@"%@年",yearString];
     yearLabel.textColor=[UIColor whiteColor];
     yearLabel.textAlignment = NSTextAlignmentLeft;
@@ -124,7 +120,7 @@
     [textLabel addSubview:yearLabel];
     
     
-    weekLabel = [UILabel new];
+    UILabel *weekLabel = [[UILabel alloc]init];
     weekLabel.text=[NSString stringWithFormat:@"%@",[weekdays objectAtIndex:theComponents.weekday]];
     weekLabel.textColor=[UIColor whiteColor];
     weekLabel.textAlignment = NSTextAlignmentLeft;
@@ -134,18 +130,20 @@
     weekLabel.frame=CGRectMake(monthLabel.frame.size.width+10, (self.frame.size.height-30)/2, weekLabel.frame.size.width, 15);
     [textLabel addSubview:weekLabel];
     
-    
-    
-    
-    
-    
+    UILabel *dayLabel = [[UILabel alloc]init];
+    dayLabel.text=[NSString stringWithFormat:@"%@日",dayString];
+    dayLabel.textColor=[UIColor whiteColor];
+    dayLabel.textAlignment = NSTextAlignmentLeft;
+    dayLabel.font=[UIFont fontWithName:@"Heiti SC" size:12];
+    dayLabel.numberOfLines = 1;
+    [dayLabel sizeToFit];
+    dayLabel.frame=CGRectMake(weekLabel.frame.size.width+weekLabel.frame.origin.x, (self.frame.size.height-30)/2, dayLabel.frame.size.width, 15);
+//    [textLabel addSubview:dayLabel];
 }
 
 - (void)layoutSubviews
 {
-    
     textLabel.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
-    
 
     // No need to call [super layoutSubviews]
 }
@@ -154,6 +152,11 @@
 {
     textLabel.textColor = self.calendarManager.calendarAppearance.menuMonthTextColor;
     textLabel.font = self.calendarManager.calendarAppearance.menuMonthTextFont;
+    
 }
 
 @end
+
+// 版权属于原作者
+// http://code4app.com (cn) http://code4app.net (en)
+// 发布代码于最专业的源码分享网站: Code4App.com 

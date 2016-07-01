@@ -119,6 +119,7 @@ int y,x=0,time_ID;
     
     NSDictionary *zjDic;
     int releID;
+    NSDictionary *lilstDetailDic;
    
 }
 @end
@@ -271,6 +272,7 @@ int y,x=0,time_ID;
 {
     NSLog(@"sender%@",sender);
     NSDictionary *dic=[sender objectForKey:@"data"];
+    lilstDetailDic=dic;
     from_ID=[dic objectForKey:@"ticket_from_city_id"];
     to_ID=[dic objectForKey:@"ticket_to_city_id"];
     string=[dic objectForKey:@"service_time"];
@@ -1361,7 +1363,7 @@ int y,x=0,time_ID;
     }
     NSDictionary *_dict;
     if (_pushID==1) {
-        _dict = @{@"card_id":_cardString,@"card_type":type_ID,@"create_user_id":create_user_id,@"user_id":user_id,@"service_time":timestring,@"service_content":contentString,@"set_remind":txROW,@"set_now_send":sendString,@"set_sec_do":msclString,@"card_extra":cityJsonString,@"attends":jsonString};
+        _dict = @{@"card_id":_cardString,@"card_type":type_ID,@"create_user_id":create_user_id,@"user_id":user_id,@"service_time":timestring,@"service_content":contentString,@"set_remind":[lilstDetailDic objectForKey:@"set_remind"],@"set_now_send":sendString,@"set_sec_do":msclString,@"card_extra":cityJsonString,@"attends":jsonString};
     }else{
         _dict = @{@"card_id":@"0",@"card_type":type_ID,@"create_user_id":create_user_id,@"user_id":user_id,@"service_time":timestring,@"service_content":contentString,@"set_remind":txROW,@"set_now_send":sendString,@"set_sec_do":msclString,@"card_extra":cityJsonString,@"attends":jsonString};
     }
@@ -1391,9 +1393,15 @@ int y,x=0,time_ID;
 
     ISLoginManager *_manager = [ISLoginManager shareManager];
     NSLog(@"有值么%@",_manager.telephone);
-    
+    NSString *txROW;
     NSString *type_ID=[NSString stringWithFormat:@"%d",card_type_ID];
-    NSString *txROW=[NSString stringWithFormat:@"%ld",(long)picker.txRow];
+    if ([remindString isEqualToString:@"不提醒"]) {
+        txROW=[NSString stringWithFormat:@"0"];
+    }else if ([remindString isEqualToString:@"按时提醒"]){
+        txROW=[NSString stringWithFormat:@"1"];
+    }else{
+        txROW=[NSString stringWithFormat:@"%ld",(long)picker.txRow];
+    }
     NSString *sendString=[NSString stringWithFormat:@"%d",set_now_send_ID];
     NSString *msclString=[NSString stringWithFormat:@"%d",mscl_int];
     NSString *fromString=[NSString stringWithFormat:@"%@",fromID];
@@ -1428,7 +1436,7 @@ int y,x=0,time_ID;
     }
     NSDictionary *_dict;
     if (_pushID==1) {
-        _dict = @{@"card_id":_cardString,@"card_type":type_ID,@"create_user_id":create_user_id,@"user_id":user_id,@"service_time":timestring,@"service_content":contentString,@"set_remind":txROW,@"set_now_send":sendString,@"set_sec_do":msclString,@"card_extra":cityJsonString,@"attends":jsonString};
+        _dict = @{@"card_id":_cardString,@"card_type":type_ID,@"create_user_id":create_user_id,@"user_id":user_id,@"service_time":timestring,@"service_content":contentString,@"set_remind":[lilstDetailDic objectForKey:@"set_remind"],@"set_now_send":sendString,@"set_sec_do":msclString,@"card_extra":cityJsonString,@"attends":jsonString};
     }else{
         _dict = @{@"card_id":@"0",@"card_type":type_ID,@"create_user_id":create_user_id,@"user_id":user_id,@"service_time":timestring,@"service_content":contentString,@"set_remind":txROW,@"set_now_send":sendString,@"set_sec_do":msclString,@"card_extra":cityJsonString,@"attends":jsonString};
     }
@@ -1437,6 +1445,267 @@ int y,x=0,time_ID;
 }
 -(void)logDowLoadFinish:(id)sender
 {
+    if ([nameArray containsObject:@"自己"]) {
+        int set_remind=[[[sender objectForKey:@"data"]objectForKey:@"set_remind"]intValue];
+        if (set_remind!=0) {
+            NSDate *  date=[NSDate date];
+            NSArray *weekdays = [NSArray arrayWithObjects: [NSNull null], @"周日", @"周一", @"周二", @"周三", @"周四", @"周五", @"周六", nil];
+            
+            NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+            
+            NSTimeZone *timeZone = [[NSTimeZone alloc] initWithName:@"Asia/Shanghai"];
+            
+            [calendar setTimeZone: timeZone];
+            
+            NSCalendarUnit calendarUnit = NSWeekdayCalendarUnit;
+            
+            NSDateComponents *theComponents = [calendar components:calendarUnit fromDate:date];
+            int week = (int)[theComponents weekday]%7;
+            NSLog(@"%@",[weekdays objectAtIndex:week]);
+            int fireDateTim = 0;
+            if (_pushID==1) {
+                NSDictionary *dict=[sender objectForKey:@"data"];
+                //删除原来的闹钟
+                NSArray *narry=[[UIApplication sharedApplication] scheduledLocalNotifications];
+                NSUInteger acount=[narry count];
+                if (acount>0)
+                {// 遍历找到对应nfkey和notificationtag的通知
+                    for (int i=0; i<acount; i++)
+                    {
+                        UILocalNotification *myUILocalNotification = [narry objectAtIndex:i];
+                        NSDictionary *userInfo = [myUILocalNotification.userInfo objectForKey:@"dic"];
+                        NSNumber *obj = [userInfo objectForKey:@"ci"];
+                        int mytag=[obj intValue];
+                        int notificationtag=[[NSString stringWithFormat:@"%@",[dict objectForKey:@"card_id"]]intValue];
+                        if (mytag==notificationtag)
+                        {
+                            //删除本地通知
+                            [[UIApplication sharedApplication] cancelLocalNotification:myUILocalNotification];
+                            break;
+                        }
+                    }
+                }//删除原来的闹钟
+                
+                NSString *timaString=[NSString stringWithFormat:@"%@",[dict objectForKey:@"service_time"]];
+                NSString *remind_time=[NSString stringWithFormat:@"%@",[dict objectForKey:@"remind_time"]];
+                NSDateFormatter *formattetime = [[NSDateFormatter alloc] init];
+                [formattetime setDateStyle:NSDateFormatterMediumStyle];
+                [formattetime setTimeStyle:NSDateFormatterShortStyle];
+                [formattetime setDateFormat:@"yyyy-MM-dd HH:mm"];
+                int  timeint=[remind_time intValue];
+                NSDate *confromTimesp = [NSDate dateWithTimeIntervalSince1970:timeint];
+                NSLog(@"1296035591  = %@",confromTimesp);
+                NSString *confromTimespStrs = [formattetime stringFromDate:confromTimesp];
+                
+                
+                NSDateFormatter *timeformatte = [[NSDateFormatter alloc] init];
+                [timeformatte setDateStyle:NSDateFormatterMediumStyle];
+                [timeformatte setTimeStyle:NSDateFormatterShortStyle];
+                [timeformatte setDateFormat:@"yyyy-MM-dd HH:mm"];
+                
+                NSDate* datetime = [timeformatte dateFromString:confromTimespStrs];
+                int theTwo1 = [datetime timeIntervalSince1970];
+                
+                //            int theTwo1 = [timaString intValue];
+                
+                //获取当前时间
+                NSDate *  senddate=[NSDate date];
+                
+                NSDateFormatter  *dateformatter=[[NSDateFormatter alloc] init];
+                
+                [dateformatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+                
+                NSString *  locationString=[dateformatter stringFromDate:senddate];
+                
+                NSLog(@"locationString:%@",locationString);
+                NSDateFormatter *formatte = [[NSDateFormatter alloc] init];
+                [formatte setDateStyle:NSDateFormatterMediumStyle];
+                [formatte setTimeStyle:NSDateFormatterShortStyle];
+                [formatte setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+                NSDate* date = [formatte dateFromString:locationString];
+                int  _secondDate = [date timeIntervalSince1970];
+                NSLog(@"%d",theTwo1-_secondDate);
+//                int period=[[NSString stringWithFormat:@"%@",[dict objectForKey:@"period"]]intValue];
+                
+                
+                // 时间戳转时间的方法:
+                NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
+                [formatter setDateStyle:NSDateFormatterMediumStyle];
+                [formatter setTimeStyle:NSDateFormatterShortStyle];
+                [formatter setDateFormat:@"HH:mm:ss"];
+                NSDate *timedate = [formatter dateFromString:timaString];
+//                NSString *confromTimespStr = [formatter stringFromDate:timedate];
+                NSLog(@"date1:%@",timedate);
+                
+                NSDateFormatter  *dateform=[[NSDateFormatter alloc] init];
+                
+                [dateform setDateFormat:@"yyyy-MM-dd"];
+                
+//                NSString *  locationStr=[dateform stringFromDate:senddate];
+                
+//                NSString *timeStrings=[NSString stringWithFormat:@"%@ %@",locationStr,confromTimespStr];
+                NSLog(@"locationString:%@",locationString);
+//                NSDateFormatter *formattes = [[NSDateFormatter alloc] init];
+//                [formatte setDateStyle:NSDateFormatterMediumStyle];
+//                [formatte setTimeStyle:NSDateFormatterShortStyle];
+//                [formatte setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+//                NSDate* datesss = [formattes dateFromString:timeStrings];
+//                int  _secondTime = [datesss timeIntervalSince1970];
+                
+                
+                
+               
+                NSLog(@"登录后信息：%@",sender);
+                
+                
+                UILocalNotification *notification=[[UILocalNotification alloc] init];
+                if (notification!=nil) {
+                    
+                    notification.fireDate=[NSDate dateWithTimeIntervalSinceNow:theTwo1-_secondDate];//10秒后通知
+                    
+                    notification.timeZone=[NSTimeZone defaultTimeZone];
+                    
+                    notification.repeatInterval=0;
+                    notification.applicationIconBadgeNumber++; //应用的红色数字
+                    
+                    notification.soundName=@"simivoice.caf";//声音，可以换成alarm.soundName = @"myMusic.caf"
+                    
+                    //去掉下面2行就不会弹出提示框
+                    notification.alertTitle=/*@"明天会响么钱钱钱？";//*/[NSString stringWithFormat:@"%@",[dict objectForKey:@"card_type_name"]];
+                    notification.alertBody=/*@"明天会响么清清浅浅？";//*/[NSString stringWithFormat:@"%@",[dict objectForKey:@"service_content"]];//提示信息 弹出提示框
+                    
+                    notification.alertAction = @"打开";  //提示框按钮
+                    
+                    NSDictionary *dictts = @{@"ac":@"s",@"ci":[dict objectForKey:@"card_id"],@"rt":[dict objectForKey:@"card_type_name"],@"rc":[dict objectForKey:@"service_content"],@"re":remind_time,@"st":timaString};
+                    NSDictionary *infoDict = @{@"dic":dictts,@"yes_or_no":@"no"};
+                    notification.userInfo = infoDict; //添加额外的信息
+                    
+                    [[UIApplication sharedApplication] scheduleLocalNotification:notification];
+                    ISLoginManager *_manager = [ISLoginManager shareManager];
+                    DownloadManager *_download = [[DownloadManager alloc]init];
+                    NSDictionary *dics=@{@"user_id":_manager.telephone,@"card_id":[dict objectForKey:@"card_id"]};
+                    [_download requestWithUrl:PUSH_NOTICE dict:dics view:self.view delegate:self finishedSEL:@selector(Success:) isPost:YES failedSEL:@selector(Fail:)];
+                }
+                
+            }else{
+                
+                NSLog(@"登录后信息：%@",sender);
+                NSDictionary *dict=[sender objectForKey:@"data"];
+                NSString *timaString=[NSString stringWithFormat:@"%@",[dict objectForKey:@"service_time"]];
+                NSString *remind_time=[NSString stringWithFormat:@"%@",[dict objectForKey:@"remind_time"]];
+                
+                NSDateFormatter *formattetime = [[NSDateFormatter alloc] init];
+                [formattetime setDateStyle:NSDateFormatterMediumStyle];
+                [formattetime setTimeStyle:NSDateFormatterShortStyle];
+                [formattetime setDateFormat:@"yyyy-MM-dd HH:mm"];
+                int  timeint=[remind_time intValue];
+                NSDate *confromTimesp = [NSDate dateWithTimeIntervalSince1970:timeint];
+                NSLog(@"1296035591  = %@",confromTimesp);
+                NSString *confromTimespStr = [formattetime stringFromDate:confromTimesp];
+
+                //获取当前时间
+                NSDate *  senddate=[NSDate date];
+                
+                NSDateFormatter  *dateformatter=[[NSDateFormatter alloc] init];
+                
+                [dateformatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+                
+                NSString *  locationString=[dateformatter stringFromDate:senddate];
+                
+                NSLog(@"locationString:%@",locationString);
+                NSDateFormatter *formatte = [[NSDateFormatter alloc] init];
+                [formatte setDateStyle:NSDateFormatterMediumStyle];
+                [formatte setTimeStyle:NSDateFormatterShortStyle];
+                [formatte setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+                NSDate* date = [formatte dateFromString:locationString];
+                int  _secondDate = [date timeIntervalSince1970];
+                
+                
+                NSDateFormatter *timeformatte = [[NSDateFormatter alloc] init];
+                [timeformatte setDateStyle:NSDateFormatterMediumStyle];
+                [timeformatte setTimeStyle:NSDateFormatterShortStyle];
+                [timeformatte setDateFormat:@"yyyy-MM-dd HH:mm"];
+                
+                NSDate* datetime = [timeformatte dateFromString:confromTimespStr];
+                int theTwo1 = [datetime timeIntervalSince1970];
+                
+                NSLog(@"%d",theTwo1-_secondDate);
+//                int period=[[NSString stringWithFormat:@"%@",[dict objectForKey:@"period"]]intValue];
+                UILocalNotification *notification=[[UILocalNotification alloc] init];
+                if (notification!=nil) {
+                    
+                    //        NSDate *now=[NSDate new];
+                    
+                    notification.fireDate=[NSDate dateWithTimeIntervalSinceNow:theTwo1-_secondDate];//10秒后通知
+                    
+                    notification.timeZone=[NSTimeZone defaultTimeZone];
+                    notification.repeatInterval=0;
+                    notification.applicationIconBadgeNumber++; //应用的红色数字
+                    
+                    
+                    notification.soundName=@"simivoice.caf";//声音，可以换成alarm.soundName = @"myMusic.caf"
+                    
+                    //去掉下面2行就不会弹出提示框
+                    notification.alertTitle=/*@"明天会响么钱钱钱？";//*/[NSString stringWithFormat:@"%@",[dict objectForKey:@"card_type_name"]];
+                    notification.alertBody=/*@"明天会响么清清浅浅？";//*/[NSString stringWithFormat:@"%@",[dict objectForKey:@"service_content"]];//提示信息 弹出提示框
+                    
+                    notification.alertAction = @"打开";  //提示框按钮
+                    
+                    //notification.hasAction = NO; //是否显示额外的按钮，为no时alertAction消失
+//                    NSDate *timedate = [NSDate dateWithTimeIntervalSince1970:[timaString intValue]];
+                    
+                    NSDateFormatter *formattesMM = [[NSDateFormatter alloc] init];
+                    [formattesMM setDateStyle:NSDateFormatterMediumStyle];
+                    [formattesMM setTimeStyle:NSDateFormatterShortStyle];
+                    [formattesMM setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+//                    NSString *  locationStr=[formattesMM stringFromDate:timedate];
+                    
+                    
+                    NSDictionary *dictts = @{@"ac":@"s",@"ci":[dict objectForKey:@"card_id"],@"rt":[dict objectForKey:@"card_type_name"],@"rc":[dict objectForKey:@"service_content"],@"re":remind_time,@"st":timaString};
+                    NSDictionary *infoDict = @{@"dic":dictts,@"yes_or_no":@"no"};
+                    notification.userInfo = infoDict; //添加额外的信息
+                    
+                    [[UIApplication sharedApplication] scheduleLocalNotification:notification];
+                    
+                }
+                
+                //            }
+                
+            }
+            NSDictionary *dict=[sender objectForKey:@"data"];
+            
+            ISLoginManager *_manager = [ISLoginManager shareManager];
+            DownloadManager *_download = [[DownloadManager alloc]init];
+            NSDictionary *dics=@{@"user_id":_manager.telephone,@"card_id":[dict objectForKey:@"card_id"]};
+            [_download requestWithUrl:PUSH_NOTICE dict:dics view:self.view delegate:self finishedSEL:@selector(Success:) isPost:YES failedSEL:@selector(Fail:)];
+        }else{
+            if (_pushID==1) {
+                NSDictionary *dict=[sender objectForKey:@"data"];
+                //删除原来的闹钟
+                NSArray *narry=[[UIApplication sharedApplication] scheduledLocalNotifications];
+                NSUInteger acount=[narry count];
+                if (acount>0)
+                {// 遍历找到对应nfkey和notificationtag的通知
+                    for (int i=0; i<acount; i++)
+                    {
+                        UILocalNotification *myUILocalNotification = [narry objectAtIndex:i];
+                        NSDictionary *userInfo = [myUILocalNotification.userInfo objectForKey:@"dic"];
+                        NSNumber *obj = [userInfo objectForKey:@"ci"];
+                        int mytag=[obj intValue];
+                        int notificationtag=[[NSString stringWithFormat:@"%@",[dict objectForKey:@"card_id"]]intValue];
+                        if (mytag==notificationtag)
+                        {
+                            //删除本地通知
+                            [[UIApplication sharedApplication] cancelLocalNotification:myUILocalNotification];
+                            break;
+                        }
+                    }
+                }//删除原来的闹钟
+
+            }
+        }
+        
+    }
     [self backAction];
     NSLog(@"登录后信息：%@",sender);
 
@@ -1475,6 +1744,14 @@ int y,x=0,time_ID;
     [self.navigationController pushViewController:vc animated:YES];
 }
 
+-(void)Success:(id)source
+{
+    
+}
+-(void)Fail:(id)source
+{
+    NSLog(@"%@",source);
+}
 
 
 

@@ -66,6 +66,8 @@
 
 #import <objc/message.h>
 
+#import "GoodsModel.h"
+
 #endif
 
 #define NAV_COLOR 0xE8374A

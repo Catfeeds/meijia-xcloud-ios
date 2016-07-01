@@ -36,8 +36,6 @@ typedef NS_ENUM (NSUInteger, eScenarioType)
 @interface UMAnalyticsConfig : NSObject
 /** required:  appkey string */
 @property(nonatomic, copy) NSString *appKey;
-/** required:  token string */
-@property(nonatomic, copy) NSString *token;
 /** optional:  default: nil*/
 @property(nonatomic, copy) NSString *secret;
 /** optional:  default: "App Store"*/
