@@ -39,13 +39,13 @@
             
         case 101:
             self.navlabel.text = @"用户协议";
-            _loadurl = @"html/simi-inapp/agreement.htm";
+            _loadurl = @"http://bolohr.com/agreement.html";
             
             break;
 
         case 102:
             self.navlabel.text = @"关于我们";
-            _loadurl = @"html/simi-inapp/about-us.htm";
+            _loadurl = @"http://bolohr.com/aboutus.html";
             break;
 
             

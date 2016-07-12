@@ -13,13 +13,16 @@
 #import "StorageRegisterViewController.h"
 #import "CollectCategoryViewController.h"
 #import "ZXShopCartViewController.h"
-@interface AssetsAdministrationViewController ()
+@interface AssetsAdministrationViewController ()<UIWebViewDelegate,UIScrollViewDelegate>
 {
     UIView *mainView;
     UIView *lineView;
     UIView *tabBarButView;
     UIViewController *currentViewController;
     CollectCategoryViewController *cateVC;
+    UIActivityIndicatorView *webActivityView;
+    UIActivityIndicatorView *view;
+    UILabel *webTitleLabel;
 }
 @end
 CollectRecordsViewController *myLaunchViewController;
@@ -58,6 +61,7 @@ StorageRecordViewController *myApprovalViewController;
     UIView *crossView=[[UIView alloc]initWithFrame:FRAME(0, 41, WIDTH, 1)];
     crossView.backgroundColor=[UIColor colorWithRed:232/255.0f green:232/255.0f blue:232/255.0f alpha:1];
     [tabBarButView addSubview:crossView];
+    
     
     NSArray *nameArray=@[@"领用记录",@"入库记录"];
     for (int i=0; i<nameArray.count; i++) {
@@ -98,7 +102,9 @@ StorageRecordViewController *myApprovalViewController;
     referBut.tag=1002;
     [referBut addTarget:self action:@selector(butAction:) forControlEvents:UIControlEventTouchUpInside];
     [butView addSubview:referBut];
-    // Do any additional setup after loading the view.
+
+
+       // Do any additional setup after loading the view.
 }
 
 -(void)viewWillAppear:(BOOL)animated

@@ -576,7 +576,7 @@ appDelegate
         [self.navigationController popViewControllerAnimated:YES];
         _vCLID=0;
         [self AppdeleAction];
-//        [self userAddress];
+        [self userAddress];
         [self getUserInfo];//2
         [[NSNotificationCenter defaultCenter] postNotificationName:@"REMIND_SPOT" object:nil];
         
@@ -665,6 +665,18 @@ appDelegate
         ISLoginManager *_manager = [ISLoginManager shareManager];
         NSLog(@"有值么%@",_manager.telephone);
         DownloadManager *_download = [[DownloadManager alloc]init];
+        if (_latString==nil||_latString==NULL||[_latString isEqualToString:@""]) {
+            _latString=@"";
+        }
+        if (_lngString==nil||_lngString==NULL||[_lngString isEqualToString:@""]){
+            _lngString=@"";
+        }
+        if (_addressName==nil||_addressName==NULL||[_addressName isEqualToString:@""]){
+            _addressName=@"";
+        }
+        if (_cityStr==nil||_cityStr==NULL||[_cityStr isEqualToString:@""]){
+            _cityStr=@"";
+        }
         NSDictionary *_dict=@{@"user_id":_manager.telephone,@"lat":_latString,@"lng":_lngString,@"poi_name":_addressName,@"city":_cityStr};
         [_download requestWithUrl:ADDRESS_USER dict:_dict view:self.view delegate:self finishedSEL:@selector(AddressFinish:) isPost:YES failedSEL:@selector(QJDownFail:)];
     }

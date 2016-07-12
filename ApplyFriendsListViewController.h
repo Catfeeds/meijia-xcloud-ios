@@ -10,4 +10,5 @@
 
 @interface ApplyFriendsListViewController : FatherViewController<UITableViewDataSource,UITableViewDelegate,MJRefreshBaseViewDelegate>
 @property (nonatomic ,assign)int vcID;
+@property (nonatomic ,assign)int listID;
 @end

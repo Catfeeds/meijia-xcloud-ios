@@ -22,6 +22,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.view.backgroundColor=[UIColor whiteColor];
     secondsDown=60;
     self.title=@"绑定手机号";
     UIButton *liftButton=[[UIButton alloc]initWithFrame:FRAME(0, 20, 70, 44)];
@@ -67,9 +68,34 @@
     [suBmit setTitle:@"绑定" forState:UIControlStateNormal];
     [self.view addSubview:suBmit];
     
-    UILabel *titleLabel=[[UILabel alloc]initWithFrame:FRAME(20, suBmit.frame.size.height+suBmit.frame.origin.y+30, WIDTH-40, 17)];
-    titleLabel.text=@"绑定手机号后，我们的服务和礼品将能更快捷的送达!";
-    [self.view addSubview:titleLabel];
+//    UILabel *titleLabel=[[UILabel alloc]init];
+//    titleLabel.text=@"绑定手机号后，我们的服务和礼品将能更快捷的送达!";
+//    titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
+//    [titleLabel setNumberOfLines:0];
+//    NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:[UIFont systemFontOfSize:15],NSFontAttributeName, nil];
+//    CGSize size = [titleLabel.text boundingRectWithSize:CGSizeMake(WIDTH-40, 200) options:NSStringDrawingUsesLineFragmentOrigin attributes:dict context:nil].size;
+//    titleLabel.frame=FRAME(20, suBmit.frame.size.height+suBmit.frame.origin.y+30, WIDTH-40, size.height);
+//    [self.view addSubview:titleLabel];
+    UILabel*_contentLabel=[[UILabel alloc]init];
+//    _contentLabel.backgroundColor=[UIColor redColor];
+    _contentLabel.text=[NSString stringWithFormat:@"绑定手机号后，我们的服务和礼品将能更快捷的送达!"];
+    _contentLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
+    _contentLabel.textColor=[UIColor colorWithRed:51/255.0f green:51/255.0f blue:51/255.0f alpha:1];
+    _contentLabel.numberOfLines=0;
+    [_contentLabel sizeToFit];
+    _contentLabel.lineBreakMode = NSLineBreakByWordWrapping;
+    NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:[UIFont systemFontOfSize:15],NSFontAttributeName, nil];
+    CGSize size = [_contentLabel.text boundingRectWithSize:CGSizeMake(WIDTH-40, 200) options:NSStringDrawingUsesLineFragmentOrigin attributes:dict context:nil].size;;
+    _contentLabel.frame=CGRectMake(20, suBmit.frame.size.height+suBmit.frame.origin.y+30, WIDTH-40, size.height);
+    [self.view addSubview:_contentLabel];
+    
+    // 调整行间距
+    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString: _contentLabel.text];
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    [paragraphStyle setLineSpacing:0];
+    [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [ _contentLabel.text length])];
+    _contentLabel.attributedText = attributedString;
+    [_contentLabel sizeToFit];
     
     // Do any additional setup after loading the view.
 }

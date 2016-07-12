@@ -89,7 +89,7 @@ WholeViewController *wholeViewController;
     voiceImage.image=[UIImage imageNamed:@"iconfont-yuyin-copy"];
     [searchButton addSubview:voiceImage];
     UILabel *searchLabel=[[UILabel alloc]initWithFrame:FRAME(45, 5, searchButton.frame.size.width-90, 15)];
-    searchLabel.text=@"点击搜索相关信息";
+    searchLabel.text=@"找一位团建策划达人";
     searchLabel.font=[UIFont fontWithName:@"Heiti SC" size:13];
     searchLabel.textAlignment=NSTextAlignmentCenter;
     searchLabel.textColor=[UIColor colorWithRed:200/255.0f green:200/255.0f blue:200/255.0f alpha:1];

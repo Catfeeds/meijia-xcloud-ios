@@ -180,7 +180,8 @@
     commonFrame.origin.y = self.searchBar.frame.size.height;
     commonFrame.size.height = commonFrame.size.height - commonFrame.origin.y;
 //    CGFloat centerY = commonFrame.size.height/2+commonFrame.origin.y;
-    UMComHotFeedMenuViewController *hotMenuVc = [[UMComHotFeedMenuViewController alloc]init];
+    UMComFeedTableViewController *hotMenuVc =[[UMComFeedTableViewController alloc] initWithFetchRequest:[[UMComAllNewFeedsRequest alloc] initWithCount:BatchSize]];
+    hotMenuVc.isShowEditButton=YES;
     hotMenuVc.view.frame = commonFrame;
     [self addChildViewController:hotMenuVc];
     [self.view addSubview:hotMenuVc.view];
@@ -219,7 +220,7 @@
     //添加热门界面的searchBar---end
 #endif
 
-    UMComFeedTableViewController *recommendPostListController = [[UMComFeedTableViewController alloc] initWithFetchRequest:[[UMComRecommendFeedsRequest alloc] initWithCount:BatchSize]];
+    UMComFeedTableViewController *recommendPostListController = [[UMComFeedTableViewController alloc] initWithFetchRequest:[[UMComHotFeedRequest alloc]initWithCount:BatchSize withinDays:30]];
     [self addChildViewController:recommendPostListController];
     
     //添加置顶类---begin
@@ -230,6 +231,8 @@
     //添加置顶类---end
     
     recommendPostListController.isShowEditButton = YES;
+    recommendPostListController.isLoadLoacalData = NO;
+    recommendPostListController.isAutoStartLoadData = YES;
     recommendPostListController.feedCellBgViewTopEdge = 0;
     recommendPostListController.view.frame = commonFrame;
 //    recommendPostListController.view.center = CGPointMake(commonFrame.size.width * 3 / 2, centerY);
@@ -327,9 +330,9 @@
     CGRect labelFrame = cell.label.frame;
     cell.label.textAlignment = NSTextAlignmentCenter;
     if (indexPath.row == 0) {
-        cell.label.text = UMComLocalizedString(@"um_com_forum_post_hot",@"热门");
+        cell.label.text =UMComLocalizedString(@"um_com_forum_post_recommend",@"最新");
     }else if (indexPath.row == 1){
-        cell.label.text = UMComLocalizedString(@"um_com_forum_post_recommend",@"推荐");
+        cell.label.text = UMComLocalizedString(@"um_com_forum_post_hot",@"热门");
     }else if (indexPath.row == 2){
         cell.label.text = UMComLocalizedString(@"um_com_forum_post_following", @"关注");
     }else if (indexPath.row == 3){

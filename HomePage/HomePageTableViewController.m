@@ -118,7 +118,8 @@ static CGFloat const imageBGHeight = 395; // 背景图片的高度
     [self user_default];
     W=[[NSMutableArray alloc]init];
     page=1;
-    arraY=@[@"精选",@"职场",@"案例",@"招聘",@"薪资",@"行政",@"培训",@"绩效",@"员工关系",@"人资规划",@"行业"];
+//    arraY=@[@"精选",@"职场",@"案例",@"招聘",@"薪资",@"行政",@"培训",@"绩效",@"员工关系",@"人资规划",@"行业"];
+    arraY=@[@"精选",@"招聘",@"绩效",@"薪资",@"案例",@"行政",@"职场",@"培训",@"员工关系",@"人资规划",@"行业"];
     [self.navigationController setNavigationBarHidden:NO animated:NO];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(SignFication:) name:@"SIGNSS" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getLayout) name:@"HOMERefresh" object:nil];
@@ -284,13 +285,13 @@ static CGFloat const imageBGHeight = 395; // 背景图片的高度
     
     
     
-    csView=[[UIView alloc]initWithFrame:FRAME(0, imageBGHeight, WIDTH, 38)];
+    csView=[[UIView alloc]initWithFrame:FRAME(0, imageBGHeight, WIDTH, 50)];
 //    csView.backgroundColor=[UIColor blackColor];
     [self.view addSubview:csView];
     [rootView removeFromSuperview];
     
     [W removeAllObjects];
-    rootView=[[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, WIDTH-40, 38)];
+    rootView=[[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, WIDTH-40, 50)];
     rootView.backgroundColor=[UIColor whiteColor];
     //    rootView.contentSize=CGSizeMake(WIDTH/4*array.count, 37);
     rootView.showsVerticalScrollIndicator = FALSE;
@@ -300,11 +301,11 @@ static CGFloat const imageBGHeight = 395; // 背景图片的高度
     rootView.delegate=self;
     [csView addSubview:rootView];
     
-    UIButton *addButton=[[UIButton alloc]initWithFrame:FRAME(WIDTH-50, 0, 50, 38)];
+    UIButton *addButton=[[UIButton alloc]initWithFrame:FRAME(WIDTH-50, 0, 50, 50)];
     //    addButton.backgroundColor=[UIColor whiteColor];
     [addButton addTarget:self action:@selector(addButAction) forControlEvents:UIControlEventTouchUpInside];
     [csView addSubview:addButton];
-    UIImageView *addImage=[[UIImageView alloc]initWithFrame:FRAME(0, 0, 50, 38)];
+    UIImageView *addImage=[[UIImageView alloc]initWithFrame:FRAME(0, 0, 50, 50)];
     addImage.image=[UIImage imageNamed:@"加号"];
     [addButton addSubview:addImage];
     
@@ -312,7 +313,7 @@ static CGFloat const imageBGHeight = 395; // 背景图片的高度
     lineView1.backgroundColor=[UIColor colorWithRed:220/255.0f green:220/255.0f blue:220/255.0f alpha:1];
     [csView addSubview:lineView1];
     
-    UIView *lineView=[[UIView alloc]initWithFrame:FRAME(0, 38.5, WIDTH, 0.5)];
+    UIView *lineView=[[UIView alloc]initWithFrame:FRAME(0, 49.5, WIDTH, 0.5)];
     lineView.backgroundColor=[UIColor colorWithRed:220/255.0f green:220/255.0f blue:220/255.0f alpha:1];
     [csView addSubview:lineView];
     
@@ -353,13 +354,13 @@ static CGFloat const imageBGHeight = 395; // 背景图片的高度
         butLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
         [butLabel setNumberOfLines:1];
         [butLabel sizeToFit];
-        butLabel.frame=FRAME(10, 8, butLabel.frame.size.width, 21);
+        butLabel.frame=FRAME(10, 14, butLabel.frame.size.width, 21);
         //        [button addSubview:butLabel];
         //        button.titleLabel.textColor=;
         int S=0;
         if (K<WIDTH) {
             
-            button.frame=CGRectMake((WIDTH-Ks)/(arraY.count+1)+X+(WIDTH-Ks)/(arraY.count+1)*i, 0, butLabel.frame.size.width, 37);
+            button.frame=CGRectMake((WIDTH-Ks)/(arraY.count+1)+X+(WIDTH-Ks)/(arraY.count+1)*i, 0, butLabel.frame.size.width, 49);
             X=X+butLabel.frame.size.width;
             if (i==0||i==arraY.count-1) {
                 S=button.frame.size.width+(WIDTH-Ks)/(arraY.count+1)*3/2;
@@ -367,7 +368,7 @@ static CGFloat const imageBGHeight = 395; // 背景图片的高度
                 S=button.frame.size.width+(WIDTH-Ks)/(arraY.count+1);
             }
         }else{
-            button.frame=CGRectMake(20+X+20*i, 0, butLabel.frame.size.width, 37);
+            button.frame=CGRectMake(20+X+20*i, 0, butLabel.frame.size.width, 49);
             X=X+butLabel.frame.size.width;
             if (i==0||i==arraY.count-1) {
                 S=button.frame.size.width+20*3/2;
@@ -386,13 +387,13 @@ static CGFloat const imageBGHeight = 395; // 背景图片的高度
         int k=[[W objectAtIndex:i]intValue];
         kuan+=k;
     }
-    rootView.contentSize=CGSizeMake(K, 37);
+    rootView.contentSize=CGSizeMake(K, 49);
     maximumOffset = rootView.contentSize.width;
     CGRect bounds = rootView.bounds;
     UIEdgeInsets inset = rootView.contentInset;
     currentOffset = rootView.contentOffset.x+bounds.size.width - inset.bottom;
     int s=[[W objectAtIndex:0]intValue];
-    lineImageView.frame=CGRectMake(0, 36, s, 2);
+    lineImageView.frame=CGRectMake(0, 48, s, 2);
 
     
     addView =[[UIView alloc]initWithFrame:FRAME(WIDTH/2, HEIGHT/2, 0, 0)];
@@ -462,10 +463,10 @@ static CGFloat const imageBGHeight = 395; // 背景图片的高度
     CGFloat alpha = offsetY / 299;
     navView.alpha=alpha;
     if (imageBGHeight-offsetY>64&&imageBGHeight-offsetY>0 ) {
-        csView.frame=FRAME(0, imageBGHeight-offsetY, WIDTH, 38);
+        csView.frame=FRAME(0, imageBGHeight-offsetY, WIDTH, 50);
     }else{
         
-        csView.frame=FRAME(0, 64, WIDTH, 38);
+        csView.frame=FRAME(0, 64, WIDTH, 50);
     }
     if (alpha>=1) {
         [UIView beginAnimations: @"Animation" context:nil];
@@ -865,7 +866,7 @@ static CGFloat const imageBGHeight = 395; // 背景图片的高度
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     
-    return 39;
+    return 50;
     
 }
 #pragma mark  列表组头view
@@ -1084,13 +1085,15 @@ static CGFloat const imageBGHeight = 395; // 背景图片的高度
     [UIView beginAnimations: @"Animation" context:nil];
     [UIView setAnimationDuration:0.3];
     
-    lineImageView.frame=CGRectMake(huang, 36, width, 2);
+    lineImageView.frame=CGRectMake(huang, 48, width, 2);
     [UIView commitAnimations];
     scrollID=(int)(sender.tag-1000);
     [self getLayout];
 }
 -(void)getLayout
 {
+    //    arraY=@[@"精选",@"职场",@"案例",@"招聘",@"薪资",@"行政",@"培训",@"绩效",@"员工关系",@"人资规划",@"行业"];
+//                @"精选",@"招聘",@"绩效",@"薪资",@"案例",@"行政",@"职场",@"培训",@"员工关系",@"人资规划",@"行业"
     NSString *urlStr;
     switch (scrollID) {
         case 0:
@@ -1101,7 +1104,7 @@ static CGFloat const imageBGHeight = 395; // 背景图片的高度
                 if (textStr==nil||textStr==NULL||[textStr isEqualToString:@""]) {
                      urlStr=@"http://51xingzheng.cn/?json=get_tag_posts&count=10&order=DESC&slug=%E9%A6%96%E9%A1%B5%E7%B2%BE%E9%80%89&include=id,title,modified,url,thumbnail,custom_fields";
                 }else{
-                    NSString *string=[NSString stringWithFormat:@"http://51xingzheng.cn/api/tags/get_tag_posts/?slug=%@&count=10&order=DESC&include=id,title,url,thumbnail,custom_fields",textStr];
+                    NSString *string=[NSString stringWithFormat:@"http://51xingzheng.cn/api/tags/get_tag_posts/?slug=首页精选,%@&count=10&order=DESC&include=id,title,url,thumbnail,custom_fields",textStr];
                     urlStr=[string stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
                     NSLog(@"%@",urlStr);
                 }
@@ -1116,25 +1119,26 @@ static CGFloat const imageBGHeight = 395; // 背景图片的高度
         case 1:
         {
            
-            urlStr=@"http://51xingzheng.cn/?json=get_category_posts&count=10&order=DESC&id=50&include=id,title,modified,url,thumbnail,custom_fields";
+            urlStr=@"http://51xingzheng.cn/?json=get_category_posts&count=10&order=DESC&id=62&include=id,title,modified,url,thumbnail,custom_fields";//
+            
+            
         }
             break;
         case 2:
         {
+            urlStr=@"http://51xingzheng.cn/?json=get_category_posts&count=10&order=DESC&id=65&include=id,title,modified,url,thumbnail,custom_fields";//
             
-            urlStr=@"http://51xingzheng.cn/?json=get_category_posts&count=10&order=DESC&id=69&include=id,title,modified,url,thumbnail,custom_fields";
         }
             break;
         case 3:
         {
+            urlStr=@"http://51xingzheng.cn/?json=get_category_posts&count=10&order=DESC&id=64&include=id,title,modified,url,thumbnail,custom_fields";//
             
-            urlStr=@"http://51xingzheng.cn/?json=get_category_posts&count=10&order=DESC&id=62&include=id,title,modified,url,thumbnail,custom_fields";
         }
             break;
         case 4:
         {
-            
-            urlStr=@"http://51xingzheng.cn/?json=get_category_posts&count=10&order=DESC&id=64&include=id,title,modified,url,thumbnail,custom_fields";
+            urlStr=@"http://51xingzheng.cn/?json=get_category_posts&count=10&order=DESC&id=69&include=id,title,modified,url,thumbnail,custom_fields";//
         }
             break;
         case 5:
@@ -1145,12 +1149,13 @@ static CGFloat const imageBGHeight = 395; // 背景图片的高度
             break;
         case 6:
         {
-            urlStr=@"http://51xingzheng.cn/?json=get_category_posts&count=10&order=DESC&id=63&include=id,title,modified,url,thumbnail,custom_fields";
+            urlStr=@"http://51xingzheng.cn/?json=get_category_posts&count=10&order=DESC&id=50&include=id,title,modified,url,thumbnail,custom_fields";//
+            
         }
             break;
         case 7:
         {
-            urlStr=@"http://51xingzheng.cn/?json=get_category_posts&count=10&order=DESC&id=65&include=id,title,modified,url,thumbnail,custom_fields";
+            urlStr=@"http://51xingzheng.cn/?json=get_category_posts&count=10&order=DESC&id=63&include=id,title,modified,url,thumbnail,custom_fields";//
         }
             break;
         case 8:

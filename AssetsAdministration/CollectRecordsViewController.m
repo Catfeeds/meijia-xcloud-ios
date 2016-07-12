@@ -16,6 +16,7 @@
     BOOL _needRefresh;
     BOOL _hasMore;
     NSInteger   page;
+    
 }
 @end
 
@@ -43,6 +44,7 @@
     [self tableViewLayout];
     // Do any additional setup after loading the view.
 }
+
 -(void)tableViewLayout
 {
     myTableView=[[UITableView alloc]initWithFrame:FRAME(0, 108, WIDTH, HEIGHT-164)];

@@ -9,7 +9,7 @@
 #import "SchoolViewController.h"
 #import "SchoolTableViewCell.h"
 #import "AFHTTPRequestOperationManager.h"
-#import "SearchVoiceViewController.h"
+#import "Home_SearchVoiceViewController.h"
 @interface SchoolViewController ()
 {
     UIScrollView *myScrollView;
@@ -559,7 +559,7 @@
 }
 #pragma mark 表格刷新相关
 -(void)searchButAction{
-    SearchVoiceViewController *searchVC=[[SearchVoiceViewController alloc]init];
+    Home_SearchVoiceViewController *searchVC=[[Home_SearchVoiceViewController alloc]init];
     [self.navigationController pushViewController:searchVC animated:YES];
 }
 

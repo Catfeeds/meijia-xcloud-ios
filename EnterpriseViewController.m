@@ -11,13 +11,11 @@
 #import "DefaultCompanyViewController.h"
 @interface EnterpriseViewController ()
 {
-    UIActivityIndicatorView *view;
     UITableView *myTableView;
     NSArray *companyArray;
     CompanyViewController *companyVC;
     int djID;
     
-    UIView *setupView;
     int  setupID;
     DropDown *dd1;
 }
@@ -28,23 +26,19 @@
 - (void)viewDidLoad {
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(sureButLayout:) name:@"SUREBUT" object:nil];
     [super viewDidLoad];
-    if (_webId==0) {
-        self.navlabel.text=@"创建企业通讯录";
-        [self webViewLayout];
-    }else if (_webId==1){
+//    if (_webId==0) {
+//        self.navlabel.text=@"创建企业通讯录";
+//        [self webViewLayout];
+//    }else if (_webId==1){
         self.navlabel.text=@"企业通讯录";
-        ISLoginManager *_manager = [ISLoginManager shareManager];
-        NSLog(@"有值么%@",_manager.telephone);
-        DownloadManager *_download = [[DownloadManager alloc]init];
-        NSDictionary *_dict=@{@"user_id":_manager.telephone};
-        [_download requestWithUrl:USER_ENTERPRISE dict:_dict view:self.view delegate:self finishedSEL:@selector(CompanySuccess:) isPost:NO failedSEL:@selector(CompanyFailure:)];
+    
         [self tableViewLayout];
         UIButton *addBut=[[UIButton alloc]initWithFrame:FRAME(WIDTH-60, 24, 50, 40)];
         [addBut setTitle:@"设置" forState:UIControlStateNormal];
         [addBut setTitleColor:[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1] forState:UIControlStateNormal];
         [addBut addTarget:self action:@selector(addButAction:) forControlEvents:UIControlEventTouchUpInside];
         [self.view addSubview:addBut];
-    }
+//    }
     
     dd1 = [[DropDown alloc] initWithFrame:CGRectMake(WIDTH-110, 54, 100, 100)];
     dd1.delegate=self;
@@ -71,14 +65,17 @@
         _mobileArray=companyVC.mobileArray;
         _idArray=companyVC.idArray;
     }
+    ISLoginManager *_manager = [ISLoginManager shareManager];
+    NSLog(@"有值么%@",_manager.telephone);
+    DownloadManager *_download = [[DownloadManager alloc]init];
+    NSDictionary *_dict=@{@"user_id":_manager.telephone};
+    [_download requestWithUrl:USER_ENTERPRISE dict:_dict view:self.view delegate:self finishedSEL:@selector(CompanySuccess:) isPost:NO failedSEL:@selector(CompanyFailure:)];
     
 }
 -(void)pullDownAnimated:(int)open
 {
     if (open==0) {
-        WebPageViewController *webVC=[[WebPageViewController alloc]init];
-        webVC.barIDS=100;
-        webVC.webURL=@"http://123.57.173.36/simi-h5/show/company-reg.html";
+        Create_Enterprise_Address_BookViewController *webVC=[[Create_Enterprise_Address_BookViewController alloc]init];
         [self.navigationController pushViewController:webVC animated:YES];
     }else{
         DefaultCompanyViewController *defVC=[[DefaultCompanyViewController alloc]init];
@@ -95,28 +92,6 @@
 #pragma mark 用户所属企业列表失败返回
 -(void)CompanyFailure:(id)sender
 {
-}
--(void)webViewLayout
-{
-    UIWebView *meWebView= [[UIWebView alloc]initWithFrame:FRAME(0, 64, WIDTH, HEIGHT-64)];
-    meWebView.delegate=self;
-    //self.meWebView.hidden=YES;
-    meWebView.scrollView.delegate=self;
-    [self.view addSubview:meWebView];
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://123.57.173.36/simi-h5/show/company-reg.html"]];//http://123.57.173.36/simi-h5/show/company-reg.html
-    //NSLog(@"gourl  =  %@",_imgurl);
-    NSURLRequest *request = [NSURLRequest requestWithURL:url];
-    [meWebView loadRequest:request];
-}
-- (void)webViewDidStartLoad:(UIWebView *)webView {
-    view=[[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-    view.center = CGPointMake(WIDTH/2, HEIGHT/2);
-    [self.view addSubview:view];
-    [view startAnimating];
-}
-- (void)webViewDidFinishLoad:(UIWebView *)webView {
-    [view stopAnimating]; // 结束旋转
-    [view setHidesWhenStopped:YES]; //当旋转结束时隐藏
 }
 - (void)backAction
 {
@@ -167,6 +142,15 @@
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     if (cell == nil) {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
+    }
+    UILabel *label=[[UILabel alloc]initWithFrame:FRAME(WIDTH-100, 15, 70, 20)];
+    label.font=[UIFont fontWithName:@"Heiti SC" size:15];
+    label.textColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
+    label.textAlignment=NSTextAlignmentRight;
+    [cell addSubview:label];
+    int  is_default=[[dic objectForKey:@"is_default"]intValue];
+    if (is_default==1) {
+        label.text=@"默认";
     }
     cell.textLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"company_name"]];
     cell.textLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];

@@ -18,7 +18,8 @@
 #import "LBXScanViewController.h"
 #import <objc/message.h>
 #import "EnterpriseViewController.h"
-#import "ApplyFriendsListViewController.h"
+#import "Create_Enterprise_Address_BookViewController.h"
+#import "Application_ListViewController.h"
 @interface SecretFriendsViewController ()
 {
     NSMutableArray *secretArray;
@@ -436,17 +437,18 @@
 {
     if (indexPath.section==0) {
         if(indexPath.row==0){
-            EnterpriseViewController *enterVc=[[EnterpriseViewController alloc]init];
-            enterVc.vcIDs=100;
             AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication] delegate];
             NSString *has_company=[NSString stringWithFormat:@"%@",[delegate.globalDic objectForKey:@"has_company"]];
             int has=[has_company intValue];
             if (has==0) {
-                enterVc.webId=0;
+                Create_Enterprise_Address_BookViewController *boolVC=[[Create_Enterprise_Address_BookViewController alloc]init];
+                [self.navigationController pushViewController:boolVC animated:YES];
             }else{
-                enterVc.webId=1;
+                EnterpriseViewController *enterVc=[[EnterpriseViewController alloc]init];
+                enterVc.vcIDs=100;
+                [self.navigationController pushViewController:enterVc animated:YES];
             }
-            [self.navigationController pushViewController:enterVc animated:YES];
+            
         }else if(indexPath.row==1){
             ListViewController *vc=[[ListViewController alloc]init];
             vc.dataArray=cellArray;
@@ -461,7 +463,7 @@
                 ((void (*)(id, SEL))objc_msgSend)(self, normalSelector);
             }
         }else{
-            ApplyFriendsListViewController *applyVC=[[ApplyFriendsListViewController alloc]init];
+            Application_ListViewController *applyVC=[[Application_ListViewController alloc]init];
             [self.navigationController pushViewController:applyVC animated:YES];
         }
     }else{

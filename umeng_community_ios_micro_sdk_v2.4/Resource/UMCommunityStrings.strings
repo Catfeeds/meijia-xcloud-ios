@@ -93,7 +93,7 @@ Receive_Like="收到的赞";
 um_com_forum_post_hot="热门";
 um_com_forum_post_hot_a_day="昨天";
 um_com_forum_post_hot_recent_day="近%d天";
-um_com_forum_post_recommend="推荐";
+um_com_forum_post_recommend="最新";
 um_com_forum_post_following="关注";
 um_com_forum_post_topic="话题";
 

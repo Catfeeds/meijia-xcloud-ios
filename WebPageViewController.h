@@ -15,4 +15,5 @@
 @property (nonatomic ,assign)int qdIDl;
 @property (nonatomic ,assign)int pushID;
 @property (nonatomic ,strong)NSString *listID;
+@property (nonatomic ,assign)int toolID;
 @end

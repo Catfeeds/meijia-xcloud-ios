@@ -344,23 +344,26 @@
 -(void)poepleBut:(UIButton *)button
 {
 //    dataID=101;
-    enterVc=[[EnterpriseViewController alloc]init];
+    
     AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication] delegate];
     NSString *has_company=[NSString stringWithFormat:@"%@",[delegate.globalDic objectForKey:@"has_company"]];
     int has=[has_company intValue];
     if (has==0) {
-        enterVc.webId=0;
+        Create_Enterprise_Address_BookViewController *webVC=[[Create_Enterprise_Address_BookViewController alloc]init];
+        [self.navigationController pushViewController:webVC animated:YES];
     }else{
+        enterVc=[[EnterpriseViewController alloc]init];
         enterVc.webId=1;
+        enterVc.enterVcID=10;
+        enterVc.theNumber=0;
+        enterVc.mutableArrat=mutableArray;
+        enterVc.nameArray=nameArray;
+        enterVc.mobileArray=_mobileArray;
+        enterVc.idArray=idArray;
+        enterVc.poepleID=10000;
+        [self.navigationController pushViewController:enterVc animated:YES];
     }
-    enterVc.enterVcID=10;
-    enterVc.theNumber=0;
-    enterVc.mutableArrat=mutableArray;
-    enterVc.nameArray=nameArray;
-    enterVc.mobileArray=_mobileArray;
-    enterVc.idArray=idArray;
-    enterVc.poepleID=10000;
-    [self.navigationController pushViewController:enterVc animated:YES];
+   
 }
 -(void)typeLayout
 {

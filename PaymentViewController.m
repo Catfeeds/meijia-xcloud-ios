@@ -67,7 +67,7 @@
     int actMone=mone-actual;
     moneyStr=[NSString stringWithFormat:@"%d",actMone];
     _buyview.actualString=moneyStr;
-    _buyview.volumeString=[NSString stringWithFormat:@"为您节省%@.0元",_actualStr];
+    _buyview.volumeString=[NSString stringWithFormat:@"为您节省%@元",_actualStr];
     if (dress.addCityID) {
         NSLog(@"1111");
         addressID=dress.addCityID;
@@ -265,8 +265,8 @@
                     }
                     else
                     {
-                        UIAlertView *alerView=[[UIAlertView alloc]initWithTitle:@"提示" message:@"您绑定的手机号不正确，请重新绑定手机号！" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-                        [alerView show];
+//                        UIAlertView *alerView=[[UIAlertView alloc]initWithTitle:@"提示" message:@"您绑定的手机号不正确，请重新绑定手机号！" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+//                        [alerView show];
                         BindMobileViewController *bindVC=[[BindMobileViewController alloc]init];
                         [self.navigationController pushViewController:bindVC animated:YES];
                     }
@@ -356,8 +356,8 @@
                         }
                         else
                         {
-                            UIAlertView *alerView=[[UIAlertView alloc]initWithTitle:@"提示" message:@"您绑定的手机号不正确，请重新绑定手机号！" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-                            [alerView show];
+//                            UIAlertView *alerView=[[UIAlertView alloc]initWithTitle:@"提示" message:@"您绑定的手机号不正确，请重新绑定手机号！" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+//                            [alerView show];
                             BindMobileViewController *bindVC=[[BindMobileViewController alloc]init];
                             [self.navigationController pushViewController:bindVC animated:YES];
                         }
@@ -446,8 +446,8 @@
                 }
                 else
                 {
-                    UIAlertView *alerView=[[UIAlertView alloc]initWithTitle:@"提示" message:@"您绑定的手机号不正确，请重新绑定手机号！" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-                    [alerView show];
+//                    UIAlertView *alerView=[[UIAlertView alloc]initWithTitle:@"提示" message:@"您绑定的手机号不正确，请重新绑定手机号！" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+//                    [alerView show];
                     BindMobileViewController *bindVC=[[BindMobileViewController alloc]init];
                     [self.navigationController pushViewController:bindVC animated:YES];
                 }

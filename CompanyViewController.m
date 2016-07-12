@@ -9,13 +9,14 @@
 #import "CompanyViewController.h"
 #import "MeetTableViewCell.h"
 #import "FriendsHomeViewController.h"
-@interface CompanyViewController ()
+@interface CompanyViewController ()<UMSocialUIDelegate>
 {
     NSArray *companyArray;
     UITableView *myTableView;
     NSMutableArray *imageArray;
     UIView *qrCodeView;
     UIButton *sureBut;
+    NSDictionary *dataCodeDic;
 }
 @end
 @implementation CompanyViewController
@@ -80,35 +81,75 @@
 -(void)DetailsSuccess:(id)sender
 {
     NSLog(@"就看看哈说的话%@",sender);
+    dataCodeDic=[sender objectForKey:@"data"];
     [qrCodeView removeFromSuperview];
     qrCodeView=[[UIView alloc]initWithFrame:FRAME(WIDTH, 0, WIDTH, HEIGHT-50)];
     qrCodeView.backgroundColor=[UIColor whiteColor];
-    UITapGestureRecognizer *tap=[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapQRActiion)];
-    tap.delegate=self;
-    tap.cancelsTouchesInView=YES;
-    [qrCodeView addGestureRecognizer:tap];
+//    UITapGestureRecognizer *tap=[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapQRActiion)];
+//    tap.delegate=self;
+//    tap.cancelsTouchesInView=YES;
+//    [qrCodeView addGestureRecognizer:tap];
+    
+    UILabel *titleLabel=[[UILabel alloc]initWithFrame:FRAME(70, 20, WIDTH-100, 40)];
+    titleLabel.text=@"邀请成员加入";
+    titleLabel.textAlignment=NSTextAlignmentCenter;
+    titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:16];
+    [qrCodeView addSubview:titleLabel];
+    
+    UIView *lineView=[[UIView alloc]initWithFrame:FRAME(0, 63, WIDTH, 1)];
+    lineView.backgroundColor=[UIColor colorWithRed:230/255.0f green:230/255.0f blue:230/255.0f alpha:1];
+    [qrCodeView addSubview:lineView];
+    
+    UILabel *nameLabel=[[UILabel alloc]initWithFrame:FRAME(20, 80, WIDTH-40, 21)];
+    nameLabel.text=_nameString;
+    nameLabel.textColor=[UIColor colorWithRed:86/255.0f green:171/255.0f blue:228/255.0f alpha:1];
+    nameLabel.font=[UIFont fontWithName:@"Heiti SC" size:20];
+    nameLabel.textAlignment=NSTextAlignmentCenter;
+    [qrCodeView addSubview:nameLabel];
+    
+    UILabel *label1=[[UILabel alloc]initWithFrame:FRAME(70/2, nameLabel.frame.origin.y+37, WIDTH-45, 15)];
+    label1.text=@"1.点击按钮分享邀请链接，成员填写后即可加入";
+    label1.textColor=[UIColor colorWithRed:51/255.0f green:51/255.0f blue:51/255.0f alpha:1];
+    label1.font=[UIFont fontWithName:@"Heiti SC" size:13];
+    [qrCodeView addSubview:label1];
+    
+    
+    UIButton *inviteBut=[[UIButton alloc]initWithFrame:FRAME(70/2, label1.frame.origin.y+50, WIDTH-70, 41)];
+    inviteBut.backgroundColor=[UIColor colorWithRed:86/255.0f green:171/255.0f blue:228/255.0f alpha:1];
+    [inviteBut setTitle:@"邀请成员加入" forState:UIControlStateNormal];
+    [inviteBut addTarget:self action:@selector(inviteButAction) forControlEvents:UIControlEventTouchUpInside];
+    inviteBut.layer.cornerRadius=8;
+    inviteBut.clipsToBounds=YES;
+    [qrCodeView addSubview:inviteBut];
+    
     UIButton *returnBut=[[UIButton alloc]initWithFrame:FRAME(0, 20, 70, 40)];
     [returnBut addTarget:self action:@selector(tapQRActiion) forControlEvents:UIControlEventTouchUpInside];
     [qrCodeView addSubview:returnBut];
     UIImageView *img = [[UIImageView alloc]initWithFrame:FRAME(18, (40-20)/2, 10, 20)];
     img.image = [UIImage imageNamed:@"title_left_back"];
     [returnBut addSubview:img];
-    UILabel *textLabel=[[UILabel alloc]initWithFrame:FRAME(10, (qrCodeView.frame.size.height-(WIDTH-60))/2-28, WIDTH-20, 18)];
-    textLabel.text=@"企业二维码名片";
-    textLabel.textAlignment=NSTextAlignmentCenter;
-    textLabel.font=[UIFont fontWithName:@"Heiti SC" size:16];
+    UILabel *textLabel=[[UILabel alloc]initWithFrame:FRAME(70/2, inviteBut.frame.origin.y+75, WIDTH-45, 15)];
+    textLabel.text=@"2.请成员/同事在App中扫描下方二维码";
+//    textLabel.textAlignment=NSTextAlignmentCenter;
+    textLabel.textColor=[UIColor colorWithRed:51/255.0f green:51/255.0f blue:51/255.0f alpha:1];
+    textLabel.font=[UIFont fontWithName:@"Heiti SC" size:13];
     [qrCodeView addSubview:textLabel];
-    UIImageView *qrImageView=[[UIImageView alloc]initWithFrame:FRAME(30, (qrCodeView.frame.size.height-(WIDTH-60))/2, WIDTH-60, WIDTH-60)];
+    UIImageView *qrImageView=[[UIImageView alloc]initWithFrame:FRAME(30, textLabel.frame.origin.y+49, WIDTH-60, WIDTH-60)];
     NSString *imageUrl=[NSString stringWithFormat:@"%@",[[sender objectForKey:@"data"] objectForKey:@"qrCode"]];
     [qrImageView setImageWithURL:[NSURL URLWithString:imageUrl]placeholderImage:nil];
     [qrCodeView addSubview:qrImageView];
-    UILabel *explainLabel=[[UILabel alloc]initWithFrame:FRAME(10, qrImageView.frame.size.height+qrImageView.frame.origin.y+30, WIDTH-20, 20)];
-    explainLabel.text=@"点击任意处可退出";
-    explainLabel.textAlignment=NSTextAlignmentCenter;
-    explainLabel.font=[UIFont fontWithName:@"Heiti SC" size:18];
-    explainLabel.textColor=[UIColor colorWithRed:240/255.0f green:240/255.0f blue:240/255.0f alpha:1];
-    [qrCodeView addSubview:explainLabel];
     [self.view addSubview:qrCodeView];
+}
+//邀请成员点击方法
+-(void)inviteButAction
+{
+     ISLoginManager *_manager = [ISLoginManager shareManager];
+    NSString *webURL=[NSString stringWithFormat:@"http://123.57.173.36/simi-h5/show/company-join.html?uid=%@&invitation_code=%@",_manager.telephone,[dataCodeDic objectForKey:@"invitationCode"]];
+    NSString *string=@"好友邀请你加入团队";
+    [UMSocialWechatHandler setWXAppId:@"wx93aa45d30bf6cba3" appSecret:@"7a4ec42a0c548c6e39ce9ed25cbc6bd7" url:webURL];
+    [UMSocialQQHandler setQQWithAppId:@"1104934408" appKey:@"bRW2glhUCR6aJYIZ" url:webURL];
+    [UMSocialSinaSSOHandler openNewSinaSSOWithAppKey:@"247547429" RedirectURL:webURL];
+    [UMSocialSnsService presentSnsIconSheetView:self appKey:YMAPPKEY shareText:string shareImage:[UIImage imageNamed:@"yunxingzheng-Logo-512.png"] shareToSnsNames:[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQQ,UMShareToQzone,UMShareToSina,nil] delegate:self];
 }
 -(void)DetailsFailure:(id)sender
 {

@@ -50,9 +50,9 @@
 //        MoreWebViewController *_controller = [[MoreWebViewController alloc]init];
 //        _controller.webtag = @"100";
 //        [self.navigationController pushViewController:_controller animated:YES];
-        MoreWebViewController *_controller = [[MoreWebViewController alloc]init];
-        _controller.webtag = @"101";
-        [self.navigationController pushViewController:_controller animated:YES];
+//        [self presentModalViewController:[UMFeedback feedbackModalViewController]
+//                                animated:YES];
+        [self presentViewController:[UMFeedback feedbackModalViewController] animated:YES completion:nil];
         
     }else if (tag == 401){
         
@@ -66,12 +66,13 @@
         [UMSocialSnsService presentSnsIconSheetView:self appKey:YMAPPKEY shareText:@"菠萝HR，企业行政服务第一平台！极大降低企业行政管理成本，有效提升行政综合服务能力，快来试试吧！体验就送礼哦：http://51xingzheng.cn/h5-app-download.html" shareImage:[UIImage imageNamed:@"001.gif"] shareToSnsNames:[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQQ,UMShareToQzone,UMShareToSina,nil] delegate:self];
         
     }else if (tag ==402){
+
+        MoreWebViewController *_controller = [[MoreWebViewController alloc]init];
+        _controller.webtag = @"101";
+        [self.navigationController pushViewController:_controller animated:YES];
+        
 //        [UMSocialSnsService presentSnsIconSheetView:self appKey:YMAPPKEY shareText:@"云行政，企业行政服务第一平台！极大降低企业行政管理成本，有效提升行政综合服务能力，快来试试吧！体验就送礼哦：http://51xingzheng.cn/h5-app-download.html" shareImage:[UIImage imageNamed:@"001.gif"] shareToSnsNames:[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQQ,UMShareToQzone,UMShareToSina,nil] delegate:self];
-        
-        [self presentModalViewController:[UMFeedback feedbackModalViewController]
-                                animated:YES];
-        
-        //[UMSocialData defaultData].extConfig.qqData.url = @"http://baidu.com";
+//[UMSocialData defaultData].extConfig.qqData.url = @"http://baidu.com";
 //        ShareFriendViewController *_controller = [[ShareFriendViewController alloc]init];
 //        [self.navigationController pushViewController:_controller animated:YES];
     }else if (tag == 403){

@@ -10,6 +10,7 @@
 #import "NJKWebViewProgressView.h"
 #import "CommentListTableViewCell.h"
 #import "AFHTTPRequestOperationManager.h"
+#import "ChatViewController.h"
 @interface UINavigationItem (margin)
 
 @end
@@ -66,7 +67,7 @@
 @interface ArticleWEBViewController ()
 {
     UIView *layoutView;
-    UIWebView *myWebView;
+    UIScrollView *myScrollView;
     UIActivityIndicatorView *webActivityView;
     UILabel *webTitleLabel;
     NJKWebViewProgressView *_progressView;
@@ -106,6 +107,7 @@
     NSDictionary *dataDict;
     NSString *webURLSSS;
     int  webDJID;
+    NSString *msNameString;
 }
 @end
 
@@ -175,7 +177,7 @@
     myTableView=[[UITableView alloc]initWithFrame:FRAME(WIDTH*0.6, 64, WIDTH*0.4, 0)];
     myTableView.dataSource=self;
     myTableView.delegate=self;
-    textArray=@[@"分享",@"刷新"];
+    textArray=@[@"分享",@"刷新",@"吐槽"];
     
     plView=[[UIView alloc]initWithFrame:FRAME(0, HEIGHT-50, WIDTH, 50)];
     plView.backgroundColor=[UIColor colorWithRed:244/255.0f green:245/255.0f blue:246/255.0f alpha:1];
@@ -225,29 +227,16 @@
         [self.navigationController setNavigationBarHidden:NO animated:NO];
         //        [myWebView removeFromSuperview];
         if (_pushID==100) {
-            myWebView= [[UIWebView alloc]initWithFrame:FRAME(0, 64, WIDTH, HEIGHT-114)];
+            myScrollView= [[UIScrollView alloc]initWithFrame:FRAME(0, 64, WIDTH, HEIGHT-114)];
             plView.hidden=NO;
         }else{
-            myWebView= [[UIWebView alloc]initWithFrame:FRAME(0, 64, WIDTH, HEIGHT-64)];
+            myScrollView= [[UIScrollView alloc]initWithFrame:FRAME(0, 64, WIDTH, HEIGHT-64)];
             plView.hidden=YES;
         }
-        myWebView.scalesPageToFit = NO;
-        [myWebView setOpaque:YES];
-//        myWebView.backgroundColor=[UIColor whiteColor];
-        myWebView.delegate=self;
-        //self.meWebView.hidden=YES;
-//        for (UIScrollView* view in myWebView.subviews)
-//        {
-//            if ([view isKindOfClass:[UIScrollView class]])
-//            {
-//                view.bounces = NO;
-//            }
-//        }
-        myWebView.backgroundColor = [UIColor clearColor];
-        myWebView.scrollView.backgroundColor=[UIColor clearColor];
-        [myWebView setOpaque:NO];
-        myWebView.scrollView.delegate=self;
-        [self.view addSubview:myWebView];
+        myScrollView.delegate=self;
+
+        myScrollView.backgroundColor = [UIColor clearColor];
+        [self.view addSubview:myScrollView];
         [self.navigationController.navigationBar.backItem setHidesBackButton:YES];
         [self.navigationController.navigationItem setHidesBackButton:YES];
         [self.navigationItem setHidesBackButton:YES];
@@ -297,17 +286,6 @@
         img.image = [UIImage imageNamed:@"iconfont_gengduo"];
         [rightButton addSubview:img];
         
-        _progressProxy = [[NJKWebViewProgress alloc] init];
-        myWebView.delegate = _progressProxy;
-        _progressProxy.webViewProxyDelegate = self;
-        _progressProxy.progressDelegate = self;
-        
-        CGFloat progressBarHeight = 2.f;
-        CGRect navigationBarBounds = self.navigationController.navigationBar.bounds;
-        CGRect barFrame = CGRectMake(0, navigationBarBounds.size.height - progressBarHeight, navigationBarBounds.size.width, progressBarHeight);
-        _progressView = [[NJKWebViewProgressView alloc] initWithFrame:barFrame];
-        //    _progressView.backgroundColor=[UIColor redColor];
-        _progressView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
         //    [self webViewLayout];
         [self loadMyWebView];
     }else{
@@ -365,15 +343,12 @@
     blackBut.alpha=0.6;
     [self.view addSubview:blackBut];
     
-        [self loadMyWebView];
-       //    [self.view addSubview:labelASS];
-    
-    // Do any additional setup after loading the view.
+    [self loadMyWebView];
 }
 
 -(void) loadMyWebView{
     NSString *urlString = [NSString stringWithFormat:@"http://51xingzheng.cn/?json=get_post&post_id=%@&include=id,title,modified,url,thumbnail,custom_fields,content",_listID];
-    NSLog(@"%@",urlString);
+//    NSLog(@"%@",urlString);
     AFHTTPRequestOperationManager *mymanager = [AFHTTPRequestOperationManager manager];
     
     [mymanager GET:[NSString stringWithFormat:@"%@",urlString] parameters:nil success:^(AFHTTPRequestOperation *opretion, id responseObject){
@@ -381,7 +356,7 @@
         
         NSString *title=[NSString stringWithFormat:@"%@",[dataDict objectForKey:@"title"]];
         NSString *linkStr=[NSString stringWithFormat:@"%@",[dataDict objectForKey:@"content"]];
-        NSLog(@"%@",linkStr);
+//        NSLog(@"%@",linkStr);
         //初始化和html字符串
         if(WIDTH==320){
             webURLSSS=[NSString stringWithFormat:@"<head><style>img{max-width:310px !important;}</style></head><body style='background-color:#f8f8f8'><h2>%@</h2><p>%@</p>",title,linkStr];
@@ -392,7 +367,57 @@
         }
          
         webTitleLabel.text=title;
-        [self loadGoogle];
+        [myScrollView removeFromSuperview];
+        myScrollView= [[UIScrollView alloc]initWithFrame:FRAME(0, 64, WIDTH, HEIGHT-114)];
+        myScrollView.delegate=self;
+        
+        myScrollView.backgroundColor = [UIColor clearColor];
+        [self.view addSubview:myScrollView];
+        
+        UILabel *titleLabel=[[UILabel alloc]init];
+        titleLabel.text=title;
+        UIFont *font=[UIFont fontWithName:@"Heiti SC" size:23];
+        titleLabel.textColor=[UIColor colorWithRed:51/255.0f green:51/255.0f blue:51/255.0f alpha:1];
+        titleLabel.font=font;
+        NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:font,NSFontAttributeName, nil];
+        CGSize titleSize = [titleLabel.text boundingRectWithSize:CGSizeMake(WIDTH-20, 100000) options:NSStringDrawingUsesLineFragmentOrigin attributes:dict context:nil].size;
+        [titleLabel setNumberOfLines:0];
+        [titleLabel sizeToFit];
+        titleLabel.frame=FRAME(10, 10, WIDTH-20, titleSize.height);
+        [myScrollView addSubview:titleLabel];
+        
+        UILabel *fromLabel=[[UILabel alloc]initWithFrame:FRAME(10, 20+titleSize.height, WIDTH-20, 20)];
+        NSArray *fram=[[dataDict objectForKey:@"custom_fields"] objectForKey:@"fromname_value"];
+        fromLabel.text=[NSString stringWithFormat:@"%@",fram[0]];
+        fromLabel.font=[UIFont fontWithName:@"Heiti SC" size:12];
+        fromLabel.textColor=[UIColor colorWithRed:153/255.0f green:153/255.0f blue:153/255.0f alpha:1];
+        [myScrollView addSubview:fromLabel];
+        UILabel *timeLabel=[[UILabel alloc]initWithFrame:FRAME(10, 50+titleSize.height, WIDTH-20, 20)];
+        timeLabel.text=[NSString stringWithFormat:@"%@",[dataDict objectForKey:@"modified"]];
+        timeLabel.font=[UIFont fontWithName:@"Heiti SC" size:12];
+        timeLabel.textColor=[UIColor colorWithRed:153/255.0f green:153/255.0f blue:153/255.0f alpha:1];
+        [myScrollView addSubview:timeLabel];
+        
+        UIImageView *imageView=[[UIImageView alloc]initWithFrame:FRAME(10, 70+titleSize.height, WIDTH-20, (WIDTH-20)*0.75)];
+//        NSArray *arrauy=[dataDict objectForKey:@"thumbnail_images"];
+        NSString *string=[NSString stringWithFormat:@"%@",[[[dataDict objectForKey:@"thumbnail_images"]objectForKey:@"full"] objectForKey:@"url"]];
+        [imageView setImageWithURL:[NSURL URLWithString:string]placeholderImage:nil];
+        [myScrollView addSubview:imageView];
+        
+        NSAttributedString * attrStr = [[NSAttributedString alloc] initWithData:[linkStr dataUsingEncoding:NSUnicodeStringEncoding] options:@{ NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType } documentAttributes:nil error:nil];
+        NSLog( @"%@",attrStr);
+        UITextView * myLabel = [[UITextView alloc] init];
+        //        myLabel.font=[UIFont fontWithName:@"Heiti SC" size:30];
+        myLabel.attributedText = attrStr;
+        CGSize size = [myLabel sizeThatFits:CGSizeMake(WIDTH-10, FLT_MAX)];
+        myLabel.scrollEnabled = NO;
+        [myLabel sizeToFit];
+        myLabel.editable = NO;
+        
+        [myScrollView addSubview:myLabel];
+        
+         myLabel.frame=FRAME(10, 60+ titleSize.height+(WIDTH-20)*0.75+30, WIDTH-20,size.height);
+         myScrollView.contentSize=CGSizeMake(WIDTH, size.height+10+titleSize.height+(WIDTH-20)*0.75+30);
         
     } failure:^(AFHTTPRequestOperation *opration, NSError *error){
         
@@ -401,10 +426,11 @@
         
     }];
     
-    
+   
     
     
 }
+
 - (void) textViewDidChange:(UITextView *)textView{
     if ([textView.text length] == 0) {
         [viewLabel setHidden:NO];
@@ -415,24 +441,6 @@
         publishButton.enabled=TRUE;
         publishButton.backgroundColor=[UIColor colorWithRed:0/255.0f green:142/255.0f blue:214/255.0f alpha:1];
     }
-}
--(void)refreshURLgo
-{
-    //    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@",refreshURL]];
-    //    //NSLog(@"gourl  =  %@",_imgurl);
-    //    NSURLRequest *request = [NSURLRequest requestWithURL:url];
-    //    [myWebView loadRequest:request];
-    [myWebView loadHTMLString:webURLSSS baseURL:nil];
-    
-}
--(void)loadGoogle
-{
-    //    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@",webURL]];
-    //    //NSLog(@"gourl  =  %@",_imgurl);
-    //    NSURLRequest *request = [NSURLRequest requestWithURL:url];
-    //    [myWebView loadRequest:request];
-    
-    [myWebView loadHTMLString:webURLSSS baseURL:nil];
 }
 -(void)viewWillAppear:(BOOL)animated
 {
@@ -464,56 +472,6 @@
     [_progressView removeFromSuperview];
 }
 
-//-(void)webViewLayout
-//{
-//    //    [myWebView removeFromSuperview];
-//    myWebView= [[UIWebView alloc]initWithFrame:FRAME(0, 64, WIDTH, HEIGHT-64)];
-//    myWebView.delegate=self;
-//    //self.meWebView.hidden=YES;
-//    myWebView.scrollView.delegate=self;
-//    [self.view addSubview:myWebView];
-//    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@",webURL]];
-//    //NSLog(@"gourl  =  %@",_imgurl);
-//    NSURLRequest *request = [NSURLRequest requestWithURL:url];
-//    [myWebView loadRequest:request];
-//    
-//    UIButton *liftButton=[[UIButton alloc]initWithFrame:FRAME(10, 20, 50, 44)];
-//    //liftButton.backgroundColor=[UIColor blackColor];
-//    [liftButton addTarget:self action:@selector(liftButAction) forControlEvents:UIControlEventTouchUpInside];
-//    [self.view addSubview:liftButton];
-//    
-//    UIImageView *image = [[UIImageView alloc]initWithFrame:FRAME(18, 11, 10, 20)];
-//    image.image = [UIImage imageNamed:@"title_left_back"];
-//    [liftButton addSubview:image];
-//    
-//    webTitleLabel=[[UILabel alloc]initWithFrame:FRAME(60, 26, WIDTH-120, 30)];
-//    webTitleLabel.textAlignment=NSTextAlignmentCenter;
-//    webTitleLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
-//    [self.view addSubview:webTitleLabel];
-//    
-//    UIButton *rightButton=[[UIButton alloc]initWithFrame:FRAME(WIDTH-60, 20, 50, 40)];
-//    //rightButton.backgroundColor=[UIColor blackColor];
-//    [rightButton addTarget:self action:@selector(rightButAction) forControlEvents:UIControlEventTouchUpInside];
-//    [self.view addSubview:rightButton];
-//    
-//    UIImageView *img = [[UIImageView alloc]initWithFrame:FRAME(115, 10, 20, 20)];
-//    img.image = [UIImage imageNamed:@"iconfont_gengduo"];
-//    [rightButton addSubview:img];
-//    
-//    _progressProxy = [[NJKWebViewProgress alloc] init];
-//    myWebView.delegate = _progressProxy;
-//    _progressProxy.webViewProxyDelegate = self;
-//    _progressProxy.progressDelegate = self;
-//    
-//    CGFloat progressBarHeight = 2.f;
-//    CGRect navigationBarBounds = FRAME(0, 64, WIDTH, 2);
-//    CGRect barFrame = CGRectMake(0, navigationBarBounds.size.height - progressBarHeight, navigationBarBounds.size.width, progressBarHeight);
-//    _progressView = [[NJKWebViewProgressView alloc] initWithFrame:barFrame];
-//    //    _progressView.backgroundColor=[UIColor redColor];
-//    _progressView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
-//    //    [self webViewLayout];
-//    [self loadGoogle];
-//}
 #pragma mark - NJKWebViewProgressDelegate
 -(void)webViewProgress:(NJKWebViewProgress *)webViewProgress updateProgress:(float)progress
 {
@@ -556,18 +514,7 @@
 -(void)liftButAction
 {
     [myTextView resignFirstResponder];
-    if([myWebView canGoBack])
-    {
-        
-        [myWebView goBack];
-    }else{
-//        if (webDJID>0) {
-//            webDJID--;
-//            [self loadMyWebView];
-//        }else{
-            [self backAction];
-//        }
-    }
+    [self backAction];
     
 }
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(nullable NSError *)error
@@ -637,70 +584,6 @@
     //    [[self class] cancelPreviousPerformRequestsWithTarget:self];
     
 }
-
-- (void)webViewDidStartLoad:(UIWebView *)webView {
-    [webActivityView removeFromSuperview];
-    webActivityView=[[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-    webActivityView.center = CGPointMake(WIDTH/2, HEIGHT/2);
-    webActivityView.color = [UIColor redColor];
-    [webActivityView startAnimating];
-    [myWebView addSubview:webActivityView];
-    
-}
-
-- (void)webViewDidFinishLoad:(UIWebView *)webView {
-    [webActivityView stopAnimating]; // 结束旋转
-    [webActivityView setHidesWhenStopped:YES]; //当旋转结束时隐藏
-//    webTitleLabel.text = [webView stringByEvaluatingJavaScriptFromString:@"document.title"];
-    refreshURL=webView.request.URL.absoluteString;
-    if(WIDTH==320){
-        [webView stringByEvaluatingJavaScriptFromString:
-         @"var script = document.createElement('script');"
-         "script.type = 'text/javascript';"
-         "script.text = \"function ResizeImages() { "
-         "var myimg,oldwidth,oldheight;"
-         "var maxwidth=310px;"// 图片宽度
-         "for(i=0;i  maxwidth){"
-         "myimg.width = maxwidth;"
-         "}"
-         "}"
-         "}\";"
-         "document.getElementsByTagName('head')[0].appendChild(script);"];
-        [webView stringByEvaluatingJavaScriptFromString:@"ResizeImages();"];
-    }else if (WIDTH==375){
-        [webView stringByEvaluatingJavaScriptFromString:
-         @"var script = document.createElement('script');"
-         "script.type = 'text/javascript';"
-         "script.text = \"function ResizeImages() { "
-         "var myimg,oldwidth,oldheight;"
-         "var maxwidth=365px;"// 图片宽度
-         "for(i=0;i  maxwidth){"
-         "myimg.width = maxwidth;"
-         "}"
-         "}"
-         "}\";"
-         "document.getElementsByTagName('head')[0].appendChild(script);"];
-        [webView stringByEvaluatingJavaScriptFromString:@"ResizeImages();"];
-    }else if (WIDTH==540){
-        [webView stringByEvaluatingJavaScriptFromString:
-         @"var script = document.createElement('script');"
-         "script.type = 'text/javascript';"
-         "script.text = \"function ResizeImages() { "
-         "var myimg,oldwidth,oldheight;"
-         "var maxwidth=530px;"// 图片宽度
-         "for(i=0;i  maxwidth){"
-         "myimg.width = maxwidth;"
-         "}"
-         "}"
-         "}\";"
-         "document.getElementsByTagName('head')[0].appendChild(script);"];
-        [webView stringByEvaluatingJavaScriptFromString:@"ResizeImages();"];
-    }
-    
-    NSLog(@"%@",webView.request.URL.absoluteString);
-    
-}
-
 
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -823,6 +706,14 @@
             {
                 [self loadMyWebView];
                 [self rightButAction];
+            }
+                break;
+            case 2:
+            {
+                ChatViewController *vcr=[[ChatViewController alloc]initWithChatter:@"simi-user-366" isGroup:NO];
+                vcr.title=[NSString stringWithFormat:@"%@",msNameString];
+                [vcr.navigationController setNavigationBarHidden:NO];
+                [self.navigationController pushViewController:vcr animated:YES];
             }
                 break;
             default:

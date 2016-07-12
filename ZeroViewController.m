@@ -60,7 +60,7 @@
     [zeroView addSubview:payLabel];
     
     UILabel *moneyLabel=[[UILabel alloc]initWithFrame:FRAME(payLabel.frame.size.width+20, 66, WIDTH-payLabel.frame.size.width-40, 20)];
-    moneyLabel.text=[NSString stringWithFormat:@"%@.00元",[_zeroDic objectForKey:@"dis_price"]];
+    moneyLabel.text=[NSString stringWithFormat:@"%@元",[_zeroDic objectForKey:@"dis_price"]];
     moneyLabel.font=[UIFont fontWithName:@"Heiti SC" size:16];
     moneyLabel.textAlignment=NSTextAlignmentLeft;
     moneyLabel.textColor=[UIColor colorWithRed:180/255.0f green:180/255.0f blue:180/255.0f alpha:1];

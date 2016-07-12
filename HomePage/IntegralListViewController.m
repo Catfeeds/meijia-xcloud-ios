@@ -106,10 +106,10 @@
     [integralLabel sizeToFit];
     integralLabel.frame=FRAME(10, titleLabel.frame.origin.y+37, integralLabel.frame.size.width, 40);
     [view addSubview:integralLabel];
-    UILabel *label=[[UILabel alloc]initWithFrame:FRAME(integralLabel.frame.size.width+integralLabel.frame.origin.x, titleLabel.frame.origin.y+57, 20, 20)];
+    UILabel *label=[[UILabel alloc]initWithFrame:FRAME(integralLabel.frame.size.width+integralLabel.frame.origin.x, titleLabel.frame.origin.y+57, 40, 20)];
     label.font=[UIFont fontWithName:@"Heiti SC" size:17];
     label.textColor=[UIColor colorWithRed:247/255.0f green:202/255.0f blue:44/255.0f alpha:1];
-    label.text=@"分";
+    label.text=@"金币";
     [view addSubview:label];
     
     UIButton *button=[[UIButton alloc]initWithFrame:FRAME(12, 100, view.frame.size.width-24, 42)];
@@ -293,7 +293,7 @@
     int textId=[[dic objectForKey:@"is_consume"]intValue];
     UILabel *textLabel=[[UILabel alloc]init];
     if (textId==0) {
-        textLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"score"]];
+        textLabel.text=[NSString stringWithFormat:@"+%@",[dic objectForKey:@"score"]];
         textLabel.textColor=[UIColor colorWithRed:92/255.0f green:189/255.0f blue:33/255.0f alpha:1];
     }else if (textId==1){
         textLabel.text=@"使用";

@@ -424,7 +424,7 @@
 {
     _fanxian = fanxian;
     UILabel *_label = (UILabel *)[self viewWithTag:102];
-    _label.text = [NSString stringWithFormat:@"%@.0元",fanxian];;
+    _label.text = [NSString stringWithFormat:@"%@元",fanxian];;
     
 }
 
@@ -448,7 +448,7 @@
 {
     _actualString = actualString;
     UILabel *_label = (UILabel *)[self viewWithTag:104];
-    _label.text = [NSString stringWithFormat:@"%@.0元",actualString];
+    _label.text = [NSString stringWithFormat:@"%@元",actualString];
     
 }
 - (NSString *)actualString

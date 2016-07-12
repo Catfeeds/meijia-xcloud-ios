@@ -67,7 +67,8 @@
 #import <objc/message.h>
 
 #import "GoodsModel.h"
-
+#import "Create_Enterprise_Address_BookViewController.h"
+#import "BindMobileViewController.h"
 #endif
 
 #define NAV_COLOR 0xE8374A

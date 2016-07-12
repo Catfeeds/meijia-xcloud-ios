@@ -28,13 +28,23 @@
     [super viewDidLoad];
 //    if (_vcID==100) {
         self.backBtn.hidden=NO;
+    if (_listID==1001) {
         self.navlabel.text=@"好友申请";
+    }else if (_listID==1002){
+        self.navlabel.text=@"成员申请";
+    }
+    
 //    }else{
 //        self.backBtn.hidden=YES;
 //    }
     page=1;
     dataArray=[[NSMutableArray alloc]init];
-    myTableView=[[UITableView alloc]initWithFrame:FRAME(0, 64, WIDTH, HEIGHT-101)];
+    if (_vcID==100) {
+        myTableView=[[UITableView alloc]initWithFrame:FRAME(0, 64, WIDTH, HEIGHT-64)];
+    }else{
+        myTableView=[[UITableView alloc]initWithFrame:FRAME(0, 104, WIDTH, HEIGHT-104)];
+    }
+    
     myTableView.dataSource=self;
     myTableView.delegate=self;
     [self.view addSubview:myTableView];
@@ -112,12 +122,24 @@
 }
 -(void)dataLayout
 {
-    ISLoginManager *_manager = [ISLoginManager shareManager];
-    DownloadManager *_download = [[DownloadManager alloc]init];
-    NSString *pageStr=[NSString stringWithFormat:@"%ld",(long)page];
-    NSDictionary *_dict = @{@"user_id":_manager.telephone,@"page":pageStr};
-    NSLog(@"字典数据%@",_dict);
-    [_download requestWithUrl:USER_APPLYFRIENDS dict:_dict view:self.view delegate:self finishedSEL:@selector(logDowLoadFinish:) isPost:NO failedSEL:@selector(DownFail:)];
+    if (_listID==1001) {
+        ISLoginManager *_manager = [ISLoginManager shareManager];
+        DownloadManager *_download = [[DownloadManager alloc]init];
+        NSString *pageStr=[NSString stringWithFormat:@"%ld",(long)page];
+        NSDictionary *_dict = @{@"user_id":_manager.telephone,@"page":pageStr};
+        NSLog(@"字典数据%@",_dict);
+        [_download requestWithUrl:USER_APPLYFRIENDS dict:_dict view:self.view delegate:self finishedSEL:@selector(logDowLoadFinish:) isPost:NO failedSEL:@selector(DownFail:)];
+        
+    }else if (_listID==1002){
+        ISLoginManager *_manager = [ISLoginManager shareManager];
+        DownloadManager *_download = [[DownloadManager alloc]init];
+        NSString *pageStr=[NSString stringWithFormat:@"%ld",(long)page];
+        NSDictionary *_dict = @{@"user_id":_manager.telephone,@"page":pageStr};
+        NSLog(@"字典数据%@",_dict);
+        [_download requestWithUrl:COMPANY_MEMBER dict:_dict view:self.view delegate:self finishedSEL:@selector(logDowLoadFinish:) isPost:NO failedSEL:@selector(DownFail:)];
+        
+    }
+    
 }
 -(void)logDowLoadFinish:(id)sender
 {
@@ -143,6 +165,7 @@
 }
 -(void)DownFail:(id)sender
 {
+    NSLog(@"获取列表信息失败%@",sender);
     
 }
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -179,13 +202,32 @@
     headeImageView.layer.cornerRadius=headeImageView.frame.size.width/2;
     headeImageView.clipsToBounds=YES;
     [cell addSubview:headeImageView];
-    UILabel *nameLabel=[[UILabel alloc]init];
-    nameLabel.text=[NSString stringWithFormat:@"%@",[dataDic objectForKey:@"name"]];
-    nameLabel.font=[UIFont fontWithName:@"Heiti SC" size:16];
-    [nameLabel setNumberOfLines:1];
-    [nameLabel sizeToFit];
-    nameLabel.frame=FRAME(headeImageView.frame.size.width+20, 20, nameLabel.frame.size.width, 20);
-    [cell addSubview:nameLabel];
+    if (_listID==1001) {
+        UILabel *nameLabel=[[UILabel alloc]init];
+        nameLabel.text=[NSString stringWithFormat:@"%@",[dataDic objectForKey:@"name"]];
+        nameLabel.font=[UIFont fontWithName:@"Heiti SC" size:16];
+        [nameLabel setNumberOfLines:1];
+        [nameLabel sizeToFit];
+        nameLabel.frame=FRAME(headeImageView.frame.size.width+20, 20, nameLabel.frame.size.width, 20);
+        [cell addSubview:nameLabel];
+    }else if (_listID==1002){
+        UILabel *company_nameLabel=[[UILabel alloc]init];
+        company_nameLabel.text=[NSString stringWithFormat:@"%@",[dataDic objectForKey:@"company_name"]];
+        company_nameLabel.font=[UIFont fontWithName:@"Heiti SC" size:16];
+        [company_nameLabel setNumberOfLines:1];
+        [company_nameLabel sizeToFit];
+        company_nameLabel.frame=FRAME(headeImageView.frame.size.width+20, 10, company_nameLabel.frame.size.width, 20);
+        [cell addSubview:company_nameLabel];
+        
+        UILabel *nameLabel=[[UILabel alloc]init];
+        nameLabel.text=[NSString stringWithFormat:@"申请人：%@",[dataDic objectForKey:@"name"]];
+        nameLabel.font=[UIFont fontWithName:@"Heiti SC" size:16];
+        [nameLabel setNumberOfLines:1];
+        [nameLabel sizeToFit];
+        nameLabel.frame=FRAME(headeImageView.frame.size.width+20, 40, nameLabel.frame.size.width, 20);
+        [cell addSubview:nameLabel];
+    }
+    
     
     int statusID=[[dataDic objectForKey:@"status"]intValue];
     int req_typeID=[[dataDic objectForKey:@"req_type"]intValue];
@@ -212,10 +254,10 @@
             CGColorSpaceRef colorSpaceRef = CGColorSpaceCreateDeviceRGB();
             CGColorRef color = CGColorCreate(colorSpaceRef, (CGFloat[]){1,0,0,1});
             [addButton.layer setBorderColor:color];
-            [addButton setTitle:@"添加" forState:UIControlStateNormal];
+            [addButton setTitle:@"同意" forState:UIControlStateNormal];
             [addButton setTitleColor:[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1] forState:UIControlStateNormal];
         }else{
-            [addButton setTitle:@"已添加" forState:UIControlStateNormal];
+            [addButton setTitle:@"已同意" forState:UIControlStateNormal];
             [addButton setTitleColor:[UIColor colorWithRed:232/255.0f green:232/255.0f blue:232/255.0f alpha:1] forState:UIControlStateNormal];
             addButton.enabled=FALSE;
         }
@@ -233,7 +275,12 @@
     
     //    PageTableViewCell *cell =[[PageTableViewCell alloc]init];
     //    return cell.view.frame.size.height;
-    return 61;
+    if (_listID==1001) {
+        return 61;
+    }else if (_listID==1002){
+        return 71;
+    }
+    return 0;
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -243,13 +290,25 @@
 }
 -(void)addButAction:(UIButton *)button
 {
+    
     NSDictionary *addDic=dataArray[button.tag];
-    ISLoginManager *_manager = [ISLoginManager shareManager];
-    DownloadManager *_download = [[DownloadManager alloc]init];
-    NSString *friend_id=[NSString stringWithFormat:@"%@",[addDic objectForKey:@"friend_id"]];
-    NSDictionary *_dict = @{@"user_id":_manager.telephone,@"friend_id":friend_id,@"status":@"1"};
-    NSLog(@"字典数据%@",_dict);
-    [_download requestWithUrl:USER_CHECK_FRIENDS_LIST dict:_dict view:self.view delegate:self finishedSEL:@selector(FriendsAddFinish:) isPost:YES failedSEL:@selector(FriendsAddFail:)];
+    if (_listID==1001) {
+        ISLoginManager *_manager = [ISLoginManager shareManager];
+        DownloadManager *_download = [[DownloadManager alloc]init];
+        NSString *friend_id=[NSString stringWithFormat:@"%@",[addDic objectForKey:@"friend_id"]];
+        NSDictionary *_dict = @{@"user_id":_manager.telephone,@"friend_id":friend_id,@"status":@"1"};
+        NSLog(@"字典数据%@",_dict);
+        [_download requestWithUrl:USER_CHECK_FRIENDS_LIST dict:_dict view:self.view delegate:self finishedSEL:@selector(FriendsAddFinish:) isPost:YES failedSEL:@selector(FriendsAddFail:)];
+    }else if (_listID==1002){
+        ISLoginManager *_manager = [ISLoginManager shareManager];
+        DownloadManager *_download = [[DownloadManager alloc]init];
+        NSString *req_user_id=[NSString stringWithFormat:@"%@",[addDic objectForKey:@"user_id"]];
+        NSString *company_id=[NSString stringWithFormat:@"%@",[addDic objectForKey:@"company_id"]];
+        NSDictionary *_dict = @{@"user_id":_manager.telephone,@"company_id":company_id,@"req_user_id":req_user_id,@"status":@"1"};
+        NSLog(@"字典数据%@",_dict);
+        [_download requestWithUrl:COMPANY_PASS dict:_dict view:self.view delegate:self finishedSEL:@selector(FriendsAddFinish:) isPost:YES failedSEL:@selector(FriendsAddFail:)];
+    }
+    
 }
 -(void)FriendsAddFinish:(id)source
 {

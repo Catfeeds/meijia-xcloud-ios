@@ -77,6 +77,7 @@
 #pragma mark 用户所属企业列表失败返回
 -(void)CompanyFailure:(id)sender
 {
+    NSLog(@"设置默认企业失败%@",sender);
 }
 - (void)backAction
 {

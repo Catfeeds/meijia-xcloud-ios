@@ -52,7 +52,7 @@
 
 - (NSString *)fullName {
     if(self.firstName != nil && self.lastName != nil) {
-        return [NSString stringWithFormat:@"%@ %@", self.firstName, self.lastName];
+        return [NSString stringWithFormat:@"%@ %@",self.lastName, self.firstName];
     } else if (self.firstName != nil) {
         return self.firstName;
     } else if (self.lastName != nil) {

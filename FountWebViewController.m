@@ -178,23 +178,36 @@
 }
 -(void)consultingAction:(UIButton *)sender
 {
-    if(fatherVc.loginYesOrNo){
-        ClerkViewController *clerkVC=[[ClerkViewController alloc]init];
-        //clerkVC.goto_type=[NSString stringWithFormat:@"%@",[dic objectForKey:@"goto_type"]];
-        clerkVC.service_type_id=_service_type_id;
-        //    clerkVC.imgurl=[NSString stringWithFormat:@"%@",[dic objectForKey:@"goto_url"]];
-        [self.navigationController pushViewController:clerkVC animated:YES];
+    AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication] delegate];
+    NSString *moile=[delegate.globalDic objectForKey:@"mobile"];
+    // NSLog(@"手机号： %@",textfield.text);
+    if (moile==nil||moile==NULL) {
+        
+        UIAlertView *alerView=[[UIAlertView alloc]initWithTitle:@"提示" message:@"您还没有绑定手机号，请绑定手机号！" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+        [alerView show];
+        BindMobileViewController *bindVC=[[BindMobileViewController alloc]init];
+        [self.navigationController pushViewController:bindVC animated:YES];
+        
     }else{
-        dispatch_async(dispatch_get_main_queue(), ^{
-            MyLogInViewController *loginViewController = [[MyLogInViewController alloc] init];
-            loginViewController.vCYMID=100;
-            loginViewController.vcIDsss=1000;
-            UMComNavigationController *navigationController = [[UMComNavigationController alloc] initWithRootViewController:loginViewController];
-            [self presentViewController:navigationController animated:YES completion:^{
-            }];
-        });
-
+        if(fatherVc.loginYesOrNo){
+            ClerkViewController *clerkVC=[[ClerkViewController alloc]init];
+            //clerkVC.goto_type=[NSString stringWithFormat:@"%@",[dic objectForKey:@"goto_type"]];
+            clerkVC.service_type_id=_service_type_id;
+            //    clerkVC.imgurl=[NSString stringWithFormat:@"%@",[dic objectForKey:@"goto_url"]];
+            [self.navigationController pushViewController:clerkVC animated:YES];
+        }else{
+            dispatch_async(dispatch_get_main_queue(), ^{
+                MyLogInViewController *loginViewController = [[MyLogInViewController alloc] init];
+                loginViewController.vCYMID=100;
+                loginViewController.vcIDsss=1000;
+                UMComNavigationController *navigationController = [[UMComNavigationController alloc] initWithRootViewController:loginViewController];
+                [self presentViewController:navigationController animated:YES completion:^{
+                }];
+            });
+            
+        }
     }
+    
     
 }
 

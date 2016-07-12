@@ -9,6 +9,7 @@
 #import "WebPageViewController.h"
 #import "NJKWebViewProgressView.h"
 #import "CommentListTableViewCell.h"
+#import "ChatViewController.h"
 @interface UINavigationItem (margin)
 
 @end
@@ -101,6 +102,7 @@
     NSString *clickStr;
     FatherViewController *fatherVc;
     UILabel *labelASS;
+    NSString *msNameString;
 }
 @end
 
@@ -170,7 +172,7 @@
     myTableView=[[UITableView alloc]initWithFrame:FRAME(WIDTH*0.6, 64, WIDTH*0.4, 0)];
     myTableView.dataSource=self;
     myTableView.delegate=self;
-    textArray=@[@"分享",@"刷新"];
+    textArray=@[@"分享",@"刷新",@"吐槽"];
     
     plView=[[UIView alloc]initWithFrame:FRAME(0, HEIGHT-50, WIDTH, 50)];
     plView.backgroundColor=[UIColor colorWithRed:244/255.0f green:245/255.0f blue:246/255.0f alpha:1];
@@ -301,17 +303,22 @@
 //    blackBut.alpha=0.6;
 //    [self.view addSubview:blackBut];
     
-    if(fatherVc.loginYesOrNo!=YES)
-    {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            MyLogInViewController *loginViewController = [[MyLogInViewController alloc] init];
-            loginViewController.vCYMID=100;
-            UMComNavigationController *navigationController = [[UMComNavigationController alloc] initWithRootViewController:loginViewController];
-            [self presentViewController:navigationController animated:YES completion:^{
-            }];
-        });
-    }
+    if (_toolID==100) {
+        
+    }else{
+        if(fatherVc.loginYesOrNo!=YES)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                MyLogInViewController *loginViewController = [[MyLogInViewController alloc] init];
+                loginViewController.vCYMID=100;
+                UMComNavigationController *navigationController = [[UMComNavigationController alloc] initWithRootViewController:loginViewController];
+                [self presentViewController:navigationController animated:YES completion:^{
+                }];
+            });
+        }
 
+    }
+    
     
     // Do any additional setup after loading the view.
 }
@@ -353,7 +360,7 @@
 //        [self listLayout];
 //        [self diazanLayout];
     }
-    
+    [self msLayout];
 }
 //-(void)viewDidDisappear:(BOOL)animated
 //{
@@ -609,6 +616,24 @@
         return view;
     }
 }
+-(void)msLayout
+{
+    DownloadManager *_download = [[DownloadManager alloc]init];
+    NSDictionary *_dict=@{@"user_id":@"366"};
+    [_download requestWithUrl:USER_INFO dict:_dict view:self.view delegate:self finishedSEL:@selector(MsFinish:) isPost:NO failedSEL:@selector(MsFail:)];
+}
+#pragma mark 获取秘书信息接口成功返回
+-(void)MsFinish:(id)source
+{
+    NSLog(@"获取秘书信息接口成功返回%@",source);
+    NSDictionary *nameDic=[source objectForKey:@"data"];
+    msNameString=[NSString stringWithFormat:@"%@",[nameDic objectForKey:@"name"]];
+}
+#pragma mark 获取秘书信息接口失败返回
+-(void)MsFail:(id)source
+{
+    NSLog(@"获取秘书信息接口失败返回%@",source);
+}
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -628,6 +653,14 @@
             {
                 [self refreshURLgo];
                 [self rightButAction];
+            }
+                break;
+            case 2:
+            {
+                ChatViewController *vcr=[[ChatViewController alloc]initWithChatter:@"simi-user-366" isGroup:NO];
+                vcr.title=[NSString stringWithFormat:@"%@",msNameString];
+                [vcr.navigationController setNavigationBarHidden:NO];
+                [self.navigationController pushViewController:vcr animated:YES];
             }
                 break;
             default:

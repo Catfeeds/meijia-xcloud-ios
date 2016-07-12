@@ -1029,6 +1029,12 @@ float lastContentOffset;
         }else if ([actionStr isEqualToString:@"friends"]){
             ApplyFriendsListViewController *friendsVC=[[ApplyFriendsListViewController alloc]init];
             friendsVC.vcID=100;
+            friendsVC.listID=1001;
+            [self.navigationController pushViewController:friendsVC animated:YES];
+        }else if ([actionStr isEqualToString:@"company_pass"]){
+            ApplyFriendsListViewController *friendsVC=[[ApplyFriendsListViewController alloc]init];
+            friendsVC.vcID=100;
+            friendsVC.listID=1002;
             [self.navigationController pushViewController:friendsVC animated:YES];
         }else if ([actionStr isEqualToString:@"water"]){
             Order_DetailsViewController *order_vc=[[Order_DetailsViewController alloc]init];

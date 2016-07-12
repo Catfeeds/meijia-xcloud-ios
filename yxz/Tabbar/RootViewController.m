@@ -63,6 +63,7 @@
 #import "Order_DetailsViewController.h"
 
 #import "EnterpriseViewController.h"
+#import "LeaveDetailsViewController.h"
 
 //#import "DisplayStarView.h"
 //#import "RatingBar.h"
@@ -362,9 +363,13 @@ MyselfViewController *thirdViewController;
         }else if ([[tempDic objectForKey:@"action"] isEqualToString:@"leave_pass"]){
             helpDic=@{@"action":@"leave_pass"};
             [[NSNotificationCenter defaultCenter] postNotificationName:@"HELP" object:helpDic];
-            LeaveListViewController *leaveListVC=[[LeaveListViewController alloc]init];
-            leaveListVC.tyPeStr=urlStr;
-            [self.navigationController pushViewController:leaveListVC animated:YES];
+//            LeaveListViewController *leaveListVC=[[LeaveListViewController alloc]init];
+//            leaveListVC.tyPeStr=urlStr;
+//            [self.navigationController pushViewController:leaveListVC animated:YES];
+            LeaveDetailsViewController *leaveDetailsVC=[[LeaveDetailsViewController alloc]init];
+            leaveDetailsVC.leave_id=[NSString stringWithFormat:@"%@",[tempDic objectForKey:@"params"]];
+            leaveDetailsVC.leaveVC_id=101;
+            [self.navigationController pushViewController:leaveDetailsVC animated:YES];
             
             
         }else if ([[tempDic objectForKey:@"action"] isEqualToString:@"feed_add"]){
@@ -417,6 +422,14 @@ MyselfViewController *thirdViewController;
             
         }else if ([[tempDic objectForKey:@"action"] isEqualToString:@"friend_req"]){
             ApplyFriendsListViewController *applyVC=[[ApplyFriendsListViewController alloc]init];
+            applyVC.vcID=100;
+            applyVC.listID=1001;
+            [self.navigationController pushViewController:applyVC animated:YES];
+            
+        }else if ([[tempDic objectForKey:@"action"] isEqualToString:@"company_pass"]){
+            ApplyFriendsListViewController *applyVC=[[ApplyFriendsListViewController alloc]init];
+            applyVC.vcID=100;
+            applyVC.listID=1002;
             [self.navigationController pushViewController:applyVC animated:YES];
             
         }else if ([[tempDic objectForKey:@"action"] isEqualToString:@"p_user_list"]){
@@ -1350,7 +1363,7 @@ MyselfViewController *thirdViewController;
 //    [_download requestWithUrl:[NSString stringWithFormat:@"%@",USER_INFO] dict:_dict view:self.view delegate:self finishedSEL:@selector(DownloadFinish1:) isPost:NO failedSEL:@selector(FailDownload:)];
 //    NSDictionary *dic=[sender objectForKey:@"data"];
     ChatViewController *vcr=[[ChatViewController alloc]initWithChatter:@"simi-user-366" isGroup:NO];
-    vcr.title=[NSString stringWithFormat:msNameString];
+    vcr.title=[NSString stringWithFormat:@"%@",msNameString];
     [vcr.navigationController setNavigationBarHidden:NO];
     [self.navigationController pushViewController:vcr animated:YES];
 }
@@ -1607,19 +1620,23 @@ MyselfViewController *thirdViewController;
             
         }else if ([action isEqualToString:@"checkin"]){
             if ([params isEqualToString:@"add"]) {
-                AttendanceViewController *userVC=[[AttendanceViewController alloc]init];
-                userVC.titleName=nameStr;
-                userVC.tyPeStr=action;
+               
                 AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication] delegate];
                 NSString *has_company=[NSString stringWithFormat:@"%@",[delegate.globalDic objectForKey:@"has_company"]];
                 int has=[has_company intValue];
                 if (has==0) {
-                    userVC.webID=0;
+                    Create_Enterprise_Address_BookViewController *boolVC=[[Create_Enterprise_Address_BookViewController alloc]init];
+                    [self.navigationController pushViewController:boolVC animated:YES];
                 }else{
+                    
+                    AttendanceViewController *userVC=[[AttendanceViewController alloc]init];
+                    userVC.titleName=nameStr;
                     userVC.webID=1;
+                    userVC.tyPeStr=action;
+                    [self.navigationController pushViewController:userVC animated:YES];
                 }
                 
-                [self.navigationController pushViewController:userVC animated:YES];
+                
             }else if ([params isEqualToString:@"list"]){
                 helpDic=@{@"action":@"punch_sign"};
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"HELP" object:helpDic];
@@ -1712,10 +1729,19 @@ MyselfViewController *thirdViewController;
                 [self.navigationController pushViewController:plantsVc animated:YES];
             }
         }else if([action isEqualToString:@"asset"]){
-            AssetsAdministrationViewController *plantsVc=[[AssetsAdministrationViewController alloc]init];
-            plantsVc.titleName=nameStr;
-            plantsVc.tyPeStr=action;
-            [self.navigationController pushViewController:plantsVc animated:YES];
+            AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication] delegate];
+            NSString *has_company=[NSString stringWithFormat:@"%@",[delegate.globalDic objectForKey:@"has_company"]];
+            int has=[has_company intValue];
+            if (has==0) {
+                Create_Enterprise_Address_BookViewController *boolVC=[[Create_Enterprise_Address_BookViewController alloc]init];
+                [self.navigationController pushViewController:boolVC animated:YES];
+            }else{
+                AssetsAdministrationViewController *plantsVc=[[AssetsAdministrationViewController alloc]init];
+                plantsVc.titleName=nameStr;
+                plantsVc.tyPeStr=action;
+                [self.navigationController pushViewController:plantsVc animated:YES];
+            }
+           
             
         }else if([action isEqualToString:@"expy"]){
             ExprViewController *plantsVc=[[ExprViewController alloc]init];
@@ -1724,17 +1750,20 @@ MyselfViewController *thirdViewController;
             [self.navigationController pushViewController:plantsVc animated:YES];
             
         }else if([action isEqualToString:@"company"]){
-            EnterpriseViewController *enterVc=[[EnterpriseViewController alloc]init];
-            enterVc.vcIDs=100;
+           
             AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication] delegate];
             NSString *has_company=[NSString stringWithFormat:@"%@",[delegate.globalDic objectForKey:@"has_company"]];
             int has=[has_company intValue];
             if (has==0) {
-                enterVc.webId=0;
+                Create_Enterprise_Address_BookViewController *boolVC=[[Create_Enterprise_Address_BookViewController alloc]init];
+                [self.navigationController pushViewController:boolVC animated:YES];
             }else{
+                EnterpriseViewController *enterVc=[[EnterpriseViewController alloc]init];
+                enterVc.vcIDs=100;
                 enterVc.webId=1;
+                [self.navigationController pushViewController:enterVc animated:YES];
             }
-            [self.navigationController pushViewController:enterVc animated:YES];
+            
         }else{
             AppCenterViewController *appCenterVC=[[AppCenterViewController alloc]init];
             appCenterVC.titleName=nameStr;

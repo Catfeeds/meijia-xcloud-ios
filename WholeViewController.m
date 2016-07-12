@@ -51,7 +51,11 @@
         voiceImage.image=[UIImage imageNamed:@"iconfont-yuyin-copy"];
         [searchButton addSubview:voiceImage];
         UILabel *searchLabel=[[UILabel alloc]initWithFrame:FRAME(45, 5, searchButton.frame.size.width-90, 15)];
-        searchLabel.text=@"点击搜索相关信息";
+        searchLabel.text=@"搜索企业服务供应商";
+        searchLabel.font=[UIFont fontWithName:@"Heiti SC" size:13];
+        searchLabel.textAlignment=NSTextAlignmentCenter;
+        searchLabel.textColor=[UIColor colorWithRed:200/255.0f green:200/255.0f blue:200/255.0f alpha:1];
+        [searchButton addSubview:searchLabel];
     }else{
         _collectionView=[[UICollectionView alloc]initWithFrame:FRAME(0, 0, WIDTH, HEIGHT-115)collectionViewLayout:flowView];
     }
@@ -66,6 +70,7 @@
 }
 -(void)viewWillAppear:(BOOL)animated
 {
+    [self.navigationController setNavigationBarHidden:YES animated:YES];
     if (_whoVCID==101) {
         [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
     }else{
@@ -91,7 +96,7 @@
     sqlite3_open([path UTF8String], &simi);
     
     sqlite3_stmt *statement;
-    NSString *sql =[NSString stringWithFormat:@"SELECT * FROM op_ad where ad_type like '%%99%%' order by id"];
+    NSString *sql =[NSString stringWithFormat:@"SELECT * FROM op_ad where ad_type like '%%99%%' order by no asc"];
     
     if (sqlite3_prepare_v2(simi, [sql UTF8String], -1, &statement, nil) == SQLITE_OK) {
         while (sqlite3_step(statement) == SQLITE_ROW) {

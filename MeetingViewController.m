@@ -142,6 +142,7 @@ int H = 0,time_ID;
 - (void)viewDidLoad {
     [super viewDidLoad];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
+    
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(KeyBoardLayout) name:@"KEYBOARD" object:nil];
     loopString=@"一次性提醒";
     [self loopLayout:loopString];
@@ -165,6 +166,7 @@ int H = 0,time_ID;
             break;
         case 1003:
             self.backlable.backgroundColor=HEX_TO_UICOLOR(0x56abe4, 1.0);
+            self.navlabel.text=@"事务提醒";
             break;
         case 1004:
             self.backlable.backgroundColor=HEX_TO_UICOLOR(0x00bb9c, 1.0);
@@ -225,8 +227,12 @@ int H = 0,time_ID;
         default:
             break;
     }
-
-    self.navlabel.text=_titleName;
+    if(_vcID==1003){
+        self.navlabel.text=@"事务提醒";
+    }else{
+        self.navlabel.text=_titleName;
+    }
+//    self.navlabel.text=_titleName;
     selfView.backgroundColor=[UIColor colorWithRed:231/255.0f green:231/255.0f blue:231/255.0f alpha:1];
     
     
@@ -651,12 +657,12 @@ int H = 0,time_ID;
                 break;
             case 1003:
             {
-                [sendButton setTitle:@"事务提醒" forState:UIControlStateNormal];
+                [sendButton setTitle:@"发起提醒" forState:UIControlStateNormal];
             }
                 break;
             case 1004:
             {
-                [sendButton setTitle:@"面试邀约" forState:UIControlStateNormal];
+                [sendButton setTitle:@"发起邀约" forState:UIControlStateNormal];
             }
                 break;
                 
@@ -1544,7 +1550,7 @@ int H = 0,time_ID;
         picker.frame = CGRectMake(0, HEIGHT, SELF_VIEW_WIDTH, 220);
         [UIView commitAnimations];
         meetingString=[NSString stringWithFormat:@"%@",hours];
-        
+//        txROW=[NSString stringWithFormat:@"%ld",(long)picker.txRow];
         [self remindLabelLayout];
         [self labelLayout];
     }
@@ -2352,10 +2358,52 @@ int H = 0,time_ID;
     
     NSString *type_ID=[NSString stringWithFormat:@"%d",card_type_ID];
     NSString *txROW;
+//    if(_pushID==1){
+//        int reminId=[[dic objectForKey:@"set_remind"]intValue];
+//        if (reminId==0) {
+//            meetingString=@"不提醒";
+//        }else if (reminId==1){
+//            meetingString=@"按时提醒";
+//        }else if (reminId==2){
+//            meetingString=@"提前5分钟";
+//        }else if (reminId==3){
+//            meetingString=@"提前15分钟";
+//        }else if (reminId==4){
+//            meetingString=@"提前30分钟";
+//        }else if (reminId==5){
+//            meetingString=@"提前1小时";
+//        }else if (reminId==6){
+//            meetingString=@"提前2小时";
+//        }else if (reminId==7){
+//            meetingString=@"提前6小时";
+//        }else if (reminId==8){
+//            meetingString=@"提前1天";
+//        }else if (reminId==9){
+//            meetingString=@"提前2天";
+//        }
+//
+//    }
+    
     if ([meetingString isEqualToString:@"不提醒"]) {
         txROW=[NSString stringWithFormat:@"0"];
     }else if ([meetingString isEqualToString:@"按时提醒"]){
         txROW=[NSString stringWithFormat:@"1"];
+    }else if ([meetingString isEqualToString:@"提前5分钟"]){
+        txROW=[NSString stringWithFormat:@"2"];
+    }else if ([meetingString isEqualToString:@"提前15分钟"]){
+        txROW=[NSString stringWithFormat:@"3"];
+    }else if ([meetingString isEqualToString:@"提前30分钟"]){
+        txROW=[NSString stringWithFormat:@"4"];
+    }else if ([meetingString isEqualToString:@"提前1小时"]){
+        txROW=[NSString stringWithFormat:@"5"];
+    }else if ([meetingString isEqualToString:@"提前2小时"]){
+        txROW=[NSString stringWithFormat:@"6"];
+    }else if ([meetingString isEqualToString:@"提前6小时"]){
+        txROW=[NSString stringWithFormat:@"7"];
+    }else if ([meetingString isEqualToString:@"提前1天"]){
+        txROW=[NSString stringWithFormat:@"8"];
+    }else if ([meetingString isEqualToString:@"提前2天"]){
+        txROW=[NSString stringWithFormat:@"9"];
     }else{
         txROW=[NSString stringWithFormat:@"%ld",(long)picker.txRow];
     }
@@ -2386,9 +2434,9 @@ int H = 0,time_ID;
     NSDictionary *_dict;
     if(_pushID==1){
         if (_vcID==1003) {
-           _dict = @{@"card_id":_cardString,@"card_type":type_ID,@"create_user_id":create_user_id,@"user_id":user_id,@"attends":jsonString,@"service_time":timestring,@"service_addr":meetingField.text,@"service_content":contentString,@"set_remind":[dic objectForKey:@"set_remind"],@"set_now_send":msclString,@"set_sec_do":whether,@"set_sec_remarks":remarksString,@"period":loopUpStr};
+           _dict = @{@"card_id":_cardString,@"card_type":type_ID,@"create_user_id":create_user_id,@"user_id":user_id,@"attends":jsonString,@"service_time":timestring,@"service_addr":meetingField.text,@"service_content":contentString,@"set_remind":txROW,@"set_now_send":msclString,@"set_sec_do":whether,@"set_sec_remarks":remarksString,@"period":loopUpStr};
         }else{
-            _dict = @{@"card_id":_cardString,@"card_type":type_ID,@"create_user_id":create_user_id,@"user_id":user_id,@"attends":jsonString,@"service_time":timestring,@"service_addr":meetingField.text,@"service_content":contentString,@"set_remind":[dic objectForKey:@"set_remind"],@"set_now_send":msclString,@"set_sec_do":whether,@"set_sec_remarks":remarksString};
+            _dict = @{@"card_id":_cardString,@"card_type":type_ID,@"create_user_id":create_user_id,@"user_id":user_id,@"attends":jsonString,@"service_time":timestring,@"service_addr":meetingField.text,@"service_content":contentString,@"set_remind":txROW,@"set_now_send":msclString,@"set_sec_do":whether,@"set_sec_remarks":remarksString};
         }
         
     }else{
@@ -2457,9 +2505,9 @@ int H = 0,time_ID;
     NSDictionary *_dict;
     if(_pushID==1){
         if (_vcID==1003) {
-            _dict = @{@"card_id":_cardString,@"card_type":type_ID,@"create_user_id":create_user_id,@"user_id":user_id,@"attends":jsonString,@"service_time":timestring,@"service_addr":meetingField.text,@"service_content":contentString,@"set_remind":[dic objectForKey:@"set_remind"],@"set_now_send":msclString,@"set_sec_do":whether,@"set_sec_remarks":remarksString,@"period":loopUpStr};
+            _dict = @{@"card_id":_cardString,@"card_type":type_ID,@"create_user_id":create_user_id,@"user_id":user_id,@"attends":jsonString,@"service_time":timestring,@"service_addr":meetingField.text,@"service_content":contentString,@"set_remind":txROW,@"set_now_send":msclString,@"set_sec_do":whether,@"set_sec_remarks":remarksString,@"period":loopUpStr};
         }else{
-            _dict = @{@"card_id":_cardString,@"card_type":type_ID,@"create_user_id":create_user_id,@"user_id":user_id,@"attends":jsonString,@"service_time":timestring,@"service_addr":meetingField.text,@"service_content":contentString,@"set_remind":[dic objectForKey:@"set_remind"],@"set_now_send":msclString,@"set_sec_do":whether,@"set_sec_remarks":remarksString};
+            _dict = @{@"card_id":_cardString,@"card_type":type_ID,@"create_user_id":create_user_id,@"user_id":user_id,@"attends":jsonString,@"service_time":timestring,@"service_addr":meetingField.text,@"service_content":contentString,@"set_remind":txROW,@"set_now_send":msclString,@"set_sec_do":whether,@"set_sec_remarks":remarksString};
         }
        
     }else{

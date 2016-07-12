@@ -371,7 +371,7 @@
 
                 
                 
-                NSArray *array=@[@"我的订单",@"优惠券",@"金币商城",@"会员服务"];
+                NSArray *array=@[@"我的订单",@"优惠券",@"金币商城",@"企业服务"];
                 for (int k=0; k<array.count; k++) {
                     UIButton *growButton=[[UIButton alloc]initWithFrame:FRAME(WIDTH/4*k, 51, WIDTH/4, 70)];
                     growButton.tag=1000+k;
@@ -738,7 +738,7 @@
     [gradeButton addSubview:iamgeView];
     //gradeButton.backgroundColor=[UIColor blackColor];
     UILabel *label=[[UILabel alloc]initWithFrame:FRAME(0, 0, 30, 20)];
-    label.text=@"LV1";
+    label.text=[NSString stringWithFormat:@"%@",[dict objectForKey:@"level"]];
     label.font=[UIFont fontWithName:@"Heiti SC" size:10];
     label.textAlignment=NSTextAlignmentCenter;
     label.textColor=[UIColor whiteColor];

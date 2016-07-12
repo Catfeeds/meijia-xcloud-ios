@@ -70,18 +70,19 @@
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:TableSampleIdentifier];
     }
     cell.textLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"name"]];
+    cell.textLabel.textColor=[UIColor colorWithRed:51/255.0f green:51/255.0f  blue:51/255.0f  alpha:1];
     cell.textLabel.font=[UIFont fontWithName:@"" size:15];
-    UIView *view=[[UIView alloc]initWithFrame:FRAME(0, 40, WIDTH, 1)];
+    UIView *view=[[UIView alloc]initWithFrame:FRAME(0, 50, WIDTH, 1)];
     view.backgroundColor=[UIColor colorWithRed:220/255.0f green:220/255.0f blue:220/255.0f alpha:1];
     [cell addSubview:view];
-    UIImageView *imageView=[[UIImageView alloc]initWithFrame:FRAME(WIDTH-30, 10, 20, 20)];
+    UIImageView *imageView=[[UIImageView alloc]initWithFrame:FRAME(WIDTH-30, 15, 20, 20)];
     imageView.image=[UIImage imageNamed:@"JH_JT_TB_@2x"];
     [cell addSubview:imageView];
     return cell;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 41;
+    return 51;
 }
 #pragma mark 列表点击事件
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -92,6 +93,7 @@
     
         WebPageViewController *webPageVC=[[WebPageViewController alloc]init];
         webPageVC.barIDS=100;
+    webPageVC.toolID=100;
         webPageVC.webURL=[NSString stringWithFormat:@"%@",[dic objectForKey:@"setting_json"]];
         [self.navigationController pushViewController:webPageVC animated:YES];
 //    }
