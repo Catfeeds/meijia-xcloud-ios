@@ -12,4 +12,8 @@
 @property (nonatomic ,strong)UICollectionView *collectionView;
 @property (nonatomic, strong)UIImageView *tab;
 @property (nonatomic ,assign)int  tabBarID;;
+@property (nonatomic, strong)NSString*lngString;
+@property (nonatomic, strong)NSString*latString;
+@property (nonatomic, strong)NSString* cityStr;
+@property (nonatomic, strong)NSString* addressName;
 @end

@@ -83,7 +83,7 @@
     AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication] delegate];
     NSString *moile=[delegate.globalDic objectForKey:@"mobile"];
     // NSLog(@"手机号： %@",textfield.text);
-    if (moile==nil||moile==NULL) {
+    if (moile==nil||moile==NULL||[moile isEqualToString:@""]) {
         
         UIAlertView *alerView=[[UIAlertView alloc]initWithTitle:@"提示" message:@"您还没有绑定手机号，请绑定手机号！" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
         [alerView show];

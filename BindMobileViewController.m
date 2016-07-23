@@ -37,14 +37,14 @@
     bindMobileView.backgroundColor=[UIColor whiteColor];
     [self.view addSubview:bindMobileView];
     
-    _mobileField=[[UITextField alloc]initWithFrame:FRAME(0, 0, WIDTH-100, 60)];
+    _mobileField=[[UITextField alloc]initWithFrame:FRAME(20, 0, WIDTH-120, 60)];
     _mobileField.placeholder=@"请输入手机号";
     _mobileField.delegate=self;
     [bindMobileView addSubview:_mobileField];
-    _veriFicationButton=[[UIButton alloc]initWithFrame:FRAME(WIDTH-100, 10, 80, 40)];
+    _veriFicationButton=[[UIButton alloc]initWithFrame:FRAME(WIDTH-100, 15, 80, 30)];
     _veriFicationButton.backgroundColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
     [_veriFicationButton setTitle:@"获取验证码" forState:UIControlStateNormal];
-    _veriFicationButton.titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
+    _veriFicationButton.titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:13];
     _veriFicationButton.layer.cornerRadius=10;
     _veriFicationButton.clipsToBounds=YES;
     [_veriFicationButton addTarget:self action:@selector(veriButAction:) forControlEvents:UIControlEventTouchUpInside];
@@ -55,12 +55,16 @@
     lineView.backgroundColor=[UIColor colorWithRed:231/255.0f green:231/255.0f blue:231/255.0f alpha:1];
     [bindMobileView addSubview:lineView];
     
-    _veriFicationField=[[UITextField alloc]initWithFrame:FRAME(0, 61, WIDTH, 60)];
+    _veriFicationField=[[UITextField alloc]initWithFrame:FRAME(20, 61, WIDTH-40, 60)];
     _veriFicationField.placeholder=@"请输入验证码";
     _veriFicationField.delegate=self;
     [bindMobileView addSubview:_veriFicationField];
     
-    UIButton *suBmit=[[UIButton alloc]initWithFrame:FRAME(20, bindMobileView.frame.size.height+bindMobileView.frame.origin.y+10, WIDTH-40, 60)];
+    UIView *lineViews=[[UIView alloc]initWithFrame:FRAME(0, _veriFicationField.frame.origin.y+60, WIDTH, 1)];
+    lineViews.backgroundColor=[UIColor colorWithRed:231/255.0f green:231/255.0f blue:231/255.0f alpha:1];
+    [bindMobileView addSubview:lineViews];
+    
+    UIButton *suBmit=[[UIButton alloc]initWithFrame:FRAME(20, bindMobileView.frame.size.height+bindMobileView.frame.origin.y+10, WIDTH-40, 40)];
     suBmit.backgroundColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
     suBmit.layer.cornerRadius=10;
     suBmit.clipsToBounds=YES;

@@ -147,7 +147,9 @@
     NSLog(@"键盘宽度是  %d",width);
     keypadHight=height;
     keypadView.frame=FRAME(0, HEIGHT-(keypadHight+145), WIDTH, 145);
+    [self.view addSubview:keypadView];
     blackBut.frame=FRAME(0, 0, WIDTH, HEIGHT-(keypadHight+145));
+    [self.view addSubview:blackBut];
 }
 
 //当键退出时调用
@@ -807,6 +809,7 @@
                     [UIView beginAnimations: @"Animation" context:nil];
                     [UIView setAnimationDuration:0.3];
                     myListTableView.frame=FRAME(0, 64, WIDTH, HEIGHT-114);
+                    [self.view addSubview:myListTableView];
                     [UIView commitAnimations];
                     
                     listIDs++;

@@ -69,6 +69,9 @@
 //#import "RatingBar.h"
 @interface RootViewController ()<UIAlertViewDelegate, IChatManagerDelegate,UIAlertViewDelegate/*,RatingBarDelegate*/>
 {
+    
+    CLLocationManager *_locationManager;
+    
     UIView *mainView;
     UIViewController *currentViewController;
     UIImageView *barView;
@@ -473,7 +476,16 @@ MyselfViewController *thirdViewController;
 }
 - (void)viewDidLoad {
     
-  
+    // 初始化定位管理器
+    _locationManager = [[CLLocationManager alloc] init];
+    // 设置代理
+    _locationManager.delegate = self;
+    // 设置定位精确度到米
+    _locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+    // 设置过滤器为无
+    _locationManager.distanceFilter = kCLDistanceFilterNone;
+    // 开始定位
+    [_locationManager startUpdatingLocation];
     
     
     
@@ -1831,5 +1843,110 @@ MyselfViewController *thirdViewController;
     NSLog(@"失败");
 }
 
+
+-(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
+    
+    NSLog(@"%lu", (unsigned long)[locations count]);
+    
+    CLLocation *newLocation = locations[0];
+    CLLocationCoordinate2D oldCoordinate= newLocation.coordinate;
+    NSLog(@"旧的经度：%f,旧的纬度：%f",oldCoordinate.longitude,oldCoordinate.latitude);
+    _lngString=[NSString stringWithFormat:@"%f",oldCoordinate.longitude];
+    _latString=[NSString stringWithFormat:@"%f",oldCoordinate.latitude];
+    [manager stopUpdatingLocation];
+    
+    CLLocation *currentLocation = [locations lastObject];
+    
+    CLGeocoder *geocoder = [[CLGeocoder alloc] init];
+    [geocoder reverseGeocodeLocation:currentLocation completionHandler:^(NSArray *array, NSError *error)
+     
+     {
+         
+         if (array.count > 0)
+             
+         {
+             
+             CLPlacemark *placemark = [array objectAtIndex:0];
+             
+             
+             
+             //将获得的所有信息显示到label上
+             
+             NSLog(@"%@",placemark.name);
+             
+             //获取城市
+             
+             NSString *city = placemark.locality;
+             if (!city) {
+                 
+                 //四大直辖市的城市信息无法通过locality获得，只能通过获取省份的方法来获得（如果city为空，则可知为直辖市）
+                 
+                 city = placemark.administrativeArea;
+                 
+             }
+             
+             _cityStr =[NSString stringWithFormat:@"%@",city];
+             _addressName=[NSString stringWithFormat:@"%@",placemark.name];
+             [self userAddress];
+         }
+         
+         else if (error == nil && [array count] == 0)
+             
+         {
+             
+             NSLog(@"No results were returned.");
+             
+         }
+         
+         else if (error != nil)
+             
+         {
+             
+             NSLog(@"An error occurred = %@", error);
+             
+         }
+         
+     }];
+    
+    [manager stopUpdatingLocation];
+}
+
+// 6.0 调用此函数
+-(void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation {
+    NSLog(@"%@", @"ok");
+}
+-(void)userAddress
+{
+    if (fatherVc.loginYesOrNo==YES) {
+        ISLoginManager *_managers = [ISLoginManager shareManager];
+        NSLog(@"有值么%@",_managers.telephone);
+        DownloadManager *_download = [[DownloadManager alloc]init];
+        if (_latString==nil||_latString==NULL||[_latString isEqualToString:@""]) {
+            _latString=@"";
+        }
+        if (_lngString==nil||_lngString==NULL||[_lngString isEqualToString:@""]){
+            _lngString=@"";
+        }
+        if (_addressName==nil||_addressName==NULL||[_addressName isEqualToString:@""]){
+            _addressName=@"";
+        }
+        if (_cityStr==nil||_cityStr==NULL||[_cityStr isEqualToString:@""]){
+            _cityStr=@"";
+        }
+        NSDictionary *_dict=@{@"user_id":_managers.telephone,@"lat":_latString,@"lng":_lngString,@"poi_name":_addressName,@"city":_cityStr};
+        [_download requestWithUrl:ADDRESS_USER dict:_dict view:self.view delegate:self finishedSEL:@selector(AddressFinish:) isPost:YES failedSEL:@selector(QJDownFail:)];
+    }
+    
+}
+//#pragma mark用户信息详情获取失败方法
+//-(void)QJDownFail:(id)sender
+//{
+//    
+//}
+#pragma mark 获取用户当前地理位置成功返回
+-(void)AddressFinish:(id)source
+{
+    
+}
 
 @end
