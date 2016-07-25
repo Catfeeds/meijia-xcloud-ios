@@ -178,7 +178,7 @@
                 return;
             }else{
                 if (i==checkin_netArray.count-1) {
-                    UIAlertView *tsView=[[UIAlertView alloc]initWithTitle:@"提醒" message:@"您给秘书预留的时间过短，至少要预留出2天的时间哦！" delegate:self cancelButtonTitle:@"是" otherButtonTitles:@"否", nil];
+                    UIAlertView *tsView=[[UIAlertView alloc]initWithTitle:@"提醒" message:@"检测到您现在未连接到（公司名）默认wifi，是否继续签到？" delegate:self cancelButtonTitle:@"是" otherButtonTitles:@"否", nil];
                     [tsView show];
                 }
             }
