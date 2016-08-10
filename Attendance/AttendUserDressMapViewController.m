@@ -74,8 +74,8 @@
     
     NSLog(@"进入普通定位态");
     //设置定位精确度，默认：kCLLocationAccuracyBest
-    [BMKLocationService setLocationDesiredAccuracy:kCLLocationAccuracyNearestTenMeters];
-    //指定最小距离更新(米)，默认：kCLDistanceFilterNone
+    [BMKLocationService setLocationDesiredAccuracy:kCLLocationAccuracyBest];
+    //指定最小距离更新(米)，默认：kCLDistanceFilterNone2
     [BMKLocationService setLocationDistanceFilter:10.f];
     
     _locService = [[BMKLocationService alloc]init];
