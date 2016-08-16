@@ -79,7 +79,7 @@
 {
 //    [self.navigationController setNavigationBarHidden:NO animated:NO];
     WebPageViewController *webVC=[[WebPageViewController alloc]init];
-    webVC.webURL=[NSString stringWithFormat:@"http://123.57.173.36/simi-h5/show/help-%@.html",_tyPeStr];
+    webVC.webURL=[NSString stringWithFormat:@"http://app.bolohr.com/simi-h5/show/help-%@.html",_tyPeStr];
 //    [webVC setModalTransitionStyle:UIModalTransitionStylePartialCurl];
      UINavigationController *nav=[[UINavigationController alloc]initWithRootViewController:webVC];
     webVC.vcIDs=1000;
@@ -147,7 +147,7 @@
     ISLoginManager *manager = [[ISLoginManager alloc]init];
     if (![url isEqualToString:@""]&& url !=nil) {
           url = [NSString stringWithFormat:
-                            @"http://123.57.173.36/simi-oa/upload/html/%@.html?mobile='%@'",
+                            @"http://app.bolohr.com/simi-oa/upload/html/%@.html?mobile='%@'",
                              [obj.object objectForKey:@"msgid"],
                              manager.telephone];
 //        url = [NSString stringWithFormat:@"%@%@",[obj.object objectForKey:@"url"],mobile];

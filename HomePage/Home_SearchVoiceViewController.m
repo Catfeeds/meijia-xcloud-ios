@@ -213,7 +213,7 @@
 {
     
     NSString *urlStr;
-    NSString *stringss=[NSString stringWithFormat:@"http://51xingzheng.cn/api/get_search_results/?s=%@&count=10&order=DESC&include=id,title,url,thumbnail,custom_fields",searchStr];
+    NSString *stringss=[NSString stringWithFormat:@"http://bolohr.com/api/get_search_results/?s=%@&count=10&order=DESC&include=id,title,url,thumbnail,custom_fields",searchStr];
     urlStr=[stringss stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     NSString *urlString = [NSString stringWithFormat:@"%@&page=%ld",urlStr,(long)page];
     AFHTTPRequestOperationManager *mymanager = [AFHTTPRequestOperationManager manager];

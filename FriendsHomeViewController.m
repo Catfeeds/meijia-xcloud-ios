@@ -95,7 +95,7 @@ ShopViewController *shopViewController;
 //        headView.image=[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[homeDic objectForKey:@"head_img"]]]];
 //    }
     headView.backgroundColor=HEX_TO_UICOLOR(0xe8374a, 1.0);
-    NSString *imageUrl=@"http://123.57.173.36/simi-h5/img/friend_bg_update.jpg";
+    NSString *imageUrl=@"http://app.bolohr.com/simi-h5/img/friend_bg_update.jpg";
     NSData * data = [NSData dataWithContentsOfURL:[NSURL URLWithString:imageUrl]];
     headView.image=[UIImage imageWithData:data];
     [self.view addSubview:headView];

@@ -177,7 +177,7 @@
 -(void)upButAction
 {
     
-    NSString *urlStr = @"http://123.57.173.36/simi/app/feed/post_feed.json";
+    NSString *urlStr = @"http://app.bolohr.com/simi/app/feed/post_feed.json";
     ISLoginManager *_manager = [ISLoginManager shareManager];
     NSString *user=_manager.telephone;
     NSDictionary *dic=@{@"user_id":user,@"title":descriptionView.text};

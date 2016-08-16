@@ -325,42 +325,42 @@
         case 0:
         {
 //            page=1;
-            NSString *string=[NSString stringWithFormat:@"http://51xingzheng.cn/?json=get_tag_posts&count=10&order=DESC&slug=精选课程&include=id,title,modified,url,thumbnail,custom_fields"];
+            NSString *string=[NSString stringWithFormat:@"http://bolohr.com/?json=get_tag_posts&count=10&order=DESC&slug=精选课程&include=id,title,modified,url,thumbnail,custom_fields"];
             urlStr=[string stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
         }
             break;
         case 1:
         {
 //            page=1;
-            NSString *string=@"http://51xingzheng.cn/?json=get_tag_posts&count=10&order=DESC&slug=人力课程&include=id,title,modified,url,thumbnail,custom_fields";
+            NSString *string=@"http://bolohr.com/?json=get_tag_posts&count=10&order=DESC&slug=人力课程&include=id,title,modified,url,thumbnail,custom_fields";
             urlStr=[string stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
         }
             break;
         case 2:
         {
 //            page=1;
-            NSString *string=@"http://51xingzheng.cn/?json=get_tag_posts&count=10&order=DESC&slug=行政课程&include=id,title,modified,url,thumbnail,custom_fields";
+            NSString *string=@"http://bolohr.com/?json=get_tag_posts&count=10&order=DESC&slug=行政课程&include=id,title,modified,url,thumbnail,custom_fields";
             urlStr=[string stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
         }
             break;
         case 3:
         {
 //            page=1;
-            NSString *string=@"http://51xingzheng.cn/?json=get_tag_posts&count=10&order=DESC&slug=企管课程&include=id,title,modified,url,thumbnail,custom_fields";
+            NSString *string=@"http://bolohr.com/?json=get_tag_posts&count=10&order=DESC&slug=企管课程&include=id,title,modified,url,thumbnail,custom_fields";
             urlStr=[string stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
         }
             break;
         case 4:
         {
 //            page=1;
-            NSString *string=@"http://51xingzheng.cn/?json=get_tag_posts&count=10&order=DESC&slug=考证课程&include=id,title,modified,url,thumbnail,custom_fields";
+            NSString *string=@"http://bolohr.com/?json=get_tag_posts&count=10&order=DESC&slug=考证课程&include=id,title,modified,url,thumbnail,custom_fields";
             urlStr=[string stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
         }
             break;
         case 5:
         {
 //            page=1;
-            NSString *string=@"http://51xingzheng.cn/?json=get_tag_posts&count=10&order=DESC&slug=技能课程&include=id,title,modified,url,thumbnail,custom_fields";
+            NSString *string=@"http://bolohr.com/?json=get_tag_posts&count=10&order=DESC&slug=技能课程&include=id,title,modified,url,thumbnail,custom_fields";
             urlStr=[string stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
         }
             break;

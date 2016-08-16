@@ -89,7 +89,7 @@ appDelegate
     NSURL *url=sender.object;
     NSString *stringUrl=[NSString stringWithFormat:@"%@",url];
     NSLog(@"%@",url.query);
-//    if([stringUrl rangeOfString:@"http://www.51xingzheng.cn/d/open.html?"].location !=NSNotFound)
+//    if([stringUrl rangeOfString:@"http://www.bolohr.com/d/open.html?"].location !=NSNotFound)
 //    {
         NSString *urlStr=[NSString stringWithFormat:@"%@",url.query];
         NSArray *urlArray = [urlStr componentsSeparatedByString:@"&"];
@@ -290,7 +290,7 @@ appDelegate
         [viewheade addSubview:headeImage];
         
         UIImageView *headImageView=[[UIImageView alloc]initWithFrame:FRAME(0, 0, WIDTH, HEIGHT*0.3)];
-        NSString *imageUrl=@"http://123.57.173.36/simi-h5/img/login_logo_update.jpg";
+        NSString *imageUrl=@"http://app.bolohr.com/simi-h5/img/login_logo_update.jpg";
 //        [headImageView setImageWithURL:[NSURL URLWithString:imageUrl]placeholderImage:nil];
         headImageView.image=[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imageUrl]]];
         [viewheade addSubview:headImageView];
@@ -748,7 +748,7 @@ appDelegate
 {
     ImgWebViewController *web = [[ImgWebViewController alloc]init];
     web.title = @"用户使用协议";
-    web.imgurl = @"http://123.57.173.36/html/simi-inapp/agreement.htm";
+    web.imgurl = @"http://app.bolohr.com/html/simi-inapp/agreement.htm";
     [self.navigationController pushViewController:web animated:YES];
     
 }

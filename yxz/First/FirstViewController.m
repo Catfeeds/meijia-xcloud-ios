@@ -353,7 +353,7 @@
         UIButton *btn = (UIButton *)[rightbtn viewWithTag:321];
         btn.hidden = YES;
         ImgWebViewController *img = [[ImgWebViewController alloc]init];
-        img.imgurl = @"http://123.57.173.36/simi-wwz/wwz/news_list.html";
+        img.imgurl = @"http://app.bolohr.com/simi-wwz/wwz/news_list.html";
         img.title = @"消息列表";
         [self.navigationController pushViewController:img animated:YES];
       

@@ -47,7 +47,7 @@
 ////////////////*************************************//////////////////
 ////////////////*************接口相关*****************//////////////////
 
-#define SERVER_DRESS                     @"http://123.57.173.36/"                        //服务器地址
+#define SERVER_DRESS                     @"http://app.bolohr.com/"                        //服务器地址
 #define GET_YANZHENGMA                   @"simi/app/user/get_sms_token.json"              //获取验证码
 #define LOGIN_API                        @"simi/app/user/login.json"                      //登录接口
 #define Third_LOG                        @"simi/app/user/login-3rd.json"                  //第三方登陆
@@ -125,7 +125,7 @@
 #define ORDER_DDZF                       @"simi/app/order/post_pay.json"                 //订单支付接口（订单详情和订单列表支付调用）
 #define USER_QRCODE                      @"simi/app/user/get_qrcode.json"                //用户获取自己的二维码接口
 #define USER_QRHY                        @"simi/app/user/add_friend.json"                //二维码扫描添加好友接口
-#define USER_LNTEGRAL                    @"http://123.57.173.36/simi/app/user/score_shop.json"                //积分积口
+#define USER_LNTEGRAL                    @"http://app.bolohr.com/simi/app/user/score_shop.json"                //积分积口
 #define USER_WALLET                      @"simi/app/user/get_detail_pay.json"                 //用户钱包接口
 #define SERVICE_SEARCH                   @"simi/app/partner/search.json"                 //服务商-搜索结果-服务人员列表接口
 #define SERVICE_RSLB                     @"simi/app/partner/get_hot_keyword.json"        //服务商-热搜关键字列表接口

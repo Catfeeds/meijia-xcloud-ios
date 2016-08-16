@@ -127,7 +127,7 @@
     meWebView.delegate=self;
     meWebView.scrollView.delegate=self;
     [self.view addSubview:meWebView];
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://123.57.173.36/simi-h5/show/company-reg.html"]];//http://123.57.173.36/simi-h5/show/company-reg.html
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://app.bolohr.com/simi-h5/show/company-reg.html"]];//http://app.bolohr.com/simi-h5/show/company-reg.html
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     [meWebView loadRequest:request];
 
@@ -198,7 +198,7 @@
 -(void)signBut
 {
     ISLoginManager *_manager = [ISLoginManager shareManager];
-    urlString=[NSString stringWithFormat:@"http://123.57.173.36/simi-h5/show/checkin-index.html?user_id=%@",_manager.telephone];
+    urlString=[NSString stringWithFormat:@"http://app.bolohr.com/simi-h5/show/checkin-index.html?user_id=%@",_manager.telephone];
     [self webLayout];
 }
 -(void)nameLabelLayout

@@ -40,7 +40,7 @@
         case 101:
             self.navlabel.text = @"用户协议";
             _loadurl = @"http://bolohr.com/agreement.html";
-            
+
             break;
 
         case 102:
@@ -59,7 +59,8 @@
         
         [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         
-        NSURL * phoneUrl = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",SERVER_DRESS,_loadurl]];
+        //NSURL * phoneUrl = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",SERVER_DRESS,_loadurl]];
+        NSURL * phoneUrl = [NSURL URLWithString:_loadurl];
         mywebView = [[UIWebView alloc]initWithFrame:FRAME(0, 64, _WIDTH, _HEIGHT-64)];
         mywebView.delegate = self;
         mywebView.scalesPageToFit = YES;  //自适应

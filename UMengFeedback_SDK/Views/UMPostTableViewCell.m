@@ -195,7 +195,7 @@
         
     }else if(ID==20){
         self.iconImageView.frame=FRAME(self.bounds.size.width-45, 3, 40, 40);
-        self.iconImageView.image=[UIImage imageNamed:@"yunxingzheng-Logo-512"];
+        self.iconImageView.image=[UIImage imageNamed:@"bolohr-logo512.png"];
         self.label.frame=CGRectMake(0, 5, self.bounds.size.width-(self.iconImageView.frame.size.width+10), self.label.frame.size.height);
         self.datelabel.frame=CGRectMake(self.bounds.size.width-130, self.label.frame.size.height, 80, 20);
         self.label.textAlignment=NSTextAlignmentRight;

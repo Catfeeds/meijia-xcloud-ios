@@ -1403,6 +1403,9 @@
 		1FFD038C1A2D82EF000B5378 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FFD038B1A2D82EF000B5378 /* main.m */; };
 		1FFD03931A2D82EF000B5378 /* guanjia.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1FFD03911A2D82EF000B5378 /* guanjia.xcdatamodeld */; };
 		1FFD03951A2D82EF000B5378 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1FFD03941A2D82EF000B5378 /* Images.xcassets */; };
+		5F0B3C021D5E207D004E3AED /* bolohr-logo120.png in Resources */ = {isa = PBXBuildFile; fileRef = 5F0B3BFF1D5E207D004E3AED /* bolohr-logo120.png */; };
+		5F0B3C031D5E207D004E3AED /* bolohr-logo180.png in Resources */ = {isa = PBXBuildFile; fileRef = 5F0B3C001D5E207D004E3AED /* bolohr-logo180.png */; };
+		5F0B3C041D5E207D004E3AED /* bolohr-logo512.png in Resources */ = {isa = PBXBuildFile; fileRef = 5F0B3C011D5E207D004E3AED /* bolohr-logo512.png */; };
 		8F84D50D1A3AAEC200F25203 /* HowGetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F84D50C1A3AAEC200F25203 /* HowGetViewController.m */; };
 		8F84D5101A3AAEF800F25203 /* GetJifenView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F84D50F1A3AAEF800F25203 /* GetJifenView.m */; };
 		8F9B69991A47C3A7000BA266 /* circle_@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8F9B69981A47C3A7000BA266 /* circle_@2x.png */; };
@@ -4065,6 +4068,9 @@
 		1FFD039B1A2D82EF000B5378 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		1FFD03A41A2D82EF000B5378 /* yxzTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "yxzTests-Info.plist"; sourceTree = "<group>"; };
 		1FFD03A81A2D82EF000B5378 /* yxzTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = yxzTests.m; sourceTree = "<group>"; };
+		5F0B3BFF1D5E207D004E3AED /* bolohr-logo120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bolohr-logo120.png"; sourceTree = "<group>"; };
+		5F0B3C001D5E207D004E3AED /* bolohr-logo180.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bolohr-logo180.png"; sourceTree = "<group>"; };
+		5F0B3C011D5E207D004E3AED /* bolohr-logo512.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bolohr-logo512.png"; sourceTree = "<group>"; };
 		8F84D50B1A3AAEC200F25203 /* HowGetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HowGetViewController.h; sourceTree = "<group>"; };
 		8F84D50C1A3AAEC200F25203 /* HowGetViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HowGetViewController.m; sourceTree = "<group>"; };
 		8F84D50E1A3AAEF800F25203 /* GetJifenView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GetJifenView.h; sourceTree = "<group>"; };
@@ -5792,6 +5798,9 @@
 		107063981B79A1BD00CD8B93 /* 加号图标 */ = {
 			isa = PBXGroup;
 			children = (
+				5F0B3BFF1D5E207D004E3AED /* bolohr-logo120.png */,
+				5F0B3C001D5E207D004E3AED /* bolohr-logo180.png */,
+				5F0B3C011D5E207D004E3AED /* bolohr-logo512.png */,
 				1015CB951CC292D200EBAE2C /* 引导页1.jpg */,
 				1015CB961CC292D200EBAE2C /* 引导页2.jpg */,
 				1015CB971CC292D200EBAE2C /* 引导页3.jpg */,
@@ -9888,6 +9897,7 @@
 				10BC25301C75967A0097DE36 /* wx_login_normal.png in Resources */,
 				03B5E1EC1B3D56D6009F779A /* 家-我_默认头像.png in Resources */,
 				10E0506F1BF19FFB009FF047 /* UzysAssetsPickerController.xib in Resources */,
+				5F0B3C031D5E207D004E3AED /* bolohr-logo180.png in Resources */,
 				102A0EC31CF5AECC00CAA320 /* opad_29.png in Resources */,
 				108962E41C3A7A2700D88350 /* chat_receiver_audio_playing002@2x.png in Resources */,
 				10BFDB961CBC909000DD274D /* UMComLoginViewController.xib in Resources */,
@@ -9974,6 +9984,7 @@
 				108962C91C3A7A2700D88350 /* chatBar_colorMore_audioCallSelected@2x.png in Resources */,
 				102A0EDC1CF83F4300CAA320 /* 取消.png in Resources */,
 				1089620A1C3A7A2700D88350 /* callRing.mp3 in Resources */,
+				5F0B3C021D5E207D004E3AED /* bolohr-logo120.png in Resources */,
 				8FECD9AB1A3ED3C90027D301 /* common_01@2x.png in Resources */,
 				1F36C2C51A30647C0072F5B4 /* bell_click@2x.png in Resources */,
 				1093C2491CE4248300C7FFD5 /* apptools_33_1456300448.png in Resources */,
@@ -10180,6 +10191,7 @@
 				108962DE1C3A7A2700D88350 /* messageToolbarBg@2x.png in Resources */,
 				8F9B69A11A493875000BA266 /* logo_@2x.png in Resources */,
 				108962C21C3A7A2700D88350 /* chatBar_recordBg.png in Resources */,
+				5F0B3C041D5E207D004E3AED /* bolohr-logo512.png in Resources */,
 				1058C2CF1C53487400FE0FB2 /* bg_menu_bottom副本.png in Resources */,
 				10E967351CC635D00047E819 /* UMSocialLocalizable.strings in Resources */,
 				10DD78F61B7064E100860310 /* common_icon_find_c@2x.png in Resources */,
@@ -11241,6 +11253,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_BITCODE = YES;
 				ENABLE_TESTABILITY = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -11297,6 +11310,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_BITCODE = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -11338,6 +11352,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COMPRESS_PNG_FILES = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = NO;
 				ENABLE_TESTABILITY = YES;
@@ -11422,6 +11437,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COMPRESS_PNG_FILES = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = NO;
 				ENABLE_TESTABILITY = NO;

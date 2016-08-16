@@ -239,7 +239,7 @@
 -(void)signBut
 {
     ISLoginManager *_manager = [ISLoginManager shareManager];
-    urlString=[NSString stringWithFormat:@"http://123.57.173.36/simi-h5/show/checkin-index.html?user_id=%@",_manager.telephone];
+    urlString=[NSString stringWithFormat:@"http://app.bolohr.com/simi-h5/show/checkin-index.html?user_id=%@",_manager.telephone];
 }
 -(void)nameLabelLayout
 {

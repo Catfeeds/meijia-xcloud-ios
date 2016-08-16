@@ -171,7 +171,7 @@
 
 - (void)upload
 {
-    NSString *urlStr = @"http://123.57.173.36/simi/app/user/post_user_head_img.json";
+    NSString *urlStr = @"http://app.bolohr.com/simi/app/user/post_user_head_img.json";
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:urlStr] cachePolicy:0 timeoutInterval:5.0f];
     
     [self setRequest:request];

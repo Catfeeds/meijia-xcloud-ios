@@ -163,7 +163,7 @@
 - (void)MaketwoImage
 {
     NSError *error;
-    NSURL *url=[NSURL URLWithString:@"http://123.57.173.36/simi/app/dict/get_ads.json"];
+    NSURL *url=[NSURL URLWithString:@"http://app.bolohr.com/simi/app/dict/get_ads.json"];
     NSData *data=[NSData dataWithContentsOfURL:url];
     NSLog( @"能否接收到数据？？%@",data);
     NSStringEncoding enc=CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000);
@@ -222,7 +222,7 @@
     [user synchronize];
     
     ISLoginManager *manager = [[ISLoginManager alloc]init];
-    NSString *url = [NSString stringWithFormat:@"http://123.57.173.36/simi-wwz/wx-news-list.html?user_id=%@&page=1",manager.telephone];
+    NSString *url = [NSString stringWithFormat:@"http://app.bolohr.com/simi-wwz/wx-news-list.html?user_id=%@&page=1",manager.telephone];
     ImgWebViewController *img = [[ImgWebViewController alloc]init];
     img.imgurl =url;
     img.title = @"消息列表";

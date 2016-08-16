@@ -280,7 +280,7 @@
    // vc.strCodeType = strResult.strBarCodeType;
     NSLog(@"111%@ -222%@ -333%@",strResult.imgScanned,strResult.strBarCodeType,strResult.strScanned);
     [self isPureInt:_user_id];
-    if([strResult.strScanned rangeOfString:@"http://www.51xingzheng.cn/d/open.html?"].location !=NSNotFound)
+    if([strResult.strScanned rangeOfString:@"http://www.bolohr.com/d/open.html?"].location !=NSNotFound)
     {
         NSURL *url=[NSURL URLWithString:strResult.strScanned];
        [[NSNotificationCenter defaultCenter] postNotificationName:@"URLOPEN" object:url];

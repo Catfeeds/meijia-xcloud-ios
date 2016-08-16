@@ -125,7 +125,7 @@
 {
     WebPageViewController *webPageVC=[[WebPageViewController alloc]init];
     webPageVC.barIDS=100;
-    webPageVC.webURL=[NSString stringWithFormat:@"http://123.57.173.36/simi-h5/show/score-intro.html"];
+    webPageVC.webURL=[NSString stringWithFormat:@"http://app.bolohr.com/simi-h5/show/score-intro.html"];
     [self.navigationController pushViewController:webPageVC animated:YES];
 }
 #pragma mark  积分兑换商品按钮方法
@@ -133,7 +133,7 @@
 {
 //    self.backlable.hidden=YES;
     ISLoginManager *_manager = [ISLoginManager shareManager];
-    NSString *url=[NSString stringWithFormat:@"http://123.57.173.36/simi/app/user/score_shop.json?user_id=%@",_manager.telephone];
+    NSString *url=[NSString stringWithFormat:@"http://app.bolohr.com/simi/app/user/score_shop.json?user_id=%@",_manager.telephone];
     CreditWebViewController *web=[[CreditWebViewController alloc]initWithUrl:url];//实际中需要改为带签名的地址
     //如果已经有UINavigationContoller了，就 创建出一个 CreditWebViewController 然后 push 进去
     [self.navigationController pushViewController:web animated:YES];

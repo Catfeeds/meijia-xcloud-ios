@@ -171,7 +171,7 @@
 }
 -(void)upButAction
 {
-    NSString *urlStr = [NSString stringWithFormat:@"http://123.57.173.36/%@",UP_DONGTAI];//@"http://123.57.173.36/simi/app/user/post_user_img.json";
+    NSString *urlStr = [NSString stringWithFormat:@"http://app.bolohr.com/%@",UP_DONGTAI];//@"http://app.bolohr.com/simi/app/user/post_user_img.json";
     ISLoginManager *_manager = [ISLoginManager shareManager];
     NSString *user=_manager.telephone;
     NSDictionary *dic=@{@"user_id":user,@"title":descriptionView.text,@"lat":_lngString,@"lng":_latString,@"poi_name":_cityStr};

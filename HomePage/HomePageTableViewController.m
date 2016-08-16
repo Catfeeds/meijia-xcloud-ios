@@ -614,7 +614,7 @@ static CGFloat const imageBGHeight = 395; // 背景图片的高度
         ISLoginManager *_manager = [ISLoginManager shareManager];
         WebPageViewController *webPageVC=[[WebPageViewController alloc]init];
         webPageVC.barIDS=100;
-        webPageVC.webURL=[NSString stringWithFormat:@"http://123.57.173.36/simi-h5/show/level-my-index.html?user_id=%@",_manager.telephone];
+        webPageVC.webURL=[NSString stringWithFormat:@"http://app.bolohr.com/simi-h5/show/level-my-index.html?user_id=%@",_manager.telephone];
         [self.navigationController pushViewController:webPageVC animated:YES];
     }else if (button.tag==14){
         pushEjectView.hidden=YES;
@@ -658,9 +658,9 @@ static CGFloat const imageBGHeight = 395; // 背景图片的高度
 //            webPageVC.barIDS=100;
 //            
 //            if (fatherVc.loginYesOrNo) {
-//                webPageVC.webURL=[NSString stringWithFormat:@"http://123.57.173.36/simi-h5/show/job-reward-list.html?user_id=%@",_manager.telephone];
+//                webPageVC.webURL=[NSString stringWithFormat:@"http://app.bolohr.com/simi-h5/show/job-reward-list.html?user_id=%@",_manager.telephone];
 //            }else{
-//                webPageVC.webURL=[NSString stringWithFormat:@"http://123.57.173.36/simi-h5/show/job-reward-list.html?user_id=0"];
+//                webPageVC.webURL=[NSString stringWithFormat:@"http://app.bolohr.com/simi-h5/show/job-reward-list.html?user_id=0"];
 //            }
 //            [self.navigationController pushViewController:webPageVC animated:YES];
         }
@@ -717,7 +717,7 @@ static CGFloat const imageBGHeight = 395; // 背景图片的高度
         case 7:
         {
             ISLoginManager *_manager = [ISLoginManager shareManager];
-            NSString *url=[NSString stringWithFormat:@"http://123.57.173.36/simi/app/user/score_shop.json?user_id=%@",_manager.telephone];
+            NSString *url=[NSString stringWithFormat:@"http://app.bolohr.com/simi/app/user/score_shop.json?user_id=%@",_manager.telephone];
             CreditWebViewController *web=[[CreditWebViewController alloc]initWithUrl:url];//实际中需要改为带签名的地址
             //如果已经有UINavigationContoller了，就 创建出一个 CreditWebViewController 然后 push 进去
             [self.navigationController pushViewController:web animated:YES];
@@ -758,7 +758,7 @@ static CGFloat const imageBGHeight = 395; // 背景图片的高度
 //#pragma mark  广告数据请求
 //-(void)requestLayout
 //{
-//    NSString *urlStr=@"http://51xingzheng.cn/?json=get_tag_posts&count=5&order=DESC&slug=%E9%A6%96%E9%A1%B5%E7%B2%BE%E9%80%89&include=id,title,modified,url,thumbnail,custom_fields";
+//    NSString *urlStr=@"http://bolohr.com/?json=get_tag_posts&count=5&order=DESC&slug=%E9%A6%96%E9%A1%B5%E7%B2%BE%E9%80%89&include=id,title,modified,url,thumbnail,custom_fields";
 //    NSString *urlString = [NSString stringWithFormat:@"%@&page=%d",urlStr,selectedPage];
 //    AFHTTPRequestOperationManager *mymanager = [AFHTTPRequestOperationManager manager];
 //    
@@ -1102,16 +1102,16 @@ static CGFloat const imageBGHeight = 395; // 背景图片的高度
                 
                 NSString *textStr= [subscribeAry componentsJoinedByString:@","];
                 if (textStr==nil||textStr==NULL||[textStr isEqualToString:@""]) {
-                     urlStr=@"http://51xingzheng.cn/?json=get_tag_posts&count=10&order=DESC&slug=%E9%A6%96%E9%A1%B5%E7%B2%BE%E9%80%89&include=id,title,modified,url,thumbnail,custom_fields";
+                     urlStr=@"http://bolohr.com/?json=get_tag_posts&count=10&order=DESC&slug=%E9%A6%96%E9%A1%B5%E7%B2%BE%E9%80%89&include=id,title,modified,url,thumbnail,custom_fields";
                 }else{
-                    NSString *string=[NSString stringWithFormat:@"http://51xingzheng.cn/api/tags/get_tag_posts/?slug=首页精选,%@&count=10&order=DESC&include=id,title,url,thumbnail,custom_fields",textStr];
+                    NSString *string=[NSString stringWithFormat:@"http://bolohr.com/api/tags/get_tag_posts/?slug=首页精选,%@&count=10&order=DESC&include=id,title,url,thumbnail,custom_fields",textStr];
                     urlStr=[string stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
                     NSLog(@"%@",urlStr);
                 }
                 
 
             }else{
-                urlStr=@"http://51xingzheng.cn/?json=get_tag_posts&count=10&order=DESC&slug=%E9%A6%96%E9%A1%B5%E7%B2%BE%E9%80%89&include=id,title,modified,url,thumbnail,custom_fields";
+                urlStr=@"http://bolohr.com/?json=get_tag_posts&count=10&order=DESC&slug=%E9%A6%96%E9%A1%B5%E7%B2%BE%E9%80%89&include=id,title,modified,url,thumbnail,custom_fields";
             }
             
         }
@@ -1119,58 +1119,58 @@ static CGFloat const imageBGHeight = 395; // 背景图片的高度
         case 1:
         {
            
-            urlStr=@"http://51xingzheng.cn/?json=get_category_posts&count=10&order=DESC&id=62&include=id,title,modified,url,thumbnail,custom_fields";//
+            urlStr=@"http://bolohr.com/?json=get_category_posts&count=10&order=DESC&id=62&include=id,title,modified,url,thumbnail,custom_fields";//
             
             
         }
             break;
         case 2:
         {
-            urlStr=@"http://51xingzheng.cn/?json=get_category_posts&count=10&order=DESC&id=65&include=id,title,modified,url,thumbnail,custom_fields";//
+            urlStr=@"http://bolohr.com/?json=get_category_posts&count=10&order=DESC&id=65&include=id,title,modified,url,thumbnail,custom_fields";//
             
         }
             break;
         case 3:
         {
-            urlStr=@"http://51xingzheng.cn/?json=get_category_posts&count=10&order=DESC&id=64&include=id,title,modified,url,thumbnail,custom_fields";//
+            urlStr=@"http://bolohr.com/?json=get_category_posts&count=10&order=DESC&id=64&include=id,title,modified,url,thumbnail,custom_fields";//
             
         }
             break;
         case 4:
         {
-            urlStr=@"http://51xingzheng.cn/?json=get_category_posts&count=10&order=DESC&id=69&include=id,title,modified,url,thumbnail,custom_fields";//
+            urlStr=@"http://bolohr.com/?json=get_category_posts&count=10&order=DESC&id=69&include=id,title,modified,url,thumbnail,custom_fields";//
         }
             break;
         case 5:
         {
         
-            urlStr=@"http://51xingzheng.cn/?json=get_category_posts&count=10&order=DESC&id=21&include=id,title,modified,url,thumbnail,custom_fields";
+            urlStr=@"http://bolohr.com/?json=get_category_posts&count=10&order=DESC&id=21&include=id,title,modified,url,thumbnail,custom_fields";
         }
             break;
         case 6:
         {
-            urlStr=@"http://51xingzheng.cn/?json=get_category_posts&count=10&order=DESC&id=50&include=id,title,modified,url,thumbnail,custom_fields";//
+            urlStr=@"http://bolohr.com/?json=get_category_posts&count=10&order=DESC&id=50&include=id,title,modified,url,thumbnail,custom_fields";//
             
         }
             break;
         case 7:
         {
-            urlStr=@"http://51xingzheng.cn/?json=get_category_posts&count=10&order=DESC&id=63&include=id,title,modified,url,thumbnail,custom_fields";//
+            urlStr=@"http://bolohr.com/?json=get_category_posts&count=10&order=DESC&id=63&include=id,title,modified,url,thumbnail,custom_fields";//
         }
             break;
         case 8:
         {
-            urlStr=@"http://51xingzheng.cn/?json=get_category_posts&count=10&order=DESC&id=66&include=id,title,modified,url,thumbnail,custom_fields";
+            urlStr=@"http://bolohr.com/?json=get_category_posts&count=10&order=DESC&id=66&include=id,title,modified,url,thumbnail,custom_fields";
         }
             break;
         case 9:
         {
-            urlStr=@"http://51xingzheng.cn/?json=get_category_posts&count=10&order=DESC&id=67&include=id,title,modified,url,thumbnail,custom_fields";
+            urlStr=@"http://bolohr.com/?json=get_category_posts&count=10&order=DESC&id=67&include=id,title,modified,url,thumbnail,custom_fields";
         }
             break;
         case 10:
         {
-            urlStr=@"http://51xingzheng.cn/?json=get_category_posts&count=10&order=DESC&id=70&include=id,title,modified,url,thumbnail,custom_fields";
+            urlStr=@"http://bolohr.com/?json=get_category_posts&count=10&order=DESC&id=70&include=id,title,modified,url,thumbnail,custom_fields";
         }
             break;
         default:

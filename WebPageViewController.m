@@ -645,7 +645,7 @@
                 [UMSocialWechatHandler setWXAppId:@"wx93aa45d30bf6cba3" appSecret:@"7a4ec42a0c548c6e39ce9ed25cbc6bd7" url:webURL];
                 [UMSocialQQHandler setQQWithAppId:@"1104934408" appKey:@"bRW2glhUCR6aJYIZ" url:webURL];
                 [UMSocialSinaSSOHandler openNewSinaSSOWithAppKey:@"247547429" RedirectURL:webURL];
-                [UMSocialSnsService presentSnsIconSheetView:self appKey:YMAPPKEY shareText:webTitleLabel.text shareImage:[UIImage imageNamed:@"yunxingzheng-Logo-512.png"] shareToSnsNames:[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQQ,UMShareToQzone,UMShareToSina,nil] delegate:self];
+                [UMSocialSnsService presentSnsIconSheetView:self appKey:YMAPPKEY shareText:webTitleLabel.text shareImage:[UIImage imageNamed:@"bolohr-logo512.png"] shareToSnsNames:[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQQ,UMShareToQzone,UMShareToSina,nil] delegate:self];
                 [self rightButAction];
             }
                 break;
@@ -742,7 +742,7 @@
             [UMSocialWechatHandler setWXAppId:@"wx93aa45d30bf6cba3" appSecret:@"7a4ec42a0c548c6e39ce9ed25cbc6bd7" url:webURL];
             [UMSocialQQHandler setQQWithAppId:@"1104934408" appKey:@"bRW2glhUCR6aJYIZ" url:webURL];
             [UMSocialSinaSSOHandler openNewSinaSSOWithAppKey:@"247547429" RedirectURL:webURL];
-            [UMSocialSnsService presentSnsIconSheetView:self appKey:YMAPPKEY shareText:webTitleLabel.text shareImage:[UIImage imageNamed:@"yunxingzheng-Logo-512.png"] shareToSnsNames:[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQQ,UMShareToQzone,UMShareToSina,nil] delegate:self];
+            [UMSocialSnsService presentSnsIconSheetView:self appKey:YMAPPKEY shareText:webTitleLabel.text shareImage:[UIImage imageNamed:@"bolohr-logo512.png"] shareToSnsNames:[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQQ,UMShareToQzone,UMShareToSina,nil] delegate:self];
         }
             break;
         default:

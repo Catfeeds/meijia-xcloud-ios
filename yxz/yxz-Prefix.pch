@@ -97,8 +97,8 @@
 
 
 //友盟分享
-#define Handlers @"http://51xingzheng.cn/web/h5-app-download.html"
-#define QQHandlerss  @"http://51xingzheng.cn/web/h5-app-download.html"
+#define Handlers @"http://bolohr.com/web/h5-app-download.html"
+#define QQHandlerss  @"http://bolohr.com/web/h5-app-download.html"
 #define SSOHandlers  @"http://sns.whalecloud.com"
 
 

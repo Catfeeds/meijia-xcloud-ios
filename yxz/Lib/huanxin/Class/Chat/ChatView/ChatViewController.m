@@ -1984,7 +1984,7 @@
     btn.hidden = YES;
     
     ISLoginManager *manager = [[ISLoginManager alloc]init];
-    NSString *url = [NSString stringWithFormat:@"http://123.57.173.36/simi-wwz/wx-news-list.html?user_id=%@&page=1",manager.telephone];
+    NSString *url = [NSString stringWithFormat:@"http://app.bolohr.com/simi-wwz/wx-news-list.html?user_id=%@&page=1",manager.telephone];
     ImgWebViewController *img = [[ImgWebViewController alloc]init];
     img.imgurl =url;
     img.title = @"消息列表";

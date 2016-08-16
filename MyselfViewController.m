@@ -189,7 +189,7 @@
 //            headeView.image=[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[dict objectForKey:@"head_img"]]]];
         }
         headeView.backgroundColor=HEX_TO_UICOLOR(0xe8374a, 1.0);
-        NSString *imageUrl=@"http://123.57.173.36/simi-h5/img/my_bg_update.jpg";
+        NSString *imageUrl=@"http://app.bolohr.com/simi-h5/img/my_bg_update.jpg";
         NSData * data = [NSData dataWithContentsOfURL:[NSURL URLWithString:imageUrl]];
         headeView.image=[UIImage imageWithData:data];
         [self.view addSubview:headeView];
@@ -214,7 +214,7 @@
 //            headeView.image=[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[dict objectForKey:@"head_img"]]]];
         }
         headeView.backgroundColor=HEX_TO_UICOLOR(0xe8374a, 1.0);
-        NSString *imageUrl=@"http://123.57.173.36/simi-h5/img/my_bg_update.jpg";
+        NSString *imageUrl=@"http://app.bolohr.com/simi-h5/img/my_bg_update.jpg";
         NSData * data = [NSData dataWithContentsOfURL:[NSURL URLWithString:imageUrl]];
         headeView.image=[UIImage imageWithData:data];
         
@@ -557,7 +557,7 @@
     switch (tg) {
         case 1000:
         {
-//            webURL=@"http://51xingzheng.cn/";
+//            webURL=@"http://bolohr.com/";
 //            [self webViewLayout];
             
             Order_ListViewController *orderVc=[[Order_ListViewController alloc]init];
@@ -575,7 +575,7 @@
         case 1002:
         {
             ISLoginManager *_manager = [ISLoginManager shareManager];
-            NSString *url=[NSString stringWithFormat:@"http://123.57.173.36/simi/app/user/score_shop.json?user_id=%@",_manager.telephone];
+            NSString *url=[NSString stringWithFormat:@"http://app.bolohr.com/simi/app/user/score_shop.json?user_id=%@",_manager.telephone];
             CreditWebViewController *web=[[CreditWebViewController alloc]initWithUrl:url];//实际中需要改为带签名的地址
             //如果已经有UINavigationContoller了，就 创建出一个 CreditWebViewController 然后 push 进去
             [self.navigationController pushViewController:web animated:YES];
@@ -678,7 +678,7 @@
             [UMSocialWechatHandler setWXAppId:@"wx93aa45d30bf6cba3" appSecret:@"7a4ec42a0c548c6e39ce9ed25cbc6bd7" url:Handlers];
             [UMSocialQQHandler setQQWithAppId:@"1104934408" appKey:@"bRW2glhUCR6aJYIZ" url:QQHandlerss];
             [UMSocialSinaSSOHandler openNewSinaSSOWithAppKey:@"247547429" RedirectURL:SSOHandlers];
-            [UMSocialSnsService presentSnsIconSheetView:self appKey:YMAPPKEY shareText:@"菠萝HR，企业行政服务第一平台！极大降低企业行政管理成本，有效提升行政综合服务能力，快来试试吧！体验就送礼哦：http://51xingzheng.cn/h5-app-download.html" shareImage:[UIImage imageNamed:@"yunxingzheng-Logo-512.png"] shareToSnsNames:[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQQ,UMShareToQzone,UMShareToSina,nil] delegate:self];
+            [UMSocialSnsService presentSnsIconSheetView:self appKey:YMAPPKEY shareText:@"菠萝HR，人事行政必备神器！我们专注“人事行政”的成长与服务！快来体验吧：http://bolohr.com/web" shareImage:[UIImage imageNamed:@"bolohr-logo512.png"] shareToSnsNames:[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQQ,UMShareToQzone,UMShareToSina,nil] delegate:self];
             break;
         case 10001:
         {
@@ -700,7 +700,7 @@
 //            [phoneCallWebView loadRequest:[NSURLRequest requestWithURL:phoneURL]];
 //            phoneCallWebView.userInteractionEnabled=YES;
 //            [self.view addSubview:phoneCallWebView];
-            webURL=[NSString stringWithFormat:@"http://123.57.173.36/simi-h5/show/store-my-index.html?user_id=%@",_userID];
+            webURL=[NSString stringWithFormat:@"http://app.bolohr.com/simi-h5/show/store-my-index.html?user_id=%@",_userID];
             [self webViewLayout];
             
         }
@@ -1013,7 +1013,7 @@
 //-(void)envelopeAction:(UIButton *)sender
 //{
 //    ISLoginManager *manager = [[ISLoginManager alloc]init];
-//    NSString *url = [NSString stringWithFormat:@"http://123.57.173.36/simi-wwz/wx-news-list.html?user_id=%@&page=1",manager.telephone];
+//    NSString *url = [NSString stringWithFormat:@"http://app.bolohr.com/simi-wwz/wx-news-list.html?user_id=%@&page=1",manager.telephone];
 //    ImgWebViewController *img = [[ImgWebViewController alloc]init];
 //    img.imgurl =url;
 //    img.title = @"消息列表";
@@ -1048,7 +1048,7 @@
             ISLoginManager *_manager = [ISLoginManager shareManager];
             WebPageViewController *webPageVC=[[WebPageViewController alloc]init];
             webPageVC.barIDS=100;
-            webPageVC.webURL=[NSString stringWithFormat:@"http://123.57.173.36/simi-h5/show/level-my-index.html?user_id=%@",_manager.telephone];
+            webPageVC.webURL=[NSString stringWithFormat:@"http://app.bolohr.com/simi-h5/show/level-my-index.html?user_id=%@",_manager.telephone];
             [self.navigationController pushViewController:webPageVC animated:YES];
         }
             break;

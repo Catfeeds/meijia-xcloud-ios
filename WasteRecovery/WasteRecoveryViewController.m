@@ -130,10 +130,10 @@
         WebPageViewController *webPageVC=[[WebPageViewController alloc]init];
         webPageVC.barIDS=100;
         if (_wasteID==100) {
-            webPageVC.webURL=@"http://123.57.173.36/simi-h5/show/recycle-price.html";//废品回收参考价格跳转URL
+            webPageVC.webURL=@"http://app.bolohr.com/simi-h5/show/recycle-price.html";//废品回收参考价格跳转URL
             [self.navigationController pushViewController:webPageVC animated:YES];
         }else if (_wasteID==101){
-//            webPageVC.webURL=@"http://123.57.173.36/simi-h5/show/clean-set.html";//保洁智能设置跳转URL
+//            webPageVC.webURL=@"http://app.bolohr.com/simi-h5/show/clean-set.html";//保洁智能设置跳转URL
 //            [self.navigationController pushViewController:webPageVC animated:YES];
             ISLoginManager *_manager = [ISLoginManager shareManager];
             NSString *pageStr=[NSString stringWithFormat:@"%ld",(long)page];
@@ -142,7 +142,7 @@
             [_download requestWithUrl:[NSString stringWithFormat:@"%@",CLEAN_ORDER_LIST] dict:_dict view:self.view delegate:self finishedSEL:@selector(addDressSuccess:) isPost:NO failedSEL:@selector(addDressFail:)];
             pushID=104;
         }else if (_wasteID==102){
-//            webPageVC.webURL=@"http://123.57.173.36/simi-h5/show/teamwork-set.html";//团建智能设置跳转URL
+//            webPageVC.webURL=@"http://app.bolohr.com/simi-h5/show/teamwork-set.html";//团建智能设置跳转URL
             
             ISLoginManager *_manager = [ISLoginManager shareManager];
             NSString *pageStr=[NSString stringWithFormat:@"%ld",(long)page];
@@ -361,13 +361,13 @@
         UIImageView *imageView=[[UIImageView alloc]initWithFrame:FRAME(20, 25, 70, 70)];
         NSString *imageUrl;
         if (_wasteID==100) {
-            imageUrl=@"http://123.57.173.36/simi-h5/icon/icon-dingdan-caolv.png";
+            imageUrl=@"http://app.bolohr.com/simi-h5/icon/icon-dingdan-caolv.png";
         }else if (_wasteID==101){
-            imageUrl=@"http://123.57.173.36/simi-h5/icon/icon-dingdan-qianlan.png";
+            imageUrl=@"http://app.bolohr.com/simi-h5/icon/icon-dingdan-qianlan.png";
         }else if (_wasteID==102){
-            imageUrl=@"http://123.57.173.36/simi-h5/icon/icon-dingdan-chenghuang.png";
+            imageUrl=@"http://app.bolohr.com/simi-h5/icon/icon-dingdan-chenghuang.png";
         }else if (_wasteID==103){
-            imageUrl=@"http://123.57.173.36/simi-h5/icon/icon-dingdan-molv.png";
+            imageUrl=@"http://app.bolohr.com/simi-h5/icon/icon-dingdan-molv.png";
         }
         [imageView setImageWithURL:[NSURL URLWithString:imageUrl]placeholderImage:nil];;
         [Cell addSubview:imageView];

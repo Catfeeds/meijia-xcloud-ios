@@ -381,9 +381,9 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
                 }else if ([actionStr isEqualToString:@"m"]){
                     if ([[dic objectForKey:@"ca"] isEqualToString:@"app"]) {
                         if ([[dic objectForKey:@"pa"] isEqualToString:@""]) {
-                            urlSrt=[NSString stringWithFormat:@"http://www.51xingzheng.cn/d/open.html?category=%@&action=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"]];
+                            urlSrt=[NSString stringWithFormat:@"http://www.bolohr.com/d/open.html?category=%@&action=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"]];
                         }else{
-                            urlSrt=[NSString stringWithFormat:@"http://www.51xingzheng.cn/d/open.html?category=%@&action=%@&params=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"],[dic objectForKey:@"pa"]];
+                            urlSrt=[NSString stringWithFormat:@"http://www.bolohr.com/d/open.html?category=%@&action=%@&params=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"],[dic objectForKey:@"pa"]];
                         }
                         
                     }else if([[dic objectForKey:@"ca"] isEqualToString:@"h5"]){
@@ -417,9 +417,9 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
                 
                 if ([[dic objectForKey:@"ca"] isEqualToString:@"app"]) {
                     if ([[dic objectForKey:@"pa"] isEqualToString:@""]) {
-                        urlSrt=[NSString stringWithFormat:@"http://www.51xingzheng.cn/d/open.html?category=%@&action=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"]];
+                        urlSrt=[NSString stringWithFormat:@"http://www.bolohr.com/d/open.html?category=%@&action=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"]];
                     }else{
-                        urlSrt=[NSString stringWithFormat:@"http://www.51xingzheng.cn/d/open.html?category=%@&action=%@&params=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"],[dic objectForKey:@"pa"]];
+                        urlSrt=[NSString stringWithFormat:@"http://www.bolohr.com/d/open.html?category=%@&action=%@&params=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"],[dic objectForKey:@"pa"]];
                     }
                     
                 }else if([[dic objectForKey:@"ca"] isEqualToString:@"h5"]){
@@ -1301,9 +1301,9 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
             }else if ([strings isEqualToString:@"m"]){
                 if ([[dic objectForKey:@"ca"] isEqualToString:@"app"]) {
                     if ([[dic objectForKey:@"pa"] isEqualToString:@""]) {
-                        urlSrt=[NSString stringWithFormat:@"http://www.51xingzheng.cn/d/open.html?category=%@&action=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"]];
+                        urlSrt=[NSString stringWithFormat:@"http://www.bolohr.com/d/open.html?category=%@&action=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"]];
                     }else{
-                        urlSrt=[NSString stringWithFormat:@"http://www.51xingzheng.cn/d/open.html?category=%@&action=%@&params=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"],[dic objectForKey:@"pa"]];
+                        urlSrt=[NSString stringWithFormat:@"http://www.bolohr.com/d/open.html?category=%@&action=%@&params=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"],[dic objectForKey:@"pa"]];
                     }
                     
                 }else if([[dic objectForKey:@"ca"] isEqualToString:@"h5"]){
@@ -1473,9 +1473,9 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
             }else if ([string isEqualToString:@"m"]){
                 if ([[dic objectForKey:@"ca"] isEqualToString:@"app"]) {
                     if ([[dic objectForKey:@"pa"] isEqualToString:@""]) {
-                        urlSrt=[NSString stringWithFormat:@"http://www.51xingzheng.cn/d/open.html?category=%@&action=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"]];
+                        urlSrt=[NSString stringWithFormat:@"http://www.bolohr.com/d/open.html?category=%@&action=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"]];
                     }else{
-                        urlSrt=[NSString stringWithFormat:@"http://www.51xingzheng.cn/d/open.html?category=%@&action=%@&params=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"],[dic objectForKey:@"pa"]];
+                        urlSrt=[NSString stringWithFormat:@"http://www.bolohr.com/d/open.html?category=%@&action=%@&params=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"],[dic objectForKey:@"pa"]];
                     }
                     
                 }else if([[dic objectForKey:@"ca"] isEqualToString:@"h5"]){
@@ -1505,9 +1505,9 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
 //       
 //        if ([[dic objectForKey:@"ca"] isEqualToString:@"app"]) {
 //            if ([[dic objectForKey:@"pa"] isEqualToString:@""]) {
-//                urlSrt=[NSString stringWithFormat:@"http://www.51xingzheng.cn/d/open.html?category=%@&action=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"]];
+//                urlSrt=[NSString stringWithFormat:@"http://www.bolohr.com/d/open.html?category=%@&action=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"]];
 //            }else{
-//                urlSrt=[NSString stringWithFormat:@"http://www.51xingzheng.cn/d/open.html?category=%@&action=%@&params=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"],[dic objectForKey:@"pa"]];
+//                urlSrt=[NSString stringWithFormat:@"http://www.bolohr.com/d/open.html?category=%@&action=%@&params=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"],[dic objectForKey:@"pa"]];
 //            }
 //            
 //        }else if([[dic objectForKey:@"ca"] isEqualToString:@"h5"]){
@@ -1821,7 +1821,7 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
             
             [self.window bringSubviewToFront:splashView];
             _adView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, WIDTH, HEIGHT-150)];
-            NSString *imageUrl=@"http://123.57.173.36/simi-h5/img/load-ad-update.jpg";
+            NSString *imageUrl=@"http://app.bolohr.com/simi-h5/img/load-ad-update.jpg";
             if (wifiID==0) {
                 [_adView setImageWithURL:[NSURL URLWithString:imageUrl]placeholderImage:nil];
             }else if (wifiID==1){
@@ -2043,9 +2043,9 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
                 }else if ([actionStr isEqualToString:@"m"]){
                     if ([[dic objectForKey:@"ca"] isEqualToString:@"app"]) {
                         if ([[dic objectForKey:@"pa"] isEqualToString:@""]) {
-                            urlSrt=[NSString stringWithFormat:@"http://www.51xingzheng.cn/d/open.html?category=%@&action=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"]];
+                            urlSrt=[NSString stringWithFormat:@"http://www.bolohr.com/d/open.html?category=%@&action=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"]];
                         }else{
-                            urlSrt=[NSString stringWithFormat:@"http://www.51xingzheng.cn/d/open.html?category=%@&action=%@&params=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"],[dic objectForKey:@"pa"]];
+                            urlSrt=[NSString stringWithFormat:@"http://www.bolohr.com/d/open.html?category=%@&action=%@&params=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"],[dic objectForKey:@"pa"]];
                         }
                         
                     }else if([[dic objectForKey:@"ca"] isEqualToString:@"h5"]){
@@ -2079,9 +2079,9 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
                 
                 if ([[dic objectForKey:@"ca"] isEqualToString:@"app"]) {
                     if ([[dic objectForKey:@"pa"] isEqualToString:@""]) {
-                        urlSrt=[NSString stringWithFormat:@"http://www.51xingzheng.cn/d/open.html?category=%@&action=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"]];
+                        urlSrt=[NSString stringWithFormat:@"http://www.bolohr.com/d/open.html?category=%@&action=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"]];
                     }else{
-                        urlSrt=[NSString stringWithFormat:@"http://www.51xingzheng.cn/d/open.html?category=%@&action=%@&params=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"],[dic objectForKey:@"pa"]];
+                        urlSrt=[NSString stringWithFormat:@"http://www.bolohr.com/d/open.html?category=%@&action=%@&params=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"],[dic objectForKey:@"pa"]];
                     }
                     
                 }else if([[dic objectForKey:@"ca"] isEqualToString:@"h5"]){
@@ -2124,9 +2124,9 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
                 }else if ([actionStr isEqualToString:@"m"]){
                     if ([[dic objectForKey:@"ca"] isEqualToString:@"app"]) {
                         if ([[dic objectForKey:@"pa"] isEqualToString:@""]) {
-                            urlSrt=[NSString stringWithFormat:@"http://www.51xingzheng.cn/d/open.html?category=%@&action=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"]];
+                            urlSrt=[NSString stringWithFormat:@"http://www.bolohr.com/d/open.html?category=%@&action=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"]];
                         }else{
-                            urlSrt=[NSString stringWithFormat:@"http://www.51xingzheng.cn/d/open.html?category=%@&action=%@&params=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"],[dic objectForKey:@"pa"]];
+                            urlSrt=[NSString stringWithFormat:@"http://www.bolohr.com/d/open.html?category=%@&action=%@&params=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"],[dic objectForKey:@"pa"]];
                         }
                         
                     }else if([[dic objectForKey:@"ca"] isEqualToString:@"h5"]){
@@ -2160,9 +2160,9 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
                 
                 if ([[dic objectForKey:@"ca"] isEqualToString:@"app"]) {
                     if ([[dic objectForKey:@"pa"] isEqualToString:@""]) {
-                        urlSrt=[NSString stringWithFormat:@"http://www.51xingzheng.cn/d/open.html?category=%@&action=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"]];
+                        urlSrt=[NSString stringWithFormat:@"http://www.bolohr.com/d/open.html?category=%@&action=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"]];
                     }else{
-                        urlSrt=[NSString stringWithFormat:@"http://www.51xingzheng.cn/d/open.html?category=%@&action=%@&params=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"],[dic objectForKey:@"pa"]];
+                        urlSrt=[NSString stringWithFormat:@"http://www.bolohr.com/d/open.html?category=%@&action=%@&params=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"],[dic objectForKey:@"pa"]];
                     }
                     
                 }else if([[dic objectForKey:@"ca"] isEqualToString:@"h5"]){

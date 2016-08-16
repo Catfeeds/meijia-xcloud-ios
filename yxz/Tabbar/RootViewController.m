@@ -266,7 +266,7 @@ MyselfViewController *thirdViewController;
 -(void)todoSomething
 {
     NSDictionary *helpDic;
-    if([stringUrl rangeOfString:@"http://www.51xingzheng.cn/d/open.html?"].location ==NSNotFound)
+    if([stringUrl rangeOfString:@"http://www.bolohr.com/d/open.html?"].location ==NSNotFound)
     {
         WebPageViewController *webVc=[[WebPageViewController alloc]init];
         webVc.barIDS=100;
