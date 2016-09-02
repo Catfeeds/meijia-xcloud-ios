@@ -153,13 +153,19 @@
     }
     [dataArray removeAllObjects];
     NSArray *array=[sender objectForKey:@"data"];
-    for (int i=0; i<array.count; i++) {
-        if ([dataArray containsObject:array[i]]) {
-            
-        }else{
-            [dataArray addObject:array[i]];
+    NSString *arrayString=[NSString stringWithFormat:@"%@",array];
+    if (arrayString==nil||arrayString==NULL||[arrayString isEqualToString:@""]) {
+        
+    }else{
+        for (int i=0; i<array.count; i++) {
+            if ([dataArray containsObject:array[i]]) {
+                
+            }else{
+                [dataArray addObject:array[i]];
+            }
         }
     }
+    
     [myTableView reloadData];
     NSLog(@"好友列表数据%@",sender);
 }
