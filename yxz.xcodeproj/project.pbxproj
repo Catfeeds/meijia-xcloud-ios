@@ -469,6 +469,7 @@
 		105130FA1BFF0C2E0004DA20 /* ScanResultViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 10512FFF1BFF0C2D0004DA20 /* ScanResultViewController.m */; };
 		105130FB1BFF0C2E0004DA20 /* ScanResultViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 105130001BFF0C2D0004DA20 /* ScanResultViewController.xib */; };
 		105131071BFF1C220004DA20 /* QRcode.png in Resources */ = {isa = PBXBuildFile; fileRef = 105131061BFF1C220004DA20 /* QRcode.png */; };
+		10556D7C1D7F04CA0095372C /* libGeTuiSdk-1.5.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 10556D7B1D7F04CA0095372C /* libGeTuiSdk-1.5.0.a */; };
 		1058C2CF1C53487400FE0FB2 /* bg_menu_bottom副本.png in Resources */ = {isa = PBXBuildFile; fileRef = 1058C2CD1C53487400FE0FB2 /* bg_menu_bottom副本.png */; };
 		1058C2D01C53487400FE0FB2 /* icon_plus_add副本.png in Resources */ = {isa = PBXBuildFile; fileRef = 1058C2CE1C53487400FE0FB2 /* icon_plus_add副本.png */; };
 		105D278B1C8D55B10081E95F /* Order_CleanViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 105D278A1C8D55B10081E95F /* Order_CleanViewController.m */; };
@@ -504,7 +505,6 @@
 		106A3A151CBB8A8200DEA95E /* libWeChatSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 10DFDBF81BF03DA400B17494 /* libWeChatSDK.a */; };
 		106A3A161CBB8A9E00DEA95E /* libSocialWechat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 10DFDBF71BF03DA400B17494 /* libSocialWechat.a */; };
 		106A3A171CBB8AEF00DEA95E /* libSocialQQ.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 10DFDBF21BF03DA400B17494 /* libSocialQQ.a */; };
-		106A3C1A1CBB91F700DEA95E /* libGeTuiSdk-1.2.1.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 106A3C191CBB91F700DEA95E /* libGeTuiSdk-1.2.1.a */; };
 		106A3C1D1CBB988500DEA95E /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 1F5F298E1A2D84A8009AC61C /* README.md */; };
 		106A3C201CBB9C5200DEA95E /* libEaseMobClientSDKLite.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 108961091C3A7A2700D88350 /* libEaseMobClientSDKLite.a */; };
 		106A3C241CBB9F1600DEA95E /* libSocialSinaSSO.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 106A3C231CBB9F1600DEA95E /* libSocialSinaSSO.a */; };
@@ -2362,6 +2362,8 @@
 		10512FFF1BFF0C2D0004DA20 /* ScanResultViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScanResultViewController.m; sourceTree = "<group>"; };
 		105130001BFF0C2D0004DA20 /* ScanResultViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ScanResultViewController.xib; sourceTree = "<group>"; };
 		105131061BFF1C220004DA20 /* QRcode.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = QRcode.png; sourceTree = "<group>"; };
+		10556D7A1D7F04CA0095372C /* GeTuiSdk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeTuiSdk.h; sourceTree = "<group>"; };
+		10556D7B1D7F04CA0095372C /* libGeTuiSdk-1.5.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libGeTuiSdk-1.5.0.a"; sourceTree = "<group>"; };
 		1058C2CD1C53487400FE0FB2 /* bg_menu_bottom副本.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bg_menu_bottom副本.png"; sourceTree = "<group>"; };
 		1058C2CE1C53487400FE0FB2 /* icon_plus_add副本.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_plus_add副本.png"; sourceTree = "<group>"; };
 		105D27891C8D55B10081E95F /* Order_CleanViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Order_CleanViewController.h; sourceTree = "<group>"; };
@@ -2377,8 +2379,6 @@
 		1062D8351BFED96600FF8EAC /* libiconv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.tbd; path = usr/lib/libiconv.tbd; sourceTree = SDKROOT; };
 		1062D8371BFED9A400FF8EAC /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		1062D8391BFED9D000FF8EAC /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
-		1062D8631BFEF4DD00FF8EAC /* GeTuiSdk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GeTuiSdk.h; path = dist/include/GeTuiSdk.h; sourceTree = SOURCE_ROOT; };
-		1062D8641BFEF4DD00FF8EAC /* GeTuiSdkError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GeTuiSdkError.h; path = dist/include/GeTuiSdkError.h; sourceTree = SOURCE_ROOT; };
 		1064BC8A1D349B8E00FD3BCD /* Application_ListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Application_ListViewController.h; sourceTree = "<group>"; };
 		1064BC8B1D349B8E00FD3BCD /* Application_ListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Application_ListViewController.m; sourceTree = "<group>"; };
 		106558EB1BAD4D390098C994 /* simivoice.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = simivoice.caf; sourceTree = "<group>"; };
@@ -2410,7 +2410,6 @@
 		106974471CB76F2000E8093A /* DataMD5.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataMD5.m; sourceTree = "<group>"; };
 		106974491CB7BEF300E8093A /* foundWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = foundWebViewController.h; sourceTree = "<group>"; };
 		1069744A1CB7BEF300E8093A /* foundWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = foundWebViewController.m; sourceTree = "<group>"; };
-		106A3C191CBB91F700DEA95E /* libGeTuiSdk-1.2.1.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libGeTuiSdk-1.2.1.a"; path = "dist/libGeTuiSdk-1.2.1.a"; sourceTree = "<group>"; };
 		106A3C1E1CBB9B9D00DEA95E /* libiconv.2.4.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.2.4.0.tbd; path = usr/lib/libiconv.2.4.0.tbd; sourceTree = SDKROOT; };
 		106A3C231CBB9F1600DEA95E /* libSocialSinaSSO.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libSocialSinaSSO.a; sourceTree = "<group>"; };
 		106A3C251CBB9F8900DEA95E /* libUMOpus.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libUMOpus.a; sourceTree = "<group>"; };
@@ -4279,7 +4278,6 @@
 				10BFDB8C1CBC909000DD274D /* libUMCommunitySDK.a in Frameworks */,
 				1089630A1C3A7E9500D88350 /* CoreText.framework in Frameworks */,
 				106A3C201CBB9C5200DEA95E /* libEaseMobClientSDKLite.a in Frameworks */,
-				106A3C1A1CBB91F700DEA95E /* libGeTuiSdk-1.2.1.a in Frameworks */,
 				106A3A171CBB8AEF00DEA95E /* libSocialQQ.a in Frameworks */,
 				106A3A161CBB8A9E00DEA95E /* libSocialWechat.a in Frameworks */,
 				106A3A151CBB8A8200DEA95E /* libWeChatSDK.a in Frameworks */,
@@ -4316,6 +4314,7 @@
 				1F67EB9B1A47F7D70014A9CC /* CoreGraphics.framework in Frameworks */,
 				1F67EB9A1A47F7C10014A9CC /* AddressBookUI.framework in Frameworks */,
 				1F67EB991A47F7A30014A9CC /* Foundation.framework in Frameworks */,
+				10556D7C1D7F04CA0095372C /* libGeTuiSdk-1.5.0.a in Frameworks */,
 				10DFDBFF1BF03DA400B17494 /* libWeiboSDK.a in Frameworks */,
 				10DFDC021BF03DA400B17494 /* TencentOpenAPI.framework in Frameworks */,
 				1F8767501A452D1F008F872B /* CoreFoundation.framework in Frameworks */,
@@ -5661,6 +5660,16 @@
 			path = ZXingWrapper;
 			sourceTree = "<group>";
 		};
+		10556D791D7F04CA0095372C /* GtSdkLib */ = {
+			isa = PBXGroup;
+			children = (
+				10556D7A1D7F04CA0095372C /* GeTuiSdk.h */,
+				10556D7B1D7F04CA0095372C /* libGeTuiSdk-1.5.0.a */,
+			);
+			name = GtSdkLib;
+			path = dist/GtSdkLib;
+			sourceTree = SOURCE_ROOT;
+		};
 		1065AA441C97ED4F0014624C /* xunfei */ = {
 			isa = PBXGroup;
 			children = (
@@ -5948,20 +5957,10 @@
 		1080D3E11BD8DDFE00DEAE40 /* dist */ = {
 			isa = PBXGroup;
 			children = (
-				1080D3E21BD8DDFE00DEAE40 /* include */,
+				10556D791D7F04CA0095372C /* GtSdkLib */,
 			);
 			name = dist;
 			path = "../../Downloads/GETUI_IOS_SDK/Demo工程/dist";
-			sourceTree = "<group>";
-		};
-		1080D3E21BD8DDFE00DEAE40 /* include */ = {
-			isa = PBXGroup;
-			children = (
-				1062D8631BFEF4DD00FF8EAC /* GeTuiSdk.h */,
-				1062D8641BFEF4DD00FF8EAC /* GeTuiSdkError.h */,
-			);
-			name = include;
-			path = dist/include;
 			sourceTree = "<group>";
 		};
 		1083FD461BA2D9AC00F8454A /* TabBarViewController */ = {
@@ -9280,7 +9279,6 @@
 				1015CB9E1CC2A97A00EBAE2C /* libiconv.2.tbd */,
 				106871871CBBB78800113696 /* AudioToolbox.framework */,
 				106A3C1E1CBB9B9D00DEA95E /* libiconv.2.4.0.tbd */,
-				106A3C191CBB91F700DEA95E /* libGeTuiSdk-1.2.1.a */,
 				1089630F1C3A80CD00D88350 /* libresolv.tbd */,
 				1089630B1C3A808400D88350 /* libstdc++.6.tbd */,
 				1062D8391BFED9D000FF8EAC /* CoreMedia.framework */,
@@ -11409,6 +11407,7 @@
 					"$(PROJECT_DIR)/UMSocial_Sdk_5.0.1",
 					"$(PROJECT_DIR)/UMAnalytics_Sdk_3.6.4",
 					"$(PROJECT_DIR)/UMtongji",
+					"$(PROJECT_DIR)/dist/GtSdkLib",
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				ORDER_FILE = "";
@@ -11494,6 +11493,7 @@
 					"$(PROJECT_DIR)/UMSocial_Sdk_5.0.1",
 					"$(PROJECT_DIR)/UMAnalytics_Sdk_3.6.4",
 					"$(PROJECT_DIR)/UMtongji",
+					"$(PROJECT_DIR)/dist/GtSdkLib",
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				ORDER_FILE = "";

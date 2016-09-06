@@ -177,7 +177,12 @@ static UMComMessageManager *_instance = nil;
             }];
         }
 }
-
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
+{
+    [[EaseMob sharedInstance] application:application didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
+    
+    APPLIACTION.deviceToken = deviceToken;
+}
 
 + (void)remoteNotificationForEnterDetailView:(UMComPushDetailViewBlock)handle
 {

@@ -51,6 +51,7 @@
 
 #import "Service_hallViewController.h"
 #import "Op_ad_hallViewController.h"
+#import "UMessage.h"
 
 #define IosAppVersion [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]
 @interface AppDelegate ()<WXApiDelegate>//,WeiboSDKDelegate
@@ -109,57 +110,29 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
 @synthesize lastPayloadIndex = _lastPaylodIndex;
 @synthesize sdkStatus = _sdkStatus;
 
--(void)registerRemoteNotification {
+/** 注册远程通知 */
+- (void)registerRemoteNotification {
     
 #ifdef __IPHONE_8_0
     if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0) {
-        //IOS8 新的通知机制category注册
-        UIMutableUserNotificationAction *action1;
-        action1 = [[UIMutableUserNotificationAction alloc] init];
-        [action1 setActivationMode:UIUserNotificationActivationModeBackground];
-        [action1 setTitle:@"取消"];
-        [action1 setIdentifier:NotificationActionOneIdent];
-        [action1 setDestructive:NO];
-        [action1 setAuthenticationRequired:NO];
         
-        UIMutableUserNotificationAction *action2;
-        action2 = [[UIMutableUserNotificationAction alloc] init];
-        [action2 setActivationMode:UIUserNotificationActivationModeBackground];
-        [action2 setTitle:@"回复"];
-        [action2 setIdentifier:NotificationActionTwoIdent];
-        [action2 setDestructive:NO];
-        [action2 setAuthenticationRequired:NO];
-        
-        UIMutableUserNotificationCategory *actionCategory;
-        actionCategory = [[UIMutableUserNotificationCategory alloc] init];
-        [actionCategory setIdentifier:NotificationCategoryIdent];
-        [actionCategory setActions:@[action1, action2]
-                        forContext:UIUserNotificationActionContextDefault];
-        
-        NSSet *categories = [NSSet setWithObject:actionCategory];
-        UIUserNotificationType types = (UIUserNotificationTypeAlert|
-                                        UIUserNotificationTypeSound|
-                                        UIUserNotificationTypeBadge);
-        
-        UIUserNotificationSettings *settings;
-        settings = [UIUserNotificationSettings settingsForTypes:types categories:categories];
+        UIUserNotificationType types = (UIUserNotificationTypeAlert | UIUserNotificationTypeSound | UIUserNotificationTypeBadge);
+        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:types categories:nil];
         [[UIApplication sharedApplication] registerForRemoteNotifications];
         [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
         
-        
     } else {
-        UIRemoteNotificationType apn_type = (UIRemoteNotificationType)(UIRemoteNotificationTypeAlert|
-                                                                       UIRemoteNotificationTypeSound|
+        UIRemoteNotificationType apn_type = (UIRemoteNotificationType)(UIRemoteNotificationTypeAlert |
+                                                                       UIRemoteNotificationTypeSound |
                                                                        UIRemoteNotificationTypeBadge);
         [[UIApplication sharedApplication] registerForRemoteNotificationTypes:apn_type];
     }
 #else
-    UIRemoteNotificationType apn_type = (UIRemoteNotificationType)(UIRemoteNotificationTypeAlert|
-                                                                   UIRemoteNotificationTypeSound|
+    UIRemoteNotificationType apn_type = (UIRemoteNotificationType)(UIRemoteNotificationTypeAlert |
+                                                                   UIRemoteNotificationTypeSound |
                                                                    UIRemoteNotificationTypeBadge);
     [[UIApplication sharedApplication] registerForRemoteNotificationTypes:apn_type];
 #endif
-    
 }
 -(NSString *)dataFilePath {
     //项目中的数据库文件路径
@@ -249,7 +222,7 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     
     
     
-    
+    [UMessage setLogEnabled:YES];
     NSFileManager *fileManager = [NSFileManager defaultManager];
     
     BOOL find = [fileManager fileExistsAtPath:[self readyDatabase:@"simi.db"]];
@@ -473,11 +446,18 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     }
     
     
-    // [1]:使用APPID/APPKEY/APPSECRENT创建个推实例
+    // [ GTSdk ]：是否运行电子围栏Lbs功能和是否SDK主动请求用户定位
+    [GeTuiSdk lbsLocationEnable:YES andUserVerify:YES];
     
-    [self startSdkWith:kAppId appKey:kAppKey appSecret:kAppSecret];
+    // [ GTSdk ]：自定义渠道
+    [GeTuiSdk setChannelId:@"GT-Channel"];
     
-    // [2]:注册APNS
+    // [ GTSdk ]：使用APPID/APPKEY/APPSECRENT启动个推
+    [GeTuiSdk startSdkWithAppId:kAppId appKey:kAppKey appSecret:kAppSecret delegate:self];
+    
+    // 注册APNs - custom method - 开发者自定义的方法
+    [self registerRemoteNotification];
+    
     if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0)
     {
         [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge) categories:nil]];
@@ -487,6 +467,7 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     else
     {
         [[UIApplication sharedApplication] registerForRemoteNotificationTypes: (UIRemoteNotificationTypeNewsstandContentAvailability| UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
+        [[UIApplication sharedApplication] registerForRemoteNotifications];
     }
     [self registerRemoteNotification];
     
@@ -681,7 +662,7 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     NSError *err = nil;
     
     //[1-1]:通过 AppId、 appKey 、appSecret 启动SDK
-    [GeTuiSdk startSdkWithAppId:appID appKey:appKey appSecret:appSecret delegate:self error:&err];
+//    [GeTuiSdk startSdkWithAppId:appID appKey:appKey appSecret:appSecret delegate:self error:&err];
     
     //[1-2]:设置是否后台运行开关
     [GeTuiSdk runBackgroundEnable:YES];
@@ -1193,13 +1174,14 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
 
 -(void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
+    
     NSLog(@"我就看看你走没走--3");
-    NSString *token = [[deviceToken description]
-                       stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]];
+    NSString *token = [[deviceToken description] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]];
+    token = [token stringByReplacingOccurrencesOfString:@" " withString:@""];
+    NSLog(@"\n>>>[DeviceToken Success]:%@\n\n", token);
     
-    _pushDeviceToken = [token stringByReplacingOccurrencesOfString:@" " withString:@""];
-    
-    NSLog(@"deviceToken:%@",_pushDeviceToken);
+    // [ GTSdk ]：向个推服务器注册deviceToken
+    [GeTuiSdk registerDeviceToken:token];
     
     //微社区
     NSLog(@"----devicetoken------%@",[[[[deviceToken description] stringByReplacingOccurrencesOfString: @"<" withString: @""]
@@ -1207,14 +1189,13 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
                                       stringByReplacingOccurrencesOfString: @" " withString: @""]);
     
     // [3]:向个推服务器注册deviceToken
-    
-    [GeTuiSdk registerDeviceToken:_pushDeviceToken];
 }
 -(void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
-    [GeTuiSdk resume];  // 恢复个推SDK运行
-    NSError *err = nil;
-    [GeTuiSdk startSdkWithAppId:_appID appKey:_appKey appSecret:_appSecret delegate:self error:&err];
+    // [ GTSdk ]：Background Fetch 恢复SDK 运行
+    [GeTuiSdk resume];
+    
+    completionHandler(UIBackgroundFetchResultNewData);
     NSLog(@"我就看看你走没走--4");
     
     completionHandler(UIBackgroundFetchResultNewData);
@@ -1260,6 +1241,7 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
     NSLog(@"我就看看你走没走--5");
+     [GeTuiSdk handleRemoteNotification:userInfo];
     pushIDs=1000;
     push_IDs+=1;
     NSLog(@"%ld",(long)application.applicationState);
@@ -1382,12 +1364,17 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     [[NSNotificationCenter defaultCenter] postNotificationName:@"URLOPEN" object:urlw];
 }
 // 在 iOS8 系统中，还需要添加这个方法。通过新的 API 注册推送服务
-- (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings
+//- (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings
+//{
+//    NSLog(@"我就看看你走没走--6");
+//    [application registerForRemoteNotifications];
+//    
+//    //    [self baiduBangding];
+//}
+-(void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings NS_AVAILABLE_IOS(8_0) __TVOS_PROHIBITED
 {
     NSLog(@"我就看看你走没走--6");
     [application registerForRemoteNotifications];
-    
-    //    [self baiduBangding];
 }
 - (void)baiduBangding{
     NSLog(@"test:%@",APPLIACTION.deviceToken);
@@ -1395,6 +1382,8 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
 
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
 {
+    NSString *error_str = [NSString stringWithFormat: @"%@", error];
+    NSLog(@"Failed to get token, error:%@", error_str);
 #pragma mark------------------------APN-------------------------// [3-EXT]:如果APNS注册失败，通知个推服务器
     [GeTuiSdk registerDeviceToken:@""];
     NSLog(@"DeviceToken 获取失败，原因：%@",error);
@@ -1405,56 +1394,37 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
 
 {
     
-    // [4-EXT-1]: 个推SDK已注册，返回clientId
-    _clientId = clientId;
-    NSLog(@"ID是什么？？%@",_clientId);
-    NSLog(@"test:%@",APPLIACTION.deviceToken);
-    _pushDeviceToken=[NSString stringWithFormat:@"%@",APPLIACTION.deviceToken];
-    if (_pushDeviceToken) {
-        
-        [GeTuiSdk registerDeviceToken:_pushDeviceToken];
-        
-    }
+    // [ GTSdk ]：个推SDK已注册，返回clientId
+    NSLog(@">>[GTSdk RegisterClient]:%@", clientId);
 }
 
 -(void)popAlertView{
     [[NSNotificationCenter defaultCenter] postNotificationName:@"URLOPEN" object:urlSrt];
 }
-#pragma  mark 在线接收推送通知
--(void)GeTuiSdkDidReceivePayload:(NSString*)payloadId andTaskId:(NSString*)taskId andMessageId:(NSString *)aMsgId fromApplication:(NSString *)appId
-
-{
-    NSLog(@"我就看看你走没走--7");
+/** SDK收到透传消息回调 */
+- (void)GeTuiSdkDidReceivePayloadData:(NSData *)payloadData andTaskId:(NSString *)taskId andMsgId:(NSString *)msgId andOffLine:(BOOL)offLine fromGtAppId:(NSString *)appId {
+    // [ GTSdk ]：汇报个推自定义事件(反馈透传消息)
+    [GeTuiSdk sendFeedbackMessage:90001 andTaskId:taskId andMsgId:msgId];
     
-    // [4]: 收到个推消息
-        _payloadId =payloadId;
-        
-        NSData *payload = [GeTuiSdk retrivePayloadById:payloadId]; //根据payloadId取回Payload
-        
-        NSString *payloadMsg = nil;
-        
-        if (payload) {
-            
-            payloadMsg = [[NSString alloc] initWithBytes:payload.bytes
-                          
-                                                  length:payload.length
-                          
-                                                encoding:NSUTF8StringEncoding];
-            
-        }
-        NSData *jsonData = [payloadMsg dataUsingEncoding:NSUTF8StringEncoding];
-        NSError *err;
-        NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:jsonData
-                                                            options:NSJSONReadingMutableContainers
-                                                              error:&err];
+    // 数据转换
+    NSString *payloadMsg = nil;
+    if (payloadData) {
+        payloadMsg = [[NSString alloc] initWithBytes:payloadData.bytes length:payloadData.length encoding:NSUTF8StringEncoding];
+    }
+    
+    NSData *jsonData = [payloadMsg dataUsingEncoding:NSUTF8StringEncoding];
+    NSError *err;
+    NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:jsonData
+                                                        options:NSJSONReadingMutableContainers
+                                                          error:&err];
     NSLog(@"个推消息内容%@",dic);
     
     NSString *string=[NSString stringWithFormat:@"%@",[dic objectForKey:@"ac"]];
     if ([string isEqualToString:@"s"]) {
         if (pushIDs!=1000) {
-             [self alarmClock:dic];
+            [self alarmClock:dic];
         }
-       
+        
     }else if ([string isEqualToString:@"d"]){
         [self Delete_alarm_clock:dic];
     }
@@ -1462,9 +1432,9 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
         [[NSNotificationCenter defaultCenter] postNotificationName:@"ASDEDSA" object:dic];
         return;
     }
-        if (dic==nil||dic==NULL) {
-            return;
-        }
+    if (dic==nil||dic==NULL) {
+        return;
+    }
     NSString *trueStr=[dic objectForKey:@"is"];
     if ([trueStr isEqual:@"true"]) {
         if (pushIDs!=1000) {
@@ -1499,111 +1469,33 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
         }
     }
     pushIDs=0;
-//    NSString *actionStr=[NSString stringWithFormat:@"%@",[dic objectForKey:@"ac"]];
-//    if ([actionStr isEqualToString:@"m"]) {
-//        
-//       
-//        if ([[dic objectForKey:@"ca"] isEqualToString:@"app"]) {
-//            if ([[dic objectForKey:@"pa"] isEqualToString:@""]) {
-//                urlSrt=[NSString stringWithFormat:@"http://www.bolohr.com/d/open.html?category=%@&action=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"]];
-//            }else{
-//                urlSrt=[NSString stringWithFormat:@"http://www.bolohr.com/d/open.html?category=%@&action=%@&params=%@",[dic objectForKey:@"ca"],[dic objectForKey:@"aj"],[dic objectForKey:@"pa"]];
-//            }
-//            
-//        }else if([[dic objectForKey:@"ca"] isEqualToString:@"h5"]){
-//            urlSrt=[NSString stringWithFormat:@"%@",[dic objectForKey:@"go"]];
-//        }
-//
-//        NSString *ca=[NSString stringWithFormat:@"%@",[dic objectForKey:@"ca"]];
-//        NSString *aj=[NSString stringWithFormat:@"%@",[dic objectForKey:@"aj"]];
-//        NSString *pa=[NSString stringWithFormat:@"%@",[dic objectForKey:@"pa"]];
-//        NSString *go=[NSString stringWithFormat:@"%@",[dic objectForKey:@"go"]];
-//        if ((ca==nil||ca==NULL||[ca isEqualToString:@"(null)"])&&(aj==nil||aj==NULL||[aj isEqualToString:@"(null)"])&&(pa==nil||pa==NULL||[pa isEqualToString:@"(null)"])&&(go==nil||go==NULL||[go isEqualToString:@"(null)"])) {
-//            
-//        }else{
-//            if(pushIDs!=1000){
-//                [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(popAlertView) userInfo:nil repeats:NO];
-//                
-//            }
-//        }
-//        
-////        return;
-//    }
-//    if ([[dic objectForKey:@"ac"] isEqualToString:@"a"]) {
-//        badge=100;
-//        
-//    }else{
-//       
-//    }
-//        
-//        NSString *timeStr=[NSString stringWithFormat:@"%@",[dic objectForKey:@"re"]];
-//        NSLog(@"remind_time%@",timeStr);
-////        NSString *card_idStr=[dic objectForKey:@"card_id"];
-//        int card_id=[[dic objectForKey:@"ci"]intValue];
-//        int gTid;
-//        long long time=[timeStr longLongValue];//因为时差问题要加8小时 == 28800 sec
-//        NSDate *detaildate=[NSDate dateWithTimeIntervalSince1970:time];
-//        NSLog(@"date:%@",[detaildate description]);
-//        //实例化一个NSDateFormatter对象
-//        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-//        //设定时间格式,这里可以设置成自己需要的格式
-//        [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-//        
-//        NSString *currentDateStr = [dateFormatter stringFromDate: detaildate];
-//        
-//        NSLog(@"时间是啥%@",currentDateStr);
-//        NSArray *nfArray=[[UIApplication sharedApplication]scheduledLocalNotifications];
-//        NSUInteger acount=[nfArray count];
-//        if (acount>0) {
-//            for (int i=0; i<acount; i++) {
-//                UILocalNotification *myUILocalNotification=[nfArray objectAtIndex:i];
-//                NSDate *dictUser=myUILocalNotification.fireDate;
-//                NSDictionary *userInfo=myUILocalNotification.userInfo;
-//                NSNumber *obj=[userInfo objectForKey:@"someKey"];
-//                
-//                NSLog(@"都有嘛东西啊？%@",myUILocalNotification);
-//                int mytag=[obj intValue];
-//                if (mytag==card_id&&dictUser==detaildate) {
-//                    gTid=1;
-//                }else{
-//                    gTid=10;
-//                }
-//            }
-//        }
-//        NSString *trueStr=[dic objectForKey:@"is"];
-//        if ([trueStr isEqual:@"true"]) {
-//            NSString *actionStr=[NSString stringWithFormat:@"%@",[dic objectForKey:@"ac"]];
-//            NSDateFormatter  *dateformatter=[[NSDateFormatter alloc] init];
-//            
-//            [dateformatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-//            if ([actionStr isEqualToString:@"a"]) {
-//                badge=100;
-//                if (pushIDs!=1000) {
-//                    [[NSNotificationCenter defaultCenter] postNotificationName:@"ALERT" object:dic];
-//                }
-//                
-//            }else if([actionStr isEqualToString:@"m"]){
-//                if (pushIDs!=1000) {
-//                    if ([[dic objectForKey:@"ca"] isEqualToString:@""]&&[[dic objectForKey:@"pa"] isEqualToString:@""]&&[[dic objectForKey:@"aj"] isEqualToString:@""]&&[[dic objectForKey:@"go"] isEqualToString:@""]) {
-//                        [[NSNotificationCenter defaultCenter] postNotificationName:@"Newinformation" object:dic];
-//                    }
-//                    
-//                }
-//            }else{
-//                if (pushIDs!=1000) {
-//                    [[NSNotificationCenter defaultCenter] postNotificationName:@"NOTICEPUSH" object:dic];
-//                }
-//            }
-//
-//        }
-//        
-//        if (gTid!=1) {
-//        }else{
-//            
-//        }
-//    pushIDs=0;
-    
 }
+//#pragma  mark 在线接收推送通知
+//-(void)GeTuiSdkDidReceivePayload:(NSString*)payloadId andTaskId:(NSString*)taskId andMessageId:(NSString *)aMsgId fromApplication:(NSString *)appId
+//
+//{
+//    NSLog(@"我就看看你走没走--7");
+//    
+//    // [4]: 收到个推消息
+//        _payloadId =payloadId;
+//        
+//        NSData *payload = [GeTuiSdk retrivePayloadById:payloadId]; //根据payloadId取回Payload
+//        
+//        NSString *payloadMsg = nil;
+//        
+//        if (payload) {
+//            
+//            payloadMsg = [[NSString alloc] initWithBytes:payload.bytes
+//                          
+//                                                  length:payload.length
+//                          
+//                                                encoding:NSUTF8StringEncoding];
+//            
+//        }
+//    
+//
+//    
+//}
 -(NSString*) formateTime:(NSDate*) date {
     NSDateFormatter* formatter = [[NSDateFormatter alloc]init];
     [formatter setDateFormat:@"HH:mm:ss"];
@@ -2205,7 +2097,7 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
     dateDic=nil;
     pushIDs=0;
 #pragma mark--------APN  // [EXT] APP进入后台时，通知个推SDK进入后台
-    [GeTuiSdk enterBackground];
+//    [GeTuiSdk enterBackground];
     bgTask=[application beginBackgroundTaskWithExpirationHandler:^{
         // 10分钟后执行这里，应该进行一些清理工作，如断开和服务器的连接等
         // ...
@@ -2258,9 +2150,8 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
 {
     NSLog(@"badge%d",badge);
     [[NSNotificationCenter defaultCenter] postNotificationName:@"HOMERefresh" object:dateDic];
-    [GeTuiSdk resume];
-     NSError *err = nil;
-    [GeTuiSdk startSdkWithAppId:_appID appKey:_appKey appSecret:_appSecret delegate:self error:&err];
+//    [GeTuiSdk resume];
+//    [GeTuiSdk startSdkWithAppId:_appID appKey:_appKey appSecret:_appSecret delegate:self error:&err];
     [[UIApplication sharedApplication]setApplicationIconBadgeNumber:0];
     if (badge==100) {
         NSLog(@"就时不走是吧");
