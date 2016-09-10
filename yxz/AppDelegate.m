@@ -213,12 +213,7 @@ NSString* const NotificationActionTwoIdent = @"ACTION_TWO";
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     
-//    NSArray * fontNames=[UIFont familyNames];
-//    
-//    for(NSString * name in fontNames)
-//    {
-//        NSLog(@"font name:%@",name);
-//    }
+
     
     
     
