@@ -1477,6 +1477,9 @@
 		8FECDD451A45684D0027D301 /* openssl_wrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FECDD3B1A45684D0027D301 /* openssl_wrapper.m */; };
 		8FECDD461A45684D0027D301 /* RSADataSigner.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FECDD3D1A45684D0027D301 /* RSADataSigner.m */; };
 		8FECDD471A45684D0027D301 /* RSADataVerifier.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FECDD3F1A45684D0027D301 /* RSADataVerifier.m */; };
+		A349281F1D83EEF6003989A2 /* ChannelListModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A349281E1D83EEF6003989A2 /* ChannelListModel.m */; };
+		A34928221D83EF1B003989A2 /* ChannelListParser.m in Sources */ = {isa = PBXBuildFile; fileRef = A34928211D83EF1B003989A2 /* ChannelListParser.m */; };
+		A34928261D83F216003989A2 /* NOBaseParser.m in Sources */ = {isa = PBXBuildFile; fileRef = A34928251D83F216003989A2 /* NOBaseParser.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -4262,6 +4265,12 @@
 		8FECDD3D1A45684D0027D301 /* RSADataSigner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSADataSigner.m; sourceTree = "<group>"; };
 		8FECDD3E1A45684D0027D301 /* RSADataVerifier.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSADataVerifier.h; sourceTree = "<group>"; };
 		8FECDD3F1A45684D0027D301 /* RSADataVerifier.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSADataVerifier.m; sourceTree = "<group>"; };
+		A349281D1D83EEF6003989A2 /* ChannelListModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChannelListModel.h; sourceTree = "<group>"; };
+		A349281E1D83EEF6003989A2 /* ChannelListModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChannelListModel.m; sourceTree = "<group>"; };
+		A34928201D83EF1B003989A2 /* ChannelListParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChannelListParser.h; sourceTree = "<group>"; };
+		A34928211D83EF1B003989A2 /* ChannelListParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChannelListParser.m; sourceTree = "<group>"; };
+		A34928241D83F216003989A2 /* NOBaseParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NOBaseParser.h; sourceTree = "<group>"; };
+		A34928251D83F216003989A2 /* NOBaseParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NOBaseParser.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -9167,6 +9176,7 @@
 		1FFD03711A2D82EE000B5378 = {
 			isa = PBXGroup;
 			children = (
+				A349281C1D83EEDB003989A2 /* VideoInterfaceController */,
 				10205CCF1D2112DF00674AF7 /* ZXShopCart */,
 				102A0EAD1CF5AECC00CAA320 /* op_ad_icons */,
 				1093C2511CE42FB300C7FFD5 /* Service_hall */,
@@ -9680,6 +9690,27 @@
 				8FECDD3F1A45684D0027D301 /* RSADataVerifier.m */,
 			);
 			path = Util;
+			sourceTree = "<group>";
+		};
+		A349281C1D83EEDB003989A2 /* VideoInterfaceController */ = {
+			isa = PBXGroup;
+			children = (
+				A34928231D83F0B1003989A2 /* Model */,
+			);
+			path = VideoInterfaceController;
+			sourceTree = "<group>";
+		};
+		A34928231D83F0B1003989A2 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				A34928241D83F216003989A2 /* NOBaseParser.h */,
+				A34928251D83F216003989A2 /* NOBaseParser.m */,
+				A349281D1D83EEF6003989A2 /* ChannelListModel.h */,
+				A349281E1D83EEF6003989A2 /* ChannelListModel.m */,
+				A34928201D83EF1B003989A2 /* ChannelListParser.h */,
+				A34928211D83EF1B003989A2 /* ChannelListParser.m */,
+			);
+			name = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -10365,6 +10396,7 @@
 				1FA6C81E1A5A508C0086E352 /* BeiZhuManager.m in Sources */,
 				1FA583C31A32A7AE00E750AC /* RemindDetailsCell.m in Sources */,
 				10BFDB9A1CBC909000DD274D /* UMComShareDelegateHandler.m in Sources */,
+				A349281F1D83EEF6003989A2 /* ChannelListModel.m in Sources */,
 				1051302A1BFF0C2D0004DA20 /* ZXCalendarParsedResult.m in Sources */,
 				10205CEB1D2112DF00674AF7 /* GoodsCategory.m in Sources */,
 				108961C41C3A7A2700D88350 /* EMCDDeviceManager+Remind.m in Sources */,
@@ -10622,6 +10654,7 @@
 				8FCA5D861A2F5A3500812F6B /* ORDERLISTBaseClass.m in Sources */,
 				105130ED1BFF0C2E0004DA20 /* ZXMultiDetector.m in Sources */,
 				108961CB1C3A7A2700D88350 /* MWCaptionView.m in Sources */,
+				A34928221D83EF1B003989A2 /* ChannelListParser.m in Sources */,
 				106B7A141C8825FD00D6ECC2 /* Card_DetailsViewController.m in Sources */,
 				8F9E4A881A39D98500C0707A /* DuiHuanTableViewCell.m in Sources */,
 				10E858E01C772164001232DB /* SimiOrderDetail.m in Sources */,
@@ -10758,6 +10791,7 @@
 				108961DA1C3A7A2700D88350 /* EMSDWebImagePrefetcher.m in Sources */,
 				1F5F2A171A2D84A8009AC61C /* SERVICEServiceTypes.m in Sources */,
 				1F5F2A1A1A2D84A8009AC61C /* SERVICEZuofan.m in Sources */,
+				A34928261D83F216003989A2 /* NOBaseParser.m in Sources */,
 				108962231C3A7A2700D88350 /* ChatGroupDetailViewController.m in Sources */,
 				108961EA1C3A7A2700D88350 /* PSTCollectionViewItemKey.m in Sources */,
 				107063E21B7CA82700CD8B93 /* MeetingTableViewCell.m in Sources */,
@@ -11415,7 +11449,7 @@
 				OTHER_LIBTOOLFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.meijialife.yxz;
 				PRODUCT_NAME = yxz;
-				PROVISIONING_PROFILE = "1580a9cc-57c6-4875-8be5-72830313c70f";
+				PROVISIONING_PROFILE = "6b41364e-acea-484e-a7ab-271b4f0a7972";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
 				TVOS_DEPLOYMENT_TARGET = 9.1;
@@ -11433,8 +11467,8 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = yxz/yxz.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Meijiashenghuo Technology Co., Ltd. (8822Q9495T)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Meijiashenghuo Technology Co., Ltd. (8822Q9495T)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Huinan Liu (YZ8UJTM6VP)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Huinan Liu (YZ8UJTM6VP)";
 				COMPRESS_PNG_FILES = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_BITCODE = NO;
@@ -11501,7 +11535,7 @@
 				OTHER_LIBTOOLFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.meijialife.yxz;
 				PRODUCT_NAME = yxz;
-				PROVISIONING_PROFILE = "c568df51-b265-4355-ae78-7fc203cf734a";
+				PROVISIONING_PROFILE = "6b41364e-acea-484e-a7ab-271b4f0a7972";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
 				TVOS_DEPLOYMENT_TARGET = 9.1;

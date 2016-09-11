@@ -10,6 +10,9 @@
 #import "SchoolTableViewCell.h"
 #import "AFHTTPRequestOperationManager.h"
 #import "Home_SearchVoiceViewController.h"
+#import "ChannelListParser.h"
+#import "ChannelListModel.h"
+
 @interface SchoolViewController ()
 {
     UIScrollView *myScrollView;
@@ -17,7 +20,7 @@
     UIScrollView *rootView;
     NSMutableArray *W;
     UIImageView *lineImageView;
-    NSArray *arraY;
+    NSMutableArray *arraY;
     CGFloat maximumOffset;
     CGFloat currentOffset;
     int scrollID;
@@ -36,9 +39,12 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    arraY = [NSMutableArray arrayWithCapacity:0];
+    
     page=1;
     W=[[NSMutableArray alloc]init];
-    arraY=@[@"精选",@"人力",@"行政",@"企管",@"考证",@"技能"];
+    [self requestChannelList];
+//    arraY=@[@"精选",@"人力",@"行政",@"企管",@"考证",@"技能"];
     sourceArray=[[NSMutableArray alloc]init];
     UIView *reView=[[UIView alloc]initWithFrame:FRAME(0, 0, WIDTH, 64)];
     reView.backgroundColor=[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1];
@@ -89,9 +95,32 @@
     _moreFooter = [[MJRefreshFooterView alloc] init];
     _moreFooter.delegate = self;
     _moreFooter.scrollView = _myTableView;
-    [self tabBarLayout];
+//    [self tabBarLayout];
     // Do any additional setup after loading the view.
 }
+
+- (void)requestChannelList
+{
+    NSString *urlString = [NSString stringWithFormat:@"%@",@"http://app.bolohr.com/simi/app/video/channels.json"];
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    [manager GET:urlString parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject)
+    {
+        ChannelListParser *parser = [[ChannelListParser alloc] init];
+        parser.idCollection = arraY;
+        if (RC_OK == [parser parserResponseDataFrom:responseObject])
+        {
+            [self tabBarLayout];
+            NSLog(@"数据%@",arraY);
+
+        }
+        
+    }
+    failure:^(AFHTTPRequestOperation *operation, NSError *error)
+    {
+        
+    }];
+}
+
 -(void)tabBarLayout
 {
     [rootView removeFromSuperview];
@@ -119,7 +148,7 @@
     {
 //        NSDictionary *dic=arraY[i];
         UILabel *butLabel=[[UILabel alloc]init];
-        butLabel.text=[NSString stringWithFormat:@"%@",arraY[i]];
+        butLabel.text=[NSString stringWithFormat:@"%@",((ChannelListModel *)arraY[i]).name];
         butLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
         [butLabel setNumberOfLines:1];
         [butLabel sizeToFit];
@@ -131,7 +160,7 @@
     for (int i=0; i<arraY.count; i++) {
 //        NSDictionary *dic=arraY[i];
         UIButton *button=[[UIButton alloc]init];
-        [button setTitle:[NSString stringWithFormat:@"%@",arraY[i]] forState:UIControlStateNormal];
+        [button setTitle:[NSString stringWithFormat:@"%@",((ChannelListModel *)arraY[i]).name] forState:UIControlStateNormal];
         [button addTarget:self action:@selector(tabbarButton:) forControlEvents:UIControlEventTouchUpInside];
         if (i==0) {
             [button setTitleColor:[UIColor colorWithRed:232/255.0f green:55/255.0f blue:74/255.0f alpha:1] forState:UIControlStateNormal];
@@ -143,7 +172,7 @@
         button.titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
         
         UILabel *butLabel=[[UILabel alloc]init];
-        butLabel.text=[NSString stringWithFormat:@"%@",arraY[i]];
+        butLabel.text=[NSString stringWithFormat:@"%@",((ChannelListModel *)arraY[i]).name];
         butLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
         [butLabel setNumberOfLines:1];
         [butLabel sizeToFit];
@@ -321,85 +350,91 @@
 -(void)getLayout
 {
     NSString *urlStr;
-    switch (scrollID) {
-        case 0:
-        {
-//            page=1;
-            NSString *string=[NSString stringWithFormat:@"http://bolohr.com/?json=get_tag_posts&count=10&order=DESC&slug=精选课程&include=id,title,modified,url,thumbnail,custom_fields"];
-            urlStr=[string stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-        }
-            break;
-        case 1:
-        {
-//            page=1;
-            NSString *string=@"http://bolohr.com/?json=get_tag_posts&count=10&order=DESC&slug=人力课程&include=id,title,modified,url,thumbnail,custom_fields";
-            urlStr=[string stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-        }
-            break;
-        case 2:
-        {
-//            page=1;
-            NSString *string=@"http://bolohr.com/?json=get_tag_posts&count=10&order=DESC&slug=行政课程&include=id,title,modified,url,thumbnail,custom_fields";
-            urlStr=[string stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-        }
-            break;
-        case 3:
-        {
-//            page=1;
-            NSString *string=@"http://bolohr.com/?json=get_tag_posts&count=10&order=DESC&slug=企管课程&include=id,title,modified,url,thumbnail,custom_fields";
-            urlStr=[string stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-        }
-            break;
-        case 4:
-        {
-//            page=1;
-            NSString *string=@"http://bolohr.com/?json=get_tag_posts&count=10&order=DESC&slug=考证课程&include=id,title,modified,url,thumbnail,custom_fields";
-            urlStr=[string stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-        }
-            break;
-        case 5:
-        {
-//            page=1;
-            NSString *string=@"http://bolohr.com/?json=get_tag_posts&count=10&order=DESC&slug=技能课程&include=id,title,modified,url,thumbnail,custom_fields";
-            urlStr=[string stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-        }
-            break;
-        default:
-            break;
-    }
+//    switch (scrollID) {
+//        case 0:
+//        {
+////            page=1;
+//            NSString *string=[NSString stringWithFormat:@"http://bolohr.com/?json=get_tag_posts&count=10&order=DESC&slug=精选课程&include=id,title,modified,url,thumbnail,custom_fields"];
+//            urlStr=[string stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+//        }
+//            break;
+//        case 1:
+//        {
+////            page=1;
+//            NSString *string=@"http://bolohr.com/?json=get_tag_posts&count=10&order=DESC&slug=人力课程&include=id,title,modified,url,thumbnail,custom_fields";
+//            urlStr=[string stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+//        }
+//            break;
+//        case 2:
+//        {
+////            page=1;
+//            NSString *string=@"http://bolohr.com/?json=get_tag_posts&count=10&order=DESC&slug=行政课程&include=id,title,modified,url,thumbnail,custom_fields";
+//            urlStr=[string stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+//        }
+//            break;
+//        case 3:
+//        {
+////            page=1;
+//            NSString *string=@"http://bolohr.com/?json=get_tag_posts&count=10&order=DESC&slug=企管课程&include=id,title,modified,url,thumbnail,custom_fields";
+//            urlStr=[string stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+//        }
+//            break;
+//        case 4:
+//        {
+////            page=1;
+//            NSString *string=@"http://bolohr.com/?json=get_tag_posts&count=10&order=DESC&slug=考证课程&include=id,title,modified,url,thumbnail,custom_fields";
+//            urlStr=[string stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+//        }
+//            break;
+//        case 5:
+//        {
+////            page=1;
+//            NSString *string=@"http://bolohr.com/?json=get_tag_posts&count=10&order=DESC&slug=技能课程&include=id,title,modified,url,thumbnail,custom_fields";
+//            urlStr=[string stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+//        }
+//            break;
+//        default:
+//            break;
+//    }
     
-    NSString *urlString = [NSString stringWithFormat:@"%@&page=%d",urlStr,page];
+    NSString *urlString = @"http://app.bolohr.com/simi/app/video/list.json";
+    NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithCapacity:0];
+    if (scrollID < arraY.count) {
+        ChannelListModel *listModel = [arraY objectAtIndex:scrollID];
+        dic[@"channel_id"] = [NSString stringWithFormat:@"%ld", (long)listModel.channel_id];
+        dic[@"page"] = [NSString stringWithFormat:@"%d", page];
+    }
     AFHTTPRequestOperationManager *mymanager = [AFHTTPRequestOperationManager manager];
     
-    [mymanager GET:[NSString stringWithFormat:@"%@",urlString] parameters:nil success:^(AFHTTPRequestOperation *opretion, id responseObject){
+    [mymanager GET:urlString parameters:dic success:^(AFHTTPRequestOperation *opretion, id responseObject){
         
         if(page==1){
             [sourceArray removeAllObjects];
         }
         NSLog(@"数据%@",responseObject);
-        NSArray *array=[responseObject objectForKey:@"posts"];
-        if (array.count<10) {
-            _hasMore=YES;
-        }else{
-            _hasMore=NO;
-        }
-
-        for (int i=0; i<array.count; i++) {
-            NSDictionary *dict=array[i];
-            if ([sourceArray containsObject:dict]) {
-                
+        id data = [responseObject objectForKey:@"data"];
+        NSLog(@"1111");
+        if ([data isKindOfClass:[NSString class]]) {
+            return;
+        } else if ([data isKindOfClass:[NSArray class]]) {
+            NSArray *array = (NSArray *)data;
+            if (array.count<10) {
+                _hasMore=YES;
             }else{
-                [sourceArray addObject:dict];
+                _hasMore=NO;
             }
+            for (int i=0; i<array.count; i++) {
+                NSDictionary *dict=array[i];
+                if ([sourceArray containsObject:dict]) {
+                    
+                }else{
+                    [sourceArray addObject:dict];
+                }
+            }
+            [_refreshHeader performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+            [_moreFooter performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+            [_myTableView reloadData];
         }
-        [_refreshHeader performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
-        [_moreFooter performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
-
-//        if (array.count<5) {
-//            selectedID=YES;
-//        }
-        [_myTableView reloadData];
-        
         
     } failure:^(AFHTTPRequestOperation *opration, NSError *error){
         

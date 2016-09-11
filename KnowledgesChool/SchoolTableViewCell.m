@@ -49,7 +49,7 @@
 //赋值 and 自动换行,计算出cell的高度
 
 -(void)setIntroductionText:(NSDictionary *)text{
-    NSString *imageString=[NSString stringWithFormat:@"%@",[text objectForKey:@"thumbnail"]];
+    NSString *imageString=[NSString stringWithFormat:@"%@",[text objectForKey:@"img_url"]];
     if (imageString==nil||imageString==NULL||[imageString isEqualToString:@""]) {
         //获得当前cell高度
         _myImageView.hidden=YES;
@@ -69,7 +69,7 @@
         //    CGSize labelSize = [self.text.text sizeWithFont:self.text.font constrainedToSize:size lineBreakMode:NSLineBreakByClipping];
         CGSize labelSize = [self.text.text boundingRectWithSize:size options:NSStringDrawingUsesLineFragmentOrigin attributes:dict context:nil].size;
         
-        NSString *imageUrl=[NSString stringWithFormat:@"%@",[text objectForKey:@"thumbnail"]];
+        NSString *imageUrl=[NSString stringWithFormat:@"%@",[text objectForKey:@"img_url"]];
         [_myImageView setImageWithURL:[NSURL URLWithString:imageUrl]placeholderImage:nil];
         _myImageView.frame=FRAME(WIDTH-110, 20, 95, 70);
         self.text.frame = CGRectMake(15, 20, WIDTH-130, labelSize.height);
@@ -103,12 +103,13 @@
         //    CGSize labelSize = [self.text.text sizeWithFont:self.text.font constrainedToSize:size lineBreakMode:NSLineBreakByClipping];
         CGSize labelSize = [self.text.text boundingRectWithSize:size options:NSStringDrawingUsesLineFragmentOrigin attributes:dict context:nil].size;
         
-        NSString *imageUrl=[NSString stringWithFormat:@"%@",[text objectForKey:@"thumbnail"]];
+        NSString *imageUrl=[NSString stringWithFormat:@"%@",[text objectForKey:@"img_url"]];
         [_myImageView setImageWithURL:[NSURL URLWithString:imageUrl]placeholderImage:nil];
         _myImageView.frame=FRAME(WIDTH-110, 15, 95, 70);
         self.text.frame = CGRectMake(15, 20, WIDTH-130, labelSize.height);
-        NSArray *viewsArray=[[text objectForKey:@"custom_fields"]objectForKey:@"views"];
-        self.nameTime.text=[NSString stringWithFormat:@"%@人已看过",viewsArray[0]];
+//        NSArray *viewsArray=[[text objectForKey:@"custom_fields"]objectForKey:@"views"];
+//        self.nameTime.text=[NSString stringWithFormat:@"%@人已看过",viewsArray[0]];
+        self.nameTime.text = [NSString stringWithFormat:@"%@人已看过", [text objectForKey:@"total_view"]];
         _nameTime.font=[UIFont systemFontOfSize:12];
        
         _nameTime.textColor=[UIColor colorWithRed:200/255.0f green:200/255.0f blue:200/255.0f alpha:1];

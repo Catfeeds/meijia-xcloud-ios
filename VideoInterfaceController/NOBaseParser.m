@@ -10,4 +10,8 @@
 
 @implementation NOBaseParser
 
+- (ReturnCode)parserResponseDataFrom:(NSDictionary *)dic
+{
+    return RC_FAILED;
+}
 @end

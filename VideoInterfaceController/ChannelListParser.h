@@ -7,7 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "NOBaseParser.h"
 
-@interface ChannelListParser : NSObject
+@interface ChannelListParser : NOBaseParser
+
 
 @end

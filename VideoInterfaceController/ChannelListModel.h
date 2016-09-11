@@ -10,4 +10,7 @@
 
 @interface ChannelListModel : NSObject
 
+@property (nonatomic, assign) NSInteger channel_id;
+
+@property (nonatomic, copy)   NSString *name;
 @end
