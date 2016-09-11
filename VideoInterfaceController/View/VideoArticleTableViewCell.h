@@ -10,4 +10,5 @@
 
 @interface VideoArticleTableViewCell : UITableViewCell
 
+- (void)setData:(NSObject *)data;
 @end

@@ -12,6 +12,7 @@
 #import "Home_SearchVoiceViewController.h"
 #import "ChannelListParser.h"
 #import "ChannelListModel.h"
+#import "VideoArticleDetailsController.h"
 
 @interface SchoolViewController ()
 {
@@ -521,10 +522,12 @@
 {
     [_myTableView deselectRowAtIndexPath:indexPath animated:NO];
     NSDictionary *dic=sourceArray[indexPath.row];
-    WebPageViewController *webPageVC=[[WebPageViewController alloc]init];
-    webPageVC.barIDS=100;
-    webPageVC.webURL=[NSString stringWithFormat:@"%@",[dic objectForKey:@"url"]];
-    [self.navigationController pushViewController:webPageVC animated:YES];
+//    WebPageViewController *webPageVC=[[WebPageViewController alloc]init];
+//    webPageVC.barIDS=100;
+//    webPageVC.webURL=[NSString stringWithFormat:@"%@",[dic objectForKey:@"url"]];
+//    [self.navigationController pushViewController:webPageVC animated:YES];
+    VideoArticleDetailsController *detailController = [[VideoArticleDetailsController alloc] init];
+    [self.navigationController pushViewController:detailController animated:YES];
 }
 
 #pragma mark 表格刷新相关
