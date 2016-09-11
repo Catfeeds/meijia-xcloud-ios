@@ -207,4 +207,6 @@
 #define FWXQ_RATES                       @"simi/app/record/get_rates.json"               //服务商-服务人员评价列表接口
 #define COMPANY_MEMBER                   @"simi/app/company/get_pass.json"               //获取企业申请加入列表
 #define COMPANY_PASS                     @"simi/app/company/pass.json"                   //企业申请通过接口
+
+#define VIDEODETAIL                      @"http://app.bolohr.com/simi/app/video/detail.json"          // 视频详情 
 #endif

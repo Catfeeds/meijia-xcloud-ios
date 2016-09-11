@@ -10,4 +10,5 @@
 
 @interface VideoArticleDetailsController : UIViewController
 
+@property (nonatomic, assign) NSInteger article_id;
 @end

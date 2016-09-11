@@ -8,13 +8,18 @@
 
 #import "VideoArticleDetailsController.h"
 #import "VideoArticleHeaderView.h"
+#import "AFHTTPRequestOperationManager.h"
+#import "VideoDetailModel.h"
+#import "VideoDetailParser.h"
 
 static NSString *cellIdentifier = @"cell";
 
 @interface VideoArticleDetailsController () <UITableViewDelegate,UITableViewDataSource>
 {
     IBOutlet UITableView *tbView;
-    NSMutableArray *arrList;
+    NSMutableArray *articleListArr;
+    NSMutableArray *videoDetailArr;
+    VideoDetailModel *detailModel;
 }
 @end
 
@@ -27,13 +32,48 @@ static NSString *cellIdentifier = @"cell";
     
     [self setupBackButton];
     [self loadHeaderView];
+    [self requstVideoDetail];
     
     [tbView registerNib:[UINib nibWithNibName:@"VideoArticleTableViewCell" bundle:nil] forCellReuseIdentifier:cellIdentifier];
+    detailModel = [[VideoDetailModel alloc] init];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+
+#pragma mark -- RequestData Methods
+
+- (void)requstVideoDetail
+{
+    ISLoginManager *_manager = [ISLoginManager shareManager];
+    NSMutableDictionary *sourceDic = [[NSMutableDictionary alloc]init];
+    [sourceDic setObject:_manager.telephone  forKey:@"user_id"];
+    [sourceDic setObject:[NSNumber numberWithInteger:self.article_id] forKey:@"article_id"];
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    [manager GET:VIDEODETAIL parameters:sourceDic success:^(AFHTTPRequestOperation *operation, id responseObject)
+     {
+         VideoDetailParser *parser = [[VideoDetailParser alloc] init];
+         parser.idCollection = detailModel;
+         if (RC_OK == [parser parserResponseDataFrom:responseObject])
+         {
+             NSLog(@"数据%@",detailModel);
+             
+         }
+         
+     }
+         failure:^(AFHTTPRequestOperation *operation, NSError *error)
+     {
+         
+     }];
+}
+
+- (void)requestArticelList
+{
+    
 }
 
 #pragma mark -- Private Methods
@@ -66,12 +106,20 @@ static NSString *cellIdentifier = @"cell";
     tbView.tableHeaderView = headerView;
 }
 
-- (NSMutableArray *)arrList
+- (NSMutableArray *)articleListArr
 {
-    if (!arrList) {
-        arrList = [NSMutableArray arrayWithCapacity:0];
+    if (!articleListArr) {
+        articleListArr = [NSMutableArray arrayWithCapacity:0];
     }
-    return arrList;
+    return articleListArr;
+}
+
+- (NSMutableArray *)videoDetailArr
+{
+    if (!videoDetailArr) {
+        videoDetailArr = [NSMutableArray arrayWithCapacity:0];
+    }
+    return videoDetailArr;
 }
 
 #pragma mark -- UITableView --

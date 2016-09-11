@@ -527,6 +527,7 @@
 //    webPageVC.webURL=[NSString stringWithFormat:@"%@",[dic objectForKey:@"url"]];
 //    [self.navigationController pushViewController:webPageVC animated:YES];
     VideoArticleDetailsController *detailController = [[VideoArticleDetailsController alloc] init];
+    detailController.article_id = [[dic objectForKey:@"article_id"]integerValue];
     [self.navigationController pushViewController:detailController animated:YES];
 }
 

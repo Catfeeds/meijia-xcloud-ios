@@ -1486,6 +1486,8 @@
 		A349283D1D852CEC003989A2 /* VideoArticleHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A349283C1D852CEC003989A2 /* VideoArticleHeaderView.xib */; };
 		A34928411D856F6D003989A2 /* VideoArticleTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A349283F1D856F6D003989A2 /* VideoArticleTableViewCell.m */; };
 		A34928421D856F6D003989A2 /* VideoArticleTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A34928401D856F6D003989A2 /* VideoArticleTableViewCell.xib */; };
+		A34928451D858783003989A2 /* VideoDetailModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A34928441D858783003989A2 /* VideoDetailModel.m */; };
+		A34928481D85879D003989A2 /* VideoDetailParser.m in Sources */ = {isa = PBXBuildFile; fileRef = A34928471D85879D003989A2 /* VideoDetailParser.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -4286,6 +4288,10 @@
 		A349283E1D856F6D003989A2 /* VideoArticleTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoArticleTableViewCell.h; sourceTree = "<group>"; };
 		A349283F1D856F6D003989A2 /* VideoArticleTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoArticleTableViewCell.m; sourceTree = "<group>"; };
 		A34928401D856F6D003989A2 /* VideoArticleTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VideoArticleTableViewCell.xib; sourceTree = "<group>"; };
+		A34928431D858783003989A2 /* VideoDetailModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoDetailModel.h; sourceTree = "<group>"; };
+		A34928441D858783003989A2 /* VideoDetailModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoDetailModel.m; sourceTree = "<group>"; };
+		A34928461D85879D003989A2 /* VideoDetailParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoDetailParser.h; sourceTree = "<group>"; };
+		A34928471D85879D003989A2 /* VideoDetailParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoDetailParser.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -9726,6 +9732,10 @@
 				A349281E1D83EEF6003989A2 /* ChannelListModel.m */,
 				A34928201D83EF1B003989A2 /* ChannelListParser.h */,
 				A34928211D83EF1B003989A2 /* ChannelListParser.m */,
+				A34928431D858783003989A2 /* VideoDetailModel.h */,
+				A34928441D858783003989A2 /* VideoDetailModel.m */,
+				A34928461D85879D003989A2 /* VideoDetailParser.h */,
+				A34928471D85879D003989A2 /* VideoDetailParser.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -10876,6 +10886,7 @@
 				10BFDB9C1CBC909000DD274D /* UMComPhotoAlbumViewController.m in Sources */,
 				10BFDBA11CBC909000DD274D /* UMComActionDeleteView.m in Sources */,
 				10BFDBFA1CBC909000DD274D /* UMComSysLikeTableViewCell.m in Sources */,
+				A34928481D85879D003989A2 /* VideoDetailParser.m in Sources */,
 				10906E0A1B6B82430020895E /* NewsViewController.m in Sources */,
 				108962321C3A7A2700D88350 /* RealtimeSearchUtil.m in Sources */,
 				1F5F2A421A2D84A9009AC61C /* SDWebImageDecoder.m in Sources */,
@@ -11198,6 +11209,7 @@
 				1F9DF4D31AD38B5A00826C30 /* BPushClass.m in Sources */,
 				1051306F1BFF0C2D0004DA20 /* ZXDataMatrixDataBlock.m in Sources */,
 				105130C11BFF0C2E0004DA20 /* ZXPDF417ECErrorCorrection.m in Sources */,
+				A34928451D858783003989A2 /* VideoDetailModel.m in Sources */,
 				1F5F2A321A2D84A9009AC61C /* FourBtnView.m in Sources */,
 				108961D11C3A7A2700D88350 /* MWTapDetectingView.m in Sources */,
 				105130971BFF0C2D0004DA20 /* ZXRSSExpandedDecodedNumeric.m in Sources */,
@@ -11454,7 +11466,7 @@
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/yxz";
 				INFOPLIST_FILE = "yxz/yxz-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/yxz",
@@ -11540,7 +11552,7 @@
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/yxz";
 				INFOPLIST_FILE = "yxz/yxz-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/yxz",
