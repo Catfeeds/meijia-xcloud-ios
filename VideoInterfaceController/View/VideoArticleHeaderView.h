@@ -10,4 +10,5 @@
 
 @interface VideoArticleHeaderView : UIView
 
+- (void)setData:(NSObject *)data;
 @end

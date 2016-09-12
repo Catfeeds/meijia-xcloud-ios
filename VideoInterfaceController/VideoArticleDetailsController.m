@@ -31,18 +31,18 @@ static NSString *cellIdentifier = @"cell";
     [super viewDidLoad];
     
     [self setupBackButton];
-    [self loadHeaderView];
     [self requstVideoDetail];
     
     [tbView registerNib:[UINib nibWithNibName:@"VideoArticleTableViewCell" bundle:nil] forCellReuseIdentifier:cellIdentifier];
-    detailModel = [[VideoDetailModel alloc] init];
+    tbView.tableHeaderView = [self loadHeaderView];
+    
+     videoDetailArr = [NSMutableArray arrayWithCapacity:0];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
 
 #pragma mark -- RequestData Methods
 
@@ -57,9 +57,12 @@ static NSString *cellIdentifier = @"cell";
     [manager GET:VIDEODETAIL parameters:sourceDic success:^(AFHTTPRequestOperation *operation, id responseObject)
      {
          VideoDetailParser *parser = [[VideoDetailParser alloc] init];
-         parser.idCollection = detailModel;
+         parser.idCollection = videoDetailArr;
          if (RC_OK == [parser parserResponseDataFrom:responseObject])
          {
+             detailModel = [videoDetailArr objectAtIndex:0];
+             VideoArticleHeaderView *headerView = [self loadHeaderView];
+             [headerView setData:detailModel];
              NSLog(@"数据%@",detailModel);
              
          }
@@ -99,11 +102,11 @@ static NSString *cellIdentifier = @"cell";
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (void)loadHeaderView
+- (VideoArticleHeaderView *)loadHeaderView
 {
     NSArray *array = [[NSBundle mainBundle] loadNibNamed:@"VideoArticleHeaderView" owner:self options:nil];
     VideoArticleHeaderView *headerView = (VideoArticleHeaderView *)[array objectAtIndex:0];
-    tbView.tableHeaderView = headerView;
+    return headerView;
 }
 
 - (NSMutableArray *)articleListArr
@@ -112,14 +115,6 @@ static NSString *cellIdentifier = @"cell";
         articleListArr = [NSMutableArray arrayWithCapacity:0];
     }
     return articleListArr;
-}
-
-- (NSMutableArray *)videoDetailArr
-{
-    if (!videoDetailArr) {
-        videoDetailArr = [NSMutableArray arrayWithCapacity:0];
-    }
-    return videoDetailArr;
 }
 
 #pragma mark -- UITableView --

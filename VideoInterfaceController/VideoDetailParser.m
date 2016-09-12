@@ -18,11 +18,10 @@
     if (status != 0) {
         return RC_FAILED;
     }
-    VideoDetailModel *model = (VideoDetailModel *)self.idCollection;
+    NSMutableArray *detailArray = (NSMutableArray *)self.idCollection;
     NSDictionary *dicData = [dic objectForKey:@"data"];
-    model = [VideoDetailModel objectWithKeyValues:dicData
-             ];
-
+    VideoDetailModel *model = [VideoDetailModel objectWithKeyValues:dicData];
+    [detailArray addObject:model];
     return RC_OK;
 }
 

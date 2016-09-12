@@ -8,7 +8,21 @@
 
 #import "VideoArticleHeaderView.h"
 
+@interface VideoArticleHeaderView ()
+{
+    IBOutlet UIImageView *detailImgView;
+    IBOutlet UILabel *titleLabel;
+    IBOutlet UILabel *teacherlabel;
+    IBOutlet UILabel *totalPersonLabel;
+    IBOutlet UILabel *priceLabel;
+    IBOutlet UILabel *dis_priceLabel;
+}
+@end
+
 @implementation VideoArticleHeaderView
 
-
+- (void)setData:(NSObject *)data
+{
+    
+}
 @end
