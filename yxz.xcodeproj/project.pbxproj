@@ -1480,14 +1480,14 @@
 		A349281F1D83EEF6003989A2 /* ChannelListModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A349281E1D83EEF6003989A2 /* ChannelListModel.m */; };
 		A34928221D83EF1B003989A2 /* ChannelListParser.m in Sources */ = {isa = PBXBuildFile; fileRef = A34928211D83EF1B003989A2 /* ChannelListParser.m */; };
 		A34928261D83F216003989A2 /* NOBaseParser.m in Sources */ = {isa = PBXBuildFile; fileRef = A34928251D83F216003989A2 /* NOBaseParser.m */; };
-		A34928351D852A36003989A2 /* VideoArticleDetailsController.m in Sources */ = {isa = PBXBuildFile; fileRef = A34928331D852A36003989A2 /* VideoArticleDetailsController.m */; };
-		A34928361D852A37003989A2 /* VideoArticleDetailsController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A34928341D852A36003989A2 /* VideoArticleDetailsController.xib */; };
 		A349283B1D852CAF003989A2 /* VideoArticleHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = A349283A1D852CAF003989A2 /* VideoArticleHeaderView.m */; };
 		A349283D1D852CEC003989A2 /* VideoArticleHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A349283C1D852CEC003989A2 /* VideoArticleHeaderView.xib */; };
 		A34928411D856F6D003989A2 /* VideoArticleTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A349283F1D856F6D003989A2 /* VideoArticleTableViewCell.m */; };
 		A34928421D856F6D003989A2 /* VideoArticleTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A34928401D856F6D003989A2 /* VideoArticleTableViewCell.xib */; };
 		A34928451D858783003989A2 /* VideoDetailModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A34928441D858783003989A2 /* VideoDetailModel.m */; };
 		A34928481D85879D003989A2 /* VideoDetailParser.m in Sources */ = {isa = PBXBuildFile; fileRef = A34928471D85879D003989A2 /* VideoDetailParser.m */; };
+		A35FB5AE1D86576500657C25 /* VideoArticleDetailsController.m in Sources */ = {isa = PBXBuildFile; fileRef = A35FB5AC1D86576500657C25 /* VideoArticleDetailsController.m */; };
+		A35FB5AF1D86576500657C25 /* VideoArticleDetailsController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A35FB5AD1D86576500657C25 /* VideoArticleDetailsController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -4279,9 +4279,6 @@
 		A34928211D83EF1B003989A2 /* ChannelListParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChannelListParser.m; sourceTree = "<group>"; };
 		A34928241D83F216003989A2 /* NOBaseParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NOBaseParser.h; sourceTree = "<group>"; };
 		A34928251D83F216003989A2 /* NOBaseParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NOBaseParser.m; sourceTree = "<group>"; };
-		A34928321D852A36003989A2 /* VideoArticleDetailsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VideoArticleDetailsController.h; path = ../VideoArticleDetailsController.h; sourceTree = "<group>"; };
-		A34928331D852A36003989A2 /* VideoArticleDetailsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VideoArticleDetailsController.m; path = ../VideoArticleDetailsController.m; sourceTree = "<group>"; };
-		A34928341D852A36003989A2 /* VideoArticleDetailsController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = VideoArticleDetailsController.xib; path = ../VideoArticleDetailsController.xib; sourceTree = "<group>"; };
 		A34928391D852CAF003989A2 /* VideoArticleHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoArticleHeaderView.h; sourceTree = "<group>"; };
 		A349283A1D852CAF003989A2 /* VideoArticleHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoArticleHeaderView.m; sourceTree = "<group>"; };
 		A349283C1D852CEC003989A2 /* VideoArticleHeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VideoArticleHeaderView.xib; sourceTree = "<group>"; };
@@ -4292,6 +4289,9 @@
 		A34928441D858783003989A2 /* VideoDetailModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoDetailModel.m; sourceTree = "<group>"; };
 		A34928461D85879D003989A2 /* VideoDetailParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoDetailParser.h; sourceTree = "<group>"; };
 		A34928471D85879D003989A2 /* VideoDetailParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoDetailParser.m; sourceTree = "<group>"; };
+		A35FB5AB1D86576500657C25 /* VideoArticleDetailsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VideoArticleDetailsController.h; path = VideoInterfaceController/VideoArticleDetailsController.h; sourceTree = SOURCE_ROOT; };
+		A35FB5AC1D86576500657C25 /* VideoArticleDetailsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VideoArticleDetailsController.m; path = VideoInterfaceController/VideoArticleDetailsController.m; sourceTree = SOURCE_ROOT; };
+		A35FB5AD1D86576500657C25 /* VideoArticleDetailsController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = VideoArticleDetailsController.xib; path = VideoInterfaceController/VideoArticleDetailsController.xib; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -9756,9 +9756,9 @@
 		A34928381D852C39003989A2 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				A34928321D852A36003989A2 /* VideoArticleDetailsController.h */,
-				A34928331D852A36003989A2 /* VideoArticleDetailsController.m */,
-				A34928341D852A36003989A2 /* VideoArticleDetailsController.xib */,
+				A35FB5AB1D86576500657C25 /* VideoArticleDetailsController.h */,
+				A35FB5AC1D86576500657C25 /* VideoArticleDetailsController.m */,
+				A35FB5AD1D86576500657C25 /* VideoArticleDetailsController.xib */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -10025,6 +10025,7 @@
 				101535721D252A8900406484 /* index-qiandaoyouli.png in Resources */,
 				8F9E4A7A1A396B5100C0707A /* list-_01@2x.png in Resources */,
 				10ED4A241CA5518E00AE0996 /* CLGH_TX_TB_@2x.png in Resources */,
+				A35FB5AF1D86576500657C25 /* VideoArticleDetailsController.xib in Resources */,
 				102A0ED41CF5AECC00CAA320 /* opad_46.png in Resources */,
 				108962831C3A7A2700D88350 /* VoiceSearchFeedback011@2x.png in Resources */,
 				104BE24E1C787440006A4D9E /* iconfont-shenpi-bianji.png in Resources */,
@@ -10159,7 +10160,6 @@
 				108962AF1C3A7A2700D88350 /* chat_location_detail_disclosureHL@2x.png in Resources */,
 				108962B11C3A7A2700D88350 /* chat_location_preview@2x.png in Resources */,
 				1F5F2A7E1A2D84A9009AC61C /* sub.png in Resources */,
-				A34928361D852A37003989A2 /* VideoArticleDetailsController.xib in Resources */,
 				108962921C3A7A2700D88350 /* VoiceSearchFeedback019.png in Resources */,
 				108962F81C3A7A2700D88350 /* account@2x.png in Resources */,
 				10E967391CC635D00047E819 /* UMSCommentInputControlleriPad.xib in Resources */,
@@ -10947,6 +10947,7 @@
 				1003ADAE1C0BFC67006966FF /* FriendsHomeViewController.m in Sources */,
 				1051300C1BFF0C2D0004DA20 /* UIActionSheet+Block.m in Sources */,
 				108962221C3A7A2700D88350 /* MessageReadManager.m in Sources */,
+				A35FB5AE1D86576500657C25 /* VideoArticleDetailsController.m in Sources */,
 				1089621A1C3A7A2700D88350 /* EMChatLocationBubbleView.m in Sources */,
 				1051308D1BFF0C2D0004DA20 /* ZXAI013x0x1xDecoder.m in Sources */,
 				1051302E1BFF0C2D0004DA20 /* ZXExpandedProductParsedResult.m in Sources */,
@@ -11150,7 +11151,6 @@
 				10BFDB8F1CBC909000DD274D /* UMComErrorCode.m in Sources */,
 				10E858E21C772164001232DB /* SimiOrderDetailModel.m in Sources */,
 				107FA1F21BEC645A00FE0166 /* UMPostTableViewCell.m in Sources */,
-				A34928351D852A36003989A2 /* VideoArticleDetailsController.m in Sources */,
 				1051303A1BFF0C2D0004DA20 /* ZXSMSTOMMSTOResultParser.m in Sources */,
 				10BFDBAE1CBC909000DD274D /* UMComProgressView.m in Sources */,
 				1051306D1BFF0C2D0004DA20 /* ZXRGBLuminanceSource.m in Sources */,
