@@ -17,6 +17,7 @@ static NSString *cellIdentifier = @"cell";
 @interface VideoArticleDetailsController () <UITableViewDelegate,UITableViewDataSource>
 {
     IBOutlet UITableView *tbView;
+    VideoArticleHeaderView *headerView;
     NSMutableArray *articleListArr;
     NSMutableArray *videoDetailArr;
     VideoDetailModel *detailModel;
@@ -31,12 +32,12 @@ static NSString *cellIdentifier = @"cell";
     [super viewDidLoad];
     
     [self setupBackButton];
+    [self loadHeaderView];
     [self requstVideoDetail];
     
     [tbView registerNib:[UINib nibWithNibName:@"VideoArticleTableViewCell" bundle:nil] forCellReuseIdentifier:cellIdentifier];
-    tbView.tableHeaderView = [self loadHeaderView];
-    
-     videoDetailArr = [NSMutableArray arrayWithCapacity:0];
+    tbView.tableHeaderView = headerView;
+    videoDetailArr = [NSMutableArray arrayWithCapacity:0];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -61,7 +62,6 @@ static NSString *cellIdentifier = @"cell";
          if (RC_OK == [parser parserResponseDataFrom:responseObject])
          {
              detailModel = [videoDetailArr objectAtIndex:0];
-             VideoArticleHeaderView *headerView = [self loadHeaderView];
              [headerView setData:detailModel];
              NSLog(@"数据%@",detailModel);
              
@@ -102,11 +102,10 @@ static NSString *cellIdentifier = @"cell";
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (VideoArticleHeaderView *)loadHeaderView
+- (void)loadHeaderView
 {
     NSArray *array = [[NSBundle mainBundle] loadNibNamed:@"VideoArticleHeaderView" owner:self options:nil];
-    VideoArticleHeaderView *headerView = (VideoArticleHeaderView *)[array objectAtIndex:0];
-    return headerView;
+    headerView = [array objectAtIndex:0];
 }
 
 - (NSMutableArray *)articleListArr
