@@ -246,10 +246,11 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" editable="NO" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1eN-9m-Ze3">
-                            <rect key="frame" x="8" y="27" width="360" height="77"/>
+                            <rect key="frame" x="6" y="27" width="362" height="77"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
-                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <color key="textColor" red="0.40236572819999999" green="0.96571954930000004" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="9"/>
                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                         </textView>
                     </subviews>
@@ -260,7 +261,7 @@
                         <constraint firstAttribute="trailing" secondItem="1eN-9m-Ze3" secondAttribute="trailing" constant="7" id="IUT-QC-47x"/>
                         <constraint firstAttribute="trailing" secondItem="1eN-9m-Ze3" secondAttribute="trailing" constant="7" id="IfI-no-UWe"/>
                         <constraint firstItem="OH6-pA-upX" firstAttribute="top" secondItem="3Bh-2T-dFv" secondAttribute="top" constant="9" id="NhO-Gc-wte"/>
-                        <constraint firstItem="1eN-9m-Ze3" firstAttribute="leading" secondItem="3Bh-2T-dFv" secondAttribute="leading" constant="8" id="Q48-6l-Wxt"/>
+                        <constraint firstItem="1eN-9m-Ze3" firstAttribute="leading" secondItem="3Bh-2T-dFv" secondAttribute="leading" constant="6" id="Q48-6l-Wxt"/>
                         <constraint firstItem="1eN-9m-Ze3" firstAttribute="leading" secondItem="3Bh-2T-dFv" secondAttribute="leading" constant="8" id="VjY-2Y-h7g"/>
                         <constraint firstItem="OH6-pA-upX" firstAttribute="leading" secondItem="3Bh-2T-dFv" secondAttribute="leading" constant="10" id="YJo-yb-svA"/>
                         <constraint firstItem="1eN-9m-Ze3" firstAttribute="leading" secondItem="3Bh-2T-dFv" secondAttribute="leading" constant="8" id="e4N-HG-imn"/>
@@ -335,9 +336,9 @@
             <connections>
                 <outlet property="detailImgView" destination="vK2-LU-FCL" id="wqx-RF-wh6"/>
                 <outlet property="dis_priceLabel" destination="vqE-ns-Tg0" id="PTN-0h-seR"/>
+                <outlet property="myTextView" destination="1eN-9m-Ze3" id="dHG-M0-iK0"/>
                 <outlet property="priceLabel" destination="6fv-kc-EJT" id="sDR-67-L3m"/>
                 <outlet property="teacherlabel" destination="B0d-wm-zbW" id="e12-In-aD5"/>
-                <outlet property="textView" destination="1eN-9m-Ze3" id="Brl-0x-Hrx"/>
                 <outlet property="titleLabel" destination="4dJ-dn-xKz" id="Mrf-hY-qUi"/>
                 <outlet property="totalPersonLabel" destination="LjR-to-mzH" id="Nsu-de-pmv"/>
             </connections>

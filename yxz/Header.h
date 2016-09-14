@@ -208,5 +208,6 @@
 #define COMPANY_MEMBER                   @"simi/app/company/get_pass.json"               //获取企业申请加入列表
 #define COMPANY_PASS                     @"simi/app/company/pass.json"                   //企业申请通过接口
 
-#define VIDEODETAIL                      @"http://app.bolohr.com/simi/app/video/detail.json"          // 视频详情 
+#define VIDEODETAIL                      @"http://app.bolohr.com/simi/app/video/detail.json"           // 视频详情
+#define VIDEORELATE                      @"http://app.bolohr.com/simi/app/video/relate.json"           // 视频文章
 #endif

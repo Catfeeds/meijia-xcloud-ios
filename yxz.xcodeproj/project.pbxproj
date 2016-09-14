@@ -1488,6 +1488,9 @@
 		A35FB5AE1D86576500657C25 /* VideoArticleDetailsController.m in Sources */ = {isa = PBXBuildFile; fileRef = A35FB5AC1D86576500657C25 /* VideoArticleDetailsController.m */; };
 		A35FB5AF1D86576500657C25 /* VideoArticleDetailsController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A35FB5AD1D86576500657C25 /* VideoArticleDetailsController.xib */; };
 		A3F71EC61D87D042007EA8BD /* VideoArticleHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A3F71EC51D87D042007EA8BD /* VideoArticleHeaderView.xib */; };
+		A3F71EC91D880F8F007EA8BD /* VideoArticleParser.m in Sources */ = {isa = PBXBuildFile; fileRef = A3F71EC81D880F8F007EA8BD /* VideoArticleParser.m */; };
+		A3F71ECC1D880FA9007EA8BD /* VideoArticleModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A3F71ECB1D880FA9007EA8BD /* VideoArticleModel.m */; };
+		A3F71ECF1D88160A007EA8BD /* VideoArticleToolBar.m in Sources */ = {isa = PBXBuildFile; fileRef = A3F71ECE1D88160A007EA8BD /* VideoArticleToolBar.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -4292,6 +4295,12 @@
 		A35FB5AC1D86576500657C25 /* VideoArticleDetailsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VideoArticleDetailsController.m; path = VideoInterfaceController/VideoArticleDetailsController.m; sourceTree = SOURCE_ROOT; };
 		A35FB5AD1D86576500657C25 /* VideoArticleDetailsController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = VideoArticleDetailsController.xib; path = VideoInterfaceController/VideoArticleDetailsController.xib; sourceTree = SOURCE_ROOT; };
 		A3F71EC51D87D042007EA8BD /* VideoArticleHeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VideoArticleHeaderView.xib; sourceTree = "<group>"; };
+		A3F71EC71D880F8F007EA8BD /* VideoArticleParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoArticleParser.h; sourceTree = "<group>"; };
+		A3F71EC81D880F8F007EA8BD /* VideoArticleParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoArticleParser.m; sourceTree = "<group>"; };
+		A3F71ECA1D880FA9007EA8BD /* VideoArticleModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoArticleModel.h; sourceTree = "<group>"; };
+		A3F71ECB1D880FA9007EA8BD /* VideoArticleModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoArticleModel.m; sourceTree = "<group>"; };
+		A3F71ECD1D88160A007EA8BD /* VideoArticleToolBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoArticleToolBar.h; sourceTree = "<group>"; };
+		A3F71ECE1D88160A007EA8BD /* VideoArticleToolBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoArticleToolBar.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -9736,6 +9745,10 @@
 				A34928441D858783003989A2 /* VideoDetailModel.m */,
 				A34928461D85879D003989A2 /* VideoDetailParser.h */,
 				A34928471D85879D003989A2 /* VideoDetailParser.m */,
+				A3F71EC71D880F8F007EA8BD /* VideoArticleParser.h */,
+				A3F71EC81D880F8F007EA8BD /* VideoArticleParser.m */,
+				A3F71ECA1D880FA9007EA8BD /* VideoArticleModel.h */,
+				A3F71ECB1D880FA9007EA8BD /* VideoArticleModel.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -9749,6 +9762,8 @@
 				A349283E1D856F6D003989A2 /* VideoArticleTableViewCell.h */,
 				A349283F1D856F6D003989A2 /* VideoArticleTableViewCell.m */,
 				A34928401D856F6D003989A2 /* VideoArticleTableViewCell.xib */,
+				A3F71ECD1D88160A007EA8BD /* VideoArticleToolBar.h */,
+				A3F71ECE1D88160A007EA8BD /* VideoArticleToolBar.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -10813,6 +10828,7 @@
 				10BFDBCB1CBC909000DD274D /* UMComFindTableViewCell.m in Sources */,
 				10E0506C1BF19FFB009FF047 /* UzysAppearanceConfig.m in Sources */,
 				10BFDBC61CBC909000DD274D /* UMComShowToast.m in Sources */,
+				A3F71EC91D880F8F007EA8BD /* VideoArticleParser.m in Sources */,
 				105130851BFF0C2D0004DA20 /* ZXMaxiCodeReader.m in Sources */,
 				105130A61BFF0C2D0004DA20 /* ZXCodaBarWriter.m in Sources */,
 				10BFDC091CBC99A700DD274D /* UMCommunityViewController.m in Sources */,
@@ -11055,6 +11071,7 @@
 				10BFDB8E1CBC909000DD274D /* UMComConfigFile.m in Sources */,
 				1051307E1BFF0C2D0004DA20 /* ZXDataMatrixTextEncoder.m in Sources */,
 				1051305E1BFF0C2D0004DA20 /* ZXIntArray.m in Sources */,
+				A3F71ECC1D880FA9007EA8BD /* VideoArticleModel.m in Sources */,
 				10E050701BF19FFB009FF047 /* UzysAssetsViewCell.m in Sources */,
 				105130911BFF0C2D0004DA20 /* ZXAI01weightDecoder.m in Sources */,
 				105130791BFF0C2D0004DA20 /* ZXDataMatrixEncoderContext.m in Sources */,
@@ -11106,6 +11123,7 @@
 				105130751BFF0C2D0004DA20 /* ZXDataMatrixBase256Encoder.m in Sources */,
 				1F5F2A101A2D84A8009AC61C /* SERVICEBaojie.m in Sources */,
 				105130E11BFF0C2E0004DA20 /* ZXQRCodeVersion.m in Sources */,
+				A3F71ECF1D88160A007EA8BD /* VideoArticleToolBar.m in Sources */,
 				1F5F2A8E1A2D84A9009AC61C /* AFURLConnectionOperation.m in Sources */,
 				10205CEE1D2112DF00674AF7 /* BadgeView.m in Sources */,
 				8F9B699D1A4935A9000BA266 /* MineJifenViewController.m in Sources */,

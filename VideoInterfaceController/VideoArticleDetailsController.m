@@ -11,6 +11,10 @@
 #import "AFHTTPRequestOperationManager.h"
 #import "VideoDetailModel.h"
 #import "VideoDetailParser.h"
+#import "VideoArticleModel.h"
+#import "VideoArticleParser.h"
+#import "VideoArticleToolBar.h"
+#import "VideoArticleTableViewCell.h"
 
 static NSString *cellIdentifier = @"cell";
 
@@ -31,13 +35,17 @@ static NSString *cellIdentifier = @"cell";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    videoDetailArr = [NSMutableArray arrayWithCapacity:0];
+    articleListArr = [NSMutableArray arrayWithCapacity:0];
+    
     [self setupBackButton];
+    [self setupToolBar];
     [self loadHeaderView];
     [self requstVideoDetail];
+    [self requestArticelList];
     
     [tbView registerNib:[UINib nibWithNibName:@"VideoArticleTableViewCell" bundle:nil] forCellReuseIdentifier:cellIdentifier];
     tbView.tableHeaderView = headerView;
-    videoDetailArr = [NSMutableArray arrayWithCapacity:0];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -64,7 +72,6 @@ static NSString *cellIdentifier = @"cell";
              detailModel = [videoDetailArr objectAtIndex:0];
              [headerView setData:detailModel];
              NSLog(@"数据%@",detailModel);
-             
          }
          
      }
@@ -76,7 +83,22 @@ static NSString *cellIdentifier = @"cell";
 
 - (void)requestArticelList
 {
-    
+    NSMutableDictionary *dic = [[NSMutableDictionary alloc]init];
+    dic[@"article_id"] = [NSString stringWithFormat:@"%ld",(long)self.article_id];
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    [manager GET:VIDEORELATE parameters:dic success:^(AFHTTPRequestOperation *operation, id responseObject)
+     {
+         VideoArticleParser *parser = [[VideoArticleParser alloc] init];
+         parser.idCollection = articleListArr;
+         if (RC_OK == [parser parserResponseDataFrom:responseObject])
+         {
+             [tbView reloadData];
+         }
+     }
+         failure:^(AFHTTPRequestOperation *operation, NSError *error)
+     {
+         
+     }];
 }
 
 #pragma mark -- Private Methods
@@ -116,19 +138,27 @@ static NSString *cellIdentifier = @"cell";
     return articleListArr;
 }
 
+- (void)setupToolBar
+{
+    VideoArticleToolBar *toolBar = [[VideoArticleToolBar alloc]initWithFrame:FRAME(0, HEIGHT-50, WIDTH, 50)];
+    toolBar.backgroundColor=[UIColor colorWithRed:244/255.0f green:245/255.0f blue:246/255.0f alpha:1];
+    [self.view addSubview:toolBar];
+}
+
 #pragma mark -- UITableView --
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 4;
+    return articleListArr.count;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     UIView *sectionView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, WIDTH, 50)];
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(10, 19, 100, 21)];
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(10, 15, 100, 21)];
     label.textColor = RGBACOLOR(51, 51, 51, 1.0);
-    label.font = [UIFont fontWithName:@"Heiti SC" size:14];
+    label.font = [UIFont fontWithName:@"Helvetica Neue" size:14];
+    label.text = @"相关课程";
     [sectionView addSubview:label];
     
     UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 49, WIDTH, 1)];
@@ -149,7 +179,9 @@ static NSString *cellIdentifier = @"cell";
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    VideoArticleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    VideoArticleModel *model = [articleListArr objectAtIndex:indexPath.row];
+    [cell setData:model];
     return cell;
 }
 
