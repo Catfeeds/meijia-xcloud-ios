@@ -22,6 +22,8 @@ static NSString *cellIdentifier = @"cell";
 {
     IBOutlet UITableView *tbView;
     VideoArticleHeaderView *headerView;
+    EjectAlertView *pushEjectView;
+
     NSMutableArray *articleListArr;
     NSMutableArray *videoDetailArr;
     VideoDetailModel *detailModel;
@@ -70,6 +72,7 @@ static NSString *cellIdentifier = @"cell";
          if (RC_OK == [parser parserResponseDataFrom:responseObject])
          {
              detailModel = [videoDetailArr objectAtIndex:0];
+             [self SignPolite];
              [headerView setData:detailModel];
              NSLog(@"数据%@",detailModel);
          }
@@ -130,12 +133,82 @@ static NSString *cellIdentifier = @"cell";
     headerView = [array objectAtIndex:0];
 }
 
-- (NSMutableArray *)articleListArr
+-(void)SignPolite
 {
-    if (!articleListArr) {
-        articleListArr = [NSMutableArray arrayWithCapacity:0];
-    }
-    return articleListArr;
+    [pushEjectView removeFromSuperview];
+    pushEjectView = [EjectAlertView new];
+    pushEjectView.frame=FRAME(0, 0, WIDTH, HEIGHT);
+    pushEjectView.backgroundColor = [UIColor blueColor];
+    [pushEjectView setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleLeftMargin];
+    [self.view addSubview:pushEjectView];
+    UIView *grayView=[[UIView alloc]initWithFrame:FRAME(0, 0, WIDTH, HEIGHT)];
+    grayView.backgroundColor=[UIColor blackColor];
+    grayView.alpha=0.4;
+    [pushEjectView addSubview:grayView];
+    
+    UIView *view=[[UIView alloc]initWithFrame:FRAME((WIDTH-WIDTH*0.72)/2, (HEIGHT-356)/2, WIDTH*0.72, WIDTH*0.72*0.70+168)];
+    view.backgroundColor=[UIColor whiteColor];
+    view.layer.cornerRadius=10;
+    view.clipsToBounds=YES;
+    [pushEjectView addSubview:view];
+    
+    UIImageView *headeImageView=[[UIImageView alloc]initWithFrame:FRAME(0, 0, WIDTH*0.72, WIDTH*0.72*0.70)];
+    //    headeImageView.backgroundColor=[UIColor whiteColor];
+    headeImageView.image=[UIImage imageNamed:@"banner"];
+    [view addSubview:headeImageView];
+    
+    UIImageView *goldImage=[[UIImageView alloc]initWithFrame:FRAME((WIDTH*0.72-100)/4, WIDTH*0.72*0.70+23, 50, 50)];
+    goldImage.image=[UIImage imageNamed:@"金币"];
+    [view addSubview:goldImage];
+    
+    UIImageView *valueImage=[[UIImageView alloc]initWithFrame:FRAME((WIDTH*0.72-100)/4*3+50, WIDTH*0.72*0.70+23, 50, 50)];
+    valueImage.image=[UIImage imageNamed:@"经验值"];
+    [view addSubview:valueImage];
+    
+    UILabel *goldLabel=[[UILabel alloc]initWithFrame:FRAME(0, WIDTH*0.72*0.70+83, (WIDTH*0.72)/2, 20)];
+    goldLabel.font=[UIFont fontWithName:@"Georgia-Bold" size:15];
+    goldLabel.text=[NSString stringWithFormat:@"金币+%@", @"15"];
+    goldLabel.textColor=[UIColor colorWithRed:255/255.0f green:157/255.0f blue:48/255.0f alpha:1];
+    goldLabel.textAlignment=NSTextAlignmentCenter;
+    [view addSubview:goldLabel];
+    
+    UILabel *valueLabel=[[UILabel alloc]initWithFrame:FRAME((WIDTH*0.72)/2, WIDTH*0.72*0.70+83, (WIDTH*0.72)/2, 20)];
+    valueLabel.font=[UIFont fontWithName:@"Georgia-Bold" size:15];
+    valueLabel.text=[NSString stringWithFormat:@"经验值+%@",@"20"];
+    valueLabel.textColor=[UIColor colorWithRed:191/255.0f green:127/255.0f blue:127/255.0f alpha:1];
+    valueLabel.textAlignment=NSTextAlignmentCenter;
+    [view addSubview:valueLabel];
+    
+    UIView *hengView=[[UIView alloc]initWithFrame:FRAME(0, WIDTH*0.72*0.70+127, WIDTH*0.72, 1)];
+    hengView.backgroundColor=[UIColor colorWithRed:232/255.0f green:232/255.0f blue:232/255.0f alpha:1];
+    [view addSubview:hengView];
+    
+    UIButton *cancelBut1=[[UIButton alloc]initWithFrame:FRAME(0, WIDTH*0.72*0.70+128, (WIDTH*0.72)/2-0.5, 40)];
+    cancelBut1.backgroundColor=[UIColor whiteColor];
+    cancelBut1.tag=12;
+    [cancelBut1 addTarget:self action:@selector(SignAction:) forControlEvents:UIControlEventTouchUpInside];
+    cancelBut1.titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:16];
+    [cancelBut1 setTitle:@"了解更多" forState:UIControlStateNormal];
+    [cancelBut1 setTitleColor:[UIColor colorWithRed:17/255.0f green:150/255.0f blue:219/255.0f alpha:1] forState:UIControlStateNormal];
+    [view addSubview:cancelBut1];
+    
+    UILabel  *labble=[[UILabel alloc]initWithFrame:FRAME((WIDTH*0.72)/2-0.5, WIDTH*0.72*0.70+138, 1, 20)];
+    labble.backgroundColor=[UIColor colorWithRed:232/255.0f green:232/255.0f blue:232/255.0f alpha:1];
+    [view addSubview:labble];
+    
+    UIButton *cancelBut=[[UIButton alloc]initWithFrame:FRAME((WIDTH*0.72)/2+0.5, WIDTH*0.72*0.70+128, (WIDTH*0.72)/2-0.5, 40)];
+    cancelBut.backgroundColor=[UIColor whiteColor];
+    cancelBut.tag=14;
+    [cancelBut addTarget:self action:@selector(SignAction:) forControlEvents:UIControlEventTouchUpInside];
+    cancelBut.titleLabel.font=[UIFont fontWithName:@"Heiti SC" size:16];
+    [cancelBut setTitle:@"我知道了" forState:UIControlStateNormal];
+    [cancelBut setTitleColor:[UIColor colorWithRed:17/255.0f green:150/255.0f blue:219/255.0f alpha:1] forState:UIControlStateNormal];
+    [view addSubview:cancelBut];
+}
+
+-(void)SignAction:(UIButton *)button
+{
+    pushEjectView.hidden = YES;
 }
 
 - (void)setupToolBar
