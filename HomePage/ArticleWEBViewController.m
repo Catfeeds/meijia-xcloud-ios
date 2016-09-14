@@ -312,6 +312,7 @@
     
     keypadView=[[UIView alloc]initWithFrame:FRAME(0, HEIGHT, WIDTH, 145)];
     keypadView.backgroundColor=[UIColor colorWithRed:243/255.0f green:246/255.0f blue:246/255.0f alpha:1];
+    
     //    [self.view addSubview:keypadView];
     //    UIWindow *window = [UIApplication sharedApplication].keyWindow;
     [self.view addSubview:keypadView];

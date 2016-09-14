@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
+typedef void (^textFieldButtonClick) ();
+
 @interface VideoArticleToolBar : UIView
 
+@property (copy, nonatomic) textFieldButtonClick block;
 @end

@@ -15,28 +15,54 @@
 #import "VideoArticleParser.h"
 #import "VideoArticleToolBar.h"
 #import "VideoArticleTableViewCell.h"
+#import "VideoMaskView.h"
 
 static NSString *cellIdentifier = @"cell";
 
-@interface VideoArticleDetailsController () <UITableViewDelegate,UITableViewDataSource>
+@interface VideoArticleDetailsController () <UITableViewDelegate,UITableViewDataSource, UITextViewDelegate>
 {
     IBOutlet UITableView *tbView;
     VideoArticleHeaderView *headerView;
     EjectAlertView *pushEjectView;
+    UIView *keypadView;
+    UIButton *blackBut;
+    UITextView *myTextView;
+    UILabel *viewLabel;
+    UIButton *publishButton;
 
     NSMutableArray *articleListArr;
     NSMutableArray *videoDetailArr;
     VideoDetailModel *detailModel;
+    
+    int  keypadHight;
 }
 @end
 
 @implementation VideoArticleDetailsController
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+}
 
 #pragma mark -- UIViewController Overrides
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    //增加监听，当键盘出现或改变时收出消息
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillShow:)
+                                                 name:UIKeyboardWillShowNotification
+                                               object:nil];
+    
+    //增加监听，当键退出时收出消息
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillHide:)
+                                                 name:UIKeyboardWillHideNotification
+                                               object:nil];
+
     videoDetailArr = [NSMutableArray arrayWithCapacity:0];
     articleListArr = [NSMutableArray arrayWithCapacity:0];
     
@@ -153,7 +179,6 @@ static NSString *cellIdentifier = @"cell";
     [pushEjectView addSubview:view];
     
     UIImageView *headeImageView=[[UIImageView alloc]initWithFrame:FRAME(0, 0, WIDTH*0.72, WIDTH*0.72*0.70)];
-    //    headeImageView.backgroundColor=[UIColor whiteColor];
     headeImageView.image=[UIImage imageNamed:@"banner"];
     [view addSubview:headeImageView];
     
@@ -214,9 +239,135 @@ static NSString *cellIdentifier = @"cell";
 - (void)setupToolBar
 {
     VideoArticleToolBar *toolBar = [[VideoArticleToolBar alloc]initWithFrame:FRAME(0, HEIGHT-50, WIDTH, 50)];
+    weak_Self(self);
+    toolBar.block = ^{
+        [weakSelf addPublishView];
+        [myTextView becomeFirstResponder];//弹出键盘
+    };
     toolBar.backgroundColor=[UIColor colorWithRed:244/255.0f green:245/255.0f blue:246/255.0f alpha:1];
     [self.view addSubview:toolBar];
 }
+
+- (void)addPublishView
+{
+    keypadView=[[UIView alloc]initWithFrame:FRAME(0, HEIGHT, WIDTH, 145)];
+    keypadView.backgroundColor=[UIColor colorWithRed:243/255.0f green:246/255.0f blue:246/255.0f alpha:1];
+    [self.view addSubview:keypadView];
+    
+    myTextView=[[UITextView alloc]initWithFrame:FRAME(9, 9, WIDTH-18, 90)];
+    myTextView.backgroundColor=[UIColor whiteColor];
+    myTextView.layer.cornerRadius=8;
+    myTextView.clipsToBounds=YES;
+    myTextView.delegate=self;
+    [keypadView addSubview:myTextView];
+    
+    viewLabel = [[UILabel alloc]initWithFrame:CGRectMake(3, 3, 200, 20)];
+    viewLabel.enabled = NO;
+    viewLabel.text = @"写下您的看法与见解...";
+    viewLabel.font =  [UIFont systemFontOfSize:15];
+    viewLabel.textColor = [UIColor lightGrayColor];
+    [myTextView addSubview:viewLabel];
+    
+    publishButton=[[UIButton alloc]initWithFrame:FRAME(WIDTH-57, 108, 48, 28)];
+    publishButton.backgroundColor=[UIColor colorWithRed:202/255.0f green:202/255.0f blue:202/255.0f alpha:1];
+    [publishButton setTitle:@"发布" forState:UIControlStateNormal];
+    publishButton.enabled=FALSE;
+    [publishButton addTarget:self action:@selector(publishBut) forControlEvents:UIControlEventTouchUpInside];
+    publishButton.layer.cornerRadius=5;
+    publishButton.clipsToBounds=YES;
+    [keypadView addSubview:publishButton];
+    
+    blackBut=[[UIButton alloc]initWithFrame:FRAME(0, HEIGHT, WIDTH, HEIGHT-(keypadHight+145))];
+    blackBut.backgroundColor=[UIColor colorWithRed:51/255.0f green:51/255.0f blue:51/255.0f alpha:1];
+    [blackBut addTarget:self action:@selector(blackButAction) forControlEvents:UIControlEventTouchUpInside];
+    blackBut.alpha=0.6;
+    [self.view addSubview:blackBut];
+}
+
+- (void)blackButAction
+{
+    [myTextView resignFirstResponder];
+}
+
+#pragma mark 发布按钮点击方法
+
+-(void)publishBut
+{
+    [myTextView resignFirstResponder];
+    DownloadManager *_download = [[DownloadManager alloc]init];
+    ISLoginManager *_manager = [ISLoginManager shareManager];
+    NSString *article_id = [NSString stringWithFormat:@"%ld", (long)self.article_id];
+    NSDictionary *_dict=@{@"fid":article_id,@"user_id":_manager.telephone,@"comment":myTextView.text};
+    [_download requestWithUrl:[NSString stringWithFormat:@"%@",DYNAMIC_COMMENT] dict:_dict view:self.view delegate:self finishedSEL:@selector(publishSuccess:) isPost:YES failedSEL:@selector(publishFail:)];
+}
+
+-(void)publishSuccess:(id)source
+{
+//    [self listLayout];
+    [self performSelector:@selector(popAlertView) withObject:nil afterDelay:1];
+}
+
+-(void)publishFail:(id)source
+{
+    NSLog(@"评论失败--:%@",source);
+}
+
+-(void)popAlertView{
+    
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"评论成功" message:nil  delegate:self cancelButtonTitle:nil otherButtonTitles:nil];
+    alert.tag=199;
+    [alert show];
+    [self performSelector:@selector(dimissAlert:) withObject:alert afterDelay:1];
+}
+
+- (void) dimissAlert:(UIAlertView *)alert {
+    if(alert)     {
+        [alert dismissWithClickedButtonIndex:[alert cancelButtonIndex] animated:YES];
+    }
+}
+
+#pragma mark -- Refresh CommentList
+
+
+
+#pragma mark -- Notification
+
+- (void)keyboardWillShow:(NSNotification *)aNotification
+{
+    //获取键盘的高度
+    NSDictionary *userInfo = [aNotification userInfo];
+    NSValue *aValue = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
+    CGRect keyboardRect = [aValue CGRectValue];
+    int height = keyboardRect.size.height;
+    keypadHight=height;
+    keypadView.frame=FRAME(0, HEIGHT-(keypadHight+145), WIDTH, 145);
+//    [self.view addSubview:keypadView];
+
+    blackBut.frame=FRAME(0, 0, WIDTH, HEIGHT-(keypadHight+145));
+//    [self.view addSubview:blackBut];
+}
+
+//当键退出时调用
+- (void)keyboardWillHide:(NSNotification *)aNotification
+{
+    keypadView.frame=FRAME(0, HEIGHT, WIDTH, 145);
+    blackBut.frame=FRAME(0, HEIGHT, WIDTH, HEIGHT-(keypadHight+145));
+}
+
+#pragma mark -- UITextViewDelegate
+
+- (void) textViewDidChange:(UITextView *)textView{
+    if ([textView.text length] == 0) {
+        [viewLabel setHidden:NO];
+        publishButton.enabled=FALSE;
+        publishButton.backgroundColor=[UIColor colorWithRed:202/255.0f green:202/255.0f blue:202/255.0f alpha:1];
+    }else{
+        [viewLabel setHidden:YES];
+        publishButton.enabled=TRUE;
+        publishButton.backgroundColor=[UIColor colorWithRed:0/255.0f green:142/255.0f blue:214/255.0f alpha:1];
+    }
+}
+
 
 #pragma mark -- UITableView --
 

@@ -66,6 +66,10 @@
     }
 }
 
+- (void)fieldBut
+{
+    _block();
+}
 
 
 @end

@@ -1491,6 +1491,7 @@
 		A3F71EC91D880F8F007EA8BD /* VideoArticleParser.m in Sources */ = {isa = PBXBuildFile; fileRef = A3F71EC81D880F8F007EA8BD /* VideoArticleParser.m */; };
 		A3F71ECC1D880FA9007EA8BD /* VideoArticleModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A3F71ECB1D880FA9007EA8BD /* VideoArticleModel.m */; };
 		A3F71ECF1D88160A007EA8BD /* VideoArticleToolBar.m in Sources */ = {isa = PBXBuildFile; fileRef = A3F71ECE1D88160A007EA8BD /* VideoArticleToolBar.m */; };
+		A3F71ED21D8952E6007EA8BD /* VideoMaskView.m in Sources */ = {isa = PBXBuildFile; fileRef = A3F71ED11D8952E6007EA8BD /* VideoMaskView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -4301,6 +4302,8 @@
 		A3F71ECB1D880FA9007EA8BD /* VideoArticleModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoArticleModel.m; sourceTree = "<group>"; };
 		A3F71ECD1D88160A007EA8BD /* VideoArticleToolBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoArticleToolBar.h; sourceTree = "<group>"; };
 		A3F71ECE1D88160A007EA8BD /* VideoArticleToolBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoArticleToolBar.m; sourceTree = "<group>"; };
+		A3F71ED01D8952E6007EA8BD /* VideoMaskView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoMaskView.h; sourceTree = "<group>"; };
+		A3F71ED11D8952E6007EA8BD /* VideoMaskView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoMaskView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -9764,6 +9767,8 @@
 				A34928401D856F6D003989A2 /* VideoArticleTableViewCell.xib */,
 				A3F71ECD1D88160A007EA8BD /* VideoArticleToolBar.h */,
 				A3F71ECE1D88160A007EA8BD /* VideoArticleToolBar.m */,
+				A3F71ED01D8952E6007EA8BD /* VideoMaskView.h */,
+				A3F71ED11D8952E6007EA8BD /* VideoMaskView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -10549,6 +10554,7 @@
 				10BFDBBF1CBC909000DD274D /* UMComRefreshView.m in Sources */,
 				10BFDBD91CBC909000DD274D /* UMComLocationTableViewCell.m in Sources */,
 				10E778281BF49CC30009A89F /* ClerkViewController.m in Sources */,
+				A3F71ED21D8952E6007EA8BD /* VideoMaskView.m in Sources */,
 				105130631BFF0C2D0004DA20 /* ZXByteMatrix.m in Sources */,
 				10DEB9791C118B60003EE1AE /* WaterfallCollectionViewCell.m in Sources */,
 				105130831BFF0C2D0004DA20 /* ZXMaxiCodeDecodedBitStreamParser.m in Sources */,

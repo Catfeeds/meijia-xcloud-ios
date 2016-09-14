@@ -31,6 +31,9 @@
 //  图片名字
 #define IMAGE_NAMED(a)                     [UIImage imageNamed:a]
 
+#define weak_Self(id) __weak typeof(id) weakSelf = id
+
+
 
 #define PRINTLOG //注释不打印 NSLog
 #ifdef  PRINTLOG
