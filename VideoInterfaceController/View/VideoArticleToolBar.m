@@ -11,7 +11,6 @@
 @interface VideoArticleToolBar ()
 {
     UIImageView *plImageView;
-    UIImageView *clickImageView;
     UIImageView *fxImageView;
 }
 @end
@@ -53,10 +52,10 @@
             plImageView.image=[UIImage imageNamed:imageArray[i]];
             [button addSubview:plImageView];
         }else if (i==1){
-            clickImageView=[[UIImageView alloc]initWithFrame:FRAME((button.frame.size.width-22)/2, 28/2, 22, 22)];
-            clickImageView.tag=10+i;
-            clickImageView.image=[UIImage imageNamed:imageArray[i]];
-            [button addSubview:clickImageView];
+            _clickImageView=[[UIImageView alloc]initWithFrame:FRAME((button.frame.size.width-22)/2, 28/2, 22, 22)];
+            _clickImageView.tag=10+i;
+            _clickImageView.image=[UIImage imageNamed:imageArray[i]];
+            [button addSubview:_clickImageView];
         }else{
             fxImageView=[[UIImageView alloc]initWithFrame:FRAME((button.frame.size.width-22)/2, 28/2, 22, 22)];
             fxImageView.tag=10+i;

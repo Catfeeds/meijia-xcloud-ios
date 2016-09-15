@@ -15,26 +15,39 @@
 #import "VideoArticleParser.h"
 #import "VideoArticleToolBar.h"
 #import "VideoArticleTableViewCell.h"
-#import "VideoMaskView.h"
+#import "CommentListTableViewCell.h"
+#import "UMSocialWechatHandler.h"
 
 static NSString *cellIdentifier = @"cell";
 
-@interface VideoArticleDetailsController () <UITableViewDelegate,UITableViewDataSource, UITextViewDelegate>
+@interface VideoArticleDetailsController () <UITableViewDelegate,UITableViewDataSource, UITextViewDelegate, MJRefreshBaseViewDelegate, UMSocialUIDelegate>
 {
-    IBOutlet UITableView *tbView;
     VideoArticleHeaderView *headerView;
     EjectAlertView *pushEjectView;
+    MJRefreshHeaderView *_refreshHeader;
+    MJRefreshFooterView *_moreFooter;
+    FatherViewController *fatherVc;
+    VideoArticleToolBar *toolBar;
+    
+    IBOutlet UITableView *tbView;
+    UITableView *myListTableView;
     UIView *keypadView;
     UIButton *blackBut;
     UITextView *myTextView;
     UILabel *viewLabel;
     UIButton *publishButton;
+    
 
     NSMutableArray *articleListArr;
     NSMutableArray *videoDetailArr;
+    NSMutableArray *listArray;
     VideoDetailModel *detailModel;
+    NSString *clickStr;
+    NSString *webURL;
     
     int  keypadHight;
+    BOOL _hasMore;
+    BOOL isDisPlayCommentList;
 }
 @end
 
@@ -51,6 +64,38 @@ static NSString *cellIdentifier = @"cell";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    fatherVc=[[FatherViewController alloc]init];
+    isDisPlayCommentList = YES;
+    
+    [self registerObserVer];
+    [self initArray];
+    [self setupPullRequest];
+    [self setupBackButton];
+    [self setupToolBar];
+    [self loadHeaderView];
+    [self requstVideoDetail];
+    [self requestArticelList];
+    [self setupTbView];
+    [self setupCommentListTableView];
+    [self requestCommentList];
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+#pragma mark -- RequestData Methods
+
+- (void)initArray
+{
+    videoDetailArr = [NSMutableArray arrayWithCapacity:0];
+    articleListArr = [NSMutableArray arrayWithCapacity:0];
+    listArray = [NSMutableArray arrayWithCapacity:0];
+}
+
+- (void)registerObserVer
+{
     //增加监听，当键盘出现或改变时收出消息
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWillShow:)
@@ -62,26 +107,34 @@ static NSString *cellIdentifier = @"cell";
                                              selector:@selector(keyboardWillHide:)
                                                  name:UIKeyboardWillHideNotification
                                                object:nil];
+}
 
-    videoDetailArr = [NSMutableArray arrayWithCapacity:0];
-    articleListArr = [NSMutableArray arrayWithCapacity:0];
+- (void)setupPullRequest
+{
+    _refreshHeader = [[MJRefreshHeaderView alloc] init];
+    _refreshHeader.delegate = self;
+    _refreshHeader.scrollView = myListTableView;
     
-    [self setupBackButton];
-    [self setupToolBar];
-    [self loadHeaderView];
-    [self requstVideoDetail];
-    [self requestArticelList];
-    
+    _moreFooter = [[MJRefreshFooterView alloc] init];
+    _moreFooter.delegate = self;
+    _moreFooter.scrollView = myListTableView;
+}
+
+- (void)setupTbView
+{
     [tbView registerNib:[UINib nibWithNibName:@"VideoArticleTableViewCell" bundle:nil] forCellReuseIdentifier:cellIdentifier];
     tbView.tableHeaderView = headerView;
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (void)setupCommentListTableView
+{
+    myListTableView=[[UITableView alloc]initWithFrame:FRAME(0, HEIGHT, WIDTH, HEIGHT-50)style:UITableViewStyleGrouped];
+    myListTableView.delegate=self;
+    myListTableView.dataSource=self;
+    myListTableView.backgroundColor=[UIColor colorWithRed:247/255.0f green:248/255.0f blue:249/255.0f alpha:1];
+    myListTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    [self.view addSubview:myListTableView];
 }
-
-#pragma mark -- RequestData Methods
 
 - (void)requstVideoDetail
 {
@@ -158,6 +211,8 @@ static NSString *cellIdentifier = @"cell";
     NSArray *array = [[NSBundle mainBundle] loadNibNamed:@"VideoArticleHeaderView" owner:self options:nil];
     headerView = [array objectAtIndex:0];
 }
+
+#pragma mark -- 弹出框口
 
 -(void)SignPolite
 {
@@ -236,13 +291,17 @@ static NSString *cellIdentifier = @"cell";
     pushEjectView.hidden = YES;
 }
 
+
+#pragma mark -- 设置底栏
+
 - (void)setupToolBar
 {
-    VideoArticleToolBar *toolBar = [[VideoArticleToolBar alloc]initWithFrame:FRAME(0, HEIGHT-50, WIDTH, 50)];
+    toolBar = [[VideoArticleToolBar alloc]initWithFrame:FRAME(0, HEIGHT-50, WIDTH, 50)];
     weak_Self(self);
+    __weak UITextView *weakTextView = myTextView;
     toolBar.block = ^{
         [weakSelf addPublishView];
-        [myTextView becomeFirstResponder];//弹出键盘
+        [weakTextView becomeFirstResponder];//弹出键盘
     };
     toolBar.backgroundColor=[UIColor colorWithRed:244/255.0f green:245/255.0f blue:246/255.0f alpha:1];
     [self.view addSubview:toolBar];
@@ -299,11 +358,12 @@ static NSString *cellIdentifier = @"cell";
     NSString *article_id = [NSString stringWithFormat:@"%ld", (long)self.article_id];
     NSDictionary *_dict=@{@"fid":article_id,@"user_id":_manager.telephone,@"comment":myTextView.text};
     [_download requestWithUrl:[NSString stringWithFormat:@"%@",DYNAMIC_COMMENT] dict:_dict view:self.view delegate:self finishedSEL:@selector(publishSuccess:) isPost:YES failedSEL:@selector(publishFail:)];
+    myTextView.text = nil;
 }
 
 -(void)publishSuccess:(id)source
 {
-//    [self listLayout];
+    [self requestCommentList];
     [self performSelector:@selector(popAlertView) withObject:nil afterDelay:1];
 }
 
@@ -326,9 +386,140 @@ static NSString *cellIdentifier = @"cell";
     }
 }
 
-#pragma mark -- Refresh CommentList
+#pragma mark获取当前动态是否点赞接口
+
+-(void)diazanLayout
+{
+    DownloadManager *_download = [[DownloadManager alloc]init];
+    ISLoginManager *_manager = [ISLoginManager shareManager];
+    NSString *article_id = [NSString stringWithFormat:@"%ld", (long)self.article_id];
+    NSDictionary *_dict=@{@"fid":article_id,@"user_id":_manager.telephone};
+    [_download requestWithUrl:[NSString stringWithFormat:@"%@",ARTICLE_CLICK_BOOL] dict:_dict view:self.view delegate:self finishedSEL:@selector(ClickBoolSuccess:) isPost:NO failedSEL:@selector(ClickBoolFail:)];
+}
+
+-(void)ClickBoolSuccess:(id)source
+{
+    clickStr=[NSString stringWithFormat:@"%@",[source objectForKey:@"data"]];
+    if (clickStr==nil||clickStr==NULL||[clickStr isEqualToString:@""]) {
+        toolBar.clickImageView.image=[UIImage imageNamed:@"赞-点击前"];
+    }else{
+        toolBar.clickImageView.image=[UIImage imageNamed:@"赞-点击后"];
+    }
+}
+
+-(void)ClickBoolFail:(id)source
+{
+    NSLog(@"获取当前动态是否点赞失败:%@",source);
+}
+
+#pragma mark -- 底栏右侧按钮点击方法
+
+-(void)ButAction:(UIButton *)button
+{
+    if(fatherVc.loginYesOrNo!=YES)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            MyLogInViewController *loginViewController = [[MyLogInViewController alloc] init];
+            loginViewController.vCYMID=100;
+            UMComNavigationController *navigationController = [[UMComNavigationController alloc] initWithRootViewController:loginViewController];
+            [self presentViewController:navigationController animated:YES completion:^{
+            }];
+        });
+    }else{
+        switch (button.tag) {
+            case 0:
+            {
+                if (isDisPlayCommentList) {
+                    [UIView beginAnimations: @"Animation" context:nil];
+                    [UIView setAnimationDuration:0.3];
+                    myListTableView.frame=FRAME(0, 64, WIDTH, HEIGHT-114);
+                    [self.view addSubview:myListTableView];
+                    [UIView commitAnimations];
+                    
+                }else{
+                    [UIView beginAnimations: @"Animation" context:nil];
+                    [UIView setAnimationDuration:0.3];
+                    myListTableView.frame=FRAME(0, HEIGHT, WIDTH, HEIGHT-114);
+                    [UIView commitAnimations];
+                }
+                
+                isDisPlayCommentList = !isDisPlayCommentList;
+            }
+                break;
+            case 1:
+            {
+                DownloadManager *_download = [[DownloadManager alloc]init];
+                ISLoginManager *_manager = [ISLoginManager shareManager];
+                NSString *actionStr;
+                if (clickStr==nil||clickStr==NULL||[clickStr isEqualToString:@""]) {
+                    actionStr=@"add";
+                }else{
+                    actionStr=@"del";
+                }
+                NSString *article_id = [NSString stringWithFormat:@"%ld", (long)self.article_id];
+                NSDictionary *_dict=@{@"fid":article_id,@"user_id":_manager.telephone,@"action":actionStr};
+                [_download requestWithUrl:[NSString stringWithFormat:@"%@",DYNAMIC_SHARE] dict:_dict view:self.view delegate:self finishedSEL:@selector(ClickSuccess:) isPost:YES failedSEL:@selector(ClickFail:)];
+            }
+                break;
+            case 2:
+            {
+                [UMSocialWechatHandler setWXAppId:@"wx93aa45d30bf6cba3" appSecret:@"7a4ec42a0c548c6e39ce9ed25cbc6bd7" url:detailModel.video_url];
+                [UMSocialQQHandler setQQWithAppId:@"1104934408" appKey:@"bRW2glhUCR6aJYIZ" url:detailModel.video_url];
+                [UMSocialSinaSSOHandler openNewSinaSSOWithAppKey:@"247547429" RedirectURL:detailModel.video_url];
+                [UMSocialSnsService presentSnsIconSheetView:self appKey:YMAPPKEY shareText:detailModel.title shareImage:[UIImage imageNamed:@"bolohr-logo512.png"] shareToSnsNames:[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQQ,UMShareToQzone,UMShareToSina,nil] delegate:self];
+            }
+                break;
+            default:
+                break;
+        }
+        
+    }
+}
 
 
+#pragma mark -- request CommentList
+
+- (void)requestCommentList
+{
+    DownloadManager *_download = [[DownloadManager alloc]init];
+    ISLoginManager *_manager = [ISLoginManager shareManager];
+    NSString *article_id = [NSString stringWithFormat:@"%ld", (long)self.article_id];
+    NSDictionary *_dict=@{@"fid":article_id,@"user_id":_manager.telephone};
+    [_download requestWithUrl:[NSString stringWithFormat:@"%@",DYNAMIC_COM_CARD] dict:_dict view:self.view delegate:self finishedSEL:@selector(ListSuccess:) isPost:NO failedSEL:@selector(ListFail:)];
+}
+
+-(void)ListSuccess:(id)source
+{
+    NSLog(@"评论列表数据成功:%@",source);
+    NSString *string=[NSString stringWithFormat:@"%@",[source objectForKey:@"data"]];
+    if (string==nil||string==NULL||[string isEqualToString:@""]) {
+        [_refreshHeader performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+        [_moreFooter performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+    }else{
+        [listArray removeAllObjects];
+        
+        NSArray *array=[source objectForKey:@"data"];
+        if (array.count<10) {
+            _hasMore = YES;
+        }else{
+            _hasMore = NO;
+        }
+        
+        for (int i=0; i<array.count; i++) {
+            NSDictionary *dict=array[i];
+            [listArray addObject:dict];
+        }
+        [_refreshHeader performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+        [_moreFooter performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+        [myListTableView reloadData];
+        
+    }
+}
+
+-(void)ListFail:(id)source
+{
+    NSLog(@"评论列表数据失败:%@",source);
+}
 
 #pragma mark -- Notification
 
@@ -373,44 +564,117 @@ static NSString *cellIdentifier = @"cell";
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return articleListArr.count;
+    if (tableView == tbView)
+        return articleListArr.count;
+    else
+        return listArray.count;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    UIView *sectionView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, WIDTH, 50)];
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(10, 15, 100, 21)];
-    label.textColor = RGBACOLOR(51, 51, 51, 1.0);
-    label.font = [UIFont fontWithName:@"Helvetica Neue" size:14];
-    label.text = @"相关课程";
-    [sectionView addSubview:label];
-    
-    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 49, WIDTH, 1)];
-    line.backgroundColor = RGBACOLOR(230, 230, 230, 1.0f);
-    [sectionView addSubview:line];
-    return sectionView;
+    if (tableView == tbView)
+    {
+        UIView *sectionView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, WIDTH, 50)];
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(10, 15, 100, 21)];
+        label.textColor = RGBACOLOR(51, 51, 51, 1.0);
+        label.font = [UIFont fontWithName:@"Helvetica Neue" size:14];
+        label.text = @"相关课程";
+        [sectionView addSubview:label];
+        
+        UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 49, WIDTH, 1)];
+        line.backgroundColor = RGBACOLOR(230, 230, 230, 1.0f);
+        [sectionView addSubview:line];
+        return sectionView;
+    }
+    else
+    {
+        UIView *view=[[UIView alloc]initWithFrame:FRAME(0, 0, WIDTH, 43)];
+        UILabel *nameLabel=[[UILabel alloc]init];
+        nameLabel.text=@"评论";
+        nameLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
+        nameLabel.textColor=[UIColor colorWithRed:50/255.0f green:51/255.0f blue:52/255.0f alpha:1];
+        [nameLabel setNumberOfLines:1];
+        [nameLabel sizeToFit];
+        nameLabel.frame=FRAME(10, 20, nameLabel.frame.size.width, 15);
+        [view addSubview:nameLabel];
+        
+        UIView *labelView=[[UIView alloc]initWithFrame:FRAME(10, 42, nameLabel.frame.size.width, 1)];
+        labelView.backgroundColor=[UIColor colorWithRed:255/255.0f green:123/255.0f blue:129/255.0f alpha:1];
+        [view addSubview:labelView];
+        
+        UIView *lineView=[[UIView alloc]initWithFrame:FRAME(10+nameLabel.frame.size.width, 42, WIDTH-20-nameLabel.frame.size.width, 1)];
+        lineView.backgroundColor=[UIColor colorWithRed:226/255.0f green:227/255.0f blue:228/255.0f alpha:1];
+        [view addSubview:lineView];
+        return view;
+
+    }
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 100;
+    if (tableView == tbView)
+        return 100;
+    else
+    {
+        CommentListTableViewCell *cell=[[CommentListTableViewCell alloc]init];
+        NSDictionary *dic=listArray[indexPath.row];
+        cell.texLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"comment"]];
+        UIFont *font=[UIFont fontWithName:@"Heiti SC" size:15];
+        NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:font,NSFontAttributeName, nil];
+        CGSize size = [cell.texLabel.text boundingRectWithSize:CGSizeMake(WIDTH-60, 200) options:NSStringDrawingUsesLineFragmentOrigin attributes:dict context:nil].size;
+        return size.height+71;
+    }
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 50;
+    if (tableView == tbView)
+        return 50;
+    else
+        return 43;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    VideoArticleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    VideoArticleModel *model = [articleListArr objectAtIndex:indexPath.row];
-    [cell setData:model];
-    return cell;
+    if (tableView == tbView) {
+        VideoArticleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+        VideoArticleModel *model = [articleListArr objectAtIndex:indexPath.row];
+        [cell setData:model];
+        return cell;
+    }
+    else
+    {
+        NSDictionary *dic=listArray[indexPath.row];
+        NSString *identifier = [NSString stringWithFormat:@"Cell%ld,%ld",(long)indexPath.row,(long)indexPath.section];
+        CommentListTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+        if (cell == nil) {
+            cell = [[CommentListTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:identifier];
+        }
+        NSString *imageUrl=[NSString stringWithFormat:@"%@",[dic objectForKey:@"head_img"]];
+        [cell.headImageView setImageWithURL:[NSURL URLWithString:imageUrl]placeholderImage:nil];
+        cell.nameLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"name"]];
+        cell.nameLabel.textColor=[UIColor colorWithRed:146/255.0f green:146/255.0f blue:146/255.0f alpha:1];
+        cell.timeLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"add_time_str"]];
+        cell.timeLabel.textColor=[UIColor colorWithRed:209/255.0f green:209/255.0f blue:209/255.0f alpha:1];
+        cell.texLabel.text=[NSString stringWithFormat:@"%@",[dic objectForKey:@"comment"]];
+        UIFont *font=[UIFont fontWithName:@"Heiti SC" size:15];
+        NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:font,NSFontAttributeName, nil];
+        CGSize size = [cell.texLabel.text boundingRectWithSize:CGSizeMake(WIDTH-60, 200) options:NSStringDrawingUsesLineFragmentOrigin attributes:dict context:nil].size;
+        [cell.texLabel setNumberOfLines:0];
+        [cell.texLabel sizeToFit];
+        cell.texLabel.frame=FRAME(50, 60, WIDTH-60, size.height);
+        UIView  *lineView=[[UIView alloc]initWithFrame:FRAME(10, 70+size.height, WIDTH-20, 1)];
+        lineView.backgroundColor=[UIColor colorWithRed:226/255.0f green:227/255.0f blue:228/255.0f alpha:1];
+        [cell addSubview:lineView];
+        cell.backgroundColor=[UIColor colorWithRed:247/255.0f green:248/255.0f blue:249/255.0f alpha:1];
+        return cell;
+    }
+    
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+
 }
 @end

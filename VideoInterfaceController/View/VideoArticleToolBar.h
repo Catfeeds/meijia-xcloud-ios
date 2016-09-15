@@ -13,4 +13,5 @@ typedef void (^textFieldButtonClick) ();
 @interface VideoArticleToolBar : UIView
 
 @property (copy, nonatomic) textFieldButtonClick block;
+@property (strong, nonatomic) UIImageView *clickImageView;
 @end
