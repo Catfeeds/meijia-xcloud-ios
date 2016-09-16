@@ -20,6 +20,13 @@
 
 static NSString *cellIdentifier = @"cell";
 
+typedef enum {
+    backAction,
+    publistAction,
+    commonListAction,
+    ShareAction,
+} BackAction;
+
 @interface VideoArticleDetailsController () <UITableViewDelegate,UITableViewDataSource, UITextViewDelegate, MJRefreshBaseViewDelegate, UMSocialUIDelegate, VideoArticleToolBarDelegate>
 {
     VideoArticleHeaderView *headerView;
@@ -49,6 +56,7 @@ static NSString *cellIdentifier = @"cell";
     BOOL _hasMore;
     BOOL isDisPlayCommentList;
 }
+@property (assign, nonatomic) BackAction action;
 @end
 
 @implementation VideoArticleDetailsController
@@ -69,7 +77,6 @@ static NSString *cellIdentifier = @"cell";
     
     [self registerObserVer];
     [self initArray];
-    [self setupPullRequest];
     [self setupBackButton];
     [self setupToolBar];
     [self loadHeaderView];
@@ -77,6 +84,7 @@ static NSString *cellIdentifier = @"cell";
     [self requestArticelList];
     [self setupTbView];
     [self setupCommentListTableView];
+    [self setupPullRequest];
     [self requestCommentList];
     [self diazanLayout];
 }
@@ -204,7 +212,31 @@ static NSString *cellIdentifier = @"cell";
 
 - (void)liftButAction
 {
-    [self.navigationController popViewControllerAnimated:YES];
+    [[self class] cancelPreviousPerformRequestsWithTarget:self selector:@selector(todoSomething) object:nil];
+    [self performSelector:@selector(todoSomething) withObject:nil afterDelay:0.2f];
+}
+
+- (void)todoSomething
+{
+    switch (self.action) {
+        case backAction:
+            [self.navigationController popViewControllerAnimated:YES];
+            break;
+        case publistAction:
+            [myTextView resignFirstResponder];
+            [self.navigationController popViewControllerAnimated:YES];
+            break;
+        case commonListAction:
+            [UIView beginAnimations: @"Animation" context:nil];
+            [UIView setAnimationDuration:0.3];
+            myListTableView.frame=FRAME(0, HEIGHT, WIDTH, HEIGHT-114);
+            [UIView commitAnimations];
+            
+            isDisPlayCommentList = !isDisPlayCommentList;
+            break;
+        default:
+            break;
+    }
 }
 
 - (void)loadHeaderView
@@ -342,12 +374,14 @@ static NSString *cellIdentifier = @"cell";
 - (void)blackButAction
 {
     [myTextView resignFirstResponder];
+    self.action = backAction;
 }
 
 #pragma mark -- VideoArticleToolBarDelegate
 
 - (void)textFieldButtonClick
 {
+    self.action = publistAction;
     [self addPublishView];
     [myTextView becomeFirstResponder];
 }
@@ -367,7 +401,9 @@ static NSString *cellIdentifier = @"cell";
     NSString *article_id = [NSString stringWithFormat:@"%ld", (long)self.article_id];
     NSDictionary *_dict=@{@"fid":article_id,@"user_id":_manager.telephone,@"comment":myTextView.text};
     [_download requestWithUrl:[NSString stringWithFormat:@"%@",DYNAMIC_COMMENT] dict:_dict view:self.view delegate:self finishedSEL:@selector(publishSuccess:) isPost:YES failedSEL:@selector(publishFail:)];
+    
     myTextView.text = nil;
+    self.action = backAction; //重置为默认值
 }
 
 -(void)publishSuccess:(id)source
@@ -445,11 +481,15 @@ static NSString *cellIdentifier = @"cell";
                     [self.view addSubview:myListTableView];
                     [UIView commitAnimations];
                     
+                    self.action = commonListAction;
+                    
                 }else{
                     [UIView beginAnimations: @"Animation" context:nil];
                     [UIView setAnimationDuration:0.3];
                     myListTableView.frame=FRAME(0, HEIGHT, WIDTH, HEIGHT-114);
                     [UIView commitAnimations];
+                    
+                    self.action = backAction;
                 }
                 
                 isDisPlayCommentList = !isDisPlayCommentList;
@@ -542,6 +582,50 @@ static NSString *cellIdentifier = @"cell";
 {
     NSLog(@"评论列表数据失败:%@",source);
 }
+
+#pragma mark - MJRefreshBaseViewDelegate
+- (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
+{
+    
+    if ([refreshView isKindOfClass:[MJRefreshHeaderView class]]) {
+        //头 -》 刷新
+        if (_moreFooter.isRefreshing) {
+            //正在加载更多，取消本次请求
+            [_refreshHeader performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+            return;
+        }
+//        page = 1;
+        //刷新
+        [self loadData];
+        
+    }else if ([refreshView isKindOfClass:[MJRefreshFooterView class]]) {
+        //尾 -》 更多
+        if (_refreshHeader.isRefreshing) {
+            //正在刷新，取消本次请求
+            [_moreFooter performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+            
+            return;
+        }
+        
+        if (_hasMore==YES) {
+            //没有更多了
+            [_moreFooter performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+            //            [_tableView reloadData];
+            return;
+        }
+//        page++;
+        
+        //加载更多
+        
+        [self loadData];
+    }
+}
+
+-(void)loadData
+{
+    [self requestCommentList];
+}
+
 
 #pragma mark -- Notification
 
