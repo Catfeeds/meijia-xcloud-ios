@@ -8,10 +8,16 @@
 
 #import <UIKit/UIKit.h>
 
-typedef void (^textFieldButtonClick) ();
+@protocol VideoArticleToolBarDelegate <NSObject>
+
+- (void)textFieldButtonClick;
+
+- (void)otherButtonsClick:(UIButton *)button;
+
+@end
 
 @interface VideoArticleToolBar : UIView
 
-@property (copy, nonatomic) textFieldButtonClick block;
+@property (weak, nonatomic) id <VideoArticleToolBarDelegate> delegate;
 @property (strong, nonatomic) UIImageView *clickImageView;
 @end

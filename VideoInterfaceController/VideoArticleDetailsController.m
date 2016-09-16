@@ -20,7 +20,7 @@
 
 static NSString *cellIdentifier = @"cell";
 
-@interface VideoArticleDetailsController () <UITableViewDelegate,UITableViewDataSource, UITextViewDelegate, MJRefreshBaseViewDelegate, UMSocialUIDelegate>
+@interface VideoArticleDetailsController () <UITableViewDelegate,UITableViewDataSource, UITextViewDelegate, MJRefreshBaseViewDelegate, UMSocialUIDelegate, VideoArticleToolBarDelegate>
 {
     VideoArticleHeaderView *headerView;
     EjectAlertView *pushEjectView;
@@ -78,6 +78,7 @@ static NSString *cellIdentifier = @"cell";
     [self setupTbView];
     [self setupCommentListTableView];
     [self requestCommentList];
+    [self diazanLayout];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -297,12 +298,7 @@ static NSString *cellIdentifier = @"cell";
 - (void)setupToolBar
 {
     toolBar = [[VideoArticleToolBar alloc]initWithFrame:FRAME(0, HEIGHT-50, WIDTH, 50)];
-    weak_Self(self);
-    __weak UITextView *weakTextView = myTextView;
-    toolBar.block = ^{
-        [weakSelf addPublishView];
-        [weakTextView becomeFirstResponder];//弹出键盘
-    };
+    toolBar.delegate = self;
     toolBar.backgroundColor=[UIColor colorWithRed:244/255.0f green:245/255.0f blue:246/255.0f alpha:1];
     [self.view addSubview:toolBar];
 }
@@ -346,6 +342,19 @@ static NSString *cellIdentifier = @"cell";
 - (void)blackButAction
 {
     [myTextView resignFirstResponder];
+}
+
+#pragma mark -- VideoArticleToolBarDelegate
+
+- (void)textFieldButtonClick
+{
+    [self addPublishView];
+    [myTextView becomeFirstResponder];
+}
+
+- (void)otherButtonsClick:(UIButton *)button
+{
+    [self ButAction:button];
 }
 
 #pragma mark 发布按钮点击方法
@@ -476,6 +485,19 @@ static NSString *cellIdentifier = @"cell";
     }
 }
 
+#pragma mark 点赞成功
+
+-(void)ClickSuccess:(id)source
+{
+    NSLog(@"点赞成功数据 :%@",source);
+    [self diazanLayout];
+}
+#pragma mark 点赞失败
+
+-(void)ClickFail:(id)source
+{
+    NSLog(@"点赞失败数据 :%@",source);
+}
 
 #pragma mark -- request CommentList
 

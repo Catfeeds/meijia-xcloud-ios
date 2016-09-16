@@ -67,8 +67,16 @@
 
 - (void)fieldBut
 {
-    _block();
+    if (_delegate && [_delegate respondsToSelector:@selector(textFieldButtonClick)]) {
+        [_delegate textFieldButtonClick];
+    }
 }
 
+- (void)ButAction:(UIButton *)button
+{
+    if (_delegate && [_delegate respondsToSelector:@selector(otherButtonsClick:)]) {
+        [_delegate otherButtonsClick:button];
+    }
+}
 
 @end
