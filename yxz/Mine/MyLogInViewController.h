@@ -16,7 +16,7 @@
 {
     sqlite3 *simi;
 }
-+ (MyLogInViewController *)shareInstance;
+//+ (MyLogInViewController *)shareInstance;
 @property (nonatomic, copy) NSString *leiMing;
 
 @property (nonatomic, assign)int vCLID;

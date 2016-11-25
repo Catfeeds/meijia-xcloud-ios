@@ -145,6 +145,14 @@
 	</dict>
 	<key>NSContactsUsageDescription</key>
 	<string>请点击“好”以允许访问。若不允许，将无法使用好友推荐和免费电话通知等功能。你的通讯录会受到加密保护，不用作其他任何用途。</string>
+	<key>NSCameraUsageDescription</key>
+	<string>访问相机</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>访问相册</string>
+	<key> Privacy - Contacts Usage Description</key>
+	<string>访问通讯录</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>访问日历</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>1</string>
 	<key>NSLocationWhenInUseUsageDescription</key>

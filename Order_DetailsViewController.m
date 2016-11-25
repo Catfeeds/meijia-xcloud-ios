@@ -12,6 +12,8 @@
 #import "Order_ListViewController.h"
 #import "WaterOrderViewController.h"
 #import "RootViewController.h"
+
+#import "VideoArticleDetailsController.h"
 @interface Order_DetailsViewController ()
 {
     UIView *detailsView;
@@ -411,6 +413,20 @@
             }
         }
 
+    }else if(_details_ID==6){
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"paysuccessabc" object:nil];
+        
+        for (UIViewController *controller in self.navigationController.viewControllers) {
+//            if ([self.order_DetailsViewDelegate respondsToSelector:@selector(payScusses:)]) {
+//                [self.order_DetailsViewDelegate payScusses:self];
+//            }
+            
+            if ([controller isKindOfClass:[VideoArticleDetailsController class]]) {
+                [self.navigationController popToViewController:controller animated:YES];
+            }
+        }
+        
     }else{
         [self.navigationController popViewControllerAnimated:YES];
        

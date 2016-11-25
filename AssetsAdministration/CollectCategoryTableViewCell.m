@@ -50,6 +50,7 @@
 }
 
 - (void)awakeFromNib {
+    [super awakeFromNib];
         // Initialization code
 }
 //-(void)addBut:(UIButton *)button

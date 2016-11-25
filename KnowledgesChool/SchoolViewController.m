@@ -14,6 +14,7 @@
 #import "ChannelListModel.h"
 #import "VideoArticleDetailsController.h"
 
+#import "MyLogInViewController.h"
 @interface SchoolViewController ()
 {
     UIScrollView *myScrollView;
@@ -106,6 +107,8 @@
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager GET:urlString parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject)
     {
+        NSLog(@"数据---------%@",responseObject);
+
         ChannelListParser *parser = [[ChannelListParser alloc] init];
         parser.idCollection = arraY;
         if (RC_OK == [parser parserResponseDataFrom:responseObject])
@@ -114,7 +117,7 @@
             NSLog(@"数据%@",arraY);
 
         }
-        
+        [self getLayouts];
     }
     failure:^(AFHTTPRequestOperation *operation, NSError *error)
     {
@@ -224,7 +227,7 @@
     [super viewWillAppear:YES];
     [self.navigationController setNavigationBarHidden:YES animated:YES];
 //    scrollID=0;
-    [self getLayout];
+//    [self getLayouts];
 }
 -(void)viewWillDisappear:(BOOL)animated
 {
@@ -347,7 +350,106 @@
     
     
 }
-
+-(void)getLayouts
+{
+    NSString *urlStr;
+    //    switch (scrollID) {
+    //        case 0:
+    //        {
+    ////            page=1;
+    //            NSString *string=[NSString stringWithFormat:@"http://bolohr.com/?json=get_tag_posts&count=10&order=DESC&slug=精选课程&include=id,title,modified,url,thumbnail,custom_fields"];
+    //            urlStr=[string stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    //        }
+    //            break;
+    //        case 1:
+    //        {
+    ////            page=1;
+    //            NSString *string=@"http://bolohr.com/?json=get_tag_posts&count=10&order=DESC&slug=人力课程&include=id,title,modified,url,thumbnail,custom_fields";
+    //            urlStr=[string stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    //        }
+    //            break;
+    //        case 2:
+    //        {
+    ////            page=1;
+    //            NSString *string=@"http://bolohr.com/?json=get_tag_posts&count=10&order=DESC&slug=行政课程&include=id,title,modified,url,thumbnail,custom_fields";
+    //            urlStr=[string stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    //        }
+    //            break;
+    //        case 3:
+    //        {
+    ////            page=1;
+    //            NSString *string=@"http://bolohr.com/?json=get_tag_posts&count=10&order=DESC&slug=企管课程&include=id,title,modified,url,thumbnail,custom_fields";
+    //            urlStr=[string stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    //        }
+    //            break;
+    //        case 4:
+    //        {
+    ////            page=1;
+    //            NSString *string=@"http://bolohr.com/?json=get_tag_posts&count=10&order=DESC&slug=考证课程&include=id,title,modified,url,thumbnail,custom_fields";
+    //            urlStr=[string stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    //        }
+    //            break;
+    //        case 5:
+    //        {
+    ////            page=1;
+    //            NSString *string=@"http://bolohr.com/?json=get_tag_posts&count=10&order=DESC&slug=技能课程&include=id,title,modified,url,thumbnail,custom_fields";
+    //            urlStr=[string stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    //        }
+    //            break;
+    //        default:
+    //            break;
+    //    }
+    
+    NSString *urlString = @"http://app.bolohr.com/simi/app/video/list.json";
+    NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithCapacity:0];
+    if (scrollID <= arraY.count) {
+        ChannelListModel *listModel = [arraY objectAtIndex:scrollID];
+        dic[@"channel_id"] = [NSString stringWithFormat:@"%ld", (long)listModel.channel_id];
+        dic[@"page"] = [NSString stringWithFormat:@"%d", page];
+    }
+    AFHTTPRequestOperationManager *mymanager = [AFHTTPRequestOperationManager manager];
+    
+    [mymanager GET:urlString parameters:dic success:^(AFHTTPRequestOperation *opretion, id responseObject){
+        
+        if(page==1){
+            [sourceArray removeAllObjects];
+        }
+        NSLog(@"数据%@",responseObject);
+        id data = [responseObject objectForKey:@"data"];
+        NSLog(@"1111");
+        if ([data isKindOfClass:[NSString class]]) {
+            return;
+        } else if ([data isKindOfClass:[NSArray class]]) {
+            NSArray *array = (NSArray *)data;
+            if (array.count<10) {
+                _hasMore=YES;
+            }else{
+                _hasMore=NO;
+            }
+            for (int i=0; i<array.count; i++) {
+                NSDictionary *dict=array[i];
+                if ([sourceArray containsObject:dict]) {
+                    
+                }else{
+                    [sourceArray addObject:dict];
+                }
+            }
+            [_refreshHeader performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+            [_moreFooter performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+            [_myTableView reloadData];
+        }
+        
+    } failure:^(AFHTTPRequestOperation *opration, NSError *error){
+        
+        NSLog(@"失败数据%@",error);
+        [_refreshHeader performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+        [_moreFooter performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.3];
+        
+        
+    }];
+    
+    
+}
 -(void)getLayout
 {
     NSString *urlStr;
@@ -520,15 +622,34 @@
 #pragma mark 列表点击事件
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [_myTableView deselectRowAtIndexPath:indexPath animated:NO];
-    NSDictionary *dic=sourceArray[indexPath.row];
-//    WebPageViewController *webPageVC=[[WebPageViewController alloc]init];
-//    webPageVC.barIDS=100;
-//    webPageVC.webURL=[NSString stringWithFormat:@"%@",[dic objectForKey:@"url"]];
-//    [self.navigationController pushViewController:webPageVC animated:YES];
-    VideoArticleDetailsController *detailController = [[VideoArticleDetailsController alloc] init];
-    detailController.article_id = [[dic objectForKey:@"article_id"]integerValue];
-    [self.navigationController pushViewController:detailController animated:YES];
+    ISLoginManager *manager = [ISLoginManager shareManager];
+    if (manager.isLogin) {
+      
+        [_myTableView deselectRowAtIndexPath:indexPath animated:NO];
+        NSDictionary *dic=sourceArray[indexPath.row];
+        
+        VideoArticleDetailsController *detailController = [[VideoArticleDetailsController alloc] init];
+        detailController.article_id = [[dic objectForKey:@"article_id"]integerValue];
+        [self.navigationController pushViewController:detailController animated:YES];
+    }else{
+        
+        MyLogInViewController *loginViewController = [[MyLogInViewController alloc] init];
+        loginViewController.vCYMID=1000;
+        UMComNavigationController *navigationController = [[UMComNavigationController alloc] initWithRootViewController:loginViewController];
+        [self presentViewController:navigationController animated:YES completion:^{
+        }];
+    }
+    
+
+//    ISLoginManager *_manager = [ISLoginManager shareManager];
+//    NSMutableDictionary *sourceDic = [[NSMutableDictionary alloc]init];
+//    [sourceDic setObject:_manager.telephone  forKey:@"user_id"];
+//    if (_manager.telephone.length == 11) {
+    
+//    }else{
+    
+    
+//    }
 }
 
 #pragma mark 表格刷新相关

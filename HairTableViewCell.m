@@ -30,6 +30,7 @@
     return self;
 }
 - (void)awakeFromNib {
+    [super awakeFromNib];
     // Initialization code
 }
 

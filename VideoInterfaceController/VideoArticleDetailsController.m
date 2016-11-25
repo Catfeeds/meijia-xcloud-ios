@@ -17,9 +17,21 @@
 #import "VideoArticleTableViewCell.h"
 #import "CommentListTableViewCell.h"
 #import "UMSocialWechatHandler.h"
+#import <YKPlayerViewSDK/YKPlayerViewSDK.h>
 
+#import "OrderModel.h"
+#import "ZeroViewController.h"
+#import "PayViewController.h"
+//支付
+#import "OrderPayViewController.h"
+#import "PaymentViewController.h"
+//#import "Order_DetailsViewController.h"
+#import "textWebViewController.h"
+
+#import "PlayerViewControllerHaveUI.h"
+#import "VideoPaymentViewController.h"
 static NSString *cellIdentifier = @"cell";
-
+#define mWindow         [[[UIApplication sharedApplication] delegate] window]
 typedef enum {
     backAction,
     publistAction,
@@ -29,8 +41,10 @@ typedef enum {
 
 @interface VideoArticleDetailsController () <UITableViewDelegate,UITableViewDataSource, UITextViewDelegate, MJRefreshBaseViewDelegate, UMSocialUIDelegate, VideoArticleToolBarDelegate>
 {
+    
     VideoArticleHeaderView *headerView;
-    EjectAlertView *pushEjectView;
+//   EjectAlertView * pushEjectViewww;
+    UIView * pushEjectView;
     MJRefreshHeaderView *_refreshHeader;
     MJRefreshFooterView *_moreFooter;
     FatherViewController *fatherVc;
@@ -47,6 +61,8 @@ typedef enum {
 
     NSMutableArray *articleListArr;
     NSMutableArray *videoDetailArr;
+    NSMutableArray * videojoinArr;
+    
     NSMutableArray *listArray;
     VideoDetailModel *detailModel;
     NSString *clickStr;
@@ -55,8 +71,28 @@ typedef enum {
     int  keypadHight;
     BOOL _hasMore;
     BOOL isDisPlayCommentList;
+    //参加课程btn
+    UIButton * attendClassesBtn;
+    
 }
 @property (assign, nonatomic) BackAction action;
+//播放按钮
+@property (nonatomic,strong) UIButton * palyBtn;
+
+//@property (nonatomic, strong) YKPlayerView * playerView;
+@property (nonatomic, strong) NSString *cid;
+
+@property (nonatomic, strong) NSString *appKey;
+
+@property (nonatomic, strong) NSString *appSecret;
+
+@property (nonatomic, strong) NSString *vid;
+#define SCREEN_WIDTH  [UIScreen mainScreen].bounds.size.width
+#define SCREEN_HEIGHT [UIScreen mainScreen].bounds.size.height
+#define APP_KEY @"199b3f31e08d160c"
+#define APP_SECRET @"08865c02e2f9dd9c7f11a72a02ddda9a"
+#define VID @"57ddfa1b0cf2394d3659a195"
+//@property (weak, nonatomic)UIButton *mediaPlayBtn;
 @end
 
 @implementation VideoArticleDetailsController
@@ -71,10 +107,17 @@ typedef enum {
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
     
     fatherVc=[[FatherViewController alloc]init];
     isDisPlayCommentList = YES;
     
+    self.appSecret = APP_SECRET;
+    self.appKey = APP_KEY;
+//    self.vid = VID;
+
+    [self.view setBackgroundColor:[UIColor whiteColor]];
+
     [self registerObserVer];
     [self initArray];
     [self setupBackButton];
@@ -87,7 +130,61 @@ typedef enum {
     [self setupPullRequest];
     [self requestCommentList];
     [self diazanLayout];
+    
+    
 }
+-(void)viewWillAppear:(BOOL)animated{
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(paysuccessabc)
+                                                 name:@"paysuccessabc"
+                                               object:nil];
+
+
+}
+
+-(void)paysuccessabc{
+    attendClassesBtn.hidden = YES;
+    
+    
+    ISLoginManager *_manager = [ISLoginManager shareManager];
+    NSMutableDictionary *sourceDic = [[NSMutableDictionary alloc]init];
+    [sourceDic setObject:_manager.telephone  forKey:@"user_id"];
+    
+    [sourceDic setObject:[NSNumber numberWithInteger:self.article_id] forKey:@"article_id"];
+    
+    AFHTTPRequestOperationManager *mymanager = [AFHTTPRequestOperationManager manager];
+    [mymanager POST:[NSString stringWithFormat:@"%@%@",SERVER_DRESS,VIDEO_JOIN]  parameters:sourceDic success:^(AFHTTPRequestOperation *opretion, id responseObject){
+        
+        NSLog(@"绑定成功%@",responseObject);
+
+        NSDictionary * data = responseObject[@"data"];
+            self.vid = data[@"vid"];
+        [self creatPlayBtn];
+    }
+     
+            failure:^(AFHTTPRequestOperation *opration, NSError *error){
+                
+                NSLog(@"请求失败: %@",error);
+                
+            }];
+    
+
+}
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+
+   
+}
+
+
+//- (void)onBackViewClick {
+//    [_playerView stop];
+//    [_playerView releasePlayer];
+//    _playerView = nil;
+//    [self dismissViewControllerAnimated:YES completion:nil];
+//}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -116,8 +213,12 @@ typedef enum {
                                              selector:@selector(keyboardWillHide:)
                                                  name:UIKeyboardWillHideNotification
                                                object:nil];
+     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playbnt) name:@"playbtn" object:nil];
 }
-
+-(void)playbnt{
+    [self creatPlayBtn];
+    
+}
 - (void)setupPullRequest
 {
     _refreshHeader = [[MJRefreshHeaderView alloc] init];
@@ -131,7 +232,11 @@ typedef enum {
 
 - (void)setupTbView
 {
+    
+    
     [tbView registerNib:[UINib nibWithNibName:@"VideoArticleTableViewCell" bundle:nil] forCellReuseIdentifier:cellIdentifier];
+    tbView.frame = CGRectMake(0, 0, WIDTH, HEIGHT-50);
+    
     tbView.tableHeaderView = headerView;
 }
 
@@ -156,13 +261,31 @@ typedef enum {
     [manager GET:VIDEODETAIL parameters:sourceDic success:^(AFHTTPRequestOperation *operation, id responseObject)
      {
          VideoDetailParser *parser = [[VideoDetailParser alloc] init];
+
+         
          parser.idCollection = videoDetailArr;
+         
          if (RC_OK == [parser parserResponseDataFrom:responseObject])
          {
              detailModel = [videoDetailArr objectAtIndex:0];
-             [self SignPolite];
              [headerView setData:detailModel];
-             NSLog(@"数据%@",detailModel);
+             if ([detailModel.category isEqualToString: @"h5"]) {
+               
+                 [self SignPolite];
+             }
+             if (detailModel.is_join == 0) {
+                 
+                 [self creatAttendClassesBtn];
+                 
+             }else{
+             
+                 self.vid = detailModel.vid;
+                 [self creatPlayBtn];
+
+                 
+                 
+             }
+             NSLog(@"-------数据%@",responseObject);
          }
          
      }
@@ -177,14 +300,19 @@ typedef enum {
     NSMutableDictionary *dic = [[NSMutableDictionary alloc]init];
     dic[@"article_id"] = [NSString stringWithFormat:@"%ld",(long)self.article_id];
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    
     [manager GET:VIDEORELATE parameters:dic success:^(AFHTTPRequestOperation *operation, id responseObject)
      {
+         NSLog(@"%@-----",responseObject);
          VideoArticleParser *parser = [[VideoArticleParser alloc] init];
+        
          parser.idCollection = articleListArr;
          if (RC_OK == [parser parserResponseDataFrom:responseObject])
          {
              [tbView reloadData];
          }
+         [tbView reloadData];
+
      }
          failure:^(AFHTTPRequestOperation *operation, NSError *error)
      {
@@ -243,18 +371,25 @@ typedef enum {
 {
     NSArray *array = [[NSBundle mainBundle] loadNibNamed:@"VideoArticleHeaderView" owner:self options:nil];
     headerView = [array objectAtIndex:0];
+    
 }
-
+-(void)mediaPlayBtnClick:HeaderView{
+//PlayerViewControllerHaveUI *controller = [[PlayerViewControllerHaveUI alloc] init];
+//    [controller setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal];
+//    [self presentViewController:controller animated:YES completion:nil];
+}
 #pragma mark -- 弹出框口
 
 -(void)SignPolite
 {
     [pushEjectView removeFromSuperview];
-    pushEjectView = [EjectAlertView new];
+    pushEjectView = [UIView new];
     pushEjectView.frame=FRAME(0, 0, WIDTH, HEIGHT);
-    pushEjectView.backgroundColor = [UIColor blueColor];
+
+      pushEjectView.backgroundColor = [UIColor colorWithRed:17 green:102 blue:254 alpha:0.6];
+
     [pushEjectView setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleLeftMargin];
-    [self.view addSubview:pushEjectView];
+    [mWindow addSubview:pushEjectView];
     UIView *grayView=[[UIView alloc]initWithFrame:FRAME(0, 0, WIDTH, HEIGHT)];
     grayView.backgroundColor=[UIColor blackColor];
     grayView.alpha=0.4;
@@ -267,31 +402,41 @@ typedef enum {
     [pushEjectView addSubview:view];
     
     UIImageView *headeImageView=[[UIImageView alloc]initWithFrame:FRAME(0, 0, WIDTH*0.72, WIDTH*0.72*0.70)];
-    headeImageView.image=[UIImage imageNamed:@"banner"];
+    headeImageView.image=[UIImage imageNamed:@"bannerer"];
     [view addSubview:headeImageView];
     
-    UIImageView *goldImage=[[UIImageView alloc]initWithFrame:FRAME((WIDTH*0.72-100)/4, WIDTH*0.72*0.70+23, 50, 50)];
-    goldImage.image=[UIImage imageNamed:@"金币"];
-    [view addSubview:goldImage];
+        UILabel *goldLabel=[[UILabel alloc]initWithFrame:FRAME(5, WIDTH*0.72*0.70, WIDTH*0.72-10, 127)];
+        goldLabel.font=[UIFont fontWithName:@"Georgia-Bold" size:15];
+        goldLabel.text=[NSString stringWithFormat:@"%@", detailModel.content_desc];
     
-    UIImageView *valueImage=[[UIImageView alloc]initWithFrame:FRAME((WIDTH*0.72-100)/4*3+50, WIDTH*0.72*0.70+23, 50, 50)];
-    valueImage.image=[UIImage imageNamed:@"经验值"];
-    [view addSubview:valueImage];
+        goldLabel.numberOfLines =0;
     
-    UILabel *goldLabel=[[UILabel alloc]initWithFrame:FRAME(0, WIDTH*0.72*0.70+83, (WIDTH*0.72)/2, 20)];
-    goldLabel.font=[UIFont fontWithName:@"Georgia-Bold" size:15];
-    goldLabel.text=[NSString stringWithFormat:@"金币+%@", @"15"];
-    goldLabel.textColor=[UIColor colorWithRed:255/255.0f green:157/255.0f blue:48/255.0f alpha:1];
-    goldLabel.textAlignment=NSTextAlignmentCenter;
-    [view addSubview:goldLabel];
+        goldLabel.textColor=[UIColor colorWithRed:255/255.0f green:157/255.0f blue:48/255.0f alpha:1];
+        goldLabel.textAlignment=NSTextAlignmentCenter;
+        [view addSubview:goldLabel];
     
-    UILabel *valueLabel=[[UILabel alloc]initWithFrame:FRAME((WIDTH*0.72)/2, WIDTH*0.72*0.70+83, (WIDTH*0.72)/2, 20)];
-    valueLabel.font=[UIFont fontWithName:@"Georgia-Bold" size:15];
-    valueLabel.text=[NSString stringWithFormat:@"经验值+%@",@"20"];
-    valueLabel.textColor=[UIColor colorWithRed:191/255.0f green:127/255.0f blue:127/255.0f alpha:1];
-    valueLabel.textAlignment=NSTextAlignmentCenter;
-    [view addSubview:valueLabel];
-    
+//    UIImageView *goldImage=[[UIImageView alloc]initWithFrame:FRAME((WIDTH*0.72-100)/4, WIDTH*0.72*0.70+23, 50, 50)];
+//    goldImage.image=[UIImage imageNamed:@"金币"];
+//    [view addSubview:goldImage];
+//    
+//    UIImageView *valueImage=[[UIImageView alloc]initWithFrame:FRAME((WIDTH*0.72-100)/4*3+50, WIDTH*0.72*0.70+23, 50, 50)];
+//    valueImage.image=[UIImage imageNamed:@"经验值"];
+//    [view addSubview:valueImage];
+//    
+//    UILabel *goldLabel=[[UILabel alloc]initWithFrame:FRAME(0, WIDTH*0.72*0.70+83, (WIDTH*0.72)/2, 20)];
+//    goldLabel.font=[UIFont fontWithName:@"Georgia-Bold" size:15];
+//    goldLabel.text=[NSString stringWithFormat:@"金币+%@", @"15"];
+//    goldLabel.textColor=[UIColor colorWithRed:255/255.0f green:157/255.0f blue:48/255.0f alpha:1];
+//    goldLabel.textAlignment=NSTextAlignmentCenter;
+//    [view addSubview:goldLabel];
+//    
+//    UILabel *valueLabel=[[UILabel alloc]initWithFrame:FRAME((WIDTH*0.72)/2, WIDTH*0.72*0.70+83, (WIDTH*0.72)/2, 20)];
+//    valueLabel.font=[UIFont fontWithName:@"Georgia-Bold" size:15];
+//    valueLabel.text=[NSString stringWithFormat:@"经验值+%@",@"20"];
+//    valueLabel.textColor=[UIColor colorWithRed:191/255.0f green:127/255.0f blue:127/255.0f alpha:1];
+//    valueLabel.textAlignment=NSTextAlignmentCenter;
+//    [view addSubview:valueLabel];
+//    
     UIView *hengView=[[UIView alloc]initWithFrame:FRAME(0, WIDTH*0.72*0.70+127, WIDTH*0.72, 1)];
     hengView.backgroundColor=[UIColor colorWithRed:232/255.0f green:232/255.0f blue:232/255.0f alpha:1];
     [view addSubview:hengView];
@@ -321,7 +466,65 @@ typedef enum {
 
 -(void)SignAction:(UIButton *)button
 {
-    pushEjectView.hidden = YES;
+    if (button.tag==12) {
+        textWebViewController *webPageVC=[[textWebViewController alloc]init];
+        [webPageVC title:@"菠萝HR-人事" webUrl:detailModel.goto_url];
+
+        [self.navigationController pushViewController:webPageVC animated:YES];
+        [pushEjectView removeFromSuperview];
+        
+    }else {
+        
+        ISLoginManager *_manager = [ISLoginManager shareManager];
+        NSMutableDictionary *sourceDic = [[NSMutableDictionary alloc]init];
+        [sourceDic setObject:_manager.telephone  forKey:@"user_id"];
+        
+        [sourceDic setObject:[NSNumber numberWithInteger:self.article_id] forKey:@"article_id"];
+        [sourceDic setObject:@"video-help"  forKey:@"action"];
+        AFHTTPRequestOperationManager *mymanager = [AFHTTPRequestOperationManager manager];
+        [mymanager POST:[NSString stringWithFormat:@"http://app.bolohr.com/simi/app/op/post_help.json"]  parameters:sourceDic success:^(AFHTTPRequestOperation *opretion, id responseObject){
+            
+            NSLog(@"绑定成功%@",responseObject);
+            
+        }
+         
+                failure:^(AFHTTPRequestOperation *opration, NSError *error){
+                    
+                    NSLog(@"请求失败: %@",error);
+                    
+                }];
+        
+        
+        
+        
+//       ISLoginManager *_manager = [ISLoginManager shareManager];
+//        NSString *article_id = [NSString stringWithFormat:@"%ld", (long)self.article_id];
+//        
+//        NSDictionary *_dict=@{@"action":@"video-help",@"user_id":_manager.telephone,@"link_id":article_id};
+//        
+//        
+//        AFHTTPRequestOperationManager *mymanager = [AFHTTPRequestOperationManager manager];
+//        NSString * uploadUrl = @"​http://app.bolohr.com/simi/app/op/post_help.json";
+//        http://app.bolohr.com/simi/app/op/post_help.json
+//
+//        [mymanager POST:uploadUrl parameters:_dict success:^(AFHTTPRequestOperation *opretion, id responseObject){
+//            
+//            NSLog(@"%@",responseObject);
+//            
+//        } failure:^(AFHTTPRequestOperation *opration, NSError *error){
+//            
+//          NSLog(@"%@",error);
+//            
+//        }];
+//        
+
+//        pushEjectView.hidden=YES;
+    }
+  
+    
+    [pushEjectView removeFromSuperview];
+    
+
 }
 
 
@@ -333,7 +536,158 @@ typedef enum {
     toolBar.delegate = self;
     toolBar.backgroundColor=[UIColor colorWithRed:244/255.0f green:245/255.0f blue:246/255.0f alpha:1];
     [self.view addSubview:toolBar];
+    
+    
+    
 }
+
+-(void)creatAttendClassesBtn{
+    
+    attendClassesBtn = [[UIButton alloc]initWithFrame:FRAME(0, HEIGHT-50, WIDTH, 50)];
+    [attendClassesBtn setTitle:@"参加该课程" forState:UIControlStateNormal];
+    [attendClassesBtn setBackgroundColor:[UIColor orangeColor]];
+    [attendClassesBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    
+    [attendClassesBtn addTarget:self action:@selector(attendClassesBtnClick:) forControlEvents:UIControlEventTouchDown];
+    
+    [self.view addSubview:attendClassesBtn];
+
+}
+-(void)attendClassesBtnClick:(UIButton *)sender{
+
+    [self creatPlayBtn];
+    
+    if (!(detailModel.dis_price == 0 && detailModel.price == 0)) {
+
+        VideoPaymentViewController *  VideoPayment = [[VideoPaymentViewController alloc]init];
+ 
+        VideoPayment.moneystring =@"0";
+        //现价
+//         NSString *dis_price=[NSString stringWithFormat:@"%f",detailModel.dis_price];
+        //原价
+         NSString * price=[NSString stringWithFormat:@"%f",detailModel.price];
+        
+        VideoPayment.moneyStr = price;
+        NSString * sec_ID=[NSString stringWithFormat:@"%d",detailModel.partner_user_id];
+        VideoPayment.sec_ID = sec_ID;
+        
+        NSString * service_type_id=[NSString stringWithFormat:@"%d",detailModel.service_type_id];
+        VideoPayment.service_type_id= service_type_id;
+        
+        NSString * service_price_id=[NSString stringWithFormat:@"%d",detailModel.service_price_id];
+        VideoPayment.service_price_id=service_price_id;
+        VideoPayment.addssID = @"0";
+        VideoPayment.buyString  = detailModel.title;
+        VideoPayment.actualStr = [NSString stringWithFormat:@"%f",detailModel.price-detailModel.dis_price];;
+        [self.navigationController pushViewController:VideoPayment animated:YES];
+        
+        
+
+     }else{
+    
+//    http://app.bolohr.com/simi/app/video/join.json
+         sender.hidden = YES;
+        [self creatPlayBtn];
+         
+         ISLoginManager *_manager = [ISLoginManager shareManager];
+        NSMutableDictionary *sourceDic = [[NSMutableDictionary alloc]init];
+        [sourceDic setObject:_manager.telephone  forKey:@"user_id"];
+        
+        [sourceDic setObject:[NSNumber numberWithInteger:self.article_id] forKey:@"article_id"];
+     
+        AFHTTPRequestOperationManager *mymanager = [AFHTTPRequestOperationManager manager];
+        [mymanager POST:[NSString stringWithFormat:@"%@%@",SERVER_DRESS,VIDEO_JOIN]  parameters:sourceDic success:^(AFHTTPRequestOperation *opretion, id responseObject){
+            
+            NSLog(@"绑定成功%@",responseObject);
+            
+        }
+         
+                failure:^(AFHTTPRequestOperation *opration, NSError *error){
+                    
+                    NSLog(@"请求失败: %@",error);
+                    
+                }];
+
+    }
+}
+- (void)DownlLoadFinish:(id)dict
+{
+    NSLog(@"dict: %@",dict);
+    NSString *msg = [dict objectForKey:@"msg"];
+    int status = [[dict objectForKey:@"status"] intValue];
+    NSLog(@"msg = %@",msg);
+    NSDictionary *dict2 = [dict objectForKey:@"data"];
+    OrderModel *model = [[OrderModel alloc]initWithDictionary:dict2];
+    NSLog(@"model.mobile :%@ model.order_id :%i  model.order_no :%@ ",model.mobile,model.order_id,model.order_no);
+    if (status == 0) {
+        PayViewController * pay = [[PayViewController alloc]init];
+        pay.price = [NSString stringWithFormat:@"%0.1f",model.order_money];
+
+        pay.orderID = [NSString stringWithFormat:@"%i",model.order_id];
+        pay.orderNum = model.order_no;
+        pay.juanLX = @"4";
+        [self.navigationController pushViewController:pay animated:YES];
+    }
+    
+}
+- (void)DownloadFail:(id)object
+{
+    NSLog(@"error is %@",object);
+}
+-(void)creatPlayBtn{
+_palyBtn=[[UIButton alloc] initWithFrame:CGRectMake(SCREEN_WIDTH/2-20, SCREEN_WIDTH * 9 / 16.0/2-20, 40, 40)];
+//    [_palyBtn setTitle:@"播放" forState:UIControlStateNormal];
+    UIImage * image = [UIImage imageNamed:@"video_list_cell_big_icon"];
+    [_palyBtn setImage:[self imageByApplyingAlpha:0.8 image:image] forState:UIControlStateNormal];
+//    _palyBtn.backgroundColor = [UIColor colorWithRed:125/255.0f green:123/255.0f blue:123/255.0f alpha:0.6];
+    [_palyBtn addTarget:self action:@selector(playbtnclick:) forControlEvents:UIControlEventTouchDown];
+   [headerView addSubview:_palyBtn];
+}
+- (UIImage *)imageByApplyingAlpha:(CGFloat)alpha  image:(UIImage*)image
+{
+    UIGraphicsBeginImageContextWithOptions(image.size, NO, 0.0f);
+    
+    CGContextRef ctx = UIGraphicsGetCurrentContext();
+    CGRect area = CGRectMake(0, 0, image.size.width, image.size.height);
+    
+    CGContextScaleCTM(ctx, 1, -1);
+    CGContextTranslateCTM(ctx, 0, -area.size.height);
+    
+    CGContextSetBlendMode(ctx, kCGBlendModeMultiply);
+    
+    CGContextSetAlpha(ctx, alpha);
+    
+    CGContextDrawImage(ctx, area, image.CGImage);
+    
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    
+    UIGraphicsEndImageContext();
+    
+    return newImage;
+}
+-(void)playbtnclick:(UIButton *)sender{
+    PlayerViewControllerHaveUI *controller = [[PlayerViewControllerHaveUI alloc] init];
+    controller.vid = self.vid;
+    
+        [controller setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal];
+    [self presentViewController:controller animated:YES completion:nil];
+
+}
+//-(void)creatPlayerView{
+//    
+////            self.vid = detailModel.vid;
+//    
+//        _playerView = [[YKPlayerView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_WIDTH * 9 / 16.0)];
+//        [_playerView setDelegate:self];
+//        [_playerView setSkin:YKPlayerViewSkinOrange];
+//        [headerView addSubview:_playerView];
+//        //    _playerView.hidden = YES;
+//        [_playerView initAppKey:self.appKey andAppSecret:self.appSecret];
+//        [_playerView setAutoPlay:NO];
+//        [_playerView playWithVid:self.vid];
+//    
+//
+//}
 
 - (void)addPublishView
 {
@@ -638,10 +992,10 @@ typedef enum {
     int height = keyboardRect.size.height;
     keypadHight=height;
     keypadView.frame=FRAME(0, HEIGHT-(keypadHight+145), WIDTH, 145);
-//    [self.view addSubview:keypadView];
+
 
     blackBut.frame=FRAME(0, 0, WIDTH, HEIGHT-(keypadHight+145));
-//    [self.view addSubview:blackBut];
+
 }
 
 //当键退出时调用
@@ -680,6 +1034,7 @@ typedef enum {
 {
     if (tableView == tbView)
     {
+
         UIView *sectionView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, WIDTH, 50)];
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(10, 15, 100, 21)];
         label.textColor = RGBACOLOR(51, 51, 51, 1.0);
@@ -780,7 +1135,31 @@ typedef enum {
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    [attendClassesBtn removeFromSuperview];
+//    [_playerView stop];
+//    [_playerView releasePlayer];
+//    [_playerView removeFromSuperview];
+    [_palyBtn removeFromSuperview];
+    VideoArticleModel *model = [articleListArr objectAtIndex:indexPath.row];
+    self.article_id = model.article_id;
+             [videoDetailArr removeAllObjects];
+             
+     [articleListArr removeAllObjects];
+    [self requstVideoDetail];
+    
+    [self requestArticelList];
+    [self requestCommentList];
+    [tbView reloadData];
+
+
+
+}
+-(void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear: animated];
+    [_palyBtn removeFromSuperview];
+//        [_playerView stop];
+//        [_playerView releasePlayer];
+//        _playerView = nil;
 
 }
 @end

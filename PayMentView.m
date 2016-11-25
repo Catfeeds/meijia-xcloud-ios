@@ -82,7 +82,7 @@
         //[volumeLabel setTag:103];
         volumeLabel.textColor = [self getColor:@"666666"];
         [volumeBut addSubview:volumeLabel];
-        
+        //优惠券
         UILabel *volLabel=[[UILabel alloc]initWithFrame:FRAME(90, 13, WIDTH-108, 14)];
         volLabel.font = MYFONT(13.5);
         volLabel.textColor = [self getColor:@"b1b1b1"];
@@ -103,7 +103,7 @@
         //[volumeLabel setTag:103];
         actualLabel.textColor = [self getColor:@"666666"];
         [actualView addSubview:actualLabel];
-        
+//        实际支付
         UILabel *actLabel=[[UILabel alloc]initWithFrame:FRAME(90, 13, WIDTH-108, 14)];
         actLabel.font = MYFONT(13.5);
         actLabel.textColor = [self getColor:@"b1b1b1"];

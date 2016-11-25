@@ -28,4 +28,5 @@
 @property (assign, nonatomic) int partner_user_id;
 @property (assign, nonatomic) int service_type_id;
 @property (assign, nonatomic) int service_price_id;
+@property (copy, nonatomic) NSString * vid;
 @end

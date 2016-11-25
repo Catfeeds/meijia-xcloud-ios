@@ -51,6 +51,9 @@
 ////////////////*************接口相关*****************//////////////////
 
 #define SERVER_DRESS                     @"http://app.bolohr.com/"                        //服务器地址
+//视频课程-视频文章参加按钮接口
+#define  VIDEO_JOIN                    @"simi/app/video/join.json"
+
 #define GET_YANZHENGMA                   @"simi/app/user/get_sms_token.json"              //获取验证码
 #define LOGIN_API                        @"simi/app/user/login.json"                      //登录接口
 #define Third_LOG                        @"simi/app/user/login-3rd.json"                  //第三方登陆

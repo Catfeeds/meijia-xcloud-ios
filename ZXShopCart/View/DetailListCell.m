@@ -12,6 +12,7 @@
 @implementation DetailListCell
 
 - (void)awakeFromNib {
+    [super awakeFromNib];
     // Initialization code
 }
 

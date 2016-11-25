@@ -374,7 +374,7 @@
 -(void)listButAction:(UIButton *)button
 {
     int cardTypeId;
-    NSString *typeID=[NSString stringWithFormat:@"%ld",button.tag];
+    NSString *typeID=[NSString stringWithFormat:@"%ld",(long)button.tag];
     int cardId=[typeID intValue];
     cardTypeId=cardId+1;
     foundWebViewController *_controller = [[foundWebViewController alloc]init];

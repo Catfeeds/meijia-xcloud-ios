@@ -7,8 +7,18 @@
 //
 
 #import "FatherViewController.h"
+//@class Order_DetailsViewController;
+//@protocol Order_DetailsViewControllerDelegate <NSObject>
+//
+//@optional
+//
+//-(void)payScusses:(Order_DetailsViewController *)order_DetailsView;
+//
+//@end
+
 
 @interface Order_DetailsViewController : FatherViewController<UIScrollViewDelegate>
+//@property(nonatomic,weak)id<Order_DetailsViewControllerDelegate> order_DetailsViewDelegate;
 @property(nonatomic ,strong)NSDictionary *dic;
 @property(nonatomic ,strong)NSString *user_ID;
 @property(nonatomic ,strong)NSString *order_ID;

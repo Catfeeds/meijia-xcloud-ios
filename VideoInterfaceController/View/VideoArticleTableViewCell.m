@@ -24,8 +24,8 @@
     [super awakeFromNib];
     // Initialization code
     
-    imgeView.layer.cornerRadius = 6;
-    imgeView.clipsToBounds = YES;
+//    imgeView.layer.cornerRadius = 6;
+//    imgeView.clipsToBounds = YES;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

@@ -44,7 +44,41 @@
     myTextView.contentOffset = CGPointZero;
     myTextView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     
-    myTextView.text = @"据重庆大学建筑城规学院有关负责人介绍，“楼纳国际高校建造设计大赛”是“楼纳国际山地建筑艺术节”的首要组成部分，落址于中国贵州黔西南州楼纳国际建筑师公社。竞赛由贵州省黔西南州义龙试验区管理委员会主办，中国建筑中心(CBC)与贵州省楼纳建筑师公社文化发展有限公司承办，吸引了来自国内外17所高校的师生团队，包括清华大学、同济大学、东南大学、湖南大";
+    NSString * htmlString = [NSString stringWithFormat:@"%@",model.content];
+    //    NSString *str1 = [htmlString substringFromIndex:1];
+    NSAttributedString * attrStr = [[NSAttributedString alloc] initWithData:[htmlString dataUsingEncoding:NSUnicodeStringEncoding] options:@{ NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType } documentAttributes:nil error:nil];
+    NSString * str = [NSString stringWithFormat:@"%@",attrStr];
+    NSLog(@"%@------%@",attrStr,str);
+    
+    if (!(htmlString.length == str.length)) {
+//        
+//        CGFloat threeLabelh = [str boundingRectWithSize:CGSizeMake(SCREEN_WIDTH, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:14]}  context:nil].size.width;
+//        hight.constant = threeLabelh+40;
+//        viewbottom.constant = 109-77+threeLabelh+40;
+        myTextView.attributedText = attrStr;
+        //        myTextView.bounds.size.width = threeLabelh;
+        
+        
+    }else{
+//        CGFloat threeLabelw = [htmlString boundingRectWithSize:CGSizeMake(SCREEN_WIDTH, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:14]}  context:nil].size.width;
+//        hight.constant = threeLabelw+1;
+//        viewbottom.constant = 109-77+threeLabelw+10;
+        
+        myTextView.text = htmlString;
+        
+    }
+
     myTextView.textColor = RGBACOLOR(153, 153, 153, 1.0);
+//    [self.mediaPlayBtn addTarget:self action:@selector(mediaPlayBtnClicks:) forControlEvents:UIControlEventTouchDown];
+//    self.mediaPlayBtn.backgroundColor = [UIColor redColor];
+    
 }
+//-(void)mediaPlayBtnClicks:(UIButton *)sender{
+//    if ([self.delegate respondsToSelector:@selector(mediaPlayBtnClick:)]) {
+//        
+//        [self.delegate mediaPlayBtnClick:self];
+//        
+//    }
+//
+//}
 @end

@@ -63,6 +63,7 @@
     [self.delegate duigouHidden:Btn];
 }
 - (void)awakeFromNib {
+    [super awakeFromNib];
     // Initialization code
 }
 

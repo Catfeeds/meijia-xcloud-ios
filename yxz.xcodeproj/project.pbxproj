@@ -1477,17 +1477,27 @@
 		8FECDD451A45684D0027D301 /* openssl_wrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FECDD3B1A45684D0027D301 /* openssl_wrapper.m */; };
 		8FECDD461A45684D0027D301 /* RSADataSigner.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FECDD3D1A45684D0027D301 /* RSADataSigner.m */; };
 		8FECDD471A45684D0027D301 /* RSADataVerifier.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FECDD3F1A45684D0027D301 /* RSADataVerifier.m */; };
+		9C009A901DCF520C00588291 /* textWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C009A8F1DCF520C00588291 /* textWebViewController.m */; };
+		9C009A961DD2030000588291 /* VideoPaymentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C009A951DD2030000588291 /* VideoPaymentViewController.m */; };
+		9C009A9A1DE0205500588291 /* VideoArticleHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C009A981DE0205500588291 /* VideoArticleHeaderView.m */; };
+		9C009A9B1DE0205500588291 /* VideoArticleHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9C009A991DE0205500588291 /* VideoArticleHeaderView.xib */; };
+		9C37DC211DC78A1200A522A6 /* PlayerViewControllerHaveUI.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C37DC201DC78A1200A522A6 /* PlayerViewControllerHaveUI.m */; };
+		9CB6CCAF1DC6171200A44861 /* YKPlayerViewResource.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 9CB6CCAC1DC6171200A44861 /* YKPlayerViewResource.bundle */; };
+		9CB6CCB01DC6171200A44861 /* YKPlayerViewSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9CB6CCAD1DC6171200A44861 /* YKPlayerViewSDK.framework */; };
+		9CB6CCB21DC61DFF00A44861 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 9CB6CCB11DC61DFF00A44861 /* libc++.tbd */; };
+		9CB6CCB41DC61E3D00A44861 /* VideoToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9CB6CCB31DC61E3D00A44861 /* VideoToolbox.framework */; };
+		9CB6CCB61DC61F0600A44861 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9CB6CCB51DC61F0600A44861 /* AdSupport.framework */; };
+		9CB6CCBA1DC634DB00A44861 /* YKPlayerSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9CB6CCB91DC634DB00A44861 /* YKPlayerSDK.framework */; };
+		9CB6CCBC1DC63B6000A44861 /* libbz2.1.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 9CB6CCBB1DC63B6000A44861 /* libbz2.1.0.tbd */; };
 		A349281F1D83EEF6003989A2 /* ChannelListModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A349281E1D83EEF6003989A2 /* ChannelListModel.m */; };
 		A34928221D83EF1B003989A2 /* ChannelListParser.m in Sources */ = {isa = PBXBuildFile; fileRef = A34928211D83EF1B003989A2 /* ChannelListParser.m */; };
 		A34928261D83F216003989A2 /* NOBaseParser.m in Sources */ = {isa = PBXBuildFile; fileRef = A34928251D83F216003989A2 /* NOBaseParser.m */; };
-		A349283B1D852CAF003989A2 /* VideoArticleHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = A349283A1D852CAF003989A2 /* VideoArticleHeaderView.m */; };
 		A34928411D856F6D003989A2 /* VideoArticleTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A349283F1D856F6D003989A2 /* VideoArticleTableViewCell.m */; };
 		A34928421D856F6D003989A2 /* VideoArticleTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A34928401D856F6D003989A2 /* VideoArticleTableViewCell.xib */; };
 		A34928451D858783003989A2 /* VideoDetailModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A34928441D858783003989A2 /* VideoDetailModel.m */; };
 		A34928481D85879D003989A2 /* VideoDetailParser.m in Sources */ = {isa = PBXBuildFile; fileRef = A34928471D85879D003989A2 /* VideoDetailParser.m */; };
 		A35FB5AE1D86576500657C25 /* VideoArticleDetailsController.m in Sources */ = {isa = PBXBuildFile; fileRef = A35FB5AC1D86576500657C25 /* VideoArticleDetailsController.m */; };
 		A35FB5AF1D86576500657C25 /* VideoArticleDetailsController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A35FB5AD1D86576500657C25 /* VideoArticleDetailsController.xib */; };
-		A3F71EC61D87D042007EA8BD /* VideoArticleHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A3F71EC51D87D042007EA8BD /* VideoArticleHeaderView.xib */; };
 		A3F71EC91D880F8F007EA8BD /* VideoArticleParser.m in Sources */ = {isa = PBXBuildFile; fileRef = A3F71EC81D880F8F007EA8BD /* VideoArticleParser.m */; };
 		A3F71ECC1D880FA9007EA8BD /* VideoArticleModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A3F71ECB1D880FA9007EA8BD /* VideoArticleModel.m */; };
 		A3F71ECF1D88160A007EA8BD /* VideoArticleToolBar.m in Sources */ = {isa = PBXBuildFile; fileRef = A3F71ECE1D88160A007EA8BD /* VideoArticleToolBar.m */; };
@@ -4276,14 +4286,28 @@
 		8FECDD3D1A45684D0027D301 /* RSADataSigner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSADataSigner.m; sourceTree = "<group>"; };
 		8FECDD3E1A45684D0027D301 /* RSADataVerifier.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSADataVerifier.h; sourceTree = "<group>"; };
 		8FECDD3F1A45684D0027D301 /* RSADataVerifier.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSADataVerifier.m; sourceTree = "<group>"; };
+		9C009A8E1DCF520C00588291 /* textWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = textWebViewController.h; path = VideoInterfaceController/textWebViewController.h; sourceTree = SOURCE_ROOT; };
+		9C009A8F1DCF520C00588291 /* textWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = textWebViewController.m; path = VideoInterfaceController/textWebViewController.m; sourceTree = SOURCE_ROOT; };
+		9C009A941DD2030000588291 /* VideoPaymentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VideoPaymentViewController.h; path = VideoInterfaceController/VideoPaymentViewController.h; sourceTree = SOURCE_ROOT; };
+		9C009A951DD2030000588291 /* VideoPaymentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VideoPaymentViewController.m; path = VideoInterfaceController/VideoPaymentViewController.m; sourceTree = SOURCE_ROOT; };
+		9C009A971DE0205500588291 /* VideoArticleHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoArticleHeaderView.h; sourceTree = "<group>"; };
+		9C009A981DE0205500588291 /* VideoArticleHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoArticleHeaderView.m; sourceTree = "<group>"; };
+		9C009A991DE0205500588291 /* VideoArticleHeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VideoArticleHeaderView.xib; sourceTree = "<group>"; };
+		9C37DC1F1DC78A1200A522A6 /* PlayerViewControllerHaveUI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PlayerViewControllerHaveUI.h; path = VideoInterfaceController/PlayerViewControllerHaveUI.h; sourceTree = SOURCE_ROOT; };
+		9C37DC201DC78A1200A522A6 /* PlayerViewControllerHaveUI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PlayerViewControllerHaveUI.m; path = VideoInterfaceController/PlayerViewControllerHaveUI.m; sourceTree = SOURCE_ROOT; };
+		9CB6CCAC1DC6171200A44861 /* YKPlayerViewResource.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = YKPlayerViewResource.bundle; sourceTree = "<group>"; };
+		9CB6CCAD1DC6171200A44861 /* YKPlayerViewSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = YKPlayerViewSDK.framework; sourceTree = "<group>"; };
+		9CB6CCB11DC61DFF00A44861 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
+		9CB6CCB31DC61E3D00A44861 /* VideoToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VideoToolbox.framework; path = System/Library/Frameworks/VideoToolbox.framework; sourceTree = SDKROOT; };
+		9CB6CCB51DC61F0600A44861 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
+		9CB6CCB91DC634DB00A44861 /* YKPlayerSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = YKPlayerSDK.framework; sourceTree = "<group>"; };
+		9CB6CCBB1DC63B6000A44861 /* libbz2.1.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libbz2.1.0.tbd; path = usr/lib/libbz2.1.0.tbd; sourceTree = SDKROOT; };
 		A349281D1D83EEF6003989A2 /* ChannelListModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChannelListModel.h; sourceTree = "<group>"; };
 		A349281E1D83EEF6003989A2 /* ChannelListModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChannelListModel.m; sourceTree = "<group>"; };
 		A34928201D83EF1B003989A2 /* ChannelListParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChannelListParser.h; sourceTree = "<group>"; };
 		A34928211D83EF1B003989A2 /* ChannelListParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChannelListParser.m; sourceTree = "<group>"; };
 		A34928241D83F216003989A2 /* NOBaseParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NOBaseParser.h; sourceTree = "<group>"; };
 		A34928251D83F216003989A2 /* NOBaseParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NOBaseParser.m; sourceTree = "<group>"; };
-		A34928391D852CAF003989A2 /* VideoArticleHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoArticleHeaderView.h; sourceTree = "<group>"; };
-		A349283A1D852CAF003989A2 /* VideoArticleHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoArticleHeaderView.m; sourceTree = "<group>"; };
 		A349283E1D856F6D003989A2 /* VideoArticleTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoArticleTableViewCell.h; sourceTree = "<group>"; };
 		A349283F1D856F6D003989A2 /* VideoArticleTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoArticleTableViewCell.m; sourceTree = "<group>"; };
 		A34928401D856F6D003989A2 /* VideoArticleTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VideoArticleTableViewCell.xib; sourceTree = "<group>"; };
@@ -4294,7 +4318,6 @@
 		A35FB5AB1D86576500657C25 /* VideoArticleDetailsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VideoArticleDetailsController.h; path = VideoInterfaceController/VideoArticleDetailsController.h; sourceTree = SOURCE_ROOT; };
 		A35FB5AC1D86576500657C25 /* VideoArticleDetailsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VideoArticleDetailsController.m; path = VideoInterfaceController/VideoArticleDetailsController.m; sourceTree = SOURCE_ROOT; };
 		A35FB5AD1D86576500657C25 /* VideoArticleDetailsController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = VideoArticleDetailsController.xib; path = VideoInterfaceController/VideoArticleDetailsController.xib; sourceTree = SOURCE_ROOT; };
-		A3F71EC51D87D042007EA8BD /* VideoArticleHeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VideoArticleHeaderView.xib; sourceTree = "<group>"; };
 		A3F71EC71D880F8F007EA8BD /* VideoArticleParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoArticleParser.h; sourceTree = "<group>"; };
 		A3F71EC81D880F8F007EA8BD /* VideoArticleParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoArticleParser.m; sourceTree = "<group>"; };
 		A3F71ECA1D880FA9007EA8BD /* VideoArticleModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoArticleModel.h; sourceTree = "<group>"; };
@@ -4308,6 +4331,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9CB6CCBC1DC63B6000A44861 /* libbz2.1.0.tbd in Frameworks */,
+				9CB6CCB61DC61F0600A44861 /* AdSupport.framework in Frameworks */,
+				9CB6CCB41DC61E3D00A44861 /* VideoToolbox.framework in Frameworks */,
+				9CB6CCB21DC61DFF00A44861 /* libc++.tbd in Frameworks */,
 				104A8FB81D0E916400EFFB8A /* UMMobClick.framework in Frameworks */,
 				10DFDBC81BF0394400B17494 /* libsqlite3.tbd in Frameworks */,
 				1049F6721CEB11720007B715 /* CoreTelephony.framework in Frameworks */,
@@ -4321,6 +4348,7 @@
 				106A3A161CBB8A9E00DEA95E /* libSocialWechat.a in Frameworks */,
 				106A3A151CBB8A8200DEA95E /* libWeChatSDK.a in Frameworks */,
 				106A3A141CBB8A3B00DEA95E /* libUMessage_Sdk_1.1.0.a in Frameworks */,
+				9CB6CCB01DC6171200A44861 /* YKPlayerViewSDK.framework in Frameworks */,
 				106A3C241CBB9F1600DEA95E /* libSocialSinaSSO.a in Frameworks */,
 				105D27951C912D820081E95F /* libc++abi.tbd in Frameworks */,
 				108963101C3A80CD00D88350 /* libresolv.tbd in Frameworks */,
@@ -4354,6 +4382,7 @@
 				1F67EB9A1A47F7C10014A9CC /* AddressBookUI.framework in Frameworks */,
 				1F67EB991A47F7A30014A9CC /* Foundation.framework in Frameworks */,
 				10556D7C1D7F04CA0095372C /* libGeTuiSdk-1.5.0.a in Frameworks */,
+				9CB6CCBA1DC634DB00A44861 /* YKPlayerSDK.framework in Frameworks */,
 				10DFDBFF1BF03DA400B17494 /* libWeiboSDK.a in Frameworks */,
 				10DFDC021BF03DA400B17494 /* TencentOpenAPI.framework in Frameworks */,
 				1F8767501A452D1F008F872B /* CoreFoundation.framework in Frameworks */,
@@ -9315,6 +9344,10 @@
 		1FFD037C1A2D82EF000B5378 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9CB6CCBB1DC63B6000A44861 /* libbz2.1.0.tbd */,
+				9CB6CCB51DC61F0600A44861 /* AdSupport.framework */,
+				9CB6CCB31DC61E3D00A44861 /* VideoToolbox.framework */,
+				9CB6CCB11DC61DFF00A44861 /* libc++.tbd */,
 				104A8FB71D0E916400EFFB8A /* UMMobClick.framework */,
 				1015CB9E1CC2A97A00EBAE2C /* libiconv.2.tbd */,
 				106871871CBBB78800113696 /* AudioToolbox.framework */,
@@ -9725,6 +9758,9 @@
 		A349281C1D83EEDB003989A2 /* VideoInterfaceController */ = {
 			isa = PBXGroup;
 			children = (
+				9CB6CCB91DC634DB00A44861 /* YKPlayerSDK.framework */,
+				9CB6CCAC1DC6171200A44861 /* YKPlayerViewResource.bundle */,
+				9CB6CCAD1DC6171200A44861 /* YKPlayerViewSDK.framework */,
 				A34928381D852C39003989A2 /* Controller */,
 				A34928371D852C2B003989A2 /* View */,
 				A34928231D83F0B1003989A2 /* Model */,
@@ -9756,9 +9792,9 @@
 		A34928371D852C2B003989A2 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				A34928391D852CAF003989A2 /* VideoArticleHeaderView.h */,
-				A349283A1D852CAF003989A2 /* VideoArticleHeaderView.m */,
-				A3F71EC51D87D042007EA8BD /* VideoArticleHeaderView.xib */,
+				9C009A971DE0205500588291 /* VideoArticleHeaderView.h */,
+				9C009A981DE0205500588291 /* VideoArticleHeaderView.m */,
+				9C009A991DE0205500588291 /* VideoArticleHeaderView.xib */,
 				A349283E1D856F6D003989A2 /* VideoArticleTableViewCell.h */,
 				A349283F1D856F6D003989A2 /* VideoArticleTableViewCell.m */,
 				A34928401D856F6D003989A2 /* VideoArticleTableViewCell.xib */,
@@ -9771,8 +9807,14 @@
 		A34928381D852C39003989A2 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				9C009A8E1DCF520C00588291 /* textWebViewController.h */,
+				9C009A8F1DCF520C00588291 /* textWebViewController.m */,
+				9C37DC1F1DC78A1200A522A6 /* PlayerViewControllerHaveUI.h */,
+				9C37DC201DC78A1200A522A6 /* PlayerViewControllerHaveUI.m */,
 				A35FB5AB1D86576500657C25 /* VideoArticleDetailsController.h */,
 				A35FB5AC1D86576500657C25 /* VideoArticleDetailsController.m */,
+				9C009A941DD2030000588291 /* VideoPaymentViewController.h */,
+				9C009A951DD2030000588291 /* VideoPaymentViewController.m */,
 				A35FB5AD1D86576500657C25 /* VideoArticleDetailsController.xib */,
 			);
 			path = Controller;
@@ -9820,7 +9862,7 @@
 								enabled = 0;
 							};
 							com.apple.Push = {
-								enabled = 1;
+								enabled = 0;
 							};
 							com.apple.SafariKeychain = {
 								enabled = 1;
@@ -9922,6 +9964,7 @@
 				10BFDBFD1CBC909000DD274D /* UMComProfileSettingController.xib in Resources */,
 				108962A91C3A7A2700D88350 /* chatBar_textBg@2x.png in Resources */,
 				1089629F1C3A7A2700D88350 /* chat_video_play.png in Resources */,
+				9C009A9B1DE0205500588291 /* VideoArticleHeaderView.xib in Resources */,
 				102A0ECC1CF5AECC00CAA320 /* opad_38.png in Resources */,
 				10FF22CA1BA97E9400BAF5EA /* common_icon_like_c@2x(1).png in Resources */,
 				106865291C9BF5D400B83627 /* MeetTableViewCell.xib in Resources */,
@@ -9930,7 +9973,6 @@
 				102A0ED31CF5AECC00CAA320 /* opad_45.png in Resources */,
 				10BC25441C76C19B0097DE36 /* iconfont_flowerpot.png in Resources */,
 				1003ADB21C0C35C6006966FF /* iconfont-time.png in Resources */,
-				A3F71EC61D87D042007EA8BD /* VideoArticleHeaderView.xib in Resources */,
 				1F36C2C71A30647C0072F5B4 /* cyclic_01@2x.png in Resources */,
 				108962931C3A7A2700D88350 /* VoiceSearchFeedback019@2x.png in Resources */,
 				102A0EDB1CF83F4300CAA320 /* 加号.png in Resources */,
@@ -10249,6 +10291,7 @@
 				106D42E11D098CA2009551FA /* apptools_27_1464277043.png in Resources */,
 				1F5F2A681A2D84A9009AC61C /* index-left-arrow.png in Resources */,
 				102A0EE61CFD865500CAA320 /* banner.png in Resources */,
+				9CB6CCAF1DC6171200A44861 /* YKPlayerViewResource.bundle in Resources */,
 				10E9673E1CC635D00047E819 /* UMSShareListController.xib in Resources */,
 				10FAE8341C43B56C00FF1E61 /* cal-bg.jpg in Resources */,
 				108962CB1C3A7A2700D88350 /* chatBar_colorMore_cameraSelected@2x.png in Resources */,
@@ -10668,6 +10711,7 @@
 				105130641BFF0C2D0004DA20 /* ZXDecodeHints.m in Sources */,
 				108962331C3A7A2700D88350 /* ApplyEntity.m in Sources */,
 				10E16D741BFB5B0900A5316A /* VolumeViewController.m in Sources */,
+				9C009A9A1DE0205500588291 /* VideoArticleHeaderView.m in Sources */,
 				10BFDBA51CBC909000DD274D /* UMComBarButtonItem.m in Sources */,
 				1FA563F81A52790600B44E4B /* CFilteringJSONSerializer.m in Sources */,
 				03905C261B4CF4FB00731769 /* SBJsonParser.m in Sources */,
@@ -10681,6 +10725,7 @@
 				105130331BFF0C2D0004DA20 /* ZXISBNResultParser.m in Sources */,
 				108961D41C3A7A2700D88350 /* EMSDImageCache.m in Sources */,
 				106974481CB76F2000E8093A /* DataMD5.m in Sources */,
+				9C009A901DCF520C00588291 /* textWebViewController.m in Sources */,
 				1051301A1BFF0C2D0004DA20 /* ZXAztecBinaryShiftToken.m in Sources */,
 				10E858E51C772164001232DB /* OrderTime.m in Sources */,
 				108962461C3A7A2700D88350 /* NSPersistentStoreCoordinator+MagicalRecord.m in Sources */,
@@ -11135,6 +11180,7 @@
 				1F5F2A4E1A2D84A9009AC61C /* MoreView.m in Sources */,
 				1F5F2A391A2D84A9009AC61C /* RemindView.m in Sources */,
 				10BFDBF91CBC909000DD274D /* UMComSysCommonTableViewCell.m in Sources */,
+				9C009A961DD2030000588291 /* VideoPaymentViewController.m in Sources */,
 				108962571C3A7A2700D88350 /* EMSearchBar.m in Sources */,
 				105130481BFF0C2D0004DA20 /* ZXCapture.m in Sources */,
 				108962521C3A7A2700D88350 /* BlackListViewController.m in Sources */,
@@ -11189,6 +11235,7 @@
 				100263481BF749FA003ECBF4 /* OrderPayViewController.m in Sources */,
 				105130B01BFF0C2E0004DA20 /* ZXEANManufacturerOrgSupport.m in Sources */,
 				108961C11C3A7A2700D88350 /* EMCDDeviceManager+Media.m in Sources */,
+				9C37DC211DC78A1200A522A6 /* PlayerViewControllerHaveUI.m in Sources */,
 				1F5F2A261A2D84A9009AC61C /* jiadianDetailViewController.m in Sources */,
 				105130EC1BFF0C2E0004DA20 /* ZXQRCodeMatrixUtil.m in Sources */,
 				10E81DF71CAD28F600065EE3 /* AssetsBarCodeViewController.m in Sources */,
@@ -11281,7 +11328,6 @@
 				108961CC1C3A7A2700D88350 /* MWGridCell.m in Sources */,
 				03905C2C1B4CF4FB00731769 /* SBJsonStreamWriterAccumulator.m in Sources */,
 				108962551C3A7A2700D88350 /* SettingsViewController.m in Sources */,
-				A349283B1D852CAF003989A2 /* VideoArticleHeaderView.m in Sources */,
 				1FA564001A52790600B44E4B /* CJSONSerializer.m in Sources */,
 				10BFDC001CBC909000DD274D /* UMComTopicsTableViewController.m in Sources */,
 				10205CEF1D2112DF00674AF7 /* DetailListCell.m in Sources */,
@@ -11457,10 +11503,11 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = yxz/yxz.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Huinan Liu (YZ8UJTM6VP)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Huinan Liu (YZ8UJTM6VP)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COMPRESS_PNG_FILES = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 8822Q9495T;
 				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = NO;
 				ENABLE_TESTABILITY = YES;
@@ -11478,6 +11525,7 @@
 					"$(PROJECT_DIR)/umeng_community_ios_micro_sdk_v2.4/Framework/UMSocial_Sdk/UMSocial_Sdk_Extra_Frameworks/TencentOpenAPI",
 					"$(PROJECT_DIR)/UMAnalytics_Sdk_3.6.4",
 					"$(PROJECT_DIR)/UMtongji",
+					"$(PROJECT_DIR)/VideoInterfaceController",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "yxz/yxz-Prefix.pch";
@@ -11525,7 +11573,7 @@
 				OTHER_LIBTOOLFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.meijialife.yxz;
 				PRODUCT_NAME = yxz;
-				PROVISIONING_PROFILE = "6b41364e-acea-484e-a7ab-271b4f0a7972";
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
 				TVOS_DEPLOYMENT_TARGET = 9.1;
@@ -11543,10 +11591,11 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = yxz/yxz.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Huinan Liu (YZ8UJTM6VP)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Huinan Liu (YZ8UJTM6VP)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COMPRESS_PNG_FILES = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 8822Q9495T;
 				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = NO;
 				ENABLE_TESTABILITY = NO;
@@ -11564,6 +11613,7 @@
 					"$(PROJECT_DIR)/umeng_community_ios_micro_sdk_v2.4/Framework/UMSocial_Sdk/UMSocial_Sdk_Extra_Frameworks/TencentOpenAPI",
 					"$(PROJECT_DIR)/UMAnalytics_Sdk_3.6.4",
 					"$(PROJECT_DIR)/UMtongji",
+					"$(PROJECT_DIR)/VideoInterfaceController",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "yxz/yxz-Prefix.pch";
@@ -11611,7 +11661,7 @@
 				OTHER_LIBTOOLFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.meijialife.yxz;
 				PRODUCT_NAME = yxz;
-				PROVISIONING_PROFILE = "6b41364e-acea-484e-a7ab-271b4f0a7972";
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
 				TVOS_DEPLOYMENT_TARGET = 9.1;

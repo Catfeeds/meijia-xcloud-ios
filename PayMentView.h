@@ -7,6 +7,7 @@
 //
 
 #import "FatherView.h"
+
 @protocol BUYDELEGATE <NSObject>
 
 - (void)buyBtnPressedisAli:(BOOL)isAli;
