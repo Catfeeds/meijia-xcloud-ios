@@ -96,7 +96,7 @@
     sqlite3_open([path UTF8String], &simi);
     
     sqlite3_stmt *statement;
-    NSString *sql =[NSString stringWithFormat:@"SELECT * FROM op_ad where ad_type like '%%99%%' order by no asc"];
+    NSString *sql =[NSString stringWithFormat:@"SELECT * FROM op_ad where ad_type like '%%99%%' order by no desc"];
     
     if (sqlite3_prepare_v2(simi, [sql UTF8String], -1, &statement, nil) == SQLITE_OK) {
         while (sqlite3_step(statement) == SQLITE_ROW) {

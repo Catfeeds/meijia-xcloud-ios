@@ -14,6 +14,7 @@
 @property (assign, nonatomic) int article_id;
 @property (copy, nonatomic) NSString *title;
 @property (copy, nonatomic) NSString *img_url;
+@property (copy, nonatomic) NSString *teacher;
 @property (copy, nonatomic) NSString *total_view;
 @property (copy, nonatomic) NSString *add_time;
 @property (assign, nonatomic) float price;
