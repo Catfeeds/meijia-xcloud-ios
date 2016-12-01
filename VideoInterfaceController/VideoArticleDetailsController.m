@@ -587,7 +587,6 @@ typedef enum {
     
 //    http://app.bolohr.com/simi/app/video/join.json
          sender.hidden = YES;
-        [self creatPlayBtn];
          
          ISLoginManager *_manager = [ISLoginManager shareManager];
         NSMutableDictionary *sourceDic = [[NSMutableDictionary alloc]init];
@@ -599,6 +598,9 @@ typedef enum {
         [mymanager POST:[NSString stringWithFormat:@"%@%@",SERVER_DRESS,VIDEO_JOIN]  parameters:sourceDic success:^(AFHTTPRequestOperation *opretion, id responseObject){
             
             NSLog(@"绑定成功%@",responseObject);
+            self.vid = responseObject[@"data"][@"vid"];
+            [self creatPlayBtn];
+
             
         }
          
