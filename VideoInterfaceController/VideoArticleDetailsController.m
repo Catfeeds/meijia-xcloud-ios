@@ -479,7 +479,7 @@ typedef enum {
         NSMutableDictionary *sourceDic = [[NSMutableDictionary alloc]init];
         [sourceDic setObject:_manager.telephone  forKey:@"user_id"];
         
-        [sourceDic setObject:[NSNumber numberWithInteger:self.article_id] forKey:@"article_id"];
+        [sourceDic setObject:[NSNumber numberWithInteger:self.article_id] forKey:@"link_id"];
         [sourceDic setObject:@"video-help"  forKey:@"action"];
         AFHTTPRequestOperationManager *mymanager = [AFHTTPRequestOperationManager manager];
         [mymanager POST:[NSString stringWithFormat:@"http://app.bolohr.com/simi/app/op/post_help.json"]  parameters:sourceDic success:^(AFHTTPRequestOperation *opretion, id responseObject){
