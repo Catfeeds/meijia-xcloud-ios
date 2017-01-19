@@ -19,7 +19,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.navlabel.text=@"常用工具";
+    self.navlabel.text=@"工具资料";
     myTableView =[[UITableView alloc]initWithFrame:FRAME(0, 64, WIDTH, HEIGHT-64)];
     myTableView.dataSource=self;
     myTableView.delegate=self;

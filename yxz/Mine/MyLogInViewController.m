@@ -1221,7 +1221,7 @@ appDelegate
     UIButton *tbtn =[[UIButton alloc]init];
     tbtn.frame = FRAME(14, SELF_VIEW_HEIGHT-180, 584/2, 100);
     
-    NSMutableAttributedString *str = [[NSMutableAttributedString alloc]initWithString:@"私秘提示 \n请检查手机号是否正确，如无误超过60秒仍未收到短信，可能是短信被拦截或网络异常，请拨打客服电话400-169-1615获取验证码。"];
+    NSMutableAttributedString *str = [[NSMutableAttributedString alloc]initWithString:@"私秘提示 \n请检查手机号是否正确，如无误超过60秒仍未收到短信，可能是短信被拦截或网络异常，请稍后重试。"];
     [str setAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIColor blueColor],NSForegroundColorAttributeName, nil] range:NSMakeRange(53 , 12)];
     
     [tbtn setAttributedTitle:str forState:UIControlStateNormal];

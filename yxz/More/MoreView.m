@@ -18,9 +18,9 @@
     if (self) {
         
         NSArray *_titleArr = @[@"意见反馈",@"分享好友",@"用户协议",@"关于我们",@"当前版本",@"联系客服",@"清理缓存"];
+//        NSArray *_titleArr = @[@"分享好友",@"用户协议",@"关于我们",@"当前版本",@"联系客服",@"清理缓存"];
         
-        
-        for (int i = 0; i < _titleArr.count; i ++) {
+        for (int i = 1; i < _titleArr.count; i ++) {
             
 
             
@@ -56,9 +56,9 @@
                 case 5:
                     _button.frame = FRAME(0, 27+54*5, _CELL_WIDTH, 54);
                     break;
-                case 6:
-                    _button.frame = FRAME(0, 36+54*6, _CELL_WIDTH, 54);
-                    break;
+//                case 6:
+//                    _button.frame = FRAME(0, 36+54*6, _CELL_WIDTH, 54);
+//                    break;
                     
                 default:
                     break;
@@ -84,7 +84,7 @@
 //                [_phonebutton setTitleColor:HEX_TO_UICOLOR(TEXT_COLOR, 1.0) forState:UIControlStateNormal];
 //                [_phonebutton setTitle:@"400-169-1615" forState:UIControlStateNormal];
                 _phonebutton.textColor=HEX_TO_UICOLOR(TEXT_COLOR, 1.0);
-                _phonebutton.text=@"400-169-1615";
+                _phonebutton.text=@"biz@bolohr.com";
                 [_button addTarget:self action:@selector(PhoneBtnPressed:) forControlEvents:UIControlEventTouchUpInside];
                 [self addSubview:_phonebutton];
             }

@@ -172,7 +172,7 @@ int heights,Y,processIDs=0;
 }
 -(void)cancelBut
 {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"确定要取消卡片吗？取消后会在日程中删除，并且所有提醒人员将收不到提醒。"  delegate:self cancelButtonTitle:@"确认" otherButtonTitles:@"返回",nil];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"确定要取消卡片吗？取消后会在提醒中删除，并且所有提醒人员将收不到提醒。"  delegate:self cancelButtonTitle:@"确认" otherButtonTitles:@"返回",nil];
     alert.tag=1101;
     [alert show];
     

@@ -1406,6 +1406,9 @@
 		5F0B3C021D5E207D004E3AED /* bolohr-logo120.png in Resources */ = {isa = PBXBuildFile; fileRef = 5F0B3BFF1D5E207D004E3AED /* bolohr-logo120.png */; };
 		5F0B3C031D5E207D004E3AED /* bolohr-logo180.png in Resources */ = {isa = PBXBuildFile; fileRef = 5F0B3C001D5E207D004E3AED /* bolohr-logo180.png */; };
 		5F0B3C041D5E207D004E3AED /* bolohr-logo512.png in Resources */ = {isa = PBXBuildFile; fileRef = 5F0B3C011D5E207D004E3AED /* bolohr-logo512.png */; };
+		5FA0FF4A1E30CCFA00D880F8 /* apptools_38_1472951297.png in Resources */ = {isa = PBXBuildFile; fileRef = 5FA0FF471E30CCFA00D880F8 /* apptools_38_1472951297.png */; };
+		5FA0FF4B1E30CCFA00D880F8 /* apptools_39_1467001717.png in Resources */ = {isa = PBXBuildFile; fileRef = 5FA0FF481E30CCFA00D880F8 /* apptools_39_1467001717.png */; };
+		5FA0FF4C1E30CCFA00D880F8 /* apptools_20_1467702535.png in Resources */ = {isa = PBXBuildFile; fileRef = 5FA0FF491E30CCFA00D880F8 /* apptools_20_1467702535.png */; };
 		8F84D50D1A3AAEC200F25203 /* HowGetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F84D50C1A3AAEC200F25203 /* HowGetViewController.m */; };
 		8F84D5101A3AAEF800F25203 /* GetJifenView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F84D50F1A3AAEF800F25203 /* GetJifenView.m */; };
 		8F9B69991A47C3A7000BA266 /* circle_@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8F9B69981A47C3A7000BA266 /* circle_@2x.png */; };
@@ -4094,6 +4097,9 @@
 		5F0B3BFF1D5E207D004E3AED /* bolohr-logo120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bolohr-logo120.png"; sourceTree = "<group>"; };
 		5F0B3C001D5E207D004E3AED /* bolohr-logo180.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bolohr-logo180.png"; sourceTree = "<group>"; };
 		5F0B3C011D5E207D004E3AED /* bolohr-logo512.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bolohr-logo512.png"; sourceTree = "<group>"; };
+		5FA0FF471E30CCFA00D880F8 /* apptools_38_1472951297.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = apptools_38_1472951297.png; sourceTree = "<group>"; };
+		5FA0FF481E30CCFA00D880F8 /* apptools_39_1467001717.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = apptools_39_1467001717.png; sourceTree = "<group>"; };
+		5FA0FF491E30CCFA00D880F8 /* apptools_20_1467702535.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = apptools_20_1467702535.png; sourceTree = "<group>"; };
 		8F84D50B1A3AAEC200F25203 /* HowGetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HowGetViewController.h; sourceTree = "<group>"; };
 		8F84D50C1A3AAEC200F25203 /* HowGetViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HowGetViewController.m; sourceTree = "<group>"; };
 		8F84D50E1A3AAEF800F25203 /* GetJifenView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GetJifenView.h; sourceTree = "<group>"; };
@@ -7524,6 +7530,9 @@
 		1093C21A1CE4248300C7FFD5 /* icons */ = {
 			isa = PBXGroup;
 			children = (
+				5FA0FF471E30CCFA00D880F8 /* apptools_38_1472951297.png */,
+				5FA0FF481E30CCFA00D880F8 /* apptools_39_1467001717.png */,
+				5FA0FF491E30CCFA00D880F8 /* apptools_20_1467702535.png */,
 				106D42CA1D098CA2009551FA /* apptools_17_1464277069.png */,
 				106D42CE1D098CA2009551FA /* apptools_22_1465381916.png */,
 				106D42CF1D098CA2009551FA /* apptools_23_1465381934.png */,
@@ -9862,7 +9871,7 @@
 								enabled = 0;
 							};
 							com.apple.Push = {
-								enabled = 0;
+								enabled = 1;
 							};
 							com.apple.SafariKeychain = {
 								enabled = 1;
@@ -9967,6 +9976,7 @@
 				9C009A9B1DE0205500588291 /* VideoArticleHeaderView.xib in Resources */,
 				102A0ECC1CF5AECC00CAA320 /* opad_38.png in Resources */,
 				10FF22CA1BA97E9400BAF5EA /* common_icon_like_c@2x(1).png in Resources */,
+				5FA0FF4B1E30CCFA00D880F8 /* apptools_39_1467001717.png in Resources */,
 				106865291C9BF5D400B83627 /* MeetTableViewCell.xib in Resources */,
 				1015CB921CC247DD00EBAE2C /* simi.db in Resources */,
 				10CEF9A31C0411D30092FA8D /* Merchant_Lcon.png in Resources */,
@@ -10269,6 +10279,7 @@
 				036C00411B184E3000FC0647 /* weixin-pay.png in Resources */,
 				8F9B69991A47C3A7000BA266 /* circle_@2x.png in Resources */,
 				8F9B69A31A493875000BA266 /* search_@2x.png in Resources */,
+				5FA0FF4C1E30CCFA00D880F8 /* apptools_20_1467702535.png in Resources */,
 				108962951C3A7A2700D88350 /* VoiceSearchFeedback020@2x.png in Resources */,
 				10E9673F1CC635D00047E819 /* UMSocialSDKResourcesNew.bundle in Resources */,
 				108962941C3A7A2700D88350 /* VoiceSearchFeedback020.png in Resources */,
@@ -10294,6 +10305,7 @@
 				9CB6CCAF1DC6171200A44861 /* YKPlayerViewResource.bundle in Resources */,
 				10E9673E1CC635D00047E819 /* UMSShareListController.xib in Resources */,
 				10FAE8341C43B56C00FF1E61 /* cal-bg.jpg in Resources */,
+				5FA0FF4A1E30CCFA00D880F8 /* apptools_38_1472951297.png in Resources */,
 				108962CB1C3A7A2700D88350 /* chatBar_colorMore_cameraSelected@2x.png in Resources */,
 				10BFDBD21CBC909000DD274D /* UMComEditTopicsTableViewCell.xib in Resources */,
 				108962B51C3A7A2700D88350 /* messageSendFail@2x.png in Resources */,

@@ -499,7 +499,7 @@ MyselfViewController *thirdViewController;
     }
     plusArray=[[NSMutableArray alloc]init];
     self.view.backgroundColor=[UIColor whiteColor];
-    coreDic=@{@"name":@"应用中心",@"logo":@"http://img.51xingzheng.cn/437396cc0b49b04dc89a0552f7e90cae?p=0",@"action":@"asdsad",@"open_type":@"app"};
+    coreDic=@{@"name":@"应用中心",@"logo":@"http://img.bolohr.com/437396cc0b49b04dc89a0552f7e90cae?p=0",@"action":@"asdsad",@"open_type":@"app"};
     helpDic=@{@"action":@"index"};
 //    [[NSNotificationCenter defaultCenter] postNotificationName:@"HELP" object:helpDic];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(helpLayout:) name:@"WEBURL" object:nil];
@@ -650,10 +650,10 @@ MyselfViewController *thirdViewController;
         
     }
 }
-#pragma mark日程红点成功返回
+#pragma mark提醒红点成功返回
 -(void)RemindFinish:(id)sourData
 {
-    NSLog(@"日程红点成功返回+++%@",sourData);
+    NSLog(@"提醒红点成功返回+++%@",sourData);
     NSArray *sourDataArray=[sourData objectForKey:@"data"];
     if (sourDataArray.count>1) {
         remind_spotView.hidden=NO;
@@ -661,10 +661,10 @@ MyselfViewController *thirdViewController;
         remind_spotView.hidden=YES;
     }
 }
-#pragma mark日程红点失败返回
+#pragma mark提醒红点失败返回
 -(void)RemindFail:(id)sourData
 {
-    NSLog(@"日程红点失败返回+++%@",sourData);
+    NSLog(@"提醒红点失败返回+++%@",sourData);
 }
 #pragma mark用户信息详情获取成功方法
 -(void)QJDowLoadFinish:(id)sender
@@ -764,7 +764,7 @@ MyselfViewController *thirdViewController;
     [bottomView addSubview:secretaryButton];
     
     UILabel *secrearyLabel=[[UILabel alloc]init];
-    secrearyLabel.text=@"直接找秘书";
+    secrearyLabel.text=@"点我来吐槽";
     secrearyLabel.font=[UIFont fontWithName:@"Heiti SC" size:15];
     secrearyLabel.lineBreakMode=NSLineBreakByTruncatingTail;
     [secrearyLabel setNumberOfLines:0];
@@ -795,7 +795,7 @@ MyselfViewController *thirdViewController;
 -(void)tabBarAction
 {
     [tab removeFromSuperview];
-    NSArray *barArr = @[@"首页",@"发现",@"工作",@"日程",@"我的"];
+    NSArray *barArr = @[@"首页",@"发现",@"助手",@"提醒",@"我的"];
     NSArray *imagesArray =@[@"common_icon_chum@2x",@"common_icon_find@2x",@"icon_plus_add",@"common_icon_home@2x",@"common_icon_mine@2x"];
     float _btnwidth = self.view.frame.size.width/5;
     tab=[[UIImageView alloc]initWithFrame:CGRectMake(0, SELF_VIEW_HEIGHT-49, SELF_VIEW_WIDTH, 49)];

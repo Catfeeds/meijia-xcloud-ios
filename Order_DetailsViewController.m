@@ -95,9 +95,9 @@
     if (_details_ID==4) {
         NSString *phoneNum = @"";// 电话号码
         
-        phoneNum = @"400-169-1615";
+        phoneNum = @"biz@bolohr.com";
         
-        NSURL *phoneURL = [NSURL URLWithString:[NSString stringWithFormat:@"tel:%@",phoneNum]];
+        NSURL *phoneURL = [NSURL URLWithString:[NSString stringWithFormat:@"mailto:%@",phoneNum]];
         
         UIWebView *phoneCallWebView;
         

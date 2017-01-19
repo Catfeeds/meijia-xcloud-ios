@@ -119,7 +119,7 @@ static CGFloat const imageBGHeight = 395; // 背景图片的高度
     W=[[NSMutableArray alloc]init];
     page=1;
 //    arraY=@[@"精选",@"职场",@"案例",@"招聘",@"薪资",@"行政",@"培训",@"绩效",@"员工关系",@"人资规划",@"行业"];
-    arraY=@[@"精选",@"招聘",@"绩效",@"薪资",@"案例",@"行政",@"职场",@"培训",@"员工关系",@"人资规划",@"行业"];
+    arraY=@[@"精选",@"招聘",@"绩效",@"薪资",@"职场",@"案例",@"行政",@"培训",@"员工关系",@"人资规划",@"行业"];
     [self.navigationController setNavigationBarHidden:NO animated:NO];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(SignFication:) name:@"SIGNSS" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getLayout) name:@"HOMERefresh" object:nil];
@@ -133,8 +133,8 @@ static CGFloat const imageBGHeight = 395; // 背景图片的高度
     NSArray *butImageArray=@[@"index-wenda",@"index-kecheng",@"index-gongju",@"index-fuwu"];
 //    NSArray *butArray=@[@"知识学院",@"服务大厅",@"微社区",@"签到有礼"];
 //    NSArray *butArray=@[@"同行热聊",@"精品课程",@"知识学院",@"签到有礼",@"内推悬赏",@"简历交换",@"找服务商",@"福利商城"];
-//    NSArray *butArray=@[@"内推悬赏",@"同行热聊",@"常用工具",@"找服务商"/*@"知识学院",@"签到有礼",@"简历交换",@"找服务商",@"福利商城"*/];
-    NSArray *butArray=@[@"互助问答",@"视听课程",@"常用工具",@"找服务商"/*@"知识学院",@"签到有礼",@"简历交换",@"找服务商",@"福利商城"*/];
+//    NSArray *butArray=@[@"内推悬赏",@"同行热聊",@"工具资料",@"找服务商"/*@"知识学院",@"签到有礼",@"简历交换",@"找服务商",@"福利商城"*/];
+    NSArray *butArray=@[@"互助问答",@"视听课程",@"工具资料",@"找服务商"/*@"知识学院",@"签到有礼",@"简历交换",@"找服务商",@"福利商城"*/];
     int x=0;
     for (int i=0; i<butArray.count; i++) {
         if (i<4) {

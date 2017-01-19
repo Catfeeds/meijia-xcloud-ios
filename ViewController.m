@@ -97,7 +97,7 @@ float lastContentOffset;
         _needRefresh = NO;
     }
 
-    [MobClick beginLogPageView:@"日程"];
+    [MobClick beginLogPageView:@"提醒"];
     
     if (vc.L==1) {
         _tableView.scrollEnabled =NO;
@@ -108,7 +108,7 @@ float lastContentOffset;
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    [MobClick endLogPageView:@"日程"];
+    [MobClick endLogPageView:@"提醒"];
     
 }
 
