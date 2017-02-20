@@ -398,7 +398,7 @@
                 UIView *lineVw=[[UIView alloc]initWithFrame:FRAME(0, 121, WIDTH, 0.5)];
                 lineVw.backgroundColor=[UIColor colorWithRed:205/255.0f green:205/255.0f blue:205/255.0f alpha:1];
                 [view addSubview:lineVw];
-                NSArray *otherArray=@[@"推荐给好友",@"我是服务者"];
+                NSArray *otherArray=@[@"推荐给好友",@"服务商入口"];
 //                NSArray *otherImageArray=@[@"Recommend_Lcon",@"More_lcon"];
                 for (int s=0; s<otherArray.count; s++) {
                     UIButton *otherButton=[[UIButton alloc]initWithFrame:FRAME(0, 61*s, WIDTH, 60)];
@@ -666,7 +666,7 @@
 }
 
 
-#pragma mark 推荐给好友与我是服务者按钮点击方法
+#pragma mark 推荐给好友与服务商入口按钮点击方法
 -(void)otherButAction:(UIButton *)sender
 {
     NSInteger tag=sender.tag;

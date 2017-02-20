@@ -35,6 +35,7 @@
     dataArray=[[NSMutableArray alloc]init];
     UIButton *askButton=[[UIButton alloc]initWithFrame:FRAME(WIDTH-60, 20, 50, 44)];
     [askButton setTitle:@"提问" forState:UIControlStateNormal];
+    askButton.titleLabel.font = [UIFont systemFontOfSize: 20.0];
     [askButton setTitleColor:[UIColor colorWithRed:42/255.0f green:142/255.0f blue:241/255.0f alpha:1] forState:UIControlStateNormal];
     [askButton addTarget:self action:@selector(askButAction) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:askButton];

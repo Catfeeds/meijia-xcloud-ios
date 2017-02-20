@@ -48,8 +48,8 @@
     [self.view addSubview:myTextView];
     
     defaultLabel=[[UILabel alloc]init];
-    defaultLabel.text=@"别着急,试着将问题尽可能清晰、详尽的描述出来,这样回答者们才能更完整、更高质的为你解答";
-    defaultLabel.textColor=[UIColor colorWithRed:198/255.0f green:198/255.0f blue:198/255.0f alpha:1];
+    defaultLabel.text=@"请在此处填写您的问题，为了得到更好的解答与帮助，请尽可能清晰详尽的描述您的问题";
+    defaultLabel.textColor=[UIColor colorWithRed:157/255.0f green:157/255.0f blue:157/255.0f alpha:1];
     UIFont *font=[UIFont fontWithName:@"Heiti SC" size:15];
     defaultLabel.font=font;
     NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:font,NSFontAttributeName, nil];
