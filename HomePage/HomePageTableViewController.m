@@ -118,7 +118,7 @@ static CGFloat const imageBGHeight = 395; // 背景图片的高度
     [self user_default];
     W=[[NSMutableArray alloc]init];
     page=1;
-//    arraY=@[@"精选",@"职场",@"案例",@"招聘",@"薪资",@"行政",@"培训",@"绩效",@"员工关系",@"人资规划",@"行业"];
+//  arraY=@[@"精选",@"职场",@"案例",@"招聘",@"薪资",@"行政",@"培训",@"绩效",@"员工关系",@"人资规划",@"行业"];
     arraY=@[@"精选",@"招聘",@"绩效",@"薪资",@"职场",@"案例",@"行政",@"培训",@"员工关系",@"人资规划",@"行业"];
     [self.navigationController setNavigationBarHidden:NO animated:NO];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(SignFication:) name:@"SIGNSS" object:nil];
@@ -1116,6 +1116,7 @@ static CGFloat const imageBGHeight = 395; // 背景图片的高度
             
         }
             break;
+        //招聘
         case 1:
         {
            
@@ -1124,50 +1125,60 @@ static CGFloat const imageBGHeight = 395; // 背景图片的高度
             
         }
             break;
+        //绩效
         case 2:
         {
             urlStr=@"http://bolohr.com/?json=get_category_posts&count=10&order=DESC&id=65&include=id,title,modified,url,thumbnail,custom_fields";//
             
         }
             break;
+        //薪资
         case 3:
         {
             urlStr=@"http://bolohr.com/?json=get_category_posts&count=10&order=DESC&id=64&include=id,title,modified,url,thumbnail,custom_fields";//
             
         }
             break;
+        //职场
         case 4:
         {
-            urlStr=@"http://bolohr.com/?json=get_category_posts&count=10&order=DESC&id=69&include=id,title,modified,url,thumbnail,custom_fields";//
+            urlStr=@"http://bolohr.com/?json=get_category_posts&count=10&order=DESC&id=50&include=id,title,modified,url,thumbnail,custom_fields";//
         }
+            
             break;
+        //案例
         case 5:
         {
         
-            urlStr=@"http://bolohr.com/?json=get_category_posts&count=10&order=DESC&id=21&include=id,title,modified,url,thumbnail,custom_fields";
+            urlStr=@"http://bolohr.com/?json=get_category_posts&count=10&order=DESC&id=69&include=id,title,modified,url,thumbnail,custom_fields";
         }
             break;
+        //行政
         case 6:
         {
-            urlStr=@"http://bolohr.com/?json=get_category_posts&count=10&order=DESC&id=50&include=id,title,modified,url,thumbnail,custom_fields";//
+            urlStr=@"http://bolohr.com/?json=get_category_posts&count=10&order=DESC&id=21&include=id,title,modified,url,thumbnail,custom_fields";//
             
         }
             break;
+        //培训
         case 7:
         {
             urlStr=@"http://bolohr.com/?json=get_category_posts&count=10&order=DESC&id=63&include=id,title,modified,url,thumbnail,custom_fields";//
         }
             break;
+        //员工关系
         case 8:
         {
             urlStr=@"http://bolohr.com/?json=get_category_posts&count=10&order=DESC&id=66&include=id,title,modified,url,thumbnail,custom_fields";
         }
             break;
+        //人资规划
         case 9:
         {
             urlStr=@"http://bolohr.com/?json=get_category_posts&count=10&order=DESC&id=67&include=id,title,modified,url,thumbnail,custom_fields";
         }
             break;
+        //行业
         case 10:
         {
             urlStr=@"http://bolohr.com/?json=get_category_posts&count=10&order=DESC&id=70&include=id,title,modified,url,thumbnail,custom_fields";

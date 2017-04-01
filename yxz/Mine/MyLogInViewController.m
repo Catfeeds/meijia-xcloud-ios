@@ -55,14 +55,14 @@ appDelegate
             tencentOAuth = _tencentOAuth;
 -(void) viewDidAppear:(BOOL)animated
 {
-    NSString* cName = [NSString stringWithFormat:@"快速注册与登录", nil];
+    NSString* cName = [NSString stringWithFormat:@"免费注册与登录", nil];
     [[BaiduMobStat defaultStat] pageviewStartWithName:cName];
     
 }
 
 -(void) viewDidDisappear:(BOOL)animated
 {
-    NSString* cName = [NSString stringWithFormat:@"快速注册与登录", nil];
+    NSString* cName = [NSString stringWithFormat:@"免费注册与登录", nil];
     [[BaiduMobStat defaultStat] pageviewEndWithName:cName];
 }
 - (void)viewWillAppear:(BOOL)animated
@@ -261,8 +261,8 @@ appDelegate
     [_locationManager startUpdatingLocation];
     
    // super.backBtn.hidden=YES;
-    self.navlabel.text = @"快速注册与登录";
-//    self.title=@"快速注册与登录";
+    self.navlabel.text = @"免费注册与登录";
+//    self.title=@"免费注册与登录";
     if (self.loginYesOrNo == YES) {
         [self ymCommunity];
         [self pushToIM];
