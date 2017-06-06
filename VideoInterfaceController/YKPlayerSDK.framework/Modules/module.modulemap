@@ -1,0 +1,6 @@
+framework module YKPlayerSDK {
+  umbrella header "YKPlayerSDK.h"
+
+  export *
+  module * { export * }
+}
