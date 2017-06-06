@@ -1,0 +1,183 @@
+//
+//  Prefix header
+//
+//  The contents of this file are implicitly included at the beginning of every source file.
+//
+
+#import <Availability.h>
+#import "Header.h"
+#import "ChoiceDefine.h"
+#import "UIViewExt.h"
+
+#import "UMSocial.h"
+#import <sqlite3.h>
+#ifndef __IPHONE_3_0
+#warning "This project uses features only available in iOS SDK 3.0 and later."
+#endif
+
+#ifdef __OBJC__
+    #import <UIKit/UIKit.h>
+    #import <Foundation/Foundation.h>
+    #import <CoreData/CoreData.h>
+#import <sqlite3.h>
+#import "JTCalendarDayView.h"
+    #import "ChatDemoUIDefine.h"
+    #import "WCAlertView.h"
+    #import "TTGlobalUICommon.h"
+    #import "UIViewController+HUD.h"
+    #import "UIViewController+DismissKeyboard.h"
+    #import "NSString+Valid.h"
+    #import "UIColor+Hex.h"
+    #define MR_SHORTHAND
+    #import "CoreData+MagicalRecord.h"
+
+    #import "EaseMob.h"
+    #import "GetPhoto.h"
+    #import "WXgetUserInfo.h"
+    #import "MainViewController.h"
+    #import "AppDelegate.h"
+//    #import "MobClick.h"
+    #import "UMFeedback.h"
+    #import "ISLoginManager.h"
+    #import "DownloadManager.h"
+    #import"UIImageView+WebCache.h"
+//    #import "ZBarReaderView.h"
+    #import "WQPlaySound.h"
+//表格上拉加载 下拉刷新相关类
+   #import "MJRefreshHeaderView.h"
+   #import "MJRefreshFooterView.h"
+   #import "MJRefresh.h"
+#import "EjectAlertView.h"
+#import "WebPageViewController.h"
+#import "UpLoadViewController.h"
+//登录页面
+#import "MyLogInViewController.h"
+//友盟微社区
+
+#import "UMComNavigationController.h"
+//友盟分享
+#import "UMSocialWechatHandler.h"
+#import "UMSocialQQHandler.h"
+#import "UMSocialSinaSSOHandler.h"
+
+//友盟统计
+#import "UMMobClick/MobClick.h"
+
+#import <objc/message.h>
+
+#import "GoodsModel.h"
+#import "Create_Enterprise_Address_BookViewController.h"
+#import "BindMobileViewController.h"
+#endif
+
+#define NAV_COLOR 0xE8374A
+#define NAV_FONT_COLOR 0xFFFFFF
+#define INDEX_FONF_COLOR 0xC5C5C5
+#define TAB_FONT_COLOR 0xCCCCCC
+#define BAC_VIEW_COLOR 0xF5F5F5
+#define TAB_BAR_COLOR 0x474546
+
+#define NAV_HEIGHT 64
+
+#define TABLE_NAME @"bylUser"
+#define FIELDS_NAME_SID @"user_id"
+#define FIELDS_NAME_SNAME @"name"
+#define FIELDS_NAME_SCLASS @"head_img"
+#define FIELDS_NAME_MOBILE @"mobile"
+
+
+#define SELF_VIEW_HEIGHT self.view.bounds.size.height
+#define SELF_VIEW_WIDTH  self.view.bounds.size.width
+
+#define WIDTH ([UIScreen mainScreen].bounds.size.width)
+#define HEIGHT ([UIScreen mainScreen].bounds.size.height)
+
+//第三方appID
+
+
+//友盟分享
+#define Handlers @"http://bolohr.com/web/h5-app-download.html"
+#define QQHandlerss  @"http://bolohr.com/web/h5-app-download.html"
+#define SSOHandlers  @"http://sns.whalecloud.com"
+
+
+
+//qq
+#define tencentAPPID     @"1104934408"
+//新浪
+#define XLAppKey         @"247547429"
+#define XLRedirectURI    @"http://www.sina.com"
+//微信
+#define WXAppKey         @"wx93aa45d30bf6cba3"
+#define WXsecret         @"7a4ec42a0c548c6e39ce9ed25cbc6bd7"
+//大众点评
+#define DAZHONGAPK       @"422475705"
+#define DAZHONG_SECREC   @"d837a4d83ad642c39c2e3afb52bcd177"
+
+#define YMAPPKEY @"5625fa6ae0f55a87fb001b6c"
+
+#define kAppId @"6t18dZQ2Vn9nv7ozqdl4EA"
+#define kAppKey @"QjVBVFMC7U8kmpjwnKCtc7"
+#define kAppSecret @"tt7n6qd2Gi8sQqWMz0rN45"
+//数据库 城市表相关字段key值
+#define CITY_ID                             @"CITY_id"
+#define CITY_NAME                           @"CITY_name"
+#define CITY_DRESS                          @"CITY_dress"
+#define CITY_STOREID                        @"CITY_storeid"
+#define CITY_OPENTIME                       @"CITY_opentime"
+#define C_ID                                @"C_id"
+//系统相关
+#define SYSTEM_VERSION  [[[UIDevice currentDevice]systemVersion] floatValue]
+#define HEIGHT_TYPE     [[[UIDevice currentDevice]systemVersion] floatValue] >= 7.0 ? 20 : 0
+#define IS_IOS_7        [[[UIDevice currentDevice]systemVersion] floatValue] >= 7.0 ? YES : NO
+
+//判断是否iPhone5
+#define IS_iPhone5      ([UIScreen instancesRespondToSelector:@selector(currentMode)]? CGSizeEqualToSize(CGSizeMake(640, 1136),[[UIScreen mainScreen] currentMode].size) : NO)
+
+//application deledate
+#define APPLIACTION     ((AppDelegate *)([[UIApplication sharedApplication] delegate]))
+
+//布局相关
+#define FRAME(x,y,w,h)  CGRectMake(x,y,w,h)
+
+//颜色转换
+#define DEFAULT_COLOR          [UIColor clearColor]
+#define COLOR_VAULE(rgb)       [UIColor colorWithRed:rgb/255.0 green:rgb/255.0 blue:rgb/255.0 alpha:1.0]//颜色值
+#define COLOR_VAULES(r,g,b,a)  [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:a]//颜色值
+#define HEX_TO_UICOLOR(hex,a)  [UIColor colorWithRed:((float)((hex & 0xFF0000) >> 16))/255.0 green:((float)((hex & 0xFF00) >> 8))/255.0 blue:((float)(hex & 0xFF))/255.0 alpha:a]
+#define YELLOW_COLOR           [UIColor colorWithRed:244.0/255.0 green:113.0/255.0 blue:31.0/255.0 alpha:1.0]  //橘黄色
+
+//调试信息打印
+#define DEBUG 1
+#if (DEBUG == 1)
+#	define XLOG(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);
+#	define XLOGDATASTR(data) XLOG(@"%@", [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease])
+#	define XLOGRECT(rect) XLOG(@"rect[%d, %d, %d, %d]", (int)rect.origin.x, (int)rect.origin.y, (int)rect.size.width, (int)rect.size.height)
+#	define XLOGH(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);
+#elif (DEBUG != 0)
+#	define XLOG(fmt, ...) {}
+#	define XLOGDATASTR(data) {}
+#	define XLOGRECT(rect) {}
+#	define XLOGH(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);
+#else
+#	define XLOG(fmt, ...) {}
+#	define XLOGDATASTR(data) {}
+#	define XLOGRECT(rect) {}
+#	define XLOGH(fmt, ...) {}
+#endif
+
+#ifdef DEBUG_LOG
+#define DLog( s, ... ) NSLog( @"<%@:(%d)> %@", [[NSString stringWithUTF8String:__FILE__] lastPathComponent], __LINE__, [NSString stringWithFormat:(s), ##__VA_ARGS__] )
+#else
+#define DLog( s, ... )
+#endif
+
+#ifdef __IPHONE_8_0
+#define GregorianCalendar NSCalendarIdentifierGregorian
+#else
+#define GregorianCalendar NSGregorianCalendar
+
+
+
+
+#endif
