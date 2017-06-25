@@ -1091,6 +1091,8 @@
 		18B6A5501EA494060086772E /* libGeTuiSdk-1.6.2.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18B6A54E1EA494060086772E /* libGeTuiSdk-1.6.2.0.a */; };
 		18B6A5511EA494060086772E /* libGtExtensionSdk-1.1.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18B6A54F1EA494060086772E /* libGtExtensionSdk-1.1.0.a */; };
 		18B6A5521EA4951C0086772E /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18B6A5491EA493990086772E /* UserNotifications.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		18B894B91EFE959E000993AF /* 引导页4.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 18B894B71EFE959E000993AF /* 引导页4.jpg */; };
+		18B894BA1EFE959E000993AF /* 引导页5.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 18B894B81EFE959E000993AF /* 引导页5.jpg */; };
 		18D527EE1EA99AC40028B325 /* UIColor+Hex.m in Sources */ = {isa = PBXBuildFile; fileRef = 18D527ED1EA99AC40028B325 /* UIColor+Hex.m */; };
 		18DF593E1EAEF5E3006FE1E9 /* MsLikeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 18DF593D1EAEF5E3006FE1E9 /* MsLikeView.m */; };
 		1F36C2B41A303E350072F5B4 /* drop-down-list_03@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1F36C2B21A303E350072F5B4 /* drop-down-list_03@2x.png */; };
@@ -3368,6 +3370,8 @@
 		18B6A54D1EA494060086772E /* GeTuiSdk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeTuiSdk.h; sourceTree = "<group>"; };
 		18B6A54E1EA494060086772E /* libGeTuiSdk-1.6.2.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libGeTuiSdk-1.6.2.0.a"; sourceTree = "<group>"; };
 		18B6A54F1EA494060086772E /* libGtExtensionSdk-1.1.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libGtExtensionSdk-1.1.0.a"; sourceTree = "<group>"; };
+		18B894B71EFE959E000993AF /* 引导页4.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "引导页4.jpg"; sourceTree = "<group>"; };
+		18B894B81EFE959E000993AF /* 引导页5.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "引导页5.jpg"; sourceTree = "<group>"; };
 		18D527EC1EA99AC40028B325 /* UIColor+Hex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Hex.h"; sourceTree = "<group>"; };
 		18D527ED1EA99AC40028B325 /* UIColor+Hex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Hex.m"; sourceTree = "<group>"; };
 		18DF593C1EAEF5E3006FE1E9 /* MsLikeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MsLikeView.h; sourceTree = "<group>"; };
@@ -5493,6 +5497,8 @@
 				1015CB951CC292D200EBAE2C /* 引导页1.jpg */,
 				1015CB961CC292D200EBAE2C /* 引导页2.jpg */,
 				1015CB971CC292D200EBAE2C /* 引导页3.jpg */,
+				18B894B71EFE959E000993AF /* 引导页4.jpg */,
+				18B894B81EFE959E000993AF /* 引导页5.jpg */,
 				10ED4A261CA5580600AE0996 /* common_icon_review@2x(1).png */,
 				1068652A1C9C096E00B83627 /* iconfont-xinjian.png */,
 				1065AA4C1C9A8C7E0014624C /* iconfont_yingyongbangzhu.png */,
@@ -9121,6 +9127,7 @@
 				108962E01C3A7A2700D88350 /* chat_receiver_audio_playing000@2x.png in Resources */,
 				10BC25451C76C19B0097DE36 /* iconfont_huilvhuiyishi.png in Resources */,
 				1089626D1C3A7A2700D88350 /* chatFire_audioPlaying3@2x.png in Resources */,
+				18B894BA1EFE959E000993AF /* 引导页5.jpg in Resources */,
 				10146E931D13DD3800DC997B /* xiangxiachakan50X58.png in Resources */,
 				1076EB131BA3D04900BF1DAB /* Main.storyboard in Resources */,
 				108962721C3A7A2700D88350 /* VoiceSearchFeedback003.png in Resources */,
@@ -9262,6 +9269,7 @@
 				108962941C3A7A2700D88350 /* VoiceSearchFeedback020.png in Resources */,
 				1097D9B31C9F9B130098B193 /* iconfont_company_tongxunbu.png in Resources */,
 				1F5F2A711A2D84A9009AC61C /* mine-background.png in Resources */,
+				18B894B91EFE959E000993AF /* 引导页4.jpg in Resources */,
 				1FA583CD1A32A89C00E750AC /* compile_02@2x.png in Resources */,
 				108962EC1C3A7A2700D88350 /* chat_sender_audio_playing_000@2x.png in Resources */,
 				1015CC081CC5E18F00EBAE2C /* iconfont_guanbi.png in Resources */,

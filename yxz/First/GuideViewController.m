@@ -27,7 +27,7 @@
     myscrollview.delegate = self;
     myscrollview.pagingEnabled = YES;
     myscrollview.backgroundColor = [UIColor clearColor];
-    myscrollview.contentSize = CGSizeMake(WIDTH*3, self.view.frame.size.height);
+    myscrollview.contentSize = CGSizeMake(WIDTH*5, self.view.frame.size.height);
     [self.view addSubview:myscrollview];
     
     CGFloat y = 600-64-100-20;
@@ -49,16 +49,21 @@
     [imageview2 setImage:[UIImage imageNamed:@"引导页2.jpg"]];
     UIImageView *imageview3=[[UIImageView alloc]initWithFrame:CGRectMake(WIDTH*2, 0, self.view.frame.size.width, self.view.frame.size.height)];
     [imageview3 setImage:[UIImage imageNamed:@"引导页3.jpg"]];
+    UIImageView *imageview4=[[UIImageView alloc]initWithFrame:CGRectMake(WIDTH*3, 0, self.view.frame.size.width, self.view.frame.size.height)];
+    [imageview4 setImage:[UIImage imageNamed:@"引导页4.jpg"]];
+    UIImageView *imageview5=[[UIImageView alloc]initWithFrame:CGRectMake(WIDTH*4, 0, self.view.frame.size.width, self.view.frame.size.height)];
+    [imageview5 setImage:[UIImage imageNamed:@"引导页5.jpg"]];
 //    UIImageView *imageview4=[[UIImageView alloc]initWithFrame:CGRectMake(640+320, 0, self.view.frame.size.width, self.view.frame.size.height)];
 //    [imageview4 setImage:[UIImage imageNamed:@"boot_4.jpg"]];
     [myscrollview addSubview:imageview1];
     [myscrollview addSubview:imageview2];
     [myscrollview addSubview:imageview3];
-//    [myscrollview addSubview:imageview4];
+    [myscrollview addSubview:imageview4];
+    [myscrollview addSubview:imageview5];
     
-    imageview3.userInteractionEnabled = YES;
+    imageview5.userInteractionEnabled = YES;
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(push)];
-    [imageview3 addGestureRecognizer:tap];
+    [imageview5 addGestureRecognizer:tap];
     //    UIButton *_button = [UIButton buttonWithType:UIButtonTypeCustom];
     //    _button.backgroundColor = [UIColor clearColor];
     //    [_button setBackgroundImage:[UIImage imageNamed:@"intro-btn.png"] forState:UIControlStateNormal];
